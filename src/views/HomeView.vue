@@ -15,6 +15,7 @@
       background_image="/img/home/1643010499_d9983336efd678d66241 拷貝.jpg"
     />
     <AdGallerySection :gallery="promotes_data" />
+    <CompanyInfoSection :image="about_image" />
   </div>
 </template>
 
@@ -23,6 +24,7 @@ import CarouselSection from '@/components/home/Carousel.vue';
 import ImageTextSection from '@/components/home/ImageTextSection.vue';
 import ProductSection from '@/components/home/ProductSection.vue';
 import AdGallerySection from '@/components/home/AdGallerySection.vue';
+import CompanyInfoSection from '@/components/home/CompantInfoSection.vue';
 export default {
   name: 'HomeView',
   components: {
@@ -30,6 +32,7 @@ export default {
     ImageTextSection,
     ProductSection,
     AdGallerySection,
+    CompanyInfoSection,
   },
   computed: {
     carousel_data() {
