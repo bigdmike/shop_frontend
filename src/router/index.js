@@ -16,6 +16,22 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "Home" */ '../views/HomeView.vue'),
   },
+  {
+    path: '/collections/:id/',
+    name: 'ProductList',
+    component: () =>
+      import(
+        /* webpackChunkName: "product_list" */ '../views/ProductListView.vue'
+      ),
+  },
+  {
+    path: '/product/:id',
+    name: 'Product',
+    component: () =>
+      import(
+        /* webpackChunkName: "product_page" */ '../views/ProductPageView.vue'
+      ),
+  },
   // {
   //   path: '/about',
   //   name: 'About',
@@ -33,12 +49,7 @@ const routes = [
   //   component: () =>
   //     import(/* webpackChunkName: "product_list" */ '../views/ProductList.vue'),
   // },
-  // {
-  //   path: '/product/:id',
-  //   name: 'Product',
-  //   component: () =>
-  //     import(/* webpackChunkName: "product_page" */ '../views/ProductPage.vue'),
-  // },
+
   // {
   //   path: '/search/:key_word',
   //   name: 'SearchPage',

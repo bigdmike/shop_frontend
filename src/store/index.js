@@ -31,6 +31,7 @@ export default new Vuex.Store({
       content: '',
       type: '',
     },
+    member_token: '',
     shopcart: [],
     loading: 0,
     common_column_data: null,
@@ -156,17 +157,23 @@ export default new Vuex.Store({
     },
     getCategoryData(state) {
       getCategoryData().then((res) => {
+        let tmp_data = res.data.sort((a, b) => {
+          return parseInt(a.Seq) - parseInt(b.Seq);
+        });
         state.commit('SetStateData', {
           key: 'category_data',
-          val: res.data,
+          val: tmp_data,
         });
       });
     },
     getProductData(state) {
       getProductData().then((res) => {
+        let tmp_data = res.data.sort((a, b) => {
+          return parseInt(a.Seq) - parseInt(b.Seq);
+        });
         state.commit('SetStateData', {
           key: 'product_data',
-          val: res.data,
+          val: tmp_data,
         });
       });
     },

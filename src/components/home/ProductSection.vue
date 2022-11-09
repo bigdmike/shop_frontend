@@ -7,9 +7,10 @@
         >
           {{ title }}
         </h2>
-        <span class="md:text-2xl sm:text-xl font-bold text-secondary">{{
-          sub_title
-        }}</span>
+        <span
+          class="md:text-2xl sm:text-xl font-bold text-secondary font-yeseva"
+          >{{ sub_title }}</span
+        >
       </header>
 
       <div ref="swiper" class="flex-shrink-0 w-full swiper">

@@ -1,17 +1,19 @@
 <template>
   <section class="w-full relative py-40">
-    <div class="w-full max-w-screen-xl mx-auto">
+    <div class="w-full max-w-screen-xl mx-auto xl:px-0 px-5">
       <header class="text-center mb-20">
         <h2
           class="md:text-6xl sm:text-4xl text-3xl font-bold text-secondary sm:mb-4"
         >
           門市資訊
         </h2>
-        <span class="md:text-2xl sm:text-xl font-bold text-secondary">
+        <span
+          class="md:text-2xl sm:text-xl font-bold text-secondary font-yeseva"
+        >
           Shop List
         </span>
       </header>
-      <div class="w-full flex items-center">
+      <div class="w-full flex flex-wrap items-center">
         <div class="lg:w-1/2 w-full rounded-3xl overflow-hidden lg:mb-0 mb-10">
           <img class="block w-full" :src="$ImageUrl(image)" />
         </div>

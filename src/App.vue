@@ -1,9 +1,10 @@
 <template>
   <div id="app" class="relative sm:pt-32 pt-28 overflow-x-hidden">
     <EventAnnouncement text="全館消費滿NT$1500 台灣本島免運優惠" />
-    <MainHeader />
+    <MainHeader v-if="data_load_finish" />
     <MainLoading />
     <router-view v-if="data_load_finish" />
+    <MainFooter />
   </div>
 </template>
 
@@ -17,6 +18,7 @@
 import EventAnnouncement from '@/components/EventAnnouncement.vue';
 import MainHeader from '@/components/MainHeader.vue';
 import MainLoading from '@/components/MainLoading';
+import MainFooter from '@/components/MainFooter.vue';
 
 export default {
   name: 'App',
@@ -27,6 +29,7 @@ export default {
     // AddCartMessage,
     EventAnnouncement,
     MainHeader,
+    MainFooter,
     MainLoading,
   },
   methods: {

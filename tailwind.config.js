@@ -10,6 +10,9 @@ module.exports = {
         basic_gray: '#888888',
         basic_white: '#F6F6F6',
       },
+      fontFamily: {
+        yeseva: "'Yeseva One', 'Noto Serif TC', serif",
+      },
     },
   },
   plugins: [],

@@ -11,7 +11,7 @@
           <h2 class="md:text-5xl sm:text-4xl text-3xl font-bold mb-2">
             關於我們
           </h2>
-          <span class="md:text-2xl sm:text-xl">About Us</span>
+          <span class="md:text-2xl sm:text-xl font-yeseva">About Us</span>
         </header>
         <div class="tracking-wider mb-10" v-html="content"></div>
         <router-link
