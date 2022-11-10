@@ -3,6 +3,7 @@
     <EventAnnouncement text="全館消費滿NT$1500 台灣本島免運優惠" />
     <MainHeader v-if="data_load_finish" />
     <MainLoading />
+    <ShopCartDialog />
     <router-view v-if="data_load_finish" />
     <MainFooter />
   </div>
@@ -19,6 +20,8 @@ import EventAnnouncement from '@/components/EventAnnouncement.vue';
 import MainHeader from '@/components/MainHeader.vue';
 import MainLoading from '@/components/MainLoading';
 import MainFooter from '@/components/MainFooter.vue';
+import ShopCartDialog from '@/components/ShopCartDialog.vue';
+import { ReadShopCart } from '@/common/shopcart';
 
 export default {
   name: 'App',
@@ -31,6 +34,7 @@ export default {
     MainHeader,
     MainFooter,
     MainLoading,
+    ShopCartDialog,
   },
   methods: {
     CheckPageData() {
@@ -116,6 +120,13 @@ export default {
         return true;
       } else {
         return false;
+      }
+    },
+  },
+  watch: {
+    data_load_finish() {
+      if (this.data_load_finish) {
+        this.$store.commit('SetShopCart', ReadShopCart());
       }
     },
   },

@@ -20,11 +20,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    add_cart_message: {
-      dialog: false,
-      status: 'loading',
-      content: '請稍候',
-    },
+    add_cart_message: false,
     main_dialog: {
       status: false,
       title: '',
@@ -49,12 +45,8 @@ export default new Vuex.Store({
     mascot_data: null,
   },
   mutations: {
-    SetAddCartMessage(state, { dialog, status, content }) {
-      state.add_cart_message = {
-        dialog: dialog,
-        status: status,
-        content: content,
-      };
+    SetAddCartMessage(state, action) {
+      state.add_cart_message = action;
     },
     SetBodyLock(state, action) {
       let body = document.querySelector('body');

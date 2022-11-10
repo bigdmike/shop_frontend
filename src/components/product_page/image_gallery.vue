@@ -1,70 +1,41 @@
 <template>
   <div>
-    <div ref="BigSwiper" class="swiper">
+    <div ref="BigSwiper" class="swiper mb-5 relative">
+      <button
+        @click="SlideSwiper(1)"
+        class="absolute z-10 top-1/2 right-0 transform -translate-y-1/2 sm:pr-3 pr-2 sm:pl-8 pl-5 sm:py-9 py-6 bg-white bg-opacity-50 rounded-tl-full rounded-bl-full transition-colors duration-200 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
+      >
+        <NextIcon class="sm:w-4 w-2" />
+      </button>
+      <button
+        @click="SlideSwiper(-1)"
+        class="absolute z-10 top-1/2 left-0 transform -translate-y-1/2 sm:pl-3 pl-2 sm:pr-8 pr-5 sm:py-9 py-6 bg-white bg-opacity-50 rounded-tr-full rounded-br-full transition-colors duration-200 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
+      >
+        <PrevIcon class="sm:w-4 w-2" />
+      </button>
+
       <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
+        <div
+          class="swiper-slide rounded-xl overflow-hidden"
+          v-for="(item, item_index) in images"
+          :key="`big_carousel_${item_index}`"
+        >
+          <img :src="$ImageUrl(item.Image)" class="w-full" />
         </div>
       </div>
     </div>
     <div thumbsSlider="" ref="SmallSwiper" class="swiper mySwiper">
       <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-        </div>
-        <div class="swiper-slide">
-          <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
+        <div
+          class="swiper-slide"
+          v-for="(item, item_index) in images"
+          :key="`big_carousel_${item_index}`"
+        >
+          <div
+            class="overflow-hidden rounded-md transition-all duration-300 hover:border-primary border-transparent border-2"
+          >
+            <img :src="$ImageUrl(item.Image)" class="w-full" />
+          </div>
         </div>
       </div>
     </div>
@@ -72,6 +43,8 @@
 </template>
 
 <script>
+import NextIcon from '@/components/svg/Carousel/NextIcon';
+import PrevIcon from '@/components/svg/Carousel/PrevIcon';
 import { Autoplay, Thumbs, FreeMode } from 'swiper';
 import Swiper from 'swiper';
 Swiper.use([Autoplay, Thumbs, FreeMode]);
@@ -84,6 +57,10 @@ export default {
   //       type: Array,
   //     },
   //   },
+  components: {
+    NextIcon,
+    PrevIcon,
+  },
   data() {
     return {
       images: [
@@ -128,11 +105,11 @@ export default {
       this.small_swiper = null;
 
       this.small_swiper = new Swiper(this.$refs.SmallSwiper, {
-        spaceBetween: 10,
-        slidesPerView: 4,
+        spaceBetween: 20,
+        slidesPerView: 6,
         freeMode: true,
         watchSlidesProgress: true,
-        loop: true,
+        // loop: true,
       });
 
       this.big_swiper = new Swiper(this.$refs.BigSwiper, {
@@ -142,6 +119,13 @@ export default {
           swiper: this.small_swiper,
         },
       });
+    },
+    SlideSwiper(val) {
+      if (val == -1) {
+        this.big_swiper.slidePrev();
+      } else {
+        this.big_swiper.slideNext();
+      }
     },
   },
   mounted() {

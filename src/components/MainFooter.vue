@@ -10,16 +10,16 @@
         <div class="mr-16 mb-20">
           <h4 class="text-2xl font-bold mb-5">聯絡我們</h4>
           <ol class="text-basic_gray">
-            <li class="flex items-center mb-2">
-              <p class="mr-3">聯絡電話</p>
+            <li class="flex items-center sm:mb-2 mb-4 sm:flex-nowrap flex-wrap">
+              <p class="mr-3 flex-shrink-0 sm:w-auto w-full">聯絡電話</p>
               <p>04-2382-1555</p>
             </li>
-            <li class="flex items-center mb-2">
-              <p class="mr-3">電子郵件</p>
+            <li class="flex items-center sm:mb-2 mb-4 sm:flex-nowrap flex-wrap">
+              <p class="mr-3 flex-shrink-0 sm:w-auto w-full">電子郵件</p>
               <p>greatfruit1105@gmail.com</p>
             </li>
-            <li class="flex items-center">
-              <p class="mr-3">營業時間</p>
+            <li class="flex items-center sm:flex-nowrap flex-wrap">
+              <p class="mr-3 flex-shrink-0 sm:w-auto w-full">營業時間</p>
               <p>一至六 9:00~21:00 / 日 11:00~19:00</p>
             </li>
           </ol>
