@@ -51,3 +51,11 @@ export function getQuestionData() {
 export function getQuestionCategoryData() {
   return get('/question/category');
 }
+
+export function getPaymentData() {
+  return get('/payment');
+}
+
+export function getShipwayData() {
+  return get('/shipping');
+}

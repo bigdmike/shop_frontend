@@ -32,6 +32,12 @@ const routes = [
         /* webpackChunkName: "product_page" */ '../views/ProductPageView.vue'
       ),
   },
+  {
+    path: '/shopcart',
+    name: '購物車結帳',
+    component: () =>
+      import(/* webpackChunkName: "shopcart" */ '../views/ShopCartView.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'About',
@@ -157,11 +163,6 @@ const routes = [
   //         ),
   //     },
   //   ],
-  // },
-  // {
-  //   path: '/cart',
-  //   name: '購物車結帳',
-  //   component: () => import(/* webpackChunkName: "cart" */ '../views/Cart.vue'),
   // },
   // {
   //   path: '/order_create/:id',

@@ -4,6 +4,7 @@
     <MainHeader v-if="data_load_finish" />
     <MainLoading />
     <ShopCartDialog />
+    <ShopCartDrawer />
     <router-view v-if="data_load_finish" />
     <MainFooter />
   </div>
@@ -12,29 +13,23 @@
 <style src="@/assets/css/app.css"></style>
 
 <script>
-// import MainHeader from '@/components/NewMainHeader';
-// import MainFooter from '@/components/MainFooter';
-// import MainDialog from '@/components/MainDialog';
-// import AddCartMessage from '@/components/AddCartMessage';
 import EventAnnouncement from '@/components/EventAnnouncement.vue';
 import MainHeader from '@/components/MainHeader.vue';
 import MainLoading from '@/components/MainLoading';
 import MainFooter from '@/components/MainFooter.vue';
 import ShopCartDialog from '@/components/ShopCartDialog.vue';
+import ShopCartDrawer from '@/components/ShopCartDrawer.vue';
 import { ReadShopCart } from '@/common/shopcart';
 
 export default {
   name: 'App',
   components: {
-    // MainHeader,
-    // MainFooter,
-    // MainDialog,
-    // AddCartMessage,
     EventAnnouncement,
     MainHeader,
     MainFooter,
     MainLoading,
     ShopCartDialog,
+    ShopCartDrawer,
   },
   methods: {
     CheckPageData() {
@@ -59,9 +54,14 @@ export default {
       this.question_data == null ? this.$store.dispatch('getQuestionData') : '';
       this.zipcode_data == null ? this.$store.dispatch('getZipCode') : '';
       this.mascot_data == null ? this.$store.dispatch('getMascotData') : '';
+      this.payment_data == null ? this.$store.dispatch('getPaymentData') : '';
+      this.shipway_data == null ? this.$store.dispatch('getShipwayData') : '';
     },
   },
   computed: {
+    body_lock() {
+      return this.$store.state.body_lock;
+    },
     common_column_data() {
       return this.$store.state.common_column_data;
     },
@@ -101,6 +101,12 @@ export default {
     mascot_data() {
       return this.$store.state.mascot_data;
     },
+    payment_data() {
+      return this.$store.state.payment_data;
+    },
+    shipway_data() {
+      return this.$store.state.shipway_data;
+    },
     data_load_finish() {
       if (
         this.common_column_data != null &&
@@ -115,7 +121,9 @@ export default {
         this.question_category_data != null &&
         this.question_data != null &&
         this.zipcode_data != null &&
-        this.mascot_data != null
+        this.mascot_data != null &&
+        this.payment_data != null &&
+        this.shipway_data != null
       ) {
         return true;
       } else {
@@ -124,6 +132,13 @@ export default {
     },
   },
   watch: {
+    body_lock() {
+      if (this.body_lock != 0) {
+        document.querySelector('body').style.overflowY = 'hidden';
+      } else {
+        document.querySelector('body').style.overflowY = 'auto';
+      }
+    },
     data_load_finish() {
       if (this.data_load_finish) {
         this.$store.commit('SetShopCart', ReadShopCart());

@@ -14,6 +14,8 @@ import {
   getProductData,
   getQuestionData,
   getQuestionCategoryData,
+  getPaymentData,
+  getShipwayData,
 } from '@/api/page_data.js';
 
 Vue.use(Vuex);
@@ -29,7 +31,9 @@ export default new Vuex.Store({
     },
     member_token: '',
     shopcart: [],
+    shopcart_drawer: false,
     loading: 0,
+    body_lock: 0,
     common_column_data: null,
     carousel_data: null,
     kol_data: null,
@@ -43,16 +47,20 @@ export default new Vuex.Store({
     question_data: null,
     zipcode_data: null,
     mascot_data: null,
+    payment_data: null,
+    shipway_data: null,
   },
   mutations: {
+    SetBodyLock(state, action) {
+      state.body_lock + action < 0
+        ? (state.body_lock = 0)
+        : (state.body_lock += action);
+    },
+    SetShopcartDrawer(state, action) {
+      state.shopcart_drawer = action;
+    },
     SetAddCartMessage(state, action) {
       state.add_cart_message = action;
-    },
-    SetBodyLock(state, action) {
-      let body = document.querySelector('body');
-      action
-        ? (body.style.overflowY = 'hidden')
-        : (body.style.overflowY = 'auto');
     },
     SetLoading(state, action) {
       if (action == 1) {
@@ -181,6 +189,22 @@ export default new Vuex.Store({
       getQuestionCategoryData().then((res) => {
         state.commit('SetStateData', {
           key: 'question_category_data',
+          val: res.data,
+        });
+      });
+    },
+    getPaymentData(state) {
+      getPaymentData().then((res) => {
+        state.commit('SetStateData', {
+          key: 'payment_data',
+          val: res.data,
+        });
+      });
+    },
+    getShipwayData(state) {
+      getShipwayData().then((res) => {
+        state.commit('SetStateData', {
+          key: 'shipway_data',
           val: res.data,
         });
       });

@@ -37,7 +37,6 @@ export default {
   watch: {
     add_cart_message() {
       if (this.add_cart_message) {
-        console.log('here');
         this.shopcart_dialog_gsap_animation.open();
       }
     },

@@ -21,7 +21,7 @@
             <button @click="TriggerSearhBar" class="sm:pr-3 pr-2">
               <SearchIcon class="sm:w-8 w-6" />
             </button>
-            <button class="sm:pl-3 pl-2 md:hidden">
+            <button @click="OpenShopcart" class="sm:pl-3 pl-2 md:hidden">
               <ShopCartIcon class="sm:w-8 w-6" />
             </button>
           </div>
@@ -45,7 +45,7 @@
           <button @click="TriggerSearhBar" class="pl-4 pr-3">
             <SearchIcon class="lg:w-7 w-6" />
           </button>
-          <button class="pl-3">
+          <button @click="OpenShopcart" class="pl-3">
             <ShopCartIcon class="lg:w-7 w-6" />
           </button>
         </div>
@@ -104,6 +104,9 @@ export default {
     },
     CloseMenu() {
       this.$refs.MainMenu.Close();
+    },
+    OpenShopcart() {
+      this.$store.commit('SetShopcartDrawer', true);
     },
     TriggerSearhBar() {
       this.$refs.SearchBar.TriggerStatus();

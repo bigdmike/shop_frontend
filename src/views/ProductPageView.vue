@@ -12,6 +12,7 @@
             :active_option="active_option"
             :amount="amount"
             @change-amount="ChangeAmount"
+            @change-option="ChangeOption"
             @add-cart="AddShopCart"
           />
         </div>
@@ -109,28 +110,33 @@ export default {
     AddShopCart() {
       let product_exist = false;
       let tmp_shopcart = JSON.parse(JSON.stringify(this.shopcart));
+      console.log(JSON.parse(JSON.stringify(tmp_shopcart)));
 
       tmp_shopcart.forEach((item, item_index) => {
+        console.log(item.active_option[0], item.active_option[1]);
         // check if product exist
-        if (item.GoodsID == this.product_data.GoodsID) {
+        if (item.product_data.GoodsID === this.product_data.GoodsID) {
           // chek if option exist
           if (
-            item.active_option[0] == this.active_option[0] &&
-            item.active_option[1] == this.active_option[1]
+            item.active_option[0] === this.active_option[0] &&
+            item.active_option[1] === this.active_option[1]
           ) {
+            console.log('same product and option', item_index);
             product_exist = true;
             tmp_shopcart[item_index].amount += this.amount;
           }
         }
       });
       if (!product_exist) {
+        console.log('new product and option');
         let shopcart_item = {
           product_data: this.product_data,
-          active_option: this.active_option,
-          amount: this.amount,
+          active_option: JSON.parse(JSON.stringify(this.active_option)),
+          amount: JSON.parse(JSON.stringify(this.amount)),
         };
         tmp_shopcart.push(shopcart_item);
       }
+      console.log(tmp_shopcart);
       this.$store.commit('SetShopCart', tmp_shopcart);
       SaveShopCart(tmp_shopcart);
       this.$store.commit('SetAddCartMessage', true);
@@ -170,6 +176,17 @@ export default {
         top: offsetPosition,
         behavior: 'smooth',
       });
+    },
+    ChangeOption(index, val) {
+      this.$set(this.active_option, index, val);
+      if (index == 0) {
+        let default_option = this.product_data.Stock.filter(
+          (item) => item.ColorID == val
+        )[0];
+        setTimeout(() => {
+          this.$set(this.active_option, 1, default_option.SizeID);
+        }, 100);
+      }
     },
   },
   created() {

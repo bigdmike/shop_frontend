@@ -1,5 +1,5 @@
 <template>
-  <footer class="relative z-10 border-t border-[#cccccc] py-32">
+  <footer class="relative z-10 border-t bg-white border-[#cccccc] py-32">
     <div
       class="w-full max-w-screen-xl mx-auto flex flex-wrap items-start justify-between xl:px-0 px-10 md:mb-12"
     >

@@ -1,6 +1,6 @@
 <template>
   <div class="w-full relative z-10">
-    <ol class="flex items-center">
+    <ol class="flex items-center flex-wrap">
       <template v-for="(item, item_index) in path">
         <li class="mr-2" :key="`path_${item_index}_link`">
           <router-link

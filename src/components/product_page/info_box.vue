@@ -31,9 +31,11 @@
       <p class="font-semibold mb-2">選項一</p>
       <div class="w-full relative mb-5">
         <SelectArrowIcon
-          class="absolute top-1/2 right-5 transform -translate-y-1/2 w-4 z-10 touch-none"
+          class="absolute top-1/2 right-5 transform -translate-y-1/2 w-4 z-10 pointer-events-none"
         />
         <select
+          @input="$emit('change-option', 0, $event.target.value)"
+          :value="active_option[0]"
           class="relative z-0 border border-zinc-300 w-full px-5 py-3 appearance-none focus:outline-none rounded-lg"
         >
           <option
@@ -48,9 +50,11 @@
       <p class="font-semibold mb-2">選項二</p>
       <div class="w-full relative mb-5">
         <SelectArrowIcon
-          class="absolute top-1/2 right-5 transform -translate-y-1/2 w-4 z-10 touch-none"
+          class="absolute top-1/2 right-5 transform -translate-y-1/2 w-4 z-10 pointer-events-none"
         />
         <select
+          @input="$emit('change-option', 1, $event.target.value)"
+          :value="active_option[1]"
           class="relative z-0 border border-zinc-300 w-full px-5 py-3 appearance-none focus:outline-none rounded-lg"
         >
           <option
@@ -99,8 +103,8 @@
 
 <script>
 import PlusIcon from '@/components/svg/PlusIcon.vue';
-import ShareLinkIcon from '@/components/svg/ShareLinkIcon.vue';
 import MinusIcon from '@/components/svg/MinusIcon.vue';
+import ShareLinkIcon from '@/components/svg/ShareLinkIcon.vue';
 import FacebookIcon from '@/components/svg/FacebookIcon.vue';
 import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 export default {
@@ -144,17 +148,18 @@ export default {
     },
     second_options() {
       let tmp_options = [];
-      this.product_data.Stock.forEach((item) => {
+      let options = this.product_data.Stock.filter(
+        (option_item) => option_item.ColorID == this.active_option[0]
+      );
+      options.forEach((item) => {
         let option = tmp_options.filter(
           (option_item) => option_item.SizeID == item.SizeID
         );
         if (option.length <= 0) {
-          if (item.ColorID == this.active_option[0]) {
-            tmp_options.push({
-              SizeID: item.SizeID,
-              Title: item.SizeTitle,
-            });
-          }
+          tmp_options.push({
+            SizeID: item.SizeID,
+            Title: item.SizeTitle,
+          });
         }
       });
       return tmp_options;

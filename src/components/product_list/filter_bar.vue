@@ -2,7 +2,7 @@
   <div>
     <div class="relative md:hidden block w-1/2 pl-2 mr-2">
       <SelectArrowIcon
-        class="w-5 absolute top-1/2 right-0 transform -translate-y-1/2 text-zinc-400 z-10 touch-none"
+        class="w-5 absolute top-1/2 right-0 transform -translate-y-1/2 text-zinc-400 z-10 pointer-events-none"
       />
       <select
         :value="active_category"
@@ -21,7 +21,7 @@
     </div>
     <div class="relative md:w-1/4 w-1/2 pl-2">
       <SelectArrowIcon
-        class="w-5 absolute top-1/2 right-0 transform -translate-y-1/2 text-zinc-400 z-10 touch-none"
+        class="w-5 absolute top-1/2 right-0 transform -translate-y-1/2 text-zinc-400 z-10 pointer-events-none"
       />
       <select
         :value="sort_type"
