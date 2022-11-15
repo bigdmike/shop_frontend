@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import { getLocalStorage } from '@/common/cookie';
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,7 @@ const routes = [
     name: 'Home',
     component: () =>
       import(/* webpackChunkName: "Home" */ '../views/HomeView.vue'),
+    meta: { requiresAuth: false },
   },
   {
     path: '/collections/:id/',
@@ -23,6 +25,7 @@ const routes = [
       import(
         /* webpackChunkName: "product_list" */ '../views/ProductListView.vue'
       ),
+    meta: { requiresAuth: false },
   },
   {
     path: '/product/:id',
@@ -31,12 +34,14 @@ const routes = [
       import(
         /* webpackChunkName: "product_page" */ '../views/ProductPageView.vue'
       ),
+    meta: { requiresAuth: false },
   },
   {
     path: '/shopcart',
     name: '購物車結帳',
     component: () =>
       import(/* webpackChunkName: "shopcart" */ '../views/ShopCartView.vue'),
+    meta: { requiresAuth: false },
   },
   {
     path: '/order_create/:id',
@@ -45,6 +50,7 @@ const routes = [
       import(
         /* webpackChunkName: "order_create" */ '../views/TradeFinishView.vue'
       ),
+    meta: { requiresAuth: false },
   },
   {
     path: '/error_page',
@@ -57,12 +63,14 @@ const routes = [
     name: '最新消息列表',
     component: () =>
       import(/* webpackChunkName: "news_list" */ '../views/NewsListView.vue'),
+    meta: { requiresAuth: false },
   },
   {
     path: '/news/:category/:type/:id',
     name: '最新消息',
     component: () =>
       import(/* webpackChunkName: "news_page" */ '../views/NewsPageView.vue'),
+    meta: { requiresAuth: false },
   },
   {
     path: '/search/:key_word',
@@ -71,18 +79,81 @@ const routes = [
       import(
         /* webpackChunkName: "search_page" */ '../views/SearchResultView.vue'
       ),
+    meta: { requiresAuth: false },
   },
   {
     path: '/about',
     name: '關於我們',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+    meta: { requiresAuth: false },
   },
   {
     path: '/account/login',
     name: '會員登入',
     component: () =>
       import(/* webpackChunkName: "login" */ '../views/LoginView.vue'),
+    meta: { requiresAuth: false },
+  },
+  {
+    path: '/account/',
+    name: '會員中心',
+    component: () =>
+      import(
+        /* webpackChunkName: "member_center" */ '../views/MemberCenterView.vue'
+      ),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: 'account_edit',
+        name: '更新個人資料',
+        component: () =>
+          import(
+            /* webpackChunkName: "member_center" */ '../views/MemberCenter/InfoEditView.vue'
+          ),
+        meta: { requiresAuth: true },
+      },
+      // {
+      //   path: 'modify_password',
+      //   name: '更改密碼',
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: "modify_password" */ '../views/MemberCenter/ModifyPassword.vue'
+      //     ),
+      // },
+      // {
+      //   path: 'orders',
+      //   name: '訂單查詢',
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: "orders" */ '../views/MemberCenter/OrderList.vue'
+      //     ),
+      // },
+      // {
+      //   path: 'orders/:id',
+      //   name: '訂單詳細',
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: "order_page" */ '../views/MemberCenter/OrderPage.vue'
+      //     ),
+      // },
+      // {
+      //   path: 'addresses',
+      //   name: '收件地址管理',
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: "addresses" */ '../views/MemberCenter/Addresses.vue'
+      //     ),
+      // },
+      // {
+      //   path: 'tracking_items',
+      //   name: '收藏清單',
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: "tracking_items" */ '../views/MemberCenter/TrackingList.vue'
+      //     ),
+      // },
+    ],
   },
 
   // {
@@ -112,64 +183,6 @@ const routes = [
   //       /* webpackChunkName: "forget_password" */ '../views/ForgetPassword.vue'
   //     ),
   // },
-  // {
-  //   path: '/account/',
-  //   name: '會員中心',
-  //   component: () =>
-  //     import(
-  //       /* webpackChunkName: "member_center" */ '../views/MemberCenter.vue'
-  //     ),
-  //   children: [
-  //     {
-  //       path: 'account_edit',
-  //       name: '更新個人資料',
-  //       component: () =>
-  //         import(
-  //           /* webpackChunkName: "member_center" */ '../views/MemberCenter/AccountEdit.vue'
-  //         ),
-  //     },
-  //     {
-  //       path: 'modify_password',
-  //       name: '更改密碼',
-  //       component: () =>
-  //         import(
-  //           /* webpackChunkName: "modify_password" */ '../views/MemberCenter/ModifyPassword.vue'
-  //         ),
-  //     },
-  //     {
-  //       path: 'orders',
-  //       name: '訂單查詢',
-  //       component: () =>
-  //         import(
-  //           /* webpackChunkName: "orders" */ '../views/MemberCenter/OrderList.vue'
-  //         ),
-  //     },
-  //     {
-  //       path: 'orders/:id',
-  //       name: '訂單詳細',
-  //       component: () =>
-  //         import(
-  //           /* webpackChunkName: "order_page" */ '../views/MemberCenter/OrderPage.vue'
-  //         ),
-  //     },
-  //     {
-  //       path: 'addresses',
-  //       name: '收件地址管理',
-  //       component: () =>
-  //         import(
-  //           /* webpackChunkName: "addresses" */ '../views/MemberCenter/Addresses.vue'
-  //         ),
-  //     },
-  //     {
-  //       path: 'tracking_items',
-  //       name: '收藏清單',
-  //       component: () =>
-  //         import(
-  //           /* webpackChunkName: "tracking_items" */ '../views/MemberCenter/TrackingList.vue'
-  //         ),
-  //     },
-  //   ],
-  // },
 
   // {
   //   path: '/order_search',
@@ -197,6 +210,21 @@ const router = new VueRouter({
     }
     return { x: 0, y: 0 };
   },
+});
+
+router.beforeEach((to, from, next) => {
+  // 而不是去检查每条路由记录
+  // to.matched.some(record => record.meta.requiresAuth)
+  const account_token = getLocalStorage('account_token');
+  if (to.meta.requiresAuth && account_token == '') {
+    // 此路由需要授权，请检查是否已登录
+    // 如果没有，则重定向到登录页面
+    next({
+      path: '/account/login',
+    });
+  } else {
+    next();
+  }
 });
 
 export default router;

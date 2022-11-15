@@ -117,7 +117,7 @@ export default {
         this.AddOffline(index);
       }
     },
-    async AddOnline(index) {
+    AddOnline(index) {
       const shopcart_item = this.$store.state.shopcart[index];
       const shopcart = [
         {
@@ -126,12 +126,16 @@ export default {
           amount: 1,
         },
       ];
-      await addShopcart(shopcart).then((res) => {
+      addShopcart(shopcart).then((res) => {
         console.log(res);
-      });
-      getShopcart().then((res) => {
-        const shop_cart = SaveOnlineShopCart(res.data);
-        this.$store.commit('SetShopCart', shop_cart);
+        if (res.code == 302) {
+          this.$store.commit('SetShopCart', []);
+        } else {
+          getShopcart().then((res) => {
+            const shop_cart = SaveOnlineShopCart(res.data);
+            this.$store.commit('SetShopCart', shop_cart);
+          });
+        }
       });
     },
     AddOffline(index) {
@@ -147,14 +151,19 @@ export default {
         this.RemoveOffline(index);
       }
     },
-    async RemoveOnline(index) {
+    RemoveOnline(index) {
       const shop_cart_item = this.$store.state.shopcart[index];
-      await removeShopcart(shop_cart_item.shopcart_id[0]).then((res) => {
+      removeShopcart(shop_cart_item.shopcart_id[0]).then((res) => {
         console.log(res);
-      });
-      getShopcart().then((res) => {
-        const shop_cart = SaveOnlineShopCart(res.data);
-        this.$store.commit('SetShopCart', shop_cart);
+        if (res.code == 302) {
+          this.$store.commit('SetShopCart', []);
+          SaveShopCart([]);
+        } else {
+          getShopcart().then((res) => {
+            const shop_cart = SaveOnlineShopCart(res.data);
+            this.$store.commit('SetShopCart', shop_cart);
+          });
+        }
       });
     },
     RemoveOffline(index) {

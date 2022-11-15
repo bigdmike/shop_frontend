@@ -116,7 +116,7 @@ export default {
         this.AddShopCartOffline();
       }
     },
-    async AddShopCartOnline() {
+    AddShopCartOnline() {
       // 1.call 加入購物車 api
       const shopcart = [
         {
@@ -125,15 +125,26 @@ export default {
           amount: this.amount,
         },
       ];
-      await addShopcart(shopcart).then((res) => {
+      addShopcart(shopcart).then((res) => {
         console.log(res);
-      });
-      // 2.call 取得購物車 api 並存入 store
-      getShopcart().then((res) => {
-        console.log(res);
-        const shop_cart = SaveOnlineShopCart(res.data);
-        this.$store.commit('SetShopCart', shop_cart);
-        this.$store.commit('SetAddCartMessage', true);
+        if (res.code == 302) {
+          // token 過期
+          this.$store.commit('SetShopCart', []);
+          this.AddShopCartOffline();
+        } else {
+          // 2.call 取得購物車 api 並存入 store
+          getShopcart().then((res) => {
+            console.log(res);
+            if (res.code == 302) {
+              this.$store.commit('SetShopCart', []);
+              SaveShopCart([]);
+            } else {
+              const shop_cart = SaveOnlineShopCart(res.data);
+              this.$store.commit('SetShopCart', shop_cart);
+            }
+            this.$store.commit('SetAddCartMessage', true);
+          });
+        }
       });
     },
     AddShopCartOffline() {

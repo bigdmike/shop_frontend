@@ -68,8 +68,13 @@ export default {
         // 1.取得api購物車
         // 2.存入Store購物車
         getShopcart().then((res) => {
-          const shop_cart = SaveOnlineShopCart(res.data);
-          this.$store.commit('SetShopCart', shop_cart);
+          if (res.code == 302) {
+            // token 過期
+            this.InitShopCart();
+          } else {
+            const shop_cart = SaveOnlineShopCart(res.data);
+            this.$store.commit('SetShopCart', shop_cart);
+          }
         });
       } else {
         // 1.取得cookie購物車

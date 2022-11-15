@@ -49,7 +49,15 @@ export function addShopcart(shopcart) {
     (res) => {
       if (promise_list.length == res.length) {
         delLocalStorage('shopcart');
-        return true;
+        let error = false;
+        res.forEach((item) => {
+          item.code != 200 ? (error = item) : '';
+        });
+        if (error != false) {
+          return error;
+        } else {
+          return res[0];
+        }
       }
     },
     (err) => console.log(err)
