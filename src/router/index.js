@@ -38,6 +38,14 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "shopcart" */ '../views/ShopCartView.vue'),
   },
+  {
+    path: '/order_create',
+    name: '付款完成頁',
+    component: () =>
+      import(
+        /* webpackChunkName: "order_create" */ '../views/TradeFinishView.vue'
+      ),
+  },
   // {
   //   path: '/about',
   //   name: 'About',
@@ -164,14 +172,7 @@ const routes = [
   //     },
   //   ],
   // },
-  // {
-  //   path: '/order_create/:id',
-  //   name: '付款完成頁',
-  //   component: () =>
-  //     import(
-  //       /* webpackChunkName: "order_create" */ '../views/ThankYouPage.vue'
-  //     ),
-  // },
+
   // {
   //   path: '/order_search',
   //   name: '訂單查詢頁面',

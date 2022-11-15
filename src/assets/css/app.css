@@ -724,6 +724,10 @@ video {
   margin-top: 1.25rem;
 }
 
+.mb-1{
+  margin-bottom: 0.25rem;
+}
+
 .block{
   display: block;
 }
@@ -1308,6 +1312,16 @@ video {
   padding-bottom: 0px;
 }
 
+.py-64{
+  padding-top: 16rem;
+  padding-bottom: 16rem;
+}
+
+.px-14{
+  padding-left: 3.5rem;
+  padding-right: 3.5rem;
+}
+
 .pt-28{
   padding-top: 7rem;
 }
@@ -1511,6 +1525,10 @@ video {
 .text-red-600{
   --tw-text-opacity: 1;
   color: rgb(220 38 38 / var(--tw-text-opacity));
+}
+
+.underline{
+  text-decoration-line: underline;
 }
 
 .line-through{
