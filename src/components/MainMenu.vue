@@ -97,7 +97,7 @@ export default {
         },
         {
           title: '關於我們',
-          link: '/',
+          link: '/about',
           type: 'link',
         },
         {

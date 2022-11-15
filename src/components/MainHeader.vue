@@ -91,7 +91,7 @@ export default {
         },
         {
           title: '關於我們',
-          link: '',
+          link: '/about',
         },
         {
           title: '最新消息',

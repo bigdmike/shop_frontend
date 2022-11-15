@@ -72,12 +72,12 @@ const routes = [
         /* webpackChunkName: "search_page" */ '../views/SearchResultView.vue'
       ),
   },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   component: () =>
-  //     import(/* webpackChunkName: "about" */ '../views/About.vue'),
-  // },
+  {
+    path: '/about',
+    name: '關於我們',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+  },
   // {
   //   path: '/kol',
   //   name: 'KolList',
