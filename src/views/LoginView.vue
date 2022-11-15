@@ -4,7 +4,7 @@
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
       <div class="w-full max-w-screen-sm mx-auto bg-zinc-50 rounded-2xl p-10">
         <h4 class="text-center text-2xl font-bold mb-8">會員登入</h4>
-        <div class="w-full border-t border-zinc-200 pt-10 px-20">
+        <div class="w-full border-t border-zinc-200 pt-10 md:px-20">
           <div class="mb-4">
             <input
               v-model="account"

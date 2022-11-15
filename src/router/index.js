@@ -113,14 +113,14 @@ const routes = [
           ),
         meta: { requiresAuth: true },
       },
-      // {
-      //   path: 'modify_password',
-      //   name: '更改密碼',
-      //   component: () =>
-      //     import(
-      //       /* webpackChunkName: "modify_password" */ '../views/MemberCenter/ModifyPassword.vue'
-      //     ),
-      // },
+      {
+        path: 'modify_password',
+        name: '更改密碼',
+        component: () =>
+          import(
+            /* webpackChunkName: "modify_password" */ '../views/MemberCenter/PasswordEditView.vue'
+          ),
+      },
       // {
       //   path: 'orders',
       //   name: '訂單查詢',

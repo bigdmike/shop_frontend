@@ -740,6 +740,10 @@ video {
   margin-right: 1rem;
 }
 
+.ml-5{
+  margin-left: 1.25rem;
+}
+
 .block{
   display: block;
 }
@@ -2107,8 +2111,16 @@ video {
     margin-right: 0.5rem;
   }
 
+  .md\:ml-2{
+    margin-left: 0.5rem;
+  }
+
   .md\:block{
     display: block;
+  }
+
+  .md\:inline-block{
+    display: inline-block;
   }
 
   .md\:flex{

@@ -70,8 +70,8 @@ export function getAccountInfo() {
 export function updateAccountInfo(data) {
   return post('member/my', data);
 }
-
-export function ModifyPassword(data) {
+// 更新會員密碼
+export function updateAccountPassword(data) {
   return post('member/password', data);
 }
 
