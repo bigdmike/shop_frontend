@@ -1,7 +1,7 @@
 <template>
   <main class="w-full relative z-10">
     <div
-      class="w-full max-w-screen-xl mx-auto relative flex items-center justify-center py-64"
+      class="w-full max-w-screen-xl mx-auto relative flex items-center justify-center py-64 xl:px-0 px-10"
     >
       <div class="text-center">
         <img src="@/assets/img/check.svg" class="mx-auto mb-5" />

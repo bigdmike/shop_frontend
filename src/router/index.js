@@ -46,6 +46,12 @@ const routes = [
         /* webpackChunkName: "order_create" */ '../views/TradeFinishView.vue'
       ),
   },
+  {
+    path: '/error_page',
+    name: '錯誤頁面',
+    component: () =>
+      import(/* webpackChunkName: "error_page" */ '../views/ErrorPageView.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'About',
@@ -178,12 +184,6 @@ const routes = [
   //   name: '訂單查詢頁面',
   //   component: () =>
   //     import(/* webpackChunkName: "order_search" */ '../views/OrderSearch.vue'),
-  // },
-  // {
-  //   path: '/error_page',
-  //   name: '錯誤頁面',
-  //   component: () =>
-  //     import(/* webpackChunkName: "error_page" */ '../views/ErrorPage.vue'),
   // },
   // {
   //   path: '*',
