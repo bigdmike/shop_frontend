@@ -106,7 +106,7 @@ const routes = [
     children: [
       {
         path: 'account_edit',
-        name: '更新個人資料',
+        name: '編輯會員資料',
         component: () =>
           import(
             /* webpackChunkName: "member_center" */ '../views/MemberCenter/InfoEditView.vue'

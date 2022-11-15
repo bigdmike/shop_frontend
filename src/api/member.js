@@ -1,6 +1,5 @@
 import { del, put, post, get } from '@/common/request';
 import {
-  delCookie,
   delLocalStorage,
   //   getLocalStorage,
 } from '@/common/cookie.js';
@@ -21,11 +20,6 @@ export async function sendLoginData(data) {
   return post('member/login', data).then((res) => {
     return res;
   });
-}
-// 登出
-export function LogOut() {
-  delCookie('member_token');
-  return true;
 }
 // 取得會員購物車
 export function getShopcart() {
@@ -63,16 +57,17 @@ export function addShopcart(shopcart) {
     (err) => console.log(err)
   );
 }
+// 移除會員購物車
 export function removeShopcart(id) {
   return del('member/shoppingCart/' + id);
 }
 
-// 會員資料
-export function GetAccountInfo() {
+// 取得會員資料
+export function getAccountInfo() {
   return get('member/my');
 }
-
-export function SendAccountInfo(data) {
+// 更新會員資料
+export function updateAccountInfo(data) {
   return post('member/my', data);
 }
 

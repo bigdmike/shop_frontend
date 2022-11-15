@@ -13,19 +13,20 @@
               placeholder="請輸入電子郵件"
               class="w-full border border-zinc-200 rounded-md px-3 py-2"
             />
-            <p v-if="GerError('account')" class="text-red-600 text-xs">
+            <p v-if="GetError('account')" class="text-red-600 text-xs">
               請輸入正確的電子郵件
             </p>
           </div>
           <div class="mb-4">
             <input
+              @keypress.enter="VarDateForm"
               v-model="password"
               type="password"
               name="password"
               placeholder="請輸入密碼"
               class="w-full border border-zinc-200 rounded-md px-3 py-2"
             />
-            <p v-if="GerError('password')" class="text-red-600 text-xs">
+            <p v-if="GetError('password')" class="text-red-600 text-xs">
               請輸入密碼
             </p>
           </div>
@@ -89,7 +90,7 @@ export default {
     },
   },
   methods: {
-    GerError(key) {
+    GetError(key) {
       return this.errors.indexOf(key) != -1;
     },
     VarDateForm() {
@@ -124,6 +125,7 @@ export default {
             console.log(res);
             const shop_cart = SaveOnlineShopCart(res.data);
             this.$store.commit('SetShopCart', shop_cart);
+            this.$router.push('/account/account_edit');
           });
         }
       });
