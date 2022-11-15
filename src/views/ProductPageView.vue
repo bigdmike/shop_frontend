@@ -52,7 +52,9 @@ import InfoBox from '@/components/product_page/info_box.vue';
 import ProductTabList from '@/components/product_page/tab_list.vue';
 import FixedProductTabList from '@/components/product_page/fixed_tab_list.vue';
 import FixedFooter from '@/components/product_page/fixed_footer.vue';
-import { SaveShopCart } from '@/common/shopcart';
+import { SaveShopCart, SaveOnlineShopCart } from '@/common/shopcart';
+import { getLocalStorage } from '@/common/cookie';
+import { addShopcart, getShopcart } from '@/api/member';
 export default {
   name: 'ProductPage',
   components: {
@@ -108,12 +110,36 @@ export default {
       this.bread_crumb_path[2].link = `/product/${this.product_data.GoodsID}`;
     },
     AddShopCart() {
+      if (getLocalStorage('account_token')) {
+        this.AddShopCartOnline();
+      } else {
+        this.AddShopCartOffline();
+      }
+    },
+    async AddShopCartOnline() {
+      // 1.call 加入購物車 api
+      const shopcart = [
+        {
+          product_data: this.product_data,
+          active_option: this.active_option,
+          amount: this.amount,
+        },
+      ];
+      await addShopcart(shopcart).then((res) => {
+        console.log(res);
+      });
+      // 2.call 取得購物車 api 並存入 store
+      getShopcart().then((res) => {
+        console.log(res);
+        const shop_cart = SaveOnlineShopCart(res.data);
+        this.$store.commit('SetShopCart', shop_cart);
+        this.$store.commit('SetAddCartMessage', true);
+      });
+    },
+    AddShopCartOffline() {
       let product_exist = false;
       let tmp_shopcart = JSON.parse(JSON.stringify(this.shopcart));
-      console.log(JSON.parse(JSON.stringify(tmp_shopcart)));
-
       tmp_shopcart.forEach((item, item_index) => {
-        console.log(item.active_option[0], item.active_option[1]);
         // check if product exist
         if (item.product_data.GoodsID === this.product_data.GoodsID) {
           // chek if option exist
@@ -121,14 +147,12 @@ export default {
             item.active_option[0] === this.active_option[0] &&
             item.active_option[1] === this.active_option[1]
           ) {
-            console.log('same product and option', item_index);
             product_exist = true;
             tmp_shopcart[item_index].amount += this.amount;
           }
         }
       });
       if (!product_exist) {
-        console.log('new product and option');
         let shopcart_item = {
           product_data: this.product_data,
           active_option: JSON.parse(JSON.stringify(this.active_option)),
@@ -136,7 +160,6 @@ export default {
         };
         tmp_shopcart.push(shopcart_item);
       }
-      console.log(tmp_shopcart);
       this.$store.commit('SetShopCart', tmp_shopcart);
       SaveShopCart(tmp_shopcart);
       this.$store.commit('SetAddCartMessage', true);
