@@ -55,6 +55,9 @@ export function addShopcart(shopcart) {
     (err) => console.log(err)
   );
 }
+export function removeShopcart(id) {
+  return del('member/shoppingCart/' + id);
+}
 
 // 會員資料
 export function GetAccountInfo() {

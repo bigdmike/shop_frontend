@@ -81,7 +81,9 @@ import CloseIcon from '@/components/svg/CloseIcon.vue';
 import PlusIcon from '@/components/svg/PlusIcon.vue';
 import MinusIcon from '@/components/svg/MinusIcon.vue';
 import { menu_gsap_animation } from '@/gsap/main_menu';
-import { SaveShopCart } from '@/common/shopcart';
+import { SaveShopCart, SaveOnlineShopCart } from '@/common/shopcart';
+import { getLocalStorage } from '@/common/cookie';
+import { addShopcart, getShopcart, removeShopcart } from '@/api/member';
 export default {
   name: 'ShopCartDrawer',
   components: {
@@ -109,12 +111,53 @@ export default {
       this.$store.commit('SetBodyLock', -1);
     },
     Add(index) {
+      if (getLocalStorage('account_token')) {
+        this.AddOnline(index);
+      } else {
+        this.AddOffline(index);
+      }
+    },
+    async AddOnline(index) {
+      const shopcart_item = this.$store.state.shopcart[index];
+      const shopcart = [
+        {
+          product_data: shopcart_item.product_data,
+          active_option: shopcart_item.active_option,
+          amount: 1,
+        },
+      ];
+      await addShopcart(shopcart).then((res) => {
+        console.log(res);
+      });
+      getShopcart().then((res) => {
+        const shop_cart = SaveOnlineShopCart(res.data);
+        this.$store.commit('SetShopCart', shop_cart);
+      });
+    },
+    AddOffline(index) {
       let tmp_shopcart = JSON.parse(JSON.stringify(this.$store.state.shopcart));
       tmp_shopcart[index].amount += 1;
       this.$store.commit('SetShopCart', tmp_shopcart);
       SaveShopCart(tmp_shopcart);
     },
     Remove(index) {
+      if (getLocalStorage('account_token')) {
+        this.RemoveOnline(index);
+      } else {
+        this.RemoveOffline(index);
+      }
+    },
+    async RemoveOnline(index) {
+      const shop_cart_item = this.$store.state.shopcart[index];
+      await removeShopcart(shop_cart_item.shopcart_id[0]).then((res) => {
+        console.log(res);
+      });
+      getShopcart().then((res) => {
+        const shop_cart = SaveOnlineShopCart(res.data);
+        this.$store.commit('SetShopCart', shop_cart);
+      });
+    },
+    RemoveOffline(index) {
       let tmp_shopcart = JSON.parse(JSON.stringify(this.$store.state.shopcart));
       tmp_shopcart[index].amount -= 1;
       if (tmp_shopcart[index].amount <= 0) {
