@@ -25,9 +25,7 @@ export default new Vuex.Store({
     add_cart_message: false,
     main_dialog: {
       status: false,
-      title: '',
       content: '',
-      type: '',
     },
     member_token: '',
     shopcart: [],
@@ -69,11 +67,9 @@ export default new Vuex.Store({
         state.loading -= 1;
       }
     },
-    SetDialog(state, { status, content, title, type }) {
+    SetDialog(state, { status, content }) {
       state.main_dialog.status = status;
       state.main_dialog.content = content;
-      state.main_dialog.title = title;
-      state.main_dialog.type = type;
     },
     SetShopCart(state, shopcart) {
       state.shopcart = shopcart;

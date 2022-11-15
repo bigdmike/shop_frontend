@@ -5,6 +5,7 @@
     <MainLoading />
     <ShopCartDialog />
     <ShopCartDrawer />
+    <MainDialog />
     <router-view v-if="data_load_finish" />
     <MainFooter />
   </div>
@@ -19,7 +20,10 @@ import MainLoading from '@/components/MainLoading';
 import MainFooter from '@/components/MainFooter.vue';
 import ShopCartDialog from '@/components/ShopCartDialog.vue';
 import ShopCartDrawer from '@/components/ShopCartDrawer.vue';
-import { ReadShopCart } from '@/common/shopcart';
+import MainDialog from '@/components/MainDialog.vue';
+import { ReadShopCart, SaveOnlineShopCart } from '@/common/shopcart';
+import { getShopcart } from '@/api/member';
+import { getLocalStorage } from '@/common/cookie';
 
 export default {
   name: 'App',
@@ -30,6 +34,7 @@ export default {
     MainLoading,
     ShopCartDialog,
     ShopCartDrawer,
+    MainDialog,
   },
   methods: {
     CheckPageData() {
@@ -56,6 +61,21 @@ export default {
       this.mascot_data == null ? this.$store.dispatch('getMascotData') : '';
       this.payment_data == null ? this.$store.dispatch('getPaymentData') : '';
       this.shipway_data == null ? this.$store.dispatch('getShipwayData') : '';
+    },
+    InitShopCart() {
+      // 判斷是否有登入會員
+      if (getLocalStorage('account_token')) {
+        // 1.取得api購物車
+        // 2.存入Store購物車
+        getShopcart().then((res) => {
+          const shop_cart = SaveOnlineShopCart(res.data);
+          this.$store.commit('SetShopCart', shop_cart);
+        });
+      } else {
+        // 1.取得cookie購物車
+        // 2.存入Store購物車
+        this.$store.commit('SetShopCart', ReadShopCart());
+      }
     },
   },
   computed: {
@@ -141,7 +161,7 @@ export default {
     },
     data_load_finish() {
       if (this.data_load_finish) {
-        this.$store.commit('SetShopCart', ReadShopCart());
+        this.InitShopCart();
       }
     },
   },

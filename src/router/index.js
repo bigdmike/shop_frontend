@@ -78,17 +78,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
   },
-  // {
-  //   path: '/kol',
-  //   name: 'KolList',
-  //   component: () => import(/* webpackChunkName: "kol" */ '../views/Kol.vue'),
-  // },
-  // {
-  //   path: '/collections/:category/',
-  //   name: 'ProductList',
-  //   component: () =>
-  //     import(/* webpackChunkName: "product_list" */ '../views/ProductList.vue'),
-  // },
+  {
+    path: '/account/login',
+    name: '會員登入',
+    component: () =>
+      import(/* webpackChunkName: "login" */ '../views/LoginView.vue'),
+  },
 
   // {
   //   path: '/question',
@@ -102,12 +97,7 @@ const routes = [
   //   component: () =>
   //     import(/* webpackChunkName: "contact" */ '../views/Contact.vue'),
   // },
-  // {
-  //   path: '/account/login',
-  //   name: 'Login',
-  //   component: () =>
-  //     import(/* webpackChunkName: "login" */ '../views/Login.vue'),
-  // },
+
   // {
   //   path: '/account/signup',
   //   name: '註冊會員',

@@ -51,7 +51,14 @@
           <button @click="TriggerSearhBar" class="pl-4 pr-3">
             <SearchIcon class="lg:w-7 w-6" />
           </button>
-          <button @click="OpenShopcart" class="pl-3">
+          <button @click="OpenShopcart" class="pl-3 relative">
+            <span
+              class="w-5 h-5 flex items-center justify-center absolute top-0 right-0 bg-primary rounded-full transform translate-x-2 -translate-y-2"
+            >
+              <p class="text-xs text-white transform scale-75 font-bold">
+                {{ shopcart_count }}
+              </p>
+            </span>
             <ShopCartIcon class="lg:w-7 w-6" />
           </button>
         </div>
@@ -116,6 +123,19 @@ export default {
     },
     TriggerSearhBar() {
       this.$refs.SearchBar.TriggerStatus();
+    },
+  },
+  computed: {
+    shopcart() {
+      return this.$store.state.shopcart;
+    },
+    shopcart_count() {
+      let count = 0;
+      this.shopcart.forEach((item) => {
+        count += parseInt(item.amount);
+      });
+
+      return count;
     },
   },
 };

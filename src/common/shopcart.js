@@ -12,6 +12,40 @@ export function SaveShopCart(shopcart) {
   setLocalStorage('shopcart', tmp_list);
 }
 
+export function SaveOnlineShopCart(shopcart) {
+  let tmp_list = [];
+  shopcart.forEach((item) => {
+    let product_exist = -1;
+    const product_data = store.state.product_data.filter(
+      (product) => product.GoodsID == item.GoodsID
+    )[0];
+
+    // 檢查是否存在相同商品
+    tmp_list.forEach((product, product_index) => {
+      if (
+        product.product_data.GoodsID == item.GoodsID &&
+        product.active_option[0] == item.ColorID &&
+        product.active_option[1] == item.SizeID
+      ) {
+        product_exist = product_index;
+      }
+    });
+    if (product_exist == -1) {
+      tmp_list.push({
+        product_data: product_data,
+        active_option: [item.ColorID, item.SizeID],
+        amount: 1,
+        shopcart_id: [item.ShoppingCartID],
+      });
+    } else {
+      tmp_list[product_exist].amount += 1;
+      tmp_list[product_exist].shopcart_id.push(item.ShoppingCartID);
+    }
+  });
+
+  return tmp_list;
+}
+
 export function ReadShopCart() {
   let tmp_list = getLocalStorage('shopcart');
   let change = false;

@@ -2,6 +2,7 @@ import axios from 'axios';
 // import qs from "qs";
 import store from '@/store/index.js';
 import router from '@/router';
+import { getLocalStorage } from '@/common/cookie';
 
 let baseURL = process.env.VUE_APP_BASE_API;
 // 建立axios例項
@@ -9,15 +10,16 @@ const service = axios.create({
   baseURL: baseURL,
   timeout: 600000, // 請求超時時間
   headers: {
+    // 'Content-Type': 'application/json;charset=UTF-8',
+    // 'content-type': 'application/x-www-form-urlencoded',
     'Content-Type': 'application/json;charset=UTF-8',
-    'content-type': 'application/x-www-form-urlencoded',
   },
 });
 const err = (error) => {
   if (error.response) {
     let data = error.response.data;
     console.log(`message: ${data.msg}`);
-    showDialog(data.msg);
+    // showDialog(data.msg);
     if (error.response.status == 401) {
       router.push('/login');
     }
@@ -26,18 +28,16 @@ const err = (error) => {
 };
 
 const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
+  return getLocalStorage(name);
 };
 
-const showDialog = (res) => {
-  store.commit('SetDialog', {
-    title: '發生錯誤',
-    content: res,
-    status: true,
-  });
-};
+// const showDialog = (res) => {
+//   store.commit('SetDialog', {
+//     title: '發生錯誤',
+//     content: res,
+//     status: true,
+//   });
+// };
 
 const showSnackBar = (text) => {
   store.commit('SetSnackbar', {
@@ -108,7 +108,7 @@ export function post(url, params = {}, success_text = '') {
     })
       .then((response) => {
         resolve(response);
-        response.code != 200 ? showDialog(response) : '';
+        // response.code != 200 ? showDialog(response) : '';
         success_text != '' ? showSnackBar(success_text) : '';
         store.commit('SetLoading', -1);
       })
@@ -134,7 +134,7 @@ export function put(url, params = {}, success_text = '') {
     })
       .then((response) => {
         resolve(response);
-        response.code != 200 ? showDialog(response) : '';
+        // response.code != 200 ? showDialog(response) : '';
         success_text != '' ? showSnackBar(success_text) : '';
 
         store.commit('SetLoading', -1);
