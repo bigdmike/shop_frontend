@@ -125,9 +125,12 @@ export default new Vuex.Store({
     },
     getNewsData(state) {
       getNewsData().then((res) => {
+        let tmp_data = res.data.sort((a, b) => {
+          return parseInt(a.Seq) - parseInt(b.Seq);
+        });
         state.commit('SetStateData', {
           key: 'news_data',
-          val: res.data,
+          val: tmp_data,
         });
       });
     },

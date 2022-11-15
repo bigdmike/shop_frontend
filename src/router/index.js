@@ -64,6 +64,14 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "news_page" */ '../views/NewsPageView.vue'),
   },
+  {
+    path: '/search/:key_word',
+    name: '搜尋商品',
+    component: () =>
+      import(
+        /* webpackChunkName: "search_page" */ '../views/SearchResultView.vue'
+      ),
+  },
   // {
   //   path: '/about',
   //   name: 'About',
@@ -82,12 +90,6 @@ const routes = [
   //     import(/* webpackChunkName: "product_list" */ '../views/ProductList.vue'),
   // },
 
-  // {
-  //   path: '/search/:key_word',
-  //   name: 'SearchPage',
-  //   component: () =>
-  //     import(/* webpackChunkName: "search_page" */ '../views/SearchPage.vue'),
-  // },
   // {
   //   path: '/question',
   //   name: 'Question',

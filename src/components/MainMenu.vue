@@ -16,7 +16,7 @@
           type="text"
           name="search"
           v-model="key_word"
-          @keyup.enter="Search"
+          @keypress.enter="Search"
           class="w-full pl-14 py-3 focus:outline-none"
           placeholder="搜尋商品關鍵字"
         />
@@ -142,7 +142,12 @@ export default {
       this.key_word = '';
     },
     Search() {
-      this.$router.push(`/Search?key_word=${this.key_word}`);
+      if (this.key_word != '') {
+        this.$router.push(`/search/${this.key_word}`);
+        this.Close();
+        this.status = false;
+        this.key_word = '';
+      }
     },
     SetProductCategoryMenu() {
       let tmp_list = [];

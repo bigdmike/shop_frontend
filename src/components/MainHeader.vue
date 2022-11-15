@@ -18,10 +18,16 @@
             <img src="/img/logo.png" class="lg:w-44 sm:w-36 w-32" />
           </router-link>
           <div class="flex items-center md:hidden">
-            <button @click="TriggerSearhBar" class="sm:pr-3 pr-2">
+            <button
+              @click="TriggerSearhBar"
+              class="sm:pr-3 pr-2 focus:outline-none"
+            >
               <SearchIcon class="sm:w-8 w-6" />
             </button>
-            <button @click="OpenShopcart" class="sm:pl-3 pl-2 md:hidden">
+            <button
+              @click="OpenShopcart"
+              class="sm:pl-3 pl-2 md:hidden focus:outline-none"
+            >
               <ShopCartIcon class="sm:w-8 w-6" />
             </button>
           </div>

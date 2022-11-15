@@ -8,9 +8,12 @@
       >
         <router-link
           :to="`/news/${item.NewsCategoryID}/page/${item.NewsID}`"
-          class="rounded-xl overflow-hidden mb-2 flex-1"
+          class="rounded-xl overflow-hidden mb-2 flex-1 block"
         >
-          <img :src="$ImageUrl(item.Image1)" class="w-full block" />
+          <img
+            :src="$ImageUrl(item.Image1)"
+            class="w-full block hover:scale-110 transform transition-all duration-200"
+          />
         </router-link>
         <h4 class="truncate mb-2 font-semibold">{{ item.Title }}</h4>
         <div class="flex items-center">
