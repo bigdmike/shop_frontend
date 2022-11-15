@@ -39,7 +39,7 @@ const routes = [
       import(/* webpackChunkName: "shopcart" */ '../views/ShopCartView.vue'),
   },
   {
-    path: '/order_create',
+    path: '/order_create/:id',
     name: '付款完成頁',
     component: () =>
       import(
