@@ -52,6 +52,18 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "error_page" */ '../views/ErrorPageView.vue'),
   },
+  {
+    path: '/news/:category/',
+    name: '最新消息列表',
+    component: () =>
+      import(/* webpackChunkName: "news_list" */ '../views/NewsListView.vue'),
+  },
+  {
+    path: '/news/:category/:type/:id',
+    name: '最新消息',
+    component: () =>
+      import(/* webpackChunkName: "news_page" */ '../views/NewsPageView.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'About',
@@ -75,18 +87,6 @@ const routes = [
   //   name: 'SearchPage',
   //   component: () =>
   //     import(/* webpackChunkName: "search_page" */ '../views/SearchPage.vue'),
-  // },
-  // {
-  //   path: '/news/:category/',
-  //   name: 'NewsList',
-  //   component: () =>
-  //     import(/* webpackChunkName: "news_list" */ '../views/NewsList.vue'),
-  // },
-  // {
-  //   path: '/news/:category/:type/:id',
-  //   name: 'NewsPage',
-  //   component: () =>
-  //     import(/* webpackChunkName: "news_page" */ '../views/NewsPage.vue'),
   // },
   // {
   //   path: '/question',

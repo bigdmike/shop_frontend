@@ -102,7 +102,7 @@ export default {
         },
         {
           title: '最新消息',
-          link: '/',
+          link: '/news/all',
           type: 'link',
         },
       ],

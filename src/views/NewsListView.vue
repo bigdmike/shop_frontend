@@ -1,5 +1,5 @@
 <template>
-  <main id="ProductList" class="w-full relative z-10 pb-40">
+  <main id="NewsList" class="w-full relative z-10 pb-40">
     <div
       class="w-full max-w-screen-xl mx-auto xl:px-0 px-5 flex items-stretch flex-wrap"
     >
@@ -19,8 +19,8 @@
       />
       <ProductList
         class="md:w-3/4 w-full"
-        :page_product_data="page_product_data"
-        :product_data="product_data"
+        :page_news_data="page_news_data"
+        :news_data="news_data"
         @next-page="page += 1"
       />
     </div>
@@ -29,11 +29,11 @@
 
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
-import CategoryMenu from '@/components/product_list/category_menu.vue';
-import ProductList from '@/components/product_list/product_list.vue';
-import FilterBar from '@/components/product_list/filter_bar.vue';
+import CategoryMenu from '@/components/news_list/category_menu.vue';
+import ProductList from '@/components/news_list/news_list.vue';
+import FilterBar from '@/components/news_list/filter_bar.vue';
 export default {
-  name: 'ProductListView',
+  name: 'NewsListView',
   components: {
     BreadCrumb,
     CategoryMenu,
@@ -52,24 +52,24 @@ export default {
           link: '/',
         },
         {
-          title: '全部商品',
-          link: '/collections/all',
+          title: '最新消息',
+          link: '/news/all',
         },
       ],
     };
   },
   methods: {
     SetActiveCategory() {
-      this.active_category = this.$route.params.id;
+      this.active_category = this.$route.params.category;
       if (this.active_category == 'all') {
-        this.bread_crumb_path[1].title = '全部商品';
-        this.bread_crumb_path[1].link = '/collections/all';
+        this.bread_crumb_path[1].title = '最新消息';
+        this.bread_crumb_path[1].link = '/news/all';
       } else {
         const category = this.category_data.filter(
-          (item) => item.MenuID == this.active_category
+          (item) => item.NewsCategoryID == this.active_category
         )[0];
         this.bread_crumb_path[1].title = category.Title;
-        this.bread_crumb_path[1].link = `/collections/${category.MenuID}`;
+        this.bread_crumb_path[1].link = `/news/${category.NewsCategoryID}`;
       }
     },
     ChangeSortType(val) {
@@ -91,7 +91,7 @@ export default {
   },
   watch: {
     active_category() {
-      this.$router.push(`/collections/${this.active_category}`);
+      this.$router.push(`/news/${this.active_category}`);
     },
     $route() {
       this.SetActiveCategory();
@@ -99,53 +99,36 @@ export default {
   },
   computed: {
     category_data() {
-      return this.$store.state.category_data;
+      return this.$store.state.news_category_data;
     },
-    product_list() {
-      return this.$store.state.product_data;
+    news_list() {
+      return this.$store.state.news_data;
     },
-    product_data() {
+    news_data() {
       if (this.active_category == 'all') {
-        return this.product_list;
+        return this.news_list;
       } else {
-        return this.product_list.filter((item) => {
-          return (
-            item.Menu.filter((menu) => menu.MenuID == this.active_category)
-              .length > 0
-          );
+        return this.news_list.filter((item) => {
+          return item.NewsCategoryID == this.active_category;
         });
       }
     },
-    sort_product_data() {
-      let tmp_product_data = JSON.parse(JSON.stringify(this.product_data));
-      if (this.sort_type == '價錢由低到高') {
-        return tmp_product_data.sort((a, b) => {
-          return (
-            parseInt(this.GetPrice(a).SellPrice) -
-            parseInt(this.GetPrice(b).SellPrice)
-          );
-        });
-      } else if (this.sort_type == '價錢由高到低') {
-        return tmp_product_data.sort((a, b) => {
-          return (
-            parseInt(this.GetPrice(b).SellPrice) -
-            parseInt(this.GetPrice(a).SellPrice)
-          );
-        });
-      } else if (this.sort_type == '時間由舊到新') {
-        return tmp_product_data.sort((a, b) => {
+    sort_news_data() {
+      let tmp_news_data = JSON.parse(JSON.stringify(this.news_data));
+      if (this.sort_type == '時間由舊到新') {
+        return tmp_news_data.sort((a, b) => {
           return new Date(a.created_at) - new Date(b.created_at);
         });
       } else if (this.sort_type == '時間由新到舊') {
-        return tmp_product_data.sort((a, b) => {
+        return tmp_news_data.sort((a, b) => {
           return new Date(b.created_at) - new Date(a.created_at);
         });
       } else {
-        return tmp_product_data;
+        return tmp_news_data;
       }
     },
-    page_product_data() {
-      return this.sort_product_data.slice(
+    page_news_data() {
+      return this.sort_news_data.slice(
         0,
         this.page * this.count_per_page + this.count_per_page
       );
