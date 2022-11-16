@@ -26,9 +26,16 @@
             </button>
             <button
               @click="OpenShopcart"
-              class="sm:pl-3 pl-2 md:hidden focus:outline-none"
+              class="relative sm:pl-3 pl-2 md:hidden focus:outline-none"
             >
-              <ShopCartIcon class="sm:w-8 w-6" />
+              <span
+                class="w-4 h-4 flex items-center justify-center absolute top-0 right-0 bg-primary rounded-full transform translate-x-2 -translate-y-2"
+              >
+                <p class="text-xs text-white transform scale-75 font-bold">
+                  {{ shopcart_count }}
+                </p>
+              </span>
+              <ShopCartIcon class="lg:w-7 w-6" />
             </button>
           </div>
         </div>

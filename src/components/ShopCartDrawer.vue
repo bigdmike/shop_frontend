@@ -2,7 +2,7 @@
   <nav ref="MainContent" class="fixed w-screen top-0 left-full bottom-0 z-30">
     <div
       data-menu
-      class="absolute top-0 bottom-0 left-full sm:w-[432px] w-5/6 bg-white z-10 sm:pt-32 pt-20"
+      class="absolute top-0 bottom-0 left-full sm:w-[432px] w-5/6 bg-white z-10 sm:pt-32 pt-20 md:pb-0"
     >
       <button @click="Close" class="absolute top-7 right-7">
         <CloseIcon class="w-5 text-black" />
@@ -64,7 +64,7 @@
       <router-link
         to="/shopcart"
         @click.native="Close"
-        class="absolute bottom-0 left-0 right-0 bg-primary py-5 text-white text-center font-bold transition-colors duration-200 hover:bg-secondary"
+        class="absolute md:bottom-0 bottom-0 left-0 right-0 bg-primary py-5 text-white text-center font-bold transition-colors duration-200 hover:bg-secondary"
       >
         結帳
       </router-link>

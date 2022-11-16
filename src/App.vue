@@ -1,13 +1,24 @@
 <template>
   <div id="app" class="relative sm:pt-32 pt-28 overflow-x-hidden">
     <EventAnnouncement text="全館消費滿NT$1500 台灣本島免運優惠" />
-    <MainHeader v-if="data_load_finish" />
+    <MainHeader ref="MainHeader" v-if="data_load_finish" />
     <MainLoading />
     <ShopCartDialog />
     <ShopCartDrawer />
     <MainDialog />
     <router-view v-if="data_load_finish" />
     <MainFooter />
+    <MainFooterNav @open-menu="OpenMenu" />
+    <button
+      class="fixed z-20 md:bottom-36 bottom-32 md:right-7 right-2 md:w-14 md:h-14 w-11 h-11 rounded-full bg-primary flex justify-center items-center"
+    >
+      <SelectArrowIcon class="md:w-8 w-6 transform -scale-y-100 text-white" />
+    </button>
+    <button
+      class="fixed z-20 bottom-16 md:right-7 right-2 md:w-14 md:h-14 w-11 h-11 rounded-full bg-primary flex justify-center items-center"
+    >
+      <MessageIcon class="md:w-8 w-6 transform -scale-y-100 text-white" />
+    </button>
   </div>
 </template>
 
@@ -21,6 +32,9 @@ import MainFooter from '@/components/MainFooter.vue';
 import ShopCartDialog from '@/components/ShopCartDialog.vue';
 import ShopCartDrawer from '@/components/ShopCartDrawer.vue';
 import MainDialog from '@/components/MainDialog.vue';
+import MainFooterNav from '@/components/MainFooterNav.vue';
+import MessageIcon from '@/components/svg/MessageIcon.vue';
+import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import { ReadShopCart, SaveOnlineShopCart } from '@/common/shopcart';
 import { getShopcart } from '@/api/member';
 import { getLocalStorage } from '@/common/cookie';
@@ -35,6 +49,9 @@ export default {
     ShopCartDialog,
     ShopCartDrawer,
     MainDialog,
+    MainFooterNav,
+    MessageIcon,
+    SelectArrowIcon,
   },
   methods: {
     CheckPageData() {
@@ -81,6 +98,9 @@ export default {
         // 2.存入Store購物車
         this.$store.commit('SetShopCart', ReadShopCart());
       }
+    },
+    OpenMenu() {
+      this.$refs.MainHeader.OpenMenu();
     },
   },
   computed: {
