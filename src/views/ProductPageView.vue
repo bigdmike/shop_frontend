@@ -126,7 +126,6 @@ export default {
         },
       ];
       addShopcart(shopcart).then((res) => {
-        console.log(res);
         if (res.code == 302) {
           // token 過期
           this.$store.commit('SetShopCart', []);
@@ -134,7 +133,6 @@ export default {
         } else {
           // 2.call 取得購物車 api 並存入 store
           getShopcart().then((res) => {
-            console.log(res);
             if (res.code == 302) {
               this.$store.commit('SetShopCart', []);
               SaveShopCart([]);

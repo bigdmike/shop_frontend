@@ -124,7 +124,6 @@ export default {
     },
     GetData() {
       getAccountInfo().then((res) => {
-        console.log(res);
         if (res.code == 302) {
           // token過期
           this.$router.push('/account/login');
@@ -149,7 +148,6 @@ export default {
         Sex: this.form_data.sex,
       };
       updateAccountInfo(info_data).then((res) => {
-        console.log(res);
         if (res.code == 302) {
           // token過期
           delLocalStorage('account_token');

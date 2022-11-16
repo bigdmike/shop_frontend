@@ -92,7 +92,6 @@ export default {
         NewPassword: this.new_password,
       };
       updateAccountPassword(password_data).then((res) => {
-        console.log(res);
         if (res.code == 302) {
           // token過期
           delLocalStorage('account_token');

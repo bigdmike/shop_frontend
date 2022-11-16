@@ -107,7 +107,6 @@ export default {
         Password: this.password,
       };
       sendLoginData(login_data).then(async (res) => {
-        console.log(res);
         if (res.code == 301 && res.msg == '登入失敗') {
           this.$store.commit('SetDialog', {
             status: true,
@@ -117,12 +116,9 @@ export default {
           // 1.將會員token存入cookie
           setLocalStorage('account_token', res.data.Token);
           // 2.將cookie購物車整合至會員購物車並刪除cookie購物車
-          await addShopcart(this.shopcart).then((res) => {
-            console.log(res);
-          });
+          await addShopcart(this.shopcart);
           // 3.撈取會員購物車整合至store
           getShopcart().then((res) => {
-            console.log(res);
             const shop_cart = SaveOnlineShopCart(res.data);
             this.$store.commit('SetShopCart', shop_cart);
             this.$router.push('/account/account_edit');

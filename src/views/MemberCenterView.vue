@@ -77,12 +77,22 @@ export default {
           title: '收件地址管理',
           link: '/account/addresses',
         },
-        {
-          title: '收藏清單',
-          link: '/account/tracking_items',
-        },
+        // {
+        //   title: '收藏清單',
+        //   link: '/account/tracking_items',
+        // },
       ],
     };
+  },
+  watch: {
+    $route() {
+      this.bread_crumb_path[2].title = this.$route.name;
+      this.bread_crumb_path[2].link = this.$route.path;
+    },
+  },
+  created() {
+    this.bread_crumb_path[2].title = this.$route.name;
+    this.bread_crumb_path[2].link = this.$route.path;
   },
   methods: {
     Logout() {

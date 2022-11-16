@@ -77,7 +77,6 @@ export default {
           this.$router.push('/account/login');
         } else {
           this.trade_list = res.data;
-          console.log(res.data);
         }
       });
     },

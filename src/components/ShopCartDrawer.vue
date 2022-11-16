@@ -127,7 +127,6 @@ export default {
         },
       ];
       addShopcart(shopcart).then((res) => {
-        console.log(res);
         if (res.code == 302) {
           this.$store.commit('SetShopCart', []);
         } else {
@@ -154,7 +153,6 @@ export default {
     RemoveOnline(index) {
       const shop_cart_item = this.$store.state.shopcart[index];
       removeShopcart(shop_cart_item.shopcart_id[0]).then((res) => {
-        console.log(res);
         if (res.code == 302) {
           this.$store.commit('SetShopCart', []);
           SaveShopCart([]);
