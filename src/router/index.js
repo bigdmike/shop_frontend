@@ -121,30 +121,30 @@ const routes = [
             /* webpackChunkName: "modify_password" */ '../views/MemberCenter/PasswordEditView.vue'
           ),
       },
-      // {
-      //   path: 'orders',
-      //   name: '訂單查詢',
-      //   component: () =>
-      //     import(
-      //       /* webpackChunkName: "orders" */ '../views/MemberCenter/OrderList.vue'
-      //     ),
-      // },
-      // {
-      //   path: 'orders/:id',
-      //   name: '訂單詳細',
-      //   component: () =>
-      //     import(
-      //       /* webpackChunkName: "order_page" */ '../views/MemberCenter/OrderPage.vue'
-      //     ),
-      // },
-      // {
-      //   path: 'addresses',
-      //   name: '收件地址管理',
-      //   component: () =>
-      //     import(
-      //       /* webpackChunkName: "addresses" */ '../views/MemberCenter/Addresses.vue'
-      //     ),
-      // },
+      {
+        path: 'orders',
+        name: '訂單查詢',
+        component: () =>
+          import(
+            /* webpackChunkName: "orders" */ '../views/MemberCenter/OrderListView.vue'
+          ),
+      },
+      {
+        path: 'order/:id',
+        name: '訂單詳細',
+        component: () =>
+          import(
+            /* webpackChunkName: "order_page" */ '../views/MemberCenter/OrderPageView.vue'
+          ),
+      },
+      {
+        path: 'addresses',
+        name: '收件地址管理',
+        component: () =>
+          import(
+            /* webpackChunkName: "addresses" */ '../views/MemberCenter/AddressListView.vue'
+          ),
+      },
       // {
       //   path: 'tracking_items',
       //   name: '收藏清單',

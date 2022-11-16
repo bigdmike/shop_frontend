@@ -75,33 +75,20 @@ export function updateAccountPassword(data) {
   return post('member/password', data);
 }
 
-export function ResetPassword(account) {
-  return post('member/forgetPassword', {
-    Account: account,
-  });
+//訂單查詢
+export function getOrderList() {
+  return get('member/trade');
 }
 
 //常用收件資訊
-export function CreateReceiver(data) {
+export function getAddressData() {
+  return get('member/receiver');
+}
+export function createReceiver(data) {
   return put('member/receiver', data);
 }
-export function DeleteReceiver(id) {
+export function deleteReceiver(id) {
   return del('member/receiver/' + id);
-}
-export function getReceiverData() {
-  var receiver = get('member/receiver');
-  var zipcode = get('zipcode');
-
-  let promise_list = [receiver, zipcode];
-
-  return Promise.all(GetPromise(promise_list)).then(
-    (res) => {
-      if (promise_list.length == res.length) {
-        return res;
-      }
-    },
-    (err) => console.log(err)
-  );
 }
 
 // 追蹤商品
@@ -130,24 +117,6 @@ export function CreateFavorite(id) {
 
 export function DeleteFavorite(id) {
   return del('member/favorite/' + id);
-}
-
-//訂單查詢
-export function GetOrderList() {
-  let payment = get('payment');
-  let ship = get('shipping');
-  let member = get('member/trade');
-  let products = get('/goods');
-  let promise_list = [payment, ship, member, products];
-
-  return Promise.all(GetPromise(promise_list)).then(
-    (res) => {
-      if (promise_list.length == res.length) {
-        return res;
-      }
-    },
-    (err) => console.log(err)
-  );
 }
 
 function GetPromise(promiseList) {
