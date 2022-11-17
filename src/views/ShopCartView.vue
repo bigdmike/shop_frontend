@@ -1,66 +1,39 @@
 <template>
-  <main class="w-full relative z-10 min-h-screen overflow-hidden">
-    <div class="w-full max-w-screen-xl mx-auto relative flex">
-      <div class="md:w-2/3 w-full xl:pl-0 sm:pl-10 sm:pr-10 px-5 pb-32">
+  <main
+    class="relative z-10 w-full min-h-screen overflow-hidden"
+    v-if="checkout_data != null"
+  >
+    <div class="relative flex w-full max-w-screen-xl mx-auto">
+      <div class="w-full px-5 pb-32 md:w-2/3 xl:pl-0 sm:pl-10 sm:pr-10">
         <BreadCrumb :path="bread_crumb_path" class="mb-20" />
         <ShopCartForm
           :errors="errors"
           :form_data="form_data"
+          :shopcart="shopcart"
+          :coupon_info="coupon_info"
           @update-action="UpdateForm"
           @validate="ValidateForm"
+          @update-coupon="GetCashier"
         />
       </div>
+
       <div
-        class="w-1/3 bg-basic_white h-screen p-12 fixed z-0 top-0 right-0 sm:pt-44 pt-40 md:block hidden"
+        class="fixed top-0 right-0 z-0 hidden w-1/3 h-screen p-12 pt-40 bg-basic_white sm:pt-44 md:block"
       >
-        <ol class="max-h-[60vh] overflow-y-auto">
-          <li
-            class="pb-5 mb-5 border-b border-zinc-300 flex flex-wrap items-start"
-            v-for="(item, item_index) in shopcart"
-            :key="`shopcart_${item_index}`"
-          >
-            <div class="rounded-lg overflow-hidden w-1/4">
-              <img :src="$ImageUrl(item.product_data.Image1)" class="w-full" />
-            </div>
-            <div class="w-3/4 pl-3 mb-10">
-              <p class="font-bold text-sm mb-2">
-                {{ item.product_data.Title }}
-              </p>
-              <p class="text-sm text-basic_gray">
-                {{ GetActiveOption(item).ColorTitle }}
-              </p>
-              <p
-                v-if="GetActiveOption(item).SizeTitle != '無'"
-                class="text-sm text-basic_gray"
-              >
-                {{ GetActiveOption(item).SizeTitle }}
-              </p>
-            </div>
-            <div class="w-full flex justify-end">
-              <p class="font-bold text-sm">
-                NT$
-                {{
-                  $MoneyFormat(
-                    parseInt(GetActiveOption(item).SellPrice) * item.amount
-                  )
-                }}
-              </p>
-            </div>
-          </li>
-        </ol>
+        <ShopCart :shopcart="shopcart" :checkout_data="checkout_data" />
         <ol class="pb-5 mb-5 border-b border-zinc-300">
-          <li class="w-full flex items-center justify-between text-sm mb-3">
+          <li class="flex items-center justify-between w-full mb-3 text-sm">
             <p class="font-medium">合計</p>
             <p class="font-semibold">
               NT$ {{ $MoneyFormat(product_total_price) }}
             </p>
           </li>
-          <li class="w-full flex items-center justify-between text-sm">
+          <li class="flex items-center justify-between w-full text-sm">
             <p class="font-medium">運費</p>
             <p class="font-semibold">NT$ {{ $MoneyFormat(ship_price) }}</p>
           </li>
         </ol>
-        <div class="w-full flex items-center justify-between text-sm">
+        <div class="flex items-center justify-between w-full text-sm">
           <p class="font-medium">總金額</p>
           <p class="font-semibold">
             NT$
@@ -71,11 +44,13 @@
     </div>
 
     <ShopCartFooter
-      class="md:hidden block"
+      class="block md:hidden"
       :shopcart="shopcart"
-      :product_total_price="product_total_price"
-      :ship_price="ship_price"
-      :total_price="total_price"
+      :product_total_price="parseInt(product_total_price)"
+      :ship_price="parseInt(ship_price)"
+      :total_price="parseInt(total_price)"
+      :checkout_data="checkout_data"
+      :coupon_info="coupon_info"
     />
   </main>
 </template>
@@ -84,18 +59,21 @@
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import ShopCartForm from '@/components/shopcart/form.vue';
 import ShopCartFooter from '@/components/shopcart/footer.vue';
+import ShopCart from '@/components/shopcart/shopcart.vue';
 import {
   validName,
   validEmail,
   validPhone,
   validAddress,
 } from '@/common/validate';
+import { getCashier } from '@/api/shopcart';
 export default {
   name: 'ShopCartView',
   components: {
     BreadCrumb,
     ShopCartForm,
     ShopCartFooter,
+    ShopCart,
   },
   data() {
     return {
@@ -115,8 +93,11 @@ export default {
         comment: '',
         pay_way: '',
         outlying: false,
+        coupon: '',
       },
+      coupon_info: null,
       errors: [],
+      checkout_data: null,
       bread_crumb_path: [
         {
           title: '首頁',
@@ -143,7 +124,6 @@ export default {
       if (key == 'city') {
         this.$set(this.form_data, 'area', '');
       }
-
       if (key == 'city' || key == 'area') {
         if (
           val == '蘭嶼鄉' ||
@@ -157,6 +137,39 @@ export default {
           this.$set(this.form_data, 'outlying', false);
         }
       }
+      if (key == 'ship_way' || key == 'pay_way') {
+        this.GetCashier();
+      }
+    },
+    GetCashier() {
+      getCashier(
+        this.form_data.coupon,
+        this.form_data.pay_way,
+        this.form_data.ship_way,
+        this.shopcart
+      ).then((res) => {
+        console.log(res);
+        if (res.code != 200 && res.msg.indexOf('超過物流限制') != -1) {
+          this.$store.commit('SetDialog', {
+            status: true,
+            content:
+              '很抱歉！<br/>購物車商品超出物流的積材上限，請選擇其他物流方式或分次下單',
+          });
+          this.form_data.ship_way = '';
+        } else if (res.code != 200 && res.msg == '現金折抵優惠券錯誤') {
+          this.$store.commit('SetDialog', {
+            status: true,
+            content: '很抱歉！<br/>您所輸入的優惠代碼不存在或已經兌換完畢',
+          });
+          this.form_data.coupon = '';
+          this.coupon_info = null;
+        } else {
+          this.checkout_data = res.data.CheckoutList;
+          res.data.CouponInfo.length <= 0
+            ? ''
+            : (this.coupon_info = res.data.CouponInfo);
+        }
+      });
     },
     ValidateForm() {
       this.errors = [];
@@ -203,6 +216,18 @@ export default {
 
       if (this.errors.length > 0) {
         window.scrollTo(0, 0);
+      }
+    },
+  },
+  created() {
+    if (this.shopcart.length > 0) {
+      this.GetCashier();
+    }
+  },
+  watch: {
+    shopcart() {
+      if (this.shopcart.length > 0) {
+        this.GetCashier();
       }
     },
   },

@@ -1,23 +1,23 @@
 <template>
-  <div ref="MainContent" class="fixed top-0 left-full w-full bottom-0 z-20">
+  <div ref="MainContent" class="fixed top-0 bottom-0 z-20 w-full left-full">
     <nav
       data-menu
-      class="absolute top-0 left-full w-96 bg-white h-screen max-h-screen overflow-y-auto z-10 pt-32"
+      class="absolute top-0 z-10 h-screen max-h-screen pt-32 overflow-y-auto bg-white left-full w-96"
     >
       <button @click="Close" class="absolute top-7 right-7">
         <CloseIcon class="w-5 text-black" />
       </button>
 
-      <div class="relative border-b border-zinc-300 mb-10">
+      <div class="relative mb-10 border-b border-zinc-300">
         <SearchIcon
-          class="absolute top-1/2 left-5 transform -translate-y-1/2 w-6"
+          class="absolute w-6 transform -translate-y-1/2 top-1/2 left-5"
         />
         <input
           type="text"
           name="search"
           v-model="key_word"
           @keypress.enter="Search"
-          class="w-full pl-14 py-3 focus:outline-none"
+          class="w-full py-3 pl-14 focus:outline-none"
           placeholder="搜尋商品關鍵字"
         />
       </div>
@@ -30,7 +30,7 @@
           >
             <router-link
               @click.native="Close"
-              class="p-5 block font-bold link_color"
+              class="block p-5 font-bold link_color"
               :to="item.link"
               >{{ item.title }}</router-link
             >
@@ -49,7 +49,7 @@
           </li>
         </template>
 
-        <li class="border-b border-zinc-200 mt-10">
+        <li class="mt-10 border-b border-zinc-200">
           <MenuCollapse
             title="會員專區"
             :list="member_menu_list"
@@ -60,7 +60,7 @@
     </nav>
     <div
       data-menu-bg
-      class="absolute top-0 left-0 right-0 bottom-0 bg-white bg-opacity-50 z-0 opacity-0"
+      class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-white bg-opacity-50 opacity-0"
     ></div>
   </div>
 </template>
@@ -86,8 +86,8 @@ export default {
           type: 'link',
         },
         {
-          title: '新品上架',
-          link: '/',
+          title: '最新商品',
+          link: '/collections/6',
           type: 'link',
         },
         {

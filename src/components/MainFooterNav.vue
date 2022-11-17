@@ -1,45 +1,45 @@
 <template>
-  <nav class="fixed bottom-0 left-0 right-0 z-20">
-    <ol class="w-full flex items-stretch border-t border-zinc-300">
+  <nav class="fixed bottom-0 left-0 right-0 z-20 block md:hidden" v-if="show">
+    <ol class="flex items-stretch w-full border-t border-zinc-300">
       <li class="w-1/4 text-center border-r border-zinc-300">
         <button
           @click="$router.push('/')"
-          class="w-full flex bg-primary text-white items-center justify-center sm:py-4 py-3"
+          class="flex items-center justify-center w-full py-3 text-white bg-primary sm:py-4"
         >
-          <HomeIcon class="sm:w-6 sm:h-6 w-5 h-5" />
+          <HomeIcon class="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
       </li>
       <li class="w-1/4 text-center border-r border-zinc-300">
         <button
           @click="$emit('open-menu')"
-          class="w-full flex bg-white text-primary items-center justify-center sm:py-4 py-3"
+          class="flex items-center justify-center w-full py-3 bg-white text-primary sm:py-4"
         >
-          <ListIcon class="sm:w-6 sm:h-6 w-5 h-5" />
+          <ListIcon class="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
       </li>
       <li class="w-1/4 text-center border-r border-zinc-300">
         <button
           @click="OpenShopCart"
-          class="w-full flex bg-white text-primary items-center justify-center sm:py-4 py-3"
+          class="flex items-center justify-center w-full py-3 bg-white text-primary sm:py-4"
         >
           <div class="relative">
             <span
-              class="w-4 h-4 flex items-center justify-center absolute top-0 right-0 bg-primary rounded-full transform translate-x-2 -translate-y-2"
+              class="absolute top-0 right-0 flex items-center justify-center w-4 h-4 transform translate-x-2 -translate-y-2 rounded-full bg-primary"
             >
-              <p class="text-xs text-white transform scale-75 font-bold">
+              <p class="text-xs font-bold text-white transform scale-75">
                 {{ shopcart_count }}
               </p>
             </span>
-            <ShopCartIcon class="sm:w-6 sm:h-6 w-5 h-5 relative z-0" />
+            <ShopCartIcon class="relative z-0 w-5 h-5 sm:w-6 sm:h-6" />
           </div>
         </button>
       </li>
       <li class="w-1/4 text-center">
         <button
           @click="$router.push('/account/account_edit')"
-          class="w-full flex bg-white text-primary items-center justify-center sm:py-4 py-3"
+          class="flex items-center justify-center w-full py-3 bg-white text-primary sm:py-4"
         >
-          <MemberIcon class="sm:w-6 sm:h-6 w-5 h-5" />
+          <MemberIcon class="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
       </li>
     </ol>
@@ -59,6 +59,11 @@ export default {
     MemberIcon,
     ShopCartIcon,
   },
+  data() {
+    return {
+      show: true,
+    };
+  },
   methods: {
     OpenShopCart() {
       this.$store.commit('SetShopcartDrawer', true);
@@ -76,6 +81,20 @@ export default {
 
       return count;
     },
+  },
+  watch: {
+    $route() {
+      if (this.$route.name == '購物車結帳') {
+        this.show = false;
+      } else {
+        this.show = true;
+      }
+    },
+  },
+  created() {
+    if (this.$route.name == '購物車結帳') {
+      this.show = false;
+    }
   },
 };
 </script>

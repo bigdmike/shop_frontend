@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="relative sm:pt-32 pt-28 overflow-x-hidden">
+  <div id="app" class="relative overflow-x-hidden sm:pt-32 pt-28">
     <EventAnnouncement text="全館消費滿NT$1500 台灣本島免運優惠" />
     <MainHeader ref="MainHeader" v-if="data_load_finish" />
     <MainLoading />
@@ -10,14 +10,14 @@
     <MainFooter />
     <MainFooterNav @open-menu="OpenMenu" />
     <button
-      class="fixed z-20 md:bottom-36 bottom-32 md:right-7 right-2 md:w-14 md:h-14 w-11 h-11 rounded-full bg-primary flex justify-center items-center"
+      class="fixed z-20 flex items-center justify-center rounded-full md:bottom-24 sm:bottom-36 bottom-28 sm:right-7 right-2 sm:w-14 sm:h-14 w-11 h-11 bg-primary"
     >
-      <SelectArrowIcon class="md:w-8 w-6 transform -scale-y-100 text-white" />
+      <SelectArrowIcon class="w-6 text-white transform md:w-8 -scale-y-100" />
     </button>
     <button
-      class="fixed z-20 bottom-16 md:right-7 right-2 md:w-14 md:h-14 w-11 h-11 rounded-full bg-primary flex justify-center items-center"
+      class="fixed z-20 flex items-center justify-center rounded-full md:bottom-5 sm:bottom-20 bottom-16 sm:right-7 right-2 sm:w-14 sm:h-14 w-11 h-11 bg-primary"
     >
-      <MessageIcon class="md:w-8 w-6 transform -scale-y-100 text-white" />
+      <MessageIcon class="w-6 text-white transform md:w-8 -scale-y-100" />
     </button>
   </div>
 </template>
@@ -59,15 +59,11 @@ export default {
         ? this.$store.dispatch('getColumnData')
         : '';
       this.carousel_data == null ? this.$store.dispatch('getCarouselData') : '';
-      this.kol_data == null ? this.$store.dispatch('getKolData') : '';
       this.news_data == null ? this.$store.dispatch('getNewsData') : '';
       this.news_category_data == null
         ? this.$store.dispatch('getNewsCategoryData')
         : '';
       this.promote_data == null ? this.$store.dispatch('getPromoteData') : '';
-      this.parent_category_data == null
-        ? this.$store.dispatch('getParentCategoryData')
-        : '';
       this.category_data == null ? this.$store.dispatch('getCategoryData') : '';
       this.product_data == null ? this.$store.dispatch('getProductData') : '';
       this.question_category_data == null
@@ -75,7 +71,6 @@ export default {
         : '';
       this.question_data == null ? this.$store.dispatch('getQuestionData') : '';
       this.zipcode_data == null ? this.$store.dispatch('getZipCode') : '';
-      this.mascot_data == null ? this.$store.dispatch('getMascotData') : '';
       this.payment_data == null ? this.$store.dispatch('getPaymentData') : '';
       this.shipway_data == null ? this.$store.dispatch('getShipwayData') : '';
     },
@@ -113,9 +108,6 @@ export default {
     carousel_data() {
       return this.$store.state.carousel_data;
     },
-    kol_data() {
-      return this.$store.state.kol_data;
-    },
     news_data() {
       return this.$store.state.news_data;
     },
@@ -124,9 +116,6 @@ export default {
     },
     promote_data() {
       return this.$store.state.promote_data;
-    },
-    parent_category_data() {
-      return this.$store.state.parent_category_data;
     },
     category_data() {
       return this.$store.state.category_data;
@@ -143,9 +132,6 @@ export default {
     zipcode_data() {
       return this.$store.state.zipcode_data;
     },
-    mascot_data() {
-      return this.$store.state.mascot_data;
-    },
     payment_data() {
       return this.$store.state.payment_data;
     },
@@ -156,17 +142,14 @@ export default {
       if (
         this.common_column_data != null &&
         this.carousel_data != null &&
-        this.kol_data != null &&
         this.news_data != null &&
         this.news_category_data != null &&
         this.promote_data != null &&
-        this.parent_category_data != null &&
         this.category_data != null &&
         this.product_data != null &&
         this.question_category_data != null &&
         this.question_data != null &&
         this.zipcode_data != null &&
-        this.mascot_data != null &&
         this.payment_data != null &&
         this.shipway_data != null
       ) {

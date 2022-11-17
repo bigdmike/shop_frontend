@@ -43,6 +43,9 @@ export function getCategoryData() {
 export function getProductData() {
   return get('/goods');
 }
+export function getSingleProductData(id) {
+  return get(`/goods/${id}`);
+}
 
 export function getQuestionData() {
   return get('/question');

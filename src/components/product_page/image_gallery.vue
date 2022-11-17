@@ -1,22 +1,22 @@
 <template>
   <div>
-    <div ref="BigSwiper" class="swiper mb-5 relative">
+    <div ref="BigSwiper" class="relative mb-5 swiper">
       <button
         @click="SlideSwiper(1)"
-        class="absolute z-10 top-1/2 right-0 transform -translate-y-1/2 sm:pr-3 pr-2 sm:pl-8 pl-5 sm:py-9 py-6 bg-white bg-opacity-50 rounded-tl-full rounded-bl-full transition-colors duration-200 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
+        class="absolute right-0 z-10 py-6 pl-5 pr-2 transition-colors duration-200 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-tl-full rounded-bl-full top-1/2 sm:pr-3 sm:pl-8 sm:py-9 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
       >
-        <NextIcon class="sm:w-4 w-2" />
+        <NextIcon class="w-2 sm:w-4" />
       </button>
       <button
         @click="SlideSwiper(-1)"
-        class="absolute z-10 top-1/2 left-0 transform -translate-y-1/2 sm:pl-3 pl-2 sm:pr-8 pr-5 sm:py-9 py-6 bg-white bg-opacity-50 rounded-tr-full rounded-br-full transition-colors duration-200 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
+        class="absolute left-0 z-10 py-6 pl-2 pr-5 transition-colors duration-200 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-tr-full rounded-br-full top-1/2 sm:pl-3 sm:pr-8 sm:py-9 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
       >
-        <PrevIcon class="sm:w-4 w-2" />
+        <PrevIcon class="w-2 sm:w-4" />
       </button>
 
       <div class="swiper-wrapper">
         <div
-          class="swiper-slide rounded-xl overflow-hidden"
+          class="overflow-hidden swiper-slide rounded-xl"
           v-for="(item, item_index) in images"
           :key="`big_carousel_${item_index}`"
         >
@@ -32,7 +32,7 @@
           :key="`big_carousel_${item_index}`"
         >
           <div
-            class="overflow-hidden rounded-md transition-all duration-300 hover:border-primary border-transparent border-2"
+            class="overflow-hidden transition-all duration-300 border-2 border-transparent rounded-md hover:border-primary"
           >
             <img :src="$ImageUrl(item.Image)" class="w-full" />
           </div>
@@ -51,50 +51,50 @@ Swiper.use([Autoplay, Thumbs, FreeMode]);
 import '@/assets/css/swiper.min.css';
 export default {
   name: 'ProductImageGallery',
-  //   props: {
-  //     images: {
-  //       require: true,
-  //       type: Array,
-  //     },
-  //   },
+  props: {
+    images: {
+      require: true,
+      type: Array,
+    },
+  },
   components: {
     NextIcon,
     PrevIcon,
   },
   data() {
     return {
-      images: [
-        {
-          GoodsPictureID: '124',
-          GoodsID: '40',
-          ColorID: '0',
-          SizeID: '0',
-          Image: '/image/picture/1642754818_936d7e7e3fb7bdbe5722.jpg',
-          Seq: '1',
-          created_at: '2022-01-21 16:46:59',
-          updated_at: '2022-01-21 16:46:59',
-        },
-        {
-          GoodsPictureID: '125',
-          GoodsID: '40',
-          ColorID: '0',
-          SizeID: '0',
-          Image: '/image/picture/1642754822_4ca5c213872a97d4ca79.jpg',
-          Seq: '1',
-          created_at: '2022-01-21 16:47:02',
-          updated_at: '2022-01-21 16:47:02',
-        },
-        {
-          GoodsPictureID: '126',
-          GoodsID: '40',
-          ColorID: '0',
-          SizeID: '0',
-          Image: '/image/picture/1642754826_39ebbba0e3d7cd3bfb2f.jpg',
-          Seq: '1',
-          created_at: '2022-01-21 16:47:06',
-          updated_at: '2022-01-21 16:47:06',
-        },
-      ],
+      // images: [
+      //   {
+      //     GoodsPictureID: '124',
+      //     GoodsID: '40',
+      //     ColorID: '0',
+      //     SizeID: '0',
+      //     Image: '/image/picture/1642754818_936d7e7e3fb7bdbe5722.jpg',
+      //     Seq: '1',
+      //     created_at: '2022-01-21 16:46:59',
+      //     updated_at: '2022-01-21 16:46:59',
+      //   },
+      //   {
+      //     GoodsPictureID: '125',
+      //     GoodsID: '40',
+      //     ColorID: '0',
+      //     SizeID: '0',
+      //     Image: '/image/picture/1642754822_4ca5c213872a97d4ca79.jpg',
+      //     Seq: '1',
+      //     created_at: '2022-01-21 16:47:02',
+      //     updated_at: '2022-01-21 16:47:02',
+      //   },
+      //   {
+      //     GoodsPictureID: '126',
+      //     GoodsID: '40',
+      //     ColorID: '0',
+      //     SizeID: '0',
+      //     Image: '/image/picture/1642754826_39ebbba0e3d7cd3bfb2f.jpg',
+      //     Seq: '1',
+      //     created_at: '2022-01-21 16:47:06',
+      //     updated_at: '2022-01-21 16:47:06',
+      //   },
+      // ],
       big_swiper: null,
       small_swiper: null,
     };

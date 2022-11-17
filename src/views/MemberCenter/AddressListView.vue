@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full relative z-10 pb-32">
+  <div class="relative z-10 w-full pb-32">
     <AddressDeleteDialog
       ref="AddressDeleteDialog"
       @delete-action="DeleteData"
@@ -7,7 +7,7 @@
     <div class="flex items-center justify-end mb-5" v-if="!create_mode">
       <button
         @click="create_mode = true"
-        class="px-5 py-2 bg-primary rounded-full text-white"
+        class="px-5 py-2 text-white rounded-full bg-primary"
       >
         新增收件地址
       </button>
@@ -15,7 +15,7 @@
     <ol class="w-full">
       <li
         v-if="create_mode"
-        class="px-5 w-full py-5 rounded-md border border-zinc-300 mb-5"
+        class="w-full px-5 py-5 mb-5 border rounded-md border-zinc-300"
       >
         <AddressCreateCard
           @create-action="CreateResiverData"
@@ -23,30 +23,33 @@
         />
       </li>
       <li
-        class="px-5 py-5 rounded-md border border-zinc-300 mb-5 flex flex-wrap items-center justify-between"
+        class="flex flex-wrap items-center justify-between px-5 py-5 mb-5 border rounded-md border-zinc-300"
         v-for="(item, item_index) in address_list"
         :key="`address_${item_index}`"
       >
-        <div class="md:mb-0 mb-5">
+        <div class="mb-5 md:mb-0">
           <div class="flex items-center mb-2">
-            <p class="w-20 text-secondary text-sm">收件人</p>
+            <p class="w-20 text-sm text-secondary">收件人</p>
             <p class="text-sm">{{ item.Name }}</p>
           </div>
           <div class="flex items-center mb-2">
-            <p class="w-20 text-secondary text-sm">聯絡電話</p>
+            <p class="w-20 text-sm text-secondary">聯絡電話</p>
             <p class="text-sm">{{ item.Phone }}</p>
           </div>
           <div class="flex items-center">
-            <p class="w-20 text-secondary text-sm">收件地址</p>
-            <p class="text-sm">{{ item.Zip }} {{ item.Address }}</p>
+            <p class="w-20 text-sm text-secondary">收件地址</p>
+            <p class="text-sm">
+              {{ GetZipData(item.Zip).City }} {{ GetZipData(item.Zip).Area }}
+              {{ item.Address }}
+            </p>
           </div>
         </div>
         <div
-          class="flex items-center md:justify-center justify-end md:w-auto w-full"
+          class="flex items-center justify-end w-full md:justify-center md:w-auto"
         >
           <button
             @click="OpenDeleteDialog(item.ReceiverID)"
-            class="px-4 py-2 border border-secondary text-secondary md:text-sm text-xs rounded-lg transition-colors duration-200 hover:bg-secondary hover:text-white"
+            class="px-4 py-2 text-xs transition-colors duration-200 border rounded-lg border-secondary text-secondary md:text-sm hover:bg-secondary hover:text-white"
           >
             刪除
           </button>
@@ -123,6 +126,14 @@ export default {
           this.GetData();
         }
       });
+    },
+    GetZipData(code) {
+      return this.zipcode_data.filter((item) => item.ZipCode == code)[0];
+    },
+  },
+  computed: {
+    zipcode_data() {
+      return this.$store.state.zipcode_data;
     },
   },
   created() {

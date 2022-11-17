@@ -4,12 +4,9 @@ import {
   getColumnData,
   getZipCode,
   getCarouselData,
-  getKolData,
   getNewsData,
   getPromoteData,
-  getMascotData,
   getNewsCategoryData,
-  getParentCategoryData,
   getCategoryData,
   getProductData,
   getQuestionData,
@@ -34,17 +31,14 @@ export default new Vuex.Store({
     body_lock: 0,
     common_column_data: null,
     carousel_data: null,
-    kol_data: null,
     news_data: null,
     news_category_data: null,
     promote_data: null,
-    parent_category_data: null,
     category_data: null,
     product_data: null,
     question_category_data: null,
     question_data: null,
     zipcode_data: null,
-    mascot_data: null,
     payment_data: null,
     shipway_data: null,
   },
@@ -103,14 +97,6 @@ export default new Vuex.Store({
         });
       });
     },
-    getKolData(state) {
-      getKolData().then((res) => {
-        state.commit('SetStateData', {
-          key: 'kol_data',
-          val: res.data,
-        });
-      });
-    },
     getNewsCategoryData(state) {
       getNewsCategoryData().then((res) => {
         state.commit('SetStateData', {
@@ -134,22 +120,6 @@ export default new Vuex.Store({
       getPromoteData().then((res) => {
         state.commit('SetStateData', {
           key: 'promote_data',
-          val: res.data,
-        });
-      });
-    },
-    getMascotData(state) {
-      getMascotData().then((res) => {
-        state.commit('SetStateData', {
-          key: 'mascot_data',
-          val: res.data,
-        });
-      });
-    },
-    getParentCategoryData(state) {
-      getParentCategoryData().then((res) => {
-        state.commit('SetStateData', {
-          key: 'parent_category_data',
           val: res.data,
         });
       });

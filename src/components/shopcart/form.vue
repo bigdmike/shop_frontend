@@ -1,23 +1,24 @@
 <template>
   <section class="w-full">
+    <AddressDialog @update-action="UpdateAddress" ref="AddressDialog" />
     <div class="flex items-center justify-between mb-5">
       <h4 class="text-2xl font-bold">聯絡資訊</h4>
-      <p class="text-sm text-basic_gray">
+      <p class="text-sm text-basic_gray" v-if="!member_login">
         已經有帳戶？
-        <router-link class="text-primary" to="/login">登入</router-link>
+        <router-link class="text-primary" to="/account/login">登入</router-link>
       </p>
     </div>
-    <div class="flex items-start flex-wrap -mx-2 mb-6">
+    <div class="flex flex-wrap items-start mb-6 -mx-2">
       <div class="w-1/2 px-2 mb-4">
         <input
           type="text"
           name="first_name"
           :value="form_data.contact_first_name"
           @input="UpdateForm('contact_first_name', $event.target.value)"
-          class="px-2 py-3 border border-zinc-300 rounded-md w-full focus:outline-primary"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
           placeholder="名字"
         />
-        <p v-if="GetError('contact_first_name')" class="text-red-600 text-xs">
+        <p v-if="GetError('contact_first_name')" class="text-xs text-red-600">
           請輸入正確的中文姓名
         </p>
       </div>
@@ -27,10 +28,10 @@
           name="last_name"
           :value="form_data.contact_last_name"
           @input="UpdateForm('contact_last_name', $event.target.value)"
-          class="px-2 py-3 border border-zinc-300 rounded-md w-full focus:outline-primary"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
           placeholder="姓氏"
         />
-        <p v-if="GetError('contact_last_name')" class="text-red-600 text-xs">
+        <p v-if="GetError('contact_last_name')" class="text-xs text-red-600">
           請輸入正確的中文姓名
         </p>
       </div>
@@ -40,10 +41,10 @@
           name="email"
           :value="form_data.contact_email"
           @input="UpdateForm('contact_email', $event.target.value)"
-          class="px-2 py-3 border border-zinc-300 rounded-md w-full focus:outline-primary"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
           placeholder="電子郵件"
         />
-        <p v-if="GetError('contact_email')" class="text-red-600 text-xs">
+        <p v-if="GetError('contact_email')" class="text-xs text-red-600">
           請輸入正確的電子郵件
         </p>
       </div>
@@ -53,29 +54,29 @@
           name="phone"
           :value="form_data.contact_phone"
           @input="UpdateForm('contact_phone', $event.target.value)"
-          class="px-2 py-3 border border-zinc-300 rounded-md w-full focus:outline-primary"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
           placeholder="手機號碼"
         />
-        <p v-if="GetError('contact_phone')" class="text-red-600 text-xs">
+        <p v-if="GetError('contact_phone')" class="text-xs text-red-600">
           請輸入正確的手機號碼
         </p>
       </div>
       <div class="w-full px-2">
-        <span class="w-full block border-b border-zinc-300"></span>
+        <span class="block w-full border-b border-zinc-300"></span>
       </div>
     </div>
     <div class="flex items-center justify-between mb-5">
       <h4 class="text-2xl font-bold">配送方式</h4>
     </div>
-    <div class="border-b border-zinc-300 pb-5 mb-6">
+    <div class="pb-5 mb-6 border-b border-zinc-300">
       <div class="relative">
         <SelectArrowIcon
-          class="absolute top-1/2 right-2 w-5 pointer-events-none text-black z-10 transform -translate-y-1/2"
+          class="absolute z-10 w-5 text-black transform -translate-y-1/2 pointer-events-none top-1/2 right-2"
         />
         <select
           :value="form_data.ship_way"
           @input="UpdateForm('ship_way', $event.target.value)"
-          class="w-full border border-zinc-300 rounded-md px-2 py-3 focus:outline-primary appearance-none relative z-0"
+          class="relative z-0 w-full px-2 py-3 border rounded-md appearance-none border-zinc-300 focus:outline-primary"
         >
           <option value="">選擇配送方式</option>
           <option
@@ -89,24 +90,31 @@
           </option>
         </select>
       </div>
-      <p v-if="GetError('ship_way')" class="text-red-600 text-xs">
+      <p v-if="GetError('ship_way')" class="text-xs text-red-600">
         請選擇配送方式
       </p>
     </div>
     <div class="flex items-center justify-between mb-5">
       <h4 class="text-2xl font-bold">收件地址</h4>
+      <button
+        @click="OpenAddressDialog"
+        v-if="member_login"
+        class="px-5 py-2 text-sm text-white transition-colors duration-200 rounded-full bg-primary hover:bg-opacity-70"
+      >
+        選擇常用收件資訊
+      </button>
     </div>
-    <div class="flex items-center flex-wrap -mx-2 mb-6">
+    <div class="flex flex-wrap items-center mb-6 -mx-2">
       <div class="w-1/2 px-2 mb-4">
         <input
           type="text"
           name="first_name"
           :value="form_data.consignee_first_name"
           @input="UpdateForm('consignee_first_name', $event.target.value)"
-          class="px-2 py-3 border border-zinc-300 rounded-md w-full focus:outline-primary"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
           placeholder="名字"
         />
-        <p v-if="GetError('consignee_first_name')" class="text-red-600 text-xs">
+        <p v-if="GetError('consignee_first_name')" class="text-xs text-red-600">
           請輸入正確的中文姓名
         </p>
       </div>
@@ -116,10 +124,10 @@
           name="last_name"
           :value="form_data.consignee_last_name"
           @input="UpdateForm('consignee_last_name', $event.target.value)"
-          class="px-2 py-3 border border-zinc-300 rounded-md w-full focus:outline-primary"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
           placeholder="姓氏"
         />
-        <p v-if="GetError('consignee_last_name')" class="text-red-600 text-xs">
+        <p v-if="GetError('consignee_last_name')" class="text-xs text-red-600">
           請輸入正確的中文姓名
         </p>
       </div>
@@ -129,10 +137,10 @@
           name="email"
           :value="form_data.consignee_email"
           @input="UpdateForm('consignee_email', $event.target.value)"
-          class="px-2 py-3 border border-zinc-300 rounded-md w-full focus:outline-primary"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
           placeholder="電子郵件"
         />
-        <p v-if="GetError('consignee_email')" class="text-red-600 text-xs">
+        <p v-if="GetError('consignee_email')" class="text-xs text-red-600">
           請輸入正確的電子郵件
         </p>
       </div>
@@ -142,52 +150,52 @@
           name="phone"
           :value="form_data.consignee_phone"
           @input="UpdateForm('consignee_phone', $event.target.value)"
-          class="px-2 py-3 border border-zinc-300 rounded-md w-full focus:outline-primary"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
           placeholder="手機號碼"
         />
-        <p v-if="GetError('consignee_phone')" class="text-red-600 text-xs">
+        <p v-if="GetError('consignee_phone')" class="text-xs text-red-600">
           請輸入正確的手機號碼
         </p>
       </div>
       <div class="w-1/2 px-2 mb-4">
-        <div class="relative border border-zinc-300 rounded-md px-2 py-1">
+        <div class="relative px-2 py-1 border rounded-md border-zinc-300">
           <SelectArrowIcon
-            class="absolute top-1/2 right-5 w-5 pointer-events-none text-black z-10 transform -translate-y-1/2"
+            class="absolute z-10 w-5 text-black transform -translate-y-1/2 pointer-events-none top-1/2 right-5"
           />
-          <label class="absolute top-2 left-2 text-basic_gray z-10 text-xs"
+          <label class="absolute z-10 text-xs top-2 left-2 text-basic_gray"
             >縣市</label
           >
           <select
             :value="form_data.consignee_city"
             @input="UpdateForm('consignee_city', $event.target.value)"
-            class="w-full focus:outline-none appearance-none relative z-0 pt-5"
+            class="relative z-0 w-full pt-5 appearance-none focus:outline-none"
           >
             <option value="">選擇縣市</option>
             <option v-for="item in city_list" :key="item">{{ item }}</option>
           </select>
         </div>
-        <p v-if="GetError('consignee_city')" class="text-red-600 text-xs">
+        <p v-if="GetError('consignee_city')" class="text-xs text-red-600">
           請選擇縣市
         </p>
       </div>
       <div class="w-1/2 px-2 mb-4">
-        <div class="relative border border-zinc-300 rounded-md px-2 py-1">
+        <div class="relative px-2 py-1 border rounded-md border-zinc-300">
           <SelectArrowIcon
-            class="absolute top-1/2 right-5 w-5 pointer-events-none text-black z-10 transform -translate-y-1/2"
+            class="absolute z-10 w-5 text-black transform -translate-y-1/2 pointer-events-none top-1/2 right-5"
           />
-          <label class="absolute top-2 left-2 text-basic_gray z-10 text-xs"
+          <label class="absolute z-10 text-xs top-2 left-2 text-basic_gray"
             >鄉鎮區域</label
           >
           <select
             :value="form_data.consignee_area"
             @input="UpdateForm('consignee_area', $event.target.value)"
-            class="w-full focus:outline-none appearance-none relative z-0 pt-5"
+            class="relative z-0 w-full pt-5 appearance-none focus:outline-none"
           >
             <option value="">選擇區域</option>
             <option v-for="item in area_list" :key="item">{{ item }}</option>
           </select>
         </div>
-        <p v-if="GetError('consignee_area')" class="text-red-600 text-xs">
+        <p v-if="GetError('consignee_area')" class="text-xs text-red-600">
           請選擇區域
         </p>
       </div>
@@ -197,21 +205,21 @@
           name="address"
           :value="form_data.consignee_address"
           @input="UpdateForm('consignee_address', $event.target.value)"
-          class="px-2 py-3 border border-zinc-300 rounded-md w-full focus:outline-primary"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
           placeholder="詳細地址"
         />
-        <p v-if="GetError('consignee_address')" class="text-red-600 text-xs">
+        <p v-if="GetError('consignee_address')" class="text-xs text-red-600">
           請輸入地址
         </p>
       </div>
       <div class="w-full px-2">
-        <span class="w-full block border-b border-zinc-300"></span>
+        <span class="block w-full border-b border-zinc-300"></span>
       </div>
     </div>
     <div class="flex items-center justify-between mb-5">
       <h4 class="text-2xl font-bold">訂單備註</h4>
     </div>
-    <div class="flex items-center flex-wrap -mx-2 mb-6">
+    <div class="flex flex-wrap items-center mb-6 -mx-2">
       <div class="w-full px-2 mb-4">
         <textarea
           name="comment"
@@ -223,10 +231,45 @@
       </div>
     </div>
     <div class="flex items-center justify-between mb-5">
+      <h4 class="text-2xl font-bold">優惠代碼</h4>
+    </div>
+    <div class="flex flex-wrap items-center mb-6 -mx-2">
+      <div class="flex items-stretch w-full px-2">
+        <input
+          type="text"
+          name="coupon"
+          :value="form_data.coupon"
+          @input="UpdateForm('coupon', $event.target.value)"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          placeholder="詳細地址"
+        />
+        <button
+          @click="$emit('update-coupon')"
+          class="flex-shrink-0 px-5 py-2 ml-3 text-white rounded-lg bg-primary"
+        >
+          確認
+        </button>
+      </div>
+    </div>
+    <div v-if="coupon_info != null" class="flex flex-wrap items-center mb-6">
+      <div
+        class="w-full p-5 border rounded-xl border-secondary bg-secondary bg-opacity-5"
+      >
+        <p class="text-xs">已套用優惠代碼：</p>
+        <h4 class="mb-2 text-2xl font-bold text-primary">
+          {{ coupon_info.Title }}
+        </h4>
+        <p class="text-sm">
+          訂單滿額NT$ {{ coupon_info.Threshold }}，折抵NT$
+          {{ coupon_info.Money }}
+        </p>
+      </div>
+    </div>
+    <div class="flex items-center justify-between mb-5">
       <h4 class="text-2xl font-bold">付款方式</h4>
     </div>
-    <div class="flex items-center flex-wrap mb-6">
-      <ol class="border border-zinc-300 rounded-lg w-full">
+    <div class="flex flex-wrap items-center mb-6">
+      <ol class="w-full border rounded-lg border-zinc-300">
         <li
           v-for="(item, item_index) in payment_data"
           :key="`payment_${item_index}`"
@@ -238,11 +281,11 @@
                 ? 'border-b border-zinc-300'
                 : ''
             "
-            class="px-2 py-3 block transition-colors duration-200 hover:bg-primary hover:bg-opacity-10"
+            class="block px-2 py-3 transition-colors duration-200 hover:bg-primary hover:bg-opacity-10"
           >
             <input
               type="radio"
-              class="checked:accent-primary mr-3"
+              class="mr-3 checked:accent-primary"
               :checked="item.PaymentID == form_data.pay_way"
             />
             <span
@@ -256,10 +299,10 @@
           </label>
         </li>
       </ol>
-      <p v-if="GetError('pay_way')" class="text-red-600 text-xs">
+      <p v-if="GetError('pay_way')" class="text-xs text-red-600">
         請選擇付款方式
       </p>
-      <span class="w-full block border-b mt-5 border-zinc-300"></span>
+      <span class="block w-full mt-5 border-b border-zinc-300"></span>
     </div>
     <div class="">
       <p class="mb-5">
@@ -272,7 +315,7 @@
       </p>
       <button
         @click="Validate"
-        class="bg-primary py-3 block w-full rounded-md text-white transition-colors duration-200 hover:bg-opacity-75"
+        class="block w-full py-3 text-white transition-colors duration-200 rounded-md bg-primary hover:bg-opacity-75"
       >
         立即下單
       </button>
@@ -282,6 +325,8 @@
 
 <script>
 import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
+import AddressDialog from '@/components/shopcart/address_dialog.vue';
+import { getLocalStorage } from '@/common/cookie';
 export default {
   name: 'ShopCartForm',
   props: {
@@ -289,17 +334,36 @@ export default {
       require: true,
       type: Object,
     },
+    shopcart: {
+      require: true,
+      type: Array,
+    },
     errors: {
       require: true,
       type: Array,
     },
+    coupon_info: {
+      require: true,
+      type: Object,
+    },
   },
   components: {
     SelectArrowIcon,
+    AddressDialog,
+  },
+  data() {
+    return {
+      member_login: false,
+    };
   },
   methods: {
     UpdateForm(key, val) {
       this.$emit('update-action', key, val);
+    },
+    UpdateAddress(data) {
+      Object.keys(data).forEach((key) => {
+        this.UpdateForm(key, data[key]);
+      });
     },
     Validate() {
       this.$emit('validate');
@@ -307,10 +371,15 @@ export default {
     GetError(key) {
       return this.errors.indexOf(key) != -1;
     },
+    OpenAddressDialog() {
+      this.$refs.AddressDialog.Open();
+    },
   },
   computed: {
     shipway_data() {
-      return this.$store.state.shipway_data;
+      return this.has_forzen_product
+        ? this.forzen_shipway
+        : this.$store.state.shipway_data;
     },
     payment_data() {
       return this.$store.state.payment_data;
@@ -341,6 +410,27 @@ export default {
         return area_list;
       }
     },
+    has_forzen_product() {
+      let forzen = false;
+      this.shopcart.forEach((item) => {
+        if (item.product_data.DeliveryFrozen == 'Y') {
+          forzen = true;
+        }
+      });
+      return forzen;
+    },
+    forzen_shipway() {
+      return this.$store.state.shipway_data.filter(
+        (item) => item.DeliveryFrozen == 'Y'
+      );
+    },
+  },
+  created() {
+    if (getLocalStorage('account_token')) {
+      this.member_login = true;
+    } else {
+      this.member_login = false;
+    }
   },
 };
 </script>

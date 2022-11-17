@@ -1,19 +1,19 @@
 <template>
-  <main class="relative w-full z-10">
-    <div class="w-full max-w-screen-xl mx-auto xl:px-0 sm:px-10 px-5 pb-32">
+  <main class="relative z-10 w-full">
+    <div class="w-full max-w-screen-xl px-5 pb-32 mx-auto xl:px-0 sm:px-10">
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
-      <div class="w-full max-w-screen-sm mx-auto bg-zinc-50 rounded-2xl p-10">
-        <h4 class="text-center text-2xl font-bold mb-8">會員登入</h4>
-        <div class="w-full border-t border-zinc-200 pt-10 md:px-20">
+      <div class="w-full max-w-screen-sm p-10 mx-auto bg-zinc-50 rounded-2xl">
+        <h4 class="mb-8 text-2xl font-bold text-center">會員登入</h4>
+        <div class="w-full pt-10 border-t border-zinc-200 md:px-20">
           <div class="mb-4">
             <input
               v-model="account"
               type="email"
               name="account"
               placeholder="請輸入電子郵件"
-              class="w-full border border-zinc-200 rounded-md px-3 py-2"
+              class="w-full px-3 py-2 border rounded-md border-zinc-200"
             />
-            <p v-if="GetError('account')" class="text-red-600 text-xs">
+            <p v-if="GetError('account')" class="text-xs text-red-600">
               請輸入正確的電子郵件
             </p>
           </div>
@@ -24,28 +24,28 @@
               type="password"
               name="password"
               placeholder="請輸入密碼"
-              class="w-full border border-zinc-200 rounded-md px-3 py-2"
+              class="w-full px-3 py-2 border rounded-md border-zinc-200"
             />
-            <p v-if="GetError('password')" class="text-red-600 text-xs">
+            <p v-if="GetError('password')" class="text-xs text-red-600">
               請輸入密碼
             </p>
           </div>
           <div class="mb-10">
             <button
               @click="VarDateForm"
-              class="bg-primary py-3 block w-full rounded-md text-white transition-colors duration-200 hover:bg-opacity-75"
+              class="block w-full py-3 text-white transition-colors duration-200 rounded-md bg-primary hover:bg-opacity-75"
             >
               會員登入
             </button>
           </div>
           <div class="flex items-center justify-between">
             <router-link
-              class="text-secondary text-sm underline transition-colors duration-200 hover:text-opacity-50"
+              class="text-sm underline transition-colors duration-200 text-secondary hover:text-opacity-50"
               to="/account/password/new"
               >忘記密碼</router-link
             >
             <router-link
-              class="text-secondary text-sm underline transition-colors duration-200 hover:text-opacity-50"
+              class="text-sm underline transition-colors duration-200 text-secondary hover:text-opacity-50"
               to="/account/signup"
               >註冊新會員</router-link
             >
@@ -60,7 +60,7 @@
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import { validEmail } from '@/common/validate';
 import { sendLoginData, addShopcart, getShopcart } from '@/api/member';
-import { setLocalStorage } from '@/common/cookie';
+import { setLocalStorage, getLocalStorage } from '@/common/cookie';
 import { SaveOnlineShopCart } from '@/common/shopcart';
 export default {
   name: 'LoginView',
@@ -126,6 +126,11 @@ export default {
         }
       });
     },
+  },
+  created() {
+    if (getLocalStorage('account_token')) {
+      this.$router.push('/account/account_edit');
+    }
   },
 };
 </script>

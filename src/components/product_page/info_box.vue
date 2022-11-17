@@ -1,12 +1,13 @@
 <template>
-  <section class="w-full relative z-10">
-    <h2 class="sm:text-3xl text-2xl font-bold mb-5">
+  <section class="relative z-10 w-full">
+    <EventImageDialog ref="EventImageDialog" />
+    <h2 class="mb-5 text-2xl font-bold sm:text-3xl">
       {{ product_data.Title }}
     </h2>
     <div
-      class="flex items-center justify-between pb-2 border-b border-zinc-300 mb-10"
+      class="flex items-center justify-between pb-2 mb-5 border-b border-zinc-300"
     >
-      <p class="sm:text-2xl font-semibold">
+      <p class="font-semibold sm:text-2xl">
         <span
           v-if="active_stock.Price != active_stock.SellPrice"
           class="text-sm line-through text-basic_gray"
@@ -16,27 +17,54 @@
       </p>
       <div class="flex items-center">
         <button
-          class="w-9 h-9 mr-2 bg-basic_black flex items-center justify-center rounded-md transition-colors duration-200 hover:bg-secondary"
+          @click="CopyLink"
+          class="flex items-center justify-center mr-2 transition-colors duration-200 rounded-md w-9 h-9 bg-basic_black hover:bg-secondary"
         >
-          <ShareLinkIcon class="text-white w-5" />
+          <ShareLinkIcon class="w-5 text-white" />
         </button>
         <button
-          class="w-9 h-9 bg-basic_black flex items-center justify-center rounded-md transition-colors duration-200 hover:bg-secondary"
+          @click="ShareToFB"
+          class="flex items-center justify-center mr-2 transition-colors duration-200 rounded-md w-9 h-9 bg-basic_black hover:bg-secondary"
         >
-          <FacebookIcon class="text-white w-5" />
+          <FacebookIcon class="w-5 text-white" />
+        </button>
+        <button
+          @click="ShareToLine"
+          class="flex items-center justify-center transition-colors duration-200 rounded-md w-9 h-9 bg-basic_black hover:bg-secondary"
+        >
+          <LineIcon class="w-5 text-white" />
         </button>
       </div>
     </div>
-    <div class="w-full mb-10">
-      <p class="font-semibold mb-2">選項一</p>
-      <div class="w-full relative mb-5">
+
+    <div v-if="product_data.Discount.length > 0" class="mb-5">
+      <p class="mb-2 text-sm">此商品參與的優惠活動</p>
+      <ol>
+        <li
+          class="flex items-center text-sm text-primary"
+          v-for="(item, item_index) in product_data.Discount"
+          :key="`event_${item_index}`"
+        >
+          {{ item.Title }}
+          <a
+            @click="OpenEventImageDialog(item)"
+            v-if="item.Image1 != ''"
+            class="block ml-2 text-xs font-bold underline"
+            >查看贈品</a
+          >
+        </li>
+      </ol>
+    </div>
+    <div class="w-full mt-5 mb-10">
+      <p class="mb-2 font-semibold">選項一</p>
+      <div class="relative w-full mb-5">
         <SelectArrowIcon
-          class="absolute top-1/2 right-5 transform -translate-y-1/2 w-4 z-10 pointer-events-none"
+          class="absolute z-10 w-4 transform -translate-y-1/2 pointer-events-none top-1/2 right-5"
         />
         <select
           @input="$emit('change-option', 0, $event.target.value)"
           :value="active_option[0]"
-          class="relative z-0 border border-zinc-300 w-full px-5 py-3 appearance-none focus:outline-none rounded-lg"
+          class="relative z-0 w-full px-5 py-3 border rounded-lg appearance-none border-zinc-300 focus:outline-none"
         >
           <option
             v-for="(item, item_index) in first_options"
@@ -47,15 +75,15 @@
           </option>
         </select>
       </div>
-      <p class="font-semibold mb-2">選項二</p>
-      <div class="w-full relative mb-5">
+      <p class="mb-2 font-semibold">選項二</p>
+      <div class="relative w-full mb-5">
         <SelectArrowIcon
-          class="absolute top-1/2 right-5 transform -translate-y-1/2 w-4 z-10 pointer-events-none"
+          class="absolute z-10 w-4 transform -translate-y-1/2 pointer-events-none top-1/2 right-5"
         />
         <select
           @input="$emit('change-option', 1, $event.target.value)"
           :value="active_option[1]"
-          class="relative z-0 border border-zinc-300 w-full px-5 py-3 appearance-none focus:outline-none rounded-lg"
+          class="relative z-0 w-full px-5 py-3 border rounded-lg appearance-none border-zinc-300 focus:outline-none"
         >
           <option
             v-for="(item, item_index) in second_options"
@@ -66,13 +94,13 @@
           </option>
         </select>
       </div>
-      <p class="font-semibold mb-2">數量</p>
+      <p class="mb-2 font-semibold">數量</p>
       <div
-        class="w-full relative flex items-stretch border border-zinc-300 rounded-lg overflow-hidden"
+        class="relative flex items-stretch w-full overflow-hidden border rounded-lg border-zinc-300"
       >
         <button
           @click="$emit('change-amount', -1)"
-          class="px-5 py-4 text-black transition-color duration-200 hover:bg-secondary hover:text-white"
+          class="px-5 py-4 text-black duration-200 transition-color hover:bg-secondary hover:text-white"
         >
           <MinusIcon class="w-3" />
         </button>
@@ -84,16 +112,16 @@
         />
         <button
           @click="$emit('change-amount', 1)"
-          class="px-5 py-4 text-black transition-color duration-200 hover:bg-secondary hover:text-white"
+          class="px-5 py-4 text-black duration-200 transition-color hover:bg-secondary hover:text-white"
         >
           <PlusIcon class="w-3" />
         </button>
       </div>
     </div>
-    <div class="md:block hidden">
+    <div class="hidden md:block">
       <button
         @click="$emit('add-cart')"
-        class="block py-4 text-white rounded-lg text-center bg-primary w-full transition-colors duration-200 hover:bg-opacity-80"
+        class="block w-full py-4 text-center text-white transition-colors duration-200 rounded-lg bg-primary hover:bg-opacity-80"
       >
         加入購物車
       </button>
@@ -106,15 +134,19 @@ import PlusIcon from '@/components/svg/PlusIcon.vue';
 import MinusIcon from '@/components/svg/MinusIcon.vue';
 import ShareLinkIcon from '@/components/svg/ShareLinkIcon.vue';
 import FacebookIcon from '@/components/svg/FacebookIcon.vue';
+import LineIcon from '@/components/svg/LineIcon.vue';
 import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
+import EventImageDialog from '@/components/product_page/EventImageDialog.vue';
 export default {
   name: 'ProductInfoBox',
   components: {
     ShareLinkIcon,
     FacebookIcon,
     SelectArrowIcon,
+    LineIcon,
     MinusIcon,
     PlusIcon,
+    EventImageDialog,
   },
   props: {
     product_data: {
@@ -128,6 +160,27 @@ export default {
     amount: {
       require: true,
       type: Number,
+    },
+  },
+  methods: {
+    OpenEventImageDialog(item) {
+      this.$refs.EventImageDialog.Open(item);
+    },
+    CopyLink() {
+      this.$refs.clone.focus();
+      document.execCommand('copy');
+      alert('已複製到剪貼簿');
+    },
+    ShareToFB() {
+      window
+        .open(
+          `https://www.facebook.com/sharer.php?u=${window.location.href}`,
+          '_blank'
+        )
+        .focus();
+    },
+    ShareToLine() {
+      window.open(`line://msg/text/${window.location.href}`, '_blank').focus();
     },
   },
   computed: {

@@ -1,12 +1,12 @@
 <template>
-  <main id="ProductPage" class="w-full relative">
-    <div class="w-full max-w-screen-xl mx-auto xl:px-0 px-5">
-      <BreadCrumb class="md:mb-20 md:pt-0 my-5" :path="bread_crumb_path" />
-      <div class="flex items-start flex-wrap mb-20 -mx-10">
-        <div class="md:w-1/2 w-full px-10 md:mb-0 mb-10">
-          <ImageGallery />
+  <main id="ProductPage" class="relative w-full" v-if="product_data != null">
+    <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0">
+      <BreadCrumb class="my-5 md:mb-20 md:pt-0" :path="bread_crumb_path" />
+      <div class="flex flex-wrap items-start mb-20 -mx-10">
+        <div class="w-full px-10 mb-10 md:w-1/2 md:mb-0">
+          <ImageGallery :images="product_data.Picture" />
         </div>
-        <div class="md:w-1/2 w-full px-10">
+        <div class="w-full px-10 md:w-1/2">
           <InfoBox
             :product_data="product_data"
             :active_option="active_option"
@@ -40,7 +40,7 @@
         class="pt-10 mb-10 border-t border-zinc-300"
         v-html="product_data.Memo3"
       ></div>
-      <FixedFooter class="md:hidden flex" @add-cart="AddShopCart" />
+      <FixedFooter class="flex md:hidden" @add-cart="AddShopCart" />
     </div>
   </main>
 </template>
@@ -55,6 +55,7 @@ import FixedFooter from '@/components/product_page/fixed_footer.vue';
 import { SaveShopCart, SaveOnlineShopCart } from '@/common/shopcart';
 import { getLocalStorage } from '@/common/cookie';
 import { addShopcart, getShopcart } from '@/api/member';
+import { getSingleProductData } from '@/api/page_data';
 export default {
   name: 'ProductPage',
   components: {
@@ -85,6 +86,7 @@ export default {
       tabs: ['商品介紹', '下單流程', '注意事項'],
       active_option: [],
       active_tab: '商品介紹',
+      product_data: null,
     };
   },
   methods: {
@@ -220,27 +222,42 @@ export default {
         }, 100);
       }
     },
+    GetProductData() {
+      getSingleProductData(this.$route.params.id).then((res) => {
+        console.log(res);
+        res.data.Picture.sort((a, b) => {
+          return a.Seq - b.Seq;
+        });
+        this.product_data = res.data;
+      });
+    },
   },
   created() {
-    if (this.product_data != 'error') {
-      this.SetActiveProduct();
-      this.active_option[0] = this.product_data.Stock[0].ColorID;
-      this.active_option[1] = this.product_data.Stock[0].SizeID;
-    }
+    this.GetProductData();
   },
-  mounted() {
-    this.SetNavTrigger();
+  mounted() {},
+  watch: {
+    product_data() {
+      if (this.product_data != null) {
+        this.SetActiveProduct();
+        this.active_option[0] = this.product_data.Stock[0].ColorID;
+        this.active_option[1] = this.product_data.Stock[0].SizeID;
+        this.$nextTick(() => {
+          this.SetNavTrigger();
+        });
+      }
+    },
   },
   computed: {
     product_list() {
       return this.$store.state.product_data;
     },
-    product_data() {
-      const tmp_product = this.product_list.filter(
-        (item) => item.GoodsID == this.$route.params.id
-      );
-      return tmp_product.length <= 0 ? 'error' : tmp_product[0];
-    },
+    // product_data() {
+    //   const tmp_product = this.product_list.filter(
+    //     (item) => item.GoodsID == this.$route.params.id
+    //   );
+    //   return tmp_product.length <= 0 ? 'error' : tmp_product[0];
+    // },
     category_data() {
       return this.$store.state.category_data;
     },
