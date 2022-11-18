@@ -19,7 +19,7 @@ export function getCashier(coupon = '', payment = 0, shipping = 0, shopcart) {
       });
     }
   });
-  if (getLocalStorage('member_token')) {
+  if (getLocalStorage('account_token')) {
     return post('member/cashier', data);
   } else {
     return post('nonMember/cashier', data);

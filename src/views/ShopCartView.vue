@@ -257,18 +257,18 @@ export default {
         delLocalStorage('check_out_form');
       }
       this.GetCashier();
-    } else {
-      this.$store.commit('SetDialog', {
-        status: true,
-        content: '購物車目前沒有商品',
-      });
-      this.$router.push('/');
     }
   },
   watch: {
     shopcart() {
       if (this.shopcart.length > 0) {
         this.GetCashier();
+      } else {
+        this.$store.commit('SetDialog', {
+          status: true,
+          content: '購物車目前沒有商品',
+        });
+        this.$router.push('/');
       }
     },
   },
