@@ -1,6 +1,5 @@
 import store from '@/store/index.js';
 import { getLocalStorage } from '@/common/cookie.js';
-
 import { get, post } from '@/common/request.js';
 
 // cahiser
@@ -28,27 +27,40 @@ export function getCashier(coupon = '', payment = 0, shipping = 0, shopcart) {
 }
 
 // checkout
-export function sendCheckout(user_data, shopcart) {
+export function SendCheckout(user_data, shopcart) {
+  // 取出郵遞區號
+  const zip_code = store.state.zipcode_data.filter(
+    (item) =>
+      item.City == user_data.consignee_city &&
+      item.Area == user_data.consignee_area
+  )[0].ZipCode;
   let data = {
-    ReceiverName: user_data.receiver_info.name,
-    ReceiverPhone: user_data.receiver_info.phone,
-    ReceiverEmail: user_data.receiver_info.email,
-    ReceiverAddressCode: user_data.receiver_info.zip_code,
-    ReceiverAddress: user_data.receiver_info.address,
-    ReceiverStoreNo: user_data.shop.id,
-    ReceiverStoreInfo: user_data.shop.name,
-    ReceiverMemo: user_data.order_comment,
+    ReceiverName:
+      user_data.consignee_last_name + user_data.consignee_first_name,
+    ReceiverPhone: user_data.consignee_phone,
+    ReceiverEmail: user_data.consignee_email,
+    ReceiverAddressCode: zip_code,
+    ReceiverAddress: user_data.consignee_address,
+    ReceiverMemo: user_data.comment,
     CouponCode: user_data.coupon,
-    PaymentID: user_data.payway,
-    ShippingID: user_data.shipway,
+    PaymentID: user_data.pay_way,
+    ShippingID: user_data.ship_way,
+    ReceiverStoreNo: '',
+    ReceiverStoreInfo: '',
     ShoppingCart: [],
   };
+  // 如果是超商取貨
+  if (data.ShippingID == 1 || data.ShippingID == 2) {
+    data.ReceiverStoreNo = user_data.shop_id;
+    data.ReceiverStoreInfo = user_data.shop_name;
+  }
+
   shopcart.forEach((item) => {
     for (let i = 0; i < item.amount; i++) {
       data.ShoppingCart.push({
-        GoodsID: item.product_id,
-        ColorID: item.color_id,
-        SizeID: item.size_id,
+        GoodsID: item.product_data.GoodsID,
+        ColorID: item.active_option[0],
+        SizeID: item.active_option[1],
       });
     }
   });
@@ -59,21 +71,7 @@ export function sendCheckout(user_data, shopcart) {
   }
 }
 
-export function covertFullShopCart(shopcart) {
-  return get('/goods').then((res) => {
-    let products = res.data;
-    shopcart.forEach((item) => {
-      item.product_data = products.filter(
-        (product) => product.GoodsID == item.product_id
-      )[0];
-    });
-    store.commit('SetShopCart', shopcart);
-    return shopcart;
-  });
-}
-
 // shop map
-
 export function Get711Map() {
   if (getLocalStorage('member_token')) {
     return get('member/711Map');
@@ -81,11 +79,18 @@ export function Get711Map() {
     return get('nonMember/711Map');
   }
 }
-
 export function GetFamilyMap() {
   if (getLocalStorage('member_token')) {
     return get('member/FamilyMap');
   } else {
     return get('nonMember/FamilyMap');
   }
+}
+
+export function GetOrder(trade_id, phone) {
+  let data = {
+    TradeID: trade_id,
+    ReceiverPhone: phone,
+  };
+  return post('nonMember/trade', data);
 }

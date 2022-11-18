@@ -1,16 +1,16 @@
 <template>
-  <main
-    class="relative z-10 w-full min-h-screen overflow-hidden"
-    v-if="checkout_data != null"
-  >
-    <div class="relative flex w-full max-w-screen-xl mx-auto">
+  <main class="relative z-10 w-full min-h-screen overflow-hidden">
+    <div
+      v-if="checkout_data != null"
+      class="relative flex w-full max-w-screen-xl mx-auto"
+    >
       <div class="w-full px-5 pb-32 md:w-2/3 xl:pl-0 sm:pl-10 sm:pr-10">
         <BreadCrumb :path="bread_crumb_path" class="mb-20" />
         <ShopCartForm
           :errors="errors"
           :form_data="form_data"
           :shopcart="shopcart"
-          :coupon_info="coupon_info"
+          :coupon_info="checkout_data.CouponInfo"
           @update-action="UpdateForm"
           @validate="ValidateForm"
           @update-coupon="GetCashier"
@@ -20,7 +20,10 @@
       <div
         class="fixed top-0 right-0 z-0 hidden w-1/3 h-screen p-12 pt-40 bg-basic_white sm:pt-44 md:block"
       >
-        <ShopCart :shopcart="shopcart" :checkout_data="checkout_data" />
+        <ShopCart
+          :shopcart="shopcart"
+          :checkout_data="checkout_data.CheckoutList"
+        />
         <ol class="pb-5 mb-5 border-b border-zinc-300">
           <li class="flex items-center justify-between w-full mb-3 text-sm">
             <p class="font-medium">合計</p>
@@ -28,9 +31,25 @@
               NT$ {{ $MoneyFormat(product_total_price) }}
             </p>
           </li>
-          <li class="flex items-center justify-between w-full text-sm">
+          <li class="flex items-center justify-between text-sm w-ful">
             <p class="font-medium">運費</p>
             <p class="font-semibold">NT$ {{ $MoneyFormat(ship_price) }}</p>
+          </li>
+          <li
+            v-if="payment_price != 0"
+            class="flex items-center justify-between w-full mt-3 text-sm"
+          >
+            <p class="font-medium">金流手續費</p>
+            <p class="font-semibold">NT$ {{ $MoneyFormat(payment_price) }}</p>
+          </li>
+          <li
+            v-if="coupon_discount != 0"
+            class="flex items-center justify-between w-full mt-3 text-sm"
+          >
+            <p class="font-medium">優惠代碼折抵</p>
+            <p class="font-semibold">
+              - NT$ {{ $MoneyFormat(coupon_discount) }}
+            </p>
           </li>
         </ol>
         <div class="flex items-center justify-between w-full text-sm">
@@ -44,13 +63,15 @@
     </div>
 
     <ShopCartFooter
+      v-if="checkout_data != null"
       class="block md:hidden"
       :shopcart="shopcart"
       :product_total_price="parseInt(product_total_price)"
       :ship_price="parseInt(ship_price)"
+      :payment_price="parseInt(payment_price)"
       :total_price="parseInt(total_price)"
-      :checkout_data="checkout_data"
-      :coupon_info="coupon_info"
+      :checkout_data="checkout_data.CheckoutList"
+      :coupon_discount="parseInt(coupon_discount)"
     />
   </main>
 </template>
@@ -66,7 +87,13 @@ import {
   validPhone,
   validAddress,
 } from '@/common/validate';
-import { getCashier } from '@/api/shopcart';
+import { getCashier, SendCheckout } from '@/api/shopcart';
+import {
+  getLocalStorage,
+  setLocalStorage,
+  delLocalStorage,
+} from '@/common/cookie';
+import { SaveShopCart } from '@/common/shopcart';
 export default {
   name: 'ShopCartView',
   components: {
@@ -78,10 +105,6 @@ export default {
   data() {
     return {
       form_data: {
-        contact_first_name: '',
-        contact_last_name: '',
-        contact_email: '',
-        contact_phone: '',
         ship_way: '',
         consignee_first_name: '',
         consignee_last_name: '',
@@ -94,10 +117,11 @@ export default {
         pay_way: '',
         outlying: false,
         coupon: '',
+        shop_id: '',
+        shop_name: '',
+        shop_address: '',
       },
-      coupon_info: null,
       errors: [],
-      checkout_data: null,
       bread_crumb_path: [
         {
           title: '首頁',
@@ -108,6 +132,7 @@ export default {
           link: '/shopcart',
         },
       ],
+      checkout_data: null,
     };
   },
   methods: {
@@ -149,44 +174,26 @@ export default {
         this.shopcart
       ).then((res) => {
         console.log(res);
-        if (res.code != 200 && res.msg.indexOf('超過物流限制') != -1) {
+        if (res.code == 200) {
+          this.checkout_data = res.data;
+        } else if (res.msg.indexOf('超過物流限制') != -1) {
           this.$store.commit('SetDialog', {
             status: true,
             content:
               '很抱歉！<br/>購物車商品超出物流的積材上限，請選擇其他物流方式或分次下單',
           });
           this.form_data.ship_way = '';
-        } else if (res.code != 200 && res.msg == '現金折抵優惠券錯誤') {
+        } else if (res.msg == '現金折抵優惠券錯誤') {
           this.$store.commit('SetDialog', {
             status: true,
             content: '很抱歉！<br/>您所輸入的優惠代碼不存在或已經兌換完畢',
           });
           this.form_data.coupon = '';
-          this.coupon_info = null;
-        } else {
-          this.checkout_data = res.data.CheckoutList;
-          res.data.CouponInfo.length <= 0
-            ? ''
-            : (this.coupon_info = res.data.CouponInfo);
         }
       });
     },
     ValidateForm() {
       this.errors = [];
-      if (
-        !validName(
-          this.form_data.contact_last_name + this.form_data.contact_first_name
-        )
-      ) {
-        this.errors.push('contact_first_name');
-        this.errors.push('contact_last_name');
-      }
-      !validEmail(this.form_data.contact_email)
-        ? this.errors.push('contact_email')
-        : '';
-      !validPhone(this.form_data.contact_phone)
-        ? this.errors.push('contact_phone')
-        : '';
       this.form_data.ship_way == '' ? this.errors.push('ship_way') : '';
       if (
         !validName(
@@ -216,12 +223,46 @@ export default {
 
       if (this.errors.length > 0) {
         window.scrollTo(0, 0);
+      } else {
+        this.SendData();
       }
+    },
+    SendData() {
+      SendCheckout(this.form_data, this.shopcart).then((res) => {
+        if (res.code == 200) {
+          // trade_data
+          setLocalStorage('trade_data', JSON.stringify(this.form_data));
+          setLocalStorage('trade_shopcart', JSON.stringify(this.shopcart));
+          setLocalStorage(
+            'trade_checkout_data',
+            JSON.stringify(this.checkout_data)
+          );
+          SaveShopCart([]);
+          this.$store.commit('SetShopCart', []);
+          document
+            .querySelector('body')
+            .insertAdjacentHTML('afterend', res.data.PaymentHTML);
+          document.querySelector('#ecpay-form').submit();
+        }
+      });
     },
   },
   created() {
     if (this.shopcart.length > 0) {
+      if (getLocalStorage('check_out_form')) {
+        this.form_data = JSON.parse(getLocalStorage('check_out_form'));
+        this.form_data.shop_id = this.$route.query.CVSStoreID;
+        this.form_data.shop_name = this.$route.query.CVSStoreName;
+        this.form_data.shop_address = this.$route.query.CVSAddress;
+        delLocalStorage('check_out_form');
+      }
       this.GetCashier();
+    } else {
+      this.$store.commit('SetDialog', {
+        status: true,
+        content: '購物車目前沒有商品',
+      });
+      this.$router.push('/');
     }
   },
   watch: {
@@ -236,34 +277,47 @@ export default {
       return this.$store.state.shopcart;
     },
     product_total_price() {
-      let price = 0;
-      this.$store.state.shopcart.forEach((shopcart_item) => {
-        const stock = shopcart_item.product_data.Stock.filter(
-          (item) =>
-            item.ColorID == shopcart_item.active_option[0] &&
-            item.SizeID == shopcart_item.active_option[1]
-        )[0];
-        price += parseInt(stock.SellPrice) * shopcart_item.amount;
-      });
-      return price;
+      if (this.checkout_data == null) {
+        return 0;
+      }
+      return this.checkout_data.DiscountFullTotal;
     },
     shipway_data() {
       return this.$store.state.shipway_data;
     },
     ship_price() {
-      if (this.form_data.ship_way == '') {
+      if (this.checkout_data == null) {
         return 0;
       } else {
-        const ship_way = this.shipway_data.filter(
-          (item) => item.ShippingID == this.form_data.ship_way
-        )[0];
         return this.form_data.outlying
-          ? ship_way.ShippingFeeOutlying
-          : ship_way.ShippingFee;
+          ? this.checkout_data.ShippingFeeOutlying
+          : this.checkout_data.ShippingFee;
+      }
+    },
+    payment_price() {
+      if (this.checkout_data == null) {
+        return 0;
+      } else {
+        return this.checkout_data.PaymentSubtotalFee;
       }
     },
     total_price() {
-      return parseInt(this.product_total_price) + parseInt(this.ship_price);
+      if (this.checkout_data == null) {
+        return 0;
+      } else {
+        return this.checkout_data.FinalTotal;
+      }
+      // AfterCouponTotal
+      // return parseInt(this.product_total_price) + parseInt(this.ship_price);
+    },
+    coupon_discount() {
+      if (this.checkout_data == null) {
+        return 0;
+      }
+      return this.checkout_data.CouponInfo.length != 0
+        ? this.checkout_data.DiscountFullTotal -
+            this.checkout_data.AfterCouponTotal
+        : 0;
     },
   },
 };

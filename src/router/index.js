@@ -155,20 +155,26 @@ const routes = [
       // },
     ],
   },
-
-  // {
-  //   path: '/question',
-  //   name: 'Question',
-  //   component: () =>
-  //     import(/* webpackChunkName: "question" */ '../views/Question.vue'),
-  // },
-  // {
-  //   path: '/contact',
-  //   name: 'Contact',
-  //   component: () =>
-  //     import(/* webpackChunkName: "contact" */ '../views/Contact.vue'),
-  // },
-
+  {
+    path: '/order_search/search',
+    name: '訂單查詢頁面',
+    component: () =>
+      import(
+        /* webpackChunkName: "order_search" */ '../views/OrderSearchView.vue'
+      ),
+  },
+  {
+    path: '/order_search/result',
+    name: '訂單查詢結果',
+    component: () =>
+      import(
+        /* webpackChunkName: "order_search_result" */ '../views/OrderSearchResultView.vue'
+      ),
+  },
+  {
+    path: '*',
+    redirect: '/error_page',
+  },
   // {
   //   path: '/account/signup',
   //   name: '註冊會員',
@@ -185,14 +191,16 @@ const routes = [
   // },
 
   // {
-  //   path: '/order_search',
-  //   name: '訂單查詢頁面',
+  //   path: '/question',
+  //   name: 'Question',
   //   component: () =>
-  //     import(/* webpackChunkName: "order_search" */ '../views/OrderSearch.vue'),
+  //     import(/* webpackChunkName: "question" */ '../views/Question.vue'),
   // },
   // {
-  //   path: '*',
-  //   redirect: '/error_page',
+  //   path: '/contact',
+  //   name: 'Contact',
+  //   component: () =>
+  //     import(/* webpackChunkName: "contact" */ '../views/Contact.vue'),
   // },
 ];
 

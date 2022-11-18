@@ -23,7 +23,12 @@
         >
           <ol class="max-h-[300px] overflow-y-auto px-5 mb-5">
             <li
-              class="flex flex-wrap items-start pb-5 mb-5 border-b border-zinc-300"
+              :class="
+                item_index != shopcart.length - 1
+                  ? ' border-b border-zinc-300'
+                  : ''
+              "
+              class="flex flex-wrap items-start pb-5 mb-5"
               v-for="(item, item_index) in shopcart"
               :key="`shopcart_${item_index}`"
             >
@@ -103,6 +108,24 @@
                 <p class="font-medium">運費</p>
                 <p class="font-semibold">NT$ {{ $MoneyFormat(ship_price) }}</p>
               </li>
+              <li
+                v-if="payment_price != 0"
+                class="flex items-center justify-between w-full mt-3 text-sm"
+              >
+                <p class="font-medium">金流手續費</p>
+                <p class="font-semibold">
+                  NT$ {{ $MoneyFormat(payment_price) }}
+                </p>
+              </li>
+              <li
+                v-if="coupon_discount != 0"
+                class="flex items-center justify-between w-full mt-3 text-sm"
+              >
+                <p class="font-medium">優惠代碼折抵</p>
+                <p class="font-semibold">
+                  - NT$ {{ $MoneyFormat(coupon_discount) }}
+                </p>
+              </li>
             </ol>
             <div
               class="flex items-center justify-between w-full px-5 pb-5 text-sm"
@@ -134,6 +157,10 @@ export default {
       require: true,
       type: Number,
     },
+    payment_price: {
+      require: true,
+      type: Number,
+    },
     ship_price: {
       require: true,
       type: Number,
@@ -145,6 +172,10 @@ export default {
     checkout_data: {
       require: true,
       type: Array,
+    },
+    coupon_discount: {
+      require: true,
+      type: Number,
     },
   },
   data() {

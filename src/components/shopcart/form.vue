@@ -2,70 +2,6 @@
   <section class="w-full">
     <AddressDialog @update-action="UpdateAddress" ref="AddressDialog" />
     <div class="flex items-center justify-between mb-5">
-      <h4 class="text-2xl font-bold">聯絡資訊</h4>
-      <p class="text-sm text-basic_gray" v-if="!member_login">
-        已經有帳戶？
-        <router-link class="text-primary" to="/account/login">登入</router-link>
-      </p>
-    </div>
-    <div class="flex flex-wrap items-start mb-6 -mx-2">
-      <div class="w-1/2 px-2 mb-4">
-        <input
-          type="text"
-          name="first_name"
-          :value="form_data.contact_first_name"
-          @input="UpdateForm('contact_first_name', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
-          placeholder="名字"
-        />
-        <p v-if="GetError('contact_first_name')" class="text-xs text-red-600">
-          請輸入正確的中文姓名
-        </p>
-      </div>
-      <div class="w-1/2 px-2 mb-4">
-        <input
-          type="text"
-          name="last_name"
-          :value="form_data.contact_last_name"
-          @input="UpdateForm('contact_last_name', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
-          placeholder="姓氏"
-        />
-        <p v-if="GetError('contact_last_name')" class="text-xs text-red-600">
-          請輸入正確的中文姓名
-        </p>
-      </div>
-      <div class="w-full px-2 mb-4">
-        <input
-          type="email"
-          name="email"
-          :value="form_data.contact_email"
-          @input="UpdateForm('contact_email', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
-          placeholder="電子郵件"
-        />
-        <p v-if="GetError('contact_email')" class="text-xs text-red-600">
-          請輸入正確的電子郵件
-        </p>
-      </div>
-      <div class="w-full px-2 mb-4">
-        <input
-          type="tel"
-          name="phone"
-          :value="form_data.contact_phone"
-          @input="UpdateForm('contact_phone', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
-          placeholder="手機號碼"
-        />
-        <p v-if="GetError('contact_phone')" class="text-xs text-red-600">
-          請輸入正確的手機號碼
-        </p>
-      </div>
-      <div class="w-full px-2">
-        <span class="block w-full border-b border-zinc-300"></span>
-      </div>
-    </div>
-    <div class="flex items-center justify-between mb-5">
       <h4 class="text-2xl font-bold">配送方式</h4>
     </div>
     <div class="pb-5 mb-6 border-b border-zinc-300">
@@ -93,9 +29,37 @@
       <p v-if="GetError('ship_way')" class="text-xs text-red-600">
         請選擇配送方式
       </p>
+      <div
+        v-if="form_data.ship_way == 1 || form_data.ship_way == 2"
+        class="relative mt-5"
+      >
+        <div
+          class="w-full p-3 mb-3 border rounded-xl border-secondary bg-secondary bg-opacity-5"
+        >
+          <p class="text-sm">
+            您已選擇門市：<b class="text-base font-bold text-secondary">{{
+              form_data.shop_name
+            }}</b
+            >・{{ form_data.shop_address }}
+          </p>
+        </div>
+        <button
+          @click="GetShopMap"
+          class="px-5 py-2 text-white rounded-lg bg-secondary"
+        >
+          {{ form_data.shop_id == '' ? '選擇取貨門市' : '重新選擇取貨門市' }}
+        </button>
+      </div>
+      <p v-if="GetError('ship_way')" class="text-xs text-red-600">
+        請選擇配送方式
+      </p>
     </div>
     <div class="flex items-center justify-between mb-5">
       <h4 class="text-2xl font-bold">收件地址</h4>
+      <p class="text-sm text-basic_gray" v-if="!member_login">
+        已經有帳戶？
+        <router-link class="text-primary" to="/account/login">登入</router-link>
+      </p>
       <button
         @click="OpenAddressDialog"
         v-if="member_login"
@@ -251,7 +215,10 @@
         </button>
       </div>
     </div>
-    <div v-if="coupon_info != null" class="flex flex-wrap items-center mb-6">
+    <div
+      v-if="coupon_info.length != 0"
+      class="flex flex-wrap items-center mb-6"
+    >
       <div
         class="w-full p-5 border rounded-xl border-secondary bg-secondary bg-opacity-5"
       >
@@ -294,7 +261,7 @@
                   ? 'text-primary'
                   : 'text-basic_gray'
               "
-              >{{ item.Title }}</span
+              >{{ item.Title }} (手續費: {{ GetPayemntFee(item) }})</span
             >
           </label>
         </li>
@@ -326,7 +293,8 @@
 <script>
 import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import AddressDialog from '@/components/shopcart/address_dialog.vue';
-import { getLocalStorage } from '@/common/cookie';
+import { getLocalStorage, setLocalStorage } from '@/common/cookie';
+import { Get711Map, GetFamilyMap } from '@/api/shopcart';
 export default {
   name: 'ShopCartForm',
   props: {
@@ -344,7 +312,6 @@ export default {
     },
     coupon_info: {
       require: true,
-      type: Object,
     },
   },
   components: {
@@ -358,6 +325,26 @@ export default {
   },
   methods: {
     UpdateForm(key, val) {
+      // 選擇7-11物流
+      if (key == 'ship_way' && val == 2) {
+        this.$emit('update-action', 'pay_way', 5);
+      }
+      // 選擇全家物流
+      else if (key == 'ship_way' && val == 1) {
+        this.$emit('update-action', 'pay_way', 4);
+      }
+      // 如果選擇不是超商物流則檢查金流是否是取貨付款
+      else if (key == 'ship_way' && val != 2 && val != 1) {
+        if (this.form_data.pay_way == 4 || this.form_data.pay_way == 5) {
+          this.$emit(
+            'update-action',
+            'pay_way',
+            this.$store.state.payment_data.filter(
+              (item) => item.PaymentID != 5 && item.PaymentID != 4
+            )[0].PaymentID
+          );
+        }
+      }
       this.$emit('update-action', key, val);
     },
     UpdateAddress(data) {
@@ -374,15 +361,60 @@ export default {
     OpenAddressDialog() {
       this.$refs.AddressDialog.Open();
     },
+    GetPayemntFee(item) {
+      if (item.ChargePercent == 0) {
+        return `NT$${item.ChargeFee}`;
+      } else {
+        return `${item.ChargePercent}%`;
+      }
+    },
+    GetShopMap() {
+      // 將目前資訊存入 localstorage
+      setLocalStorage('check_out_form', JSON.stringify(this.form_data));
+      // 呼叫超商地圖
+      if (this.form_data.ship_way == 2) {
+        Get711Map().then((res) => {
+          document
+            .querySelector('body')
+            .insertAdjacentHTML('afterend', res.data.PaymentHTML);
+          document.querySelector('#ecpay-form').submit();
+        });
+      }
+      if (this.form_data.ship_way == 1) {
+        GetFamilyMap().then((res) => {
+          document
+            .querySelector('body')
+            .insertAdjacentHTML('afterend', res.data.PaymentHTML);
+          document.querySelector('#ecpay-form').submit();
+        });
+      }
+    },
   },
   computed: {
     shipway_data() {
       return this.has_forzen_product
         ? this.forzen_shipway
-        : this.$store.state.shipway_data;
+        : this.$store.state.shipway_data.filter(
+            (item) => item.DeliveryFrozen == 'N'
+          );
     },
     payment_data() {
-      return this.$store.state.payment_data;
+      // 如果選擇 7-11物流則只能選 7-11取貨付款
+      if (this.form_data.ship_way == 2) {
+        return this.$store.state.payment_data.filter(
+          (item) => item.PaymentID == 5
+        );
+      }
+      // 如果選擇 全家物流則只能選 全家取貨付款
+      else if (this.form_data.ship_way == 1) {
+        return this.$store.state.payment_data.filter(
+          (item) => item.PaymentID == 4
+        );
+      } else {
+        return this.$store.state.payment_data.filter(
+          (item) => item.PaymentID != 5 && item.PaymentID != 4
+        );
+      }
     },
     zipcode_data() {
       return this.$store.state.zipcode_data;

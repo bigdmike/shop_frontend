@@ -5,16 +5,8 @@
     >
       <div class="w-full">
         <div class="mb-10 text-center">
-          <img src="@/assets/img/check.svg" class="mx-auto mb-5" />
-          <h2 class="mb-1 text-2xl font-bold text-primary">感謝您的訂購</h2>
-          <p class="mb-4 text-primary">訂單編號 #{{ tade_no }}</p>
-          <p class="mb-10 text-basic_gray">
-            以下是您的購物明細，也可至
-            <router-link to="/order_search" class="underline text-secondary"
-              >訂單查詢</router-link
-            >
-            追蹤您的訂單。
-          </p>
+          <p class="mb-4 text-primary">訂單編號 #{{ trade_data.TradeID }}</p>
+          <p class="mb-10 text-basic_gray">以下是您的購物明細</p>
         </div>
         <div class="mb-5">
           <p class="px-2 py-2 font-bold text-primary bg-primary bg-opacity-20">
@@ -25,7 +17,7 @@
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">訂單編號</p>
             <p class="text-sm font-bold sm:text-base">
-              #{{ $route.params.id }}
+              #{{ trade_data.TradeID }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
@@ -50,25 +42,19 @@
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人姓名</p>
             <p class="text-sm font-bold sm:text-base">
-              {{
-                form_data.consignee_last_name + form_data.consignee_first_name
-              }}
+              {{ trade_data.ReceiverName }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人電話</p>
             <p class="text-sm font-bold sm:text-base">
-              {{ form_data.consignee_phone }}
+              {{ trade_data.ReceiverPhone }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人地址</p>
             <p class="text-sm font-bold sm:text-base">
-              {{
-                form_data.consignee_city +
-                form_data.consignee_area +
-                form_data.consignee_address
-              }}
+              {{ trade_data.ReceiverAddress }}
             </p>
           </li>
         </ol>
@@ -91,10 +77,10 @@
             v-for="(item, item_index) in shopcart"
             :key="`shopcart_${item_index}`"
           >
-            <div class="w-[100px] overflow-hidden rounded-lg">
+            <!-- <div class="w-[100px] overflow-hidden rounded-lg">
               <img :src="$ImageUrl(item.product_data.Image1)" class="w-full" />
-            </div>
-            <div class="flex-1 w-full pl-3">
+            </div> -->
+            <div class="flex-1 w-full">
               <p class="mb-2 text-sm font-bold">
                 {{ item.product_data.Title }}
               </p>
@@ -107,21 +93,6 @@
               >
                 {{ GetActiveOption(item).SizeTitle }}
               </p>
-              <div
-                class="pt-2"
-                v-if="GetDiscountAndPrice(item).discount_list.length > 0"
-              >
-                <ol>
-                  <li
-                    class="mb-2 text-xs text-primary"
-                    v-for="(event, event_index) in GetDiscountAndPrice(item)
-                      .discount_list"
-                    :key="`event_${event_index}`"
-                  >
-                    {{ event.Title }}
-                  </li>
-                </ol>
-              </div>
             </div>
 
             <div class="flex items-center justify-end">
@@ -129,22 +100,16 @@
                 <p
                   class="mr-2 text-xs line-through text-basic_gray"
                   v-if="
-                    GetDiscountAndPrice(item).discount_price !=
-                    GetDiscountAndPrice(item).sell_price
+                    item.checkout_data.SellPrice !=
+                    item.checkout_data.FinalPrice
                   "
                 >
                   NT$
-                  {{
-                    $MoneyFormat(parseInt(GetDiscountAndPrice(item).sell_price))
-                  }}
+                  {{ $MoneyFormat(parseInt(item.checkout_data.SellPrice)) }}
                 </p>
                 <p class="text-sm font-bold">
                   NT$
-                  {{
-                    $MoneyFormat(
-                      parseInt(GetDiscountAndPrice(item).discount_price)
-                    )
-                  }}
+                  {{ $MoneyFormat(parseInt(item.checkout_data.FinalPrice)) }}
                   x {{ item.amount }}
                 </p>
               </div>
@@ -201,15 +166,12 @@
 </template>
 
 <script>
-import { SaveShopCart } from '@/common/shopcart';
 import { getLocalStorage, delLocalStorage } from '@/common/cookie';
 export default {
   name: 'TradeFinishView',
   data() {
     return {
-      form_data: null,
-      shopcart: null,
-      checkout_data: null,
+      trade_data: null,
     };
   },
   methods: {
@@ -244,9 +206,6 @@ export default {
     },
   },
   computed: {
-    tade_no() {
-      return this.$route.params.id;
-    },
     product_total_price() {
       if (this.checkout_data == null) {
         return 0;
@@ -258,6 +217,9 @@ export default {
     },
     payment_data() {
       return this.$store.state.payment_data;
+    },
+    product_list() {
+      return this.$store.state.product_data;
     },
     ship_price() {
       if (this.checkout_data == null) {
@@ -294,37 +256,62 @@ export default {
         : 0;
     },
     active_shipway() {
-      if (this.form_data == null) {
+      if (this.trade_data == null) {
         return '';
       }
       return this.shipway_data.filter(
-        (item) => item.ShippingID == this.form_data.ship_way
+        (item) => item.ShippingID == this.trade_data.ShippingID
       )[0].Title;
     },
     active_payment() {
-      if (this.form_data == null) {
+      if (this.trade_data == null) {
         return '';
       }
       return this.payment_data.filter(
-        (item) => item.PaymentID == this.form_data.pay_way
+        (item) => item.PaymentID == this.trade_data.PaymentID
       )[0].Title;
+    },
+    shopcart() {
+      if (this.trade_data == null) {
+        return [];
+      }
+      let shopcart = [];
+      this.trade_data.SubTradeList.forEach((item) => {
+        let product_exist = -1;
+        shopcart.forEach((shopcart_item, shopcart_item_index) => {
+          if (
+            shopcart_item.product_data.GoodsID == item.GoodsID &&
+            shopcart_item.active_option[0] == item.ColorID &&
+            shopcart_item.active_option[1] == item.SizeID
+          ) {
+            product_exist = shopcart_item_index;
+          }
+        });
+        if (product_exist != -1) {
+          shopcart[product_exist].amount += 1;
+        } else {
+          let product_data = this.product_list.filter(
+            (product) => product.GoodsID == item.GoodsID
+          )[0];
+          shopcart.push({
+            product_data: product_data,
+            checkout_data: item,
+            active_option: [item.ColorID, item.SizeID],
+            amount: 1,
+          });
+        }
+      });
+
+      return shopcart;
     },
   },
   created() {
     const trade_data = getLocalStorage('trade_data');
-    const shopcart_data = getLocalStorage('trade_shopcart');
-    const checkout_data = getLocalStorage('trade_checkout_data');
-    if (this.$route.params.id && trade_data && shopcart_data && checkout_data) {
-      this.form_data = JSON.parse(trade_data);
-      this.shopcart = JSON.parse(shopcart_data);
-      this.checkout_data = JSON.parse(checkout_data);
+    if (trade_data) {
+      this.trade_data = JSON.parse(trade_data)[0];
       delLocalStorage('trade_data');
-      delLocalStorage('trade_shopcart');
-      delLocalStorage('trade_checkout_data');
-      SaveShopCart([]);
-      this.$store.commit('SetShopCart', []);
     } else {
-      this.$router.push('/');
+      this.$router.push('/order_search/search');
     }
   },
 };
