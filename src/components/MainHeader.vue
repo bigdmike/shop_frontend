@@ -97,7 +97,7 @@ export default {
       menu_list: [
         {
           title: '最新商品',
-          link: '/collections/6',
+          link: '/collections/4',
         },
         {
           title: '所有商品',

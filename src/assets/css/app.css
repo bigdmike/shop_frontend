@@ -1811,6 +1811,10 @@ video {
     margin-bottom: 0px;
   }
 
+  .sm\:mb-20{
+    margin-bottom: 5rem;
+  }
+
   .sm\:h-14{
     height: 3.5rem;
   }
@@ -2020,6 +2024,14 @@ video {
     margin-left: 0.5rem;
   }
 
+  .md\:mb-28{
+    margin-bottom: 7rem;
+  }
+
+  .md\:mr-10{
+    margin-right: 2.5rem;
+  }
+
   .md\:block{
     display: block;
   }
@@ -2076,6 +2088,10 @@ video {
 
   .md\:flex-row{
     flex-direction: row;
+  }
+
+  .md\:flex-row-reverse{
+    flex-direction: row-reverse;
   }
 
   .md\:flex-col{
@@ -2149,6 +2165,14 @@ video {
 
   .md\:pl-2{
     padding-left: 0.5rem;
+  }
+
+  .md\:pl-20{
+    padding-left: 5rem;
+  }
+
+  .md\:pr-20{
+    padding-right: 5rem;
   }
 
   .md\:text-left{

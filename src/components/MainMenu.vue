@@ -87,7 +87,7 @@ export default {
         },
         {
           title: '最新商品',
-          link: '/collections/6',
+          link: '/collections/4',
           type: 'link',
         },
         {

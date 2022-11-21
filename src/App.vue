@@ -1,13 +1,16 @@
 <template>
   <div id="app" class="relative overflow-x-hidden sm:pt-32 pt-28">
-    <EventAnnouncement text="全館消費滿NT$1500 台灣本島免運優惠" />
+    <EventAnnouncement
+      v-if="data_load_finish"
+      text="全館消費滿NT$1500 台灣本島免運優惠"
+    />
     <MainHeader ref="MainHeader" v-if="data_load_finish" />
     <MainLoading />
     <ShopCartDialog />
     <ShopCartDrawer />
     <MainDialog />
     <router-view v-if="data_load_finish" />
-    <MainFooter />
+    <MainFooter v-if="data_load_finish" />
     <MainFooterNav @open-menu="OpenMenu" />
     <button
       @click="ScrollToTop"

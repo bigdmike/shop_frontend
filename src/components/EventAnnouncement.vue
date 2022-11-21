@@ -1,8 +1,8 @@
 <template>
   <div
-    class="fixed z-20 top-0 left-0 right-0 py-1 bg-primary text-white text-center"
+    class="fixed top-0 left-0 right-0 z-20 py-1 text-center text-white bg-primary"
   >
-    <p class="text-center tracking-wider">{{ text }}</p>
+    <p class="tracking-wider text-center">{{ event_announcement }}</p>
   </div>
 </template>
 
@@ -13,6 +13,17 @@ export default {
     text: {
       require: true,
       type: String,
+    },
+  },
+  computed: {
+    common_column_data() {
+      return this.$store.state.common_column_data;
+    },
+    event_announcement() {
+      let tmp_data = this.common_column_data.filter(
+        (item) => item.Title == 'event_announcement'
+      )[0].Content;
+      return tmp_data;
     },
   },
 };
