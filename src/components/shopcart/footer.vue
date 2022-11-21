@@ -96,7 +96,27 @@
               </div>
             </li>
           </ol>
+
           <div class="px-5">
+            <div
+              class="flex flex-wrap items-start pt-5 mb-5 border-t border-zinc-300"
+              v-if="give_info"
+            >
+              <div class="w-full">
+                <h4 class="mb-5 font-bold text-primary">活動贈品</h4>
+              </div>
+              <div class="w-1/4 overflow-hidden rounded-lg">
+                <img :src="$ImageUrl(give_info.Image1)" class="w-full" />
+              </div>
+              <div class="w-3/4 pl-3">
+                <p class="mb-2 text-sm font-bold">
+                  {{ give_info.GiveName }}
+                </p>
+                <p class="text-sm text-basic_gray">
+                  {{ give_info.Title }}
+                </p>
+              </div>
+            </div>
             <ol class="px-5 pt-5 pb-5 mb-5 border-t border-b border-zinc-300">
               <li class="flex items-center justify-between w-full mb-3 text-sm">
                 <p class="font-medium">合計</p>
@@ -176,6 +196,10 @@ export default {
     coupon_discount: {
       require: true,
       type: Number,
+    },
+    give_info: {
+      require: true,
+      type: Object,
     },
   },
   data() {

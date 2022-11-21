@@ -10,6 +10,7 @@
     <MainFooter />
     <MainFooterNav @open-menu="OpenMenu" />
     <button
+      @click="ScrollToTop"
       class="fixed z-20 flex items-center justify-center rounded-full md:bottom-24 sm:bottom-36 bottom-28 sm:right-7 right-2 sm:w-14 sm:h-14 w-11 h-11 bg-primary"
     >
       <SelectArrowIcon class="w-6 text-white transform md:w-8 -scale-y-100" />
@@ -54,6 +55,9 @@ export default {
     SelectArrowIcon,
   },
   methods: {
+    ScrollToTop() {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    },
     CheckPageData() {
       this.common_column_data == null
         ? this.$store.dispatch('getColumnData')

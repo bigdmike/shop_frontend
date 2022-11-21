@@ -1396,6 +1396,11 @@ video {
   padding-bottom: 1rem;
 }
 
+.py-64{
+  padding-top: 16rem;
+  padding-bottom: 16rem;
+}
+
 .pt-28{
   padding-top: 7rem;
 }
@@ -1731,6 +1736,10 @@ video {
 
 .hover\:bg-opacity-10:hover{
   --tw-bg-opacity: 0.1;
+}
+
+.hover\:bg-opacity-30:hover{
+  --tw-bg-opacity: 0.3;
 }
 
 .hover\:text-primary:hover{

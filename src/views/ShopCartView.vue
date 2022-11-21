@@ -24,6 +24,28 @@
           :shopcart="shopcart"
           :checkout_data="checkout_data.CheckoutList"
         />
+        <div
+          class="flex flex-wrap items-start pb-5 mb-5 border-b border-zinc-300"
+          v-if="checkout_data.GiveInfo"
+        >
+          <div class="w-full">
+            <h4 class="mb-5 font-bold text-primary">活動贈品</h4>
+          </div>
+          <div class="w-1/4 overflow-hidden rounded-lg">
+            <img
+              :src="$ImageUrl(checkout_data.GiveInfo.Image1)"
+              class="w-full"
+            />
+          </div>
+          <div class="w-3/4 pl-3">
+            <p class="mb-2 text-sm font-bold">
+              {{ checkout_data.GiveInfo.GiveName }}
+            </p>
+            <p class="text-sm text-basic_gray">
+              {{ checkout_data.GiveInfo.Title }}
+            </p>
+          </div>
+        </div>
         <ol class="pb-5 mb-5 border-b border-zinc-300">
           <li class="flex items-center justify-between w-full mb-3 text-sm">
             <p class="font-medium">合計</p>
@@ -62,6 +84,28 @@
       </div>
     </div>
 
+    <div class="w-full max-w-screen-xl px-5 py-64 mx-auto text-center xl:px-0">
+      <h4 class="mb-4 text-2xl font-bold">購物車內目前沒有商品</h4>
+      <p class="mb-10">
+        您可以前往<a href="/collections/all" class="text-primary">瀏覽商品</a
+        >，選購您想要得商品
+      </p>
+      <div class="flex items-center justify-center">
+        <router-link
+          to="/"
+          class="px-4 py-2 mr-2 transition-all duration-300 rounded-lg text-primary hover:text-primary hover:bg-primary hover:bg-opacity-30"
+        >
+          回到首頁
+        </router-link>
+        <router-link
+          to="/collections/all"
+          class="px-4 py-2 text-white transition-all duration-300 rounded-lg bg-primary hover:bg-opacity-70"
+        >
+          瀏覽商品
+        </router-link>
+      </div>
+    </div>
+
     <ShopCartFooter
       v-if="checkout_data != null"
       class="block md:hidden"
@@ -72,6 +116,7 @@
       :total_price="parseInt(total_price)"
       :checkout_data="checkout_data.CheckoutList"
       :coupon_discount="parseInt(coupon_discount)"
+      :give_info="checkout_data.GiveInfo"
     />
   </main>
 </template>
@@ -133,6 +178,7 @@ export default {
         },
       ],
       checkout_data: null,
+      shop_cart_first_load: false,
     };
   },
   methods: {
@@ -248,31 +294,35 @@ export default {
     },
   },
   created() {
-    if (this.shopcart.length > 0) {
-      if (getLocalStorage('check_out_form')) {
-        this.form_data = JSON.parse(getLocalStorage('check_out_form'));
-        this.form_data.shop_id = this.$route.query.CVSStoreID;
-        this.form_data.shop_name = this.$route.query.CVSStoreName;
-        this.form_data.shop_address = this.$route.query.CVSAddress;
-        delLocalStorage('check_out_form');
-      }
-      this.GetCashier();
+    // this.GetCashier();
+    if (getLocalStorage('check_out_form')) {
+      this.form_data = JSON.parse(getLocalStorage('check_out_form'));
+      this.form_data.shop_id = this.$route.query.CVSStoreID;
+      this.form_data.shop_name = this.$route.query.CVSStoreName;
+      this.form_data.shop_address = this.$route.query.CVSAddress;
+      delLocalStorage('check_out_form');
     }
   },
   watch: {
     shopcart() {
-      if (this.shopcart.length > 0) {
+      if (!this.shop_cart_first_load) {
+        this.shop_cart_first_load = true;
         this.GetCashier();
-      } else {
-        this.$store.commit('SetDialog', {
-          status: true,
-          content: '購物車目前沒有商品',
-        });
-        this.$router.push('/');
+      }
+      if (this.shopcart.length <= 0) {
+        this.checkout_data = null;
+      }
+    },
+    shopcart_drawer() {
+      if (!this.shopcart_drawer) {
+        this.GetCashier();
       }
     },
   },
   computed: {
+    shopcart_drawer() {
+      return this.$store.state.shopcart_drawer;
+    },
     shopcart() {
       return this.$store.state.shopcart;
     },
