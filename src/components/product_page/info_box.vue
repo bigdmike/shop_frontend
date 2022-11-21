@@ -38,10 +38,12 @@
     </div>
 
     <div v-if="product_data.Discount.length > 0" class="mb-5">
-      <p class="mb-2 text-sm">此商品參與的優惠活動</p>
-      <ol>
+      <p class="mb-2 text-sm text-primary">此商品參與的優惠活動</p>
+      <ol
+        class="py-2 border rounded-lg text-primary bg-primary bg-opacity-10 border-primary"
+      >
         <li
-          class="flex items-center text-sm text-primary"
+          class="flex items-center px-4 py-1 text-sm"
           v-for="(item, item_index) in product_data.Discount"
           :key="`event_${item_index}`"
         >
@@ -49,7 +51,7 @@
           <a
             @click="OpenEventImageDialog(item)"
             v-if="item.Image1 != ''"
-            class="block ml-2 text-xs font-bold underline"
+            class="block ml-2 text-xs font-bold underline cursor-pointer"
             >查看贈品</a
           >
         </li>
