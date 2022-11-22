@@ -100,7 +100,7 @@
           <div class="px-5">
             <div
               class="flex flex-wrap items-start pt-5 mb-5 border-t border-zinc-300"
-              v-if="give_info"
+              v-if="give_info.length > 0"
             >
               <div class="w-full">
                 <h4 class="mb-5 font-bold text-primary">活動贈品</h4>
@@ -199,7 +199,6 @@ export default {
     },
     give_info: {
       require: true,
-      type: Object,
     },
   },
   data() {

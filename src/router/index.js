@@ -96,6 +96,13 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
+    path: '/account/signup',
+    name: '會員註冊',
+    component: () =>
+      import(/* webpackChunkName: "signup" */ '../views/SignupView.vue'),
+    meta: { requiresAuth: false },
+  },
+  {
     path: '/account/',
     name: '會員中心',
     component: () =>

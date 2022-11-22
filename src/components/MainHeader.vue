@@ -15,7 +15,7 @@
             @click.native="CloseMenu"
             class="absolute block transform -translate-x-1/2 -translate-y-1/2 md:relative md:top-0 md:left-0 top-1/2 left-1/2 md:translate-x-0 md:translate-y-0"
           >
-            <img src="/img/logo.png" class="w-32 lg:w-44 sm:w-36" />
+            <img :src="$ImageUrl(logo_image)" class="w-32 lg:w-44 sm:w-36" />
           </router-link>
           <div class="flex items-center md:hidden">
             <button
@@ -49,16 +49,22 @@
               <router-link
                 :to="item.link"
                 @click.native="CloseMenu"
-                class="px-3 text-sm font-bold lg:px-4 lg:text-base"
+                class="px-3 text-sm font-bold transition-colors duration-300 cursor-pointer lg:px-4 lg:text-base hover:text-primary"
               >
                 {{ item.title }}
               </router-link>
             </li>
           </ol>
-          <button @click="TriggerSearhBar" class="pl-4 pr-3">
+          <button
+            @click="TriggerSearhBar"
+            class="pl-4 pr-3 transition-colors duration-300 hover:text-secondary"
+          >
             <SearchIcon class="w-6 lg:w-7" />
           </button>
-          <button @click="OpenShopcart" class="relative pl-3">
+          <button
+            @click="OpenShopcart"
+            class="relative pl-3 transition-colors duration-300 hover:text-secondary"
+          >
             <span
               class="absolute top-0 right-0 flex items-center justify-center w-5 h-5 transform translate-x-2 -translate-y-2 rounded-full bg-primary"
             >
@@ -143,6 +149,15 @@ export default {
       });
 
       return count;
+    },
+    common_column_data() {
+      return this.$store.state.common_column_data;
+    },
+    logo_image() {
+      let tmp_data = this.common_column_data.filter(
+        (item) => item.Title == 'logo_image'
+      )[0].Content;
+      return tmp_data;
     },
   },
 };

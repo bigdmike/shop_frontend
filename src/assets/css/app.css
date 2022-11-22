@@ -1012,10 +1012,6 @@ video {
   resize: both;
 }
 
-.list-disc{
-  list-style-type: disc;
-}
-
 .appearance-none{
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -1371,6 +1367,16 @@ video {
   padding-bottom: 2px;
 }
 
+.py-64{
+  padding-top: 16rem;
+  padding-bottom: 16rem;
+}
+
+.px-4{
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 .py-6{
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
@@ -1386,19 +1392,9 @@ video {
   padding-right: 4rem;
 }
 
-.px-4{
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
 .py-4{
   padding-top: 1rem;
   padding-bottom: 1rem;
-}
-
-.py-64{
-  padding-top: 16rem;
-  padding-bottom: 16rem;
 }
 
 .pt-28{
@@ -1495,14 +1491,6 @@ video {
 
 .pr-5{
   padding-right: 1.25rem;
-}
-
-.pl-20{
-  padding-left: 5rem;
-}
-
-.pl-10{
-  padding-left: 2.5rem;
 }
 
 .text-center{
@@ -1622,6 +1610,11 @@ video {
   color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 
+.text-red-500{
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
+}
+
 .underline{
   text-decoration-line: underline;
 }
@@ -1730,16 +1723,16 @@ video {
   --tw-bg-opacity: 1;
 }
 
+.hover\:bg-opacity-30:hover{
+  --tw-bg-opacity: 0.3;
+}
+
 .hover\:bg-opacity-80:hover{
   --tw-bg-opacity: 0.8;
 }
 
 .hover\:bg-opacity-10:hover{
   --tw-bg-opacity: 0.1;
-}
-
-.hover\:bg-opacity-30:hover{
-  --tw-bg-opacity: 0.3;
 }
 
 .hover\:text-primary:hover{
@@ -1795,6 +1788,10 @@ video {
     margin-bottom: 3.5rem;
   }
 
+  .sm\:mb-20{
+    margin-bottom: 5rem;
+  }
+
   .sm\:mb-4{
     margin-bottom: 1rem;
   }
@@ -1809,10 +1806,6 @@ video {
 
   .sm\:mb-0{
     margin-bottom: 0px;
-  }
-
-  .sm\:mb-20{
-    margin-bottom: 5rem;
   }
 
   .sm\:h-14{
@@ -2000,6 +1993,10 @@ video {
     margin-bottom: 3rem;
   }
 
+  .md\:mb-28{
+    margin-bottom: 7rem;
+  }
+
   .md\:mb-0{
     margin-bottom: 0px;
   }
@@ -2022,14 +2019,6 @@ video {
 
   .md\:ml-2{
     margin-left: 0.5rem;
-  }
-
-  .md\:mb-28{
-    margin-bottom: 7rem;
-  }
-
-  .md\:mr-10{
-    margin-right: 2.5rem;
   }
 
   .md\:block{
@@ -2151,12 +2140,12 @@ video {
     padding-bottom: 0px;
   }
 
-  .md\:pr-10{
-    padding-right: 2.5rem;
+  .md\:pl-20{
+    padding-left: 5rem;
   }
 
-  .md\:pl-10{
-    padding-left: 2.5rem;
+  .md\:pr-20{
+    padding-right: 5rem;
   }
 
   .md\:pt-0{
@@ -2165,14 +2154,6 @@ video {
 
   .md\:pl-2{
     padding-left: 0.5rem;
-  }
-
-  .md\:pl-20{
-    padding-left: 5rem;
-  }
-
-  .md\:pr-20{
-    padding-right: 5rem;
   }
 
   .md\:text-left{

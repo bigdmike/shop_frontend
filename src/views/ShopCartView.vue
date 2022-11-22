@@ -26,7 +26,7 @@
         />
         <div
           class="flex flex-wrap items-start pb-5 mb-5 border-b border-zinc-300"
-          v-if="checkout_data.GiveInfo"
+          v-if="checkout_data.GiveInfo.legnth > 0"
         >
           <div class="w-full">
             <h4 class="mb-5 font-bold text-primary">活動贈品</h4>
@@ -84,7 +84,10 @@
       </div>
     </div>
 
-    <div class="w-full max-w-screen-xl px-5 py-64 mx-auto text-center xl:px-0">
+    <div
+      v-if="checkout_data == null"
+      class="w-full max-w-screen-xl px-5 py-64 mx-auto text-center xl:px-0"
+    >
       <h4 class="mb-4 text-2xl font-bold">購物車內目前沒有商品</h4>
       <p class="mb-10">
         您可以前往<a href="/collections/all" class="text-primary">瀏覽商品</a
@@ -275,8 +278,8 @@ export default {
     },
     SendData() {
       SendCheckout(this.form_data, this.shopcart).then((res) => {
+        console.log(res);
         if (res.code == 200) {
-          // trade_data
           setLocalStorage('trade_data', JSON.stringify(this.form_data));
           setLocalStorage('trade_shopcart', JSON.stringify(this.shopcart));
           setLocalStorage(
@@ -285,16 +288,22 @@ export default {
           );
           SaveShopCart([]);
           this.$store.commit('SetShopCart', []);
-          document
-            .querySelector('body')
-            .insertAdjacentHTML('afterend', res.data.PaymentHTML);
-          document.querySelector('#ecpay-form').submit();
+          if (this.checkout_data.PaymentInfo.PaymentType == 'PCHomeCredit') {
+            window.location.replace(res.data.PaymentHTML);
+          } else {
+            document
+              .querySelector('body')
+              .insertAdjacentHTML('afterend', res.data.PaymentHTML);
+            document.querySelector('#ecpay-form').submit();
+          }
         }
       });
     },
   },
   created() {
-    // this.GetCashier();
+    if (this.shopcart.length > 0) {
+      this.GetCashier();
+    }
     if (getLocalStorage('check_out_form')) {
       this.form_data = JSON.parse(getLocalStorage('check_out_form'));
       this.form_data.shop_id = this.$route.query.CVSStoreID;

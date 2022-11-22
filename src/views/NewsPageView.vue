@@ -1,15 +1,15 @@
 <template>
-  <main class="w-full relative z-10">
-    <div class="w-full max-w-screen-xl mx-auto xl:px-0 sm:px-10 px-5 pb-40">
+  <main id="NewsPage" class="relative z-10 w-full">
+    <div class="w-full max-w-screen-xl px-5 pb-40 mx-auto xl:px-0 sm:px-10">
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
-      <h2 class="sm:text-4xl text-2xl font-semibold mb-5">
+      <h2 class="mb-5 text-2xl font-semibold sm:text-4xl">
         {{ news_data.Title }}
       </h2>
       <div
-        class="flex items-center justify-between pb-2 border-b border-zinc-300 mb-10"
+        class="flex items-center justify-between pb-2 mb-10 border-b border-zinc-300"
       >
         <div class="flex items-center">
-          <p class="text-basic_gray font-semibold sm:text-base text-sm mr-2">
+          <p class="mr-2 text-sm font-semibold text-basic_gray sm:text-base">
             {{ news_data.created_at.slice(0, 10) }}
           </p>
           <span
@@ -26,46 +26,47 @@
           />
           <button
             @click="CopyLink"
-            class="sm:w-9 sm:h-9 h-7 w-7 sm:mr-2 mr-1 bg-basic_black flex items-center justify-center rounded-md transition-colors duration-200 hover:bg-secondary"
+            class="flex items-center justify-center mr-1 transition-colors duration-200 rounded-md sm:w-9 sm:h-9 h-7 w-7 sm:mr-2 bg-basic_black hover:bg-secondary"
           >
-            <ShareLinkIcon class="text-white sm:w-5 w-4" />
+            <ShareLinkIcon class="w-4 text-white sm:w-5" />
           </button>
           <button
             @click="ShareToFB"
-            class="sm:w-9 sm:h-9 h-7 w-7 sm:mr-2 mr-1 bg-basic_black flex items-center justify-center rounded-md transition-colors duration-200 hover:bg-secondary"
+            class="flex items-center justify-center mr-1 transition-colors duration-200 rounded-md sm:w-9 sm:h-9 h-7 w-7 sm:mr-2 bg-basic_black hover:bg-secondary"
           >
-            <FacebookIcon class="text-white sm:w-5 w-4" />
+            <FacebookIcon class="w-4 text-white sm:w-5" />
           </button>
           <button
             @click="ShareToLine"
-            class="sm:w-9 sm:h-9 h-7 w-7 bg-basic_black flex items-center justify-center rounded-md transition-colors duration-200 hover:bg-secondary"
+            class="flex items-center justify-center transition-colors duration-200 rounded-md sm:w-9 sm:h-9 h-7 w-7 bg-basic_black hover:bg-secondary"
           >
-            <LineIcon class="text-white sm:w-5 w-4" />
+            <LineIcon class="w-4 text-white sm:w-5" />
           </button>
         </div>
       </div>
       <div class="mb-10">
-        <img :src="$ImageUrl(news_data.Image1)" class="w-full block" />
+        <img :src="$ImageUrl(news_data.Image1)" class="block w-full" />
       </div>
       <div
-        class="w-full text-basic_black mb-20"
+        id="NewsContent"
+        class="w-full mb-20 text-basic_black"
         v-html="news_data.Content"
       ></div>
       <div
-        class="border-t border-zinc-300 pt-1"
+        class="pt-1 border-t border-zinc-300"
         v-if="next_news_data != 'error'"
       >
-        <p class="text-sm text-basic_gray mb-2">下一篇</p>
+        <p class="mb-2 text-sm text-basic_gray">下一篇</p>
         <router-link
           :to="`/news/${next_news_data.NewsCategoryID}/page/${next_news_data.NewsID}`"
           class="flex items-start justify-between mb-10"
         >
           <div>
-            <h3 class="font-semibold sm:text-3xl text-2xl mb-3">
+            <h3 class="mb-3 text-2xl font-semibold sm:text-3xl">
               {{ next_news_data.Title }}
             </h3>
             <div class="flex items-center">
-              <p class="text-basic_gray font-semibold mr-2 text-sm">
+              <p class="mr-2 text-sm font-semibold text-basic_gray">
                 {{ next_news_data.created_at.slice(0, 10) }}
               </p>
               <span
@@ -75,15 +76,15 @@
             </div>
           </div>
           <button
-            class="sm:w-16 sm:h-16 h-14 w-14 flex items-center justify-center bg-primary bg-opacity-20 text-primary rounded-full transition-colors duration-200 hover:bg-opacity-100 hover:text-white"
+            class="flex items-center justify-center transition-colors duration-200 rounded-full sm:w-16 sm:h-16 h-14 w-14 bg-primary bg-opacity-20 text-primary hover:bg-opacity-100 hover:text-white"
           >
-            <NextIcon class="sm:w-4 w-3" />
+            <NextIcon class="w-3 sm:w-4" />
           </button>
         </router-link>
         <div class="flex items-center">
           <router-link
             :to="bread_crumb_path[1].link"
-            class="flex items-center mr-3 flex-shrink-0 transition-colors duration-200 hover:text-secondary"
+            class="flex items-center flex-shrink-0 mr-3 transition-colors duration-200 hover:text-secondary"
           >
             <PrevIcon class="w-2 mr-3" />
             回到列表
@@ -193,3 +194,9 @@ export default {
   },
 };
 </script>
+
+<style>
+#NewsContent img {
+  display: inline-block;
+}
+</style>

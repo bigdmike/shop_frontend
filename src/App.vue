@@ -14,15 +14,18 @@
     <MainFooterNav @open-menu="OpenMenu" />
     <button
       @click="ScrollToTop"
-      class="fixed z-20 flex items-center justify-center rounded-full md:bottom-24 sm:bottom-36 bottom-28 sm:right-7 right-2 sm:w-14 sm:h-14 w-11 h-11 bg-primary"
+      class="fixed z-20 flex items-center justify-center transition-all duration-300 rounded-full cursor-pointer md:bottom-24 sm:bottom-36 bottom-28 sm:right-7 right-2 sm:w-14 sm:h-14 w-11 h-11 bg-primary hover:bg-opacity-70"
     >
       <SelectArrowIcon class="w-6 text-white transform md:w-8 -scale-y-100" />
     </button>
-    <button
-      class="fixed z-20 flex items-center justify-center rounded-full md:bottom-5 sm:bottom-20 bottom-16 sm:right-7 right-2 sm:w-14 sm:h-14 w-11 h-11 bg-primary"
+    <a
+      v-if="data_load_finish"
+      :href="company_messenger"
+      target="_blank"
+      class="fixed z-20 flex items-center justify-center transition-all duration-300 rounded-full md:bottom-5 sm:bottom-20 bottom-16 sm:right-7 right-2 sm:w-14 sm:h-14 w-11 h-11 bg-primary hover:bg-opacity-70"
     >
       <MessageIcon class="w-6 text-white transform md:w-8 -scale-y-100" />
-    </button>
+    </a>
   </div>
 </template>
 
@@ -111,6 +114,12 @@ export default {
     },
     common_column_data() {
       return this.$store.state.common_column_data;
+    },
+    company_messenger() {
+      let tmp_data = this.common_column_data.filter(
+        (item) => item.Title == 'company_messenger'
+      )[0].Content;
+      return tmp_data;
     },
     carousel_data() {
       return this.$store.state.carousel_data;
