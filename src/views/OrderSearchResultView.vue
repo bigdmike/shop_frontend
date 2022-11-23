@@ -167,11 +167,13 @@
 
 <script>
 import { getLocalStorage, delLocalStorage } from '@/common/cookie';
+import { GetMetaData } from '@/common/meta';
 export default {
   name: 'TradeFinishView',
   data() {
     return {
       trade_data: null,
+      meta_data: null,
     };
   },
   methods: {
@@ -310,9 +312,16 @@ export default {
     if (trade_data) {
       this.trade_data = JSON.parse(trade_data)[0];
       delLocalStorage('trade_data');
+      this.meta_data = GetMetaData('訂單查詢', '', '');
+      this.$nextTick(() => {
+        window.prerenderReady = true;
+      });
     } else {
       this.$router.push('/order_search/search');
     }
+  },
+  metaInfo() {
+    return this.meta_data;
   },
 };
 </script>

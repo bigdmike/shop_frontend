@@ -96,7 +96,13 @@
           </option>
         </select>
       </div>
-      <p class="mb-2 font-semibold">數量</p>
+      <p class="mb-2 font-semibold">
+        數量
+
+        <span class="ml-3 text-sm text-center text-primary">
+          目前庫存數量：{{ active_stock.Stock }}
+        </span>
+      </p>
       <div
         class="relative flex items-stretch w-full overflow-hidden border rounded-lg border-zinc-300"
       >
@@ -113,7 +119,7 @@
           readonly
         />
         <button
-          @click="$emit('change-amount', 1)"
+          @click="amount >= active_stock.Stock ? '' : $emit('change-amount', 1)"
           class="px-5 py-4 text-black duration-200 transition-color hover:bg-secondary hover:text-white"
         >
           <PlusIcon class="w-3" />
@@ -122,10 +128,17 @@
     </div>
     <div class="hidden md:block">
       <button
+        v-if="active_stock.Stock > 0"
         @click="$emit('add-cart')"
         class="block w-full py-4 text-center text-white transition-colors duration-200 rounded-lg bg-primary hover:bg-opacity-80"
       >
         加入購物車
+      </button>
+      <button
+        v-else
+        class="block w-full py-4 text-center text-white transition-colors duration-200 rounded-lg cursor-not-allowed bg-zinc-600 hover:bg-opacity-80"
+      >
+        商品已售完
       </button>
     </div>
   </section>

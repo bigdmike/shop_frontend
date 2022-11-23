@@ -4,7 +4,7 @@
       class="flex flex-wrap items-start justify-between w-full max-w-screen-xl px-10 mx-auto xl:px-0 md:mb-12"
     >
       <router-link to="/" class="mb-20">
-        <img :src="$ImageUrl(logo_image)" class="w-60" />
+        <img :src="$ImageUrl($GetCloumn('logo_image'))" class="w-60" />
       </router-link>
       <div class="flex flex-wrap items-start">
         <div class="mb-20 mr-16">
@@ -12,16 +12,16 @@
           <ol class="text-basic_gray">
             <li class="flex flex-wrap items-center mb-4 sm:mb-2 sm:flex-nowrap">
               <p class="flex-shrink-0 w-full mr-3 sm:w-auto">聯絡電話</p>
-              <p>{{ company_phone }}</p>
+              <p>{{ $GetCloumn('company_phone') }}</p>
             </li>
             <li class="flex flex-wrap items-center mb-4 sm:mb-2 sm:flex-nowrap">
               <p class="flex-shrink-0 w-full mr-3 sm:w-auto">電子郵件</p>
-              <p>{{ company_email }}/p></p>
+              <p>{{ $GetCloumn('company_email') }}</p>
             </li>
 
             <li class="flex flex-wrap items-center sm:flex-nowrap">
               <p class="flex-shrink-0 w-full mr-3 sm:w-auto">營業時間</p>
-              <p>{{ company_time }}</p>
+              <p>{{ $GetCloumn('company_time') }}</p>
             </li>
           </ol>
         </div>
@@ -30,7 +30,7 @@
           <ol class="flex text-basic_gray">
             <li class="flex items-center mb-2 mr-2">
               <a
-                :href="company_facebook"
+                :href="$GetCloumn('company_facebook')"
                 target="_blank"
                 class="p-2 text-white transition-colors duration-200 rounded-md bg-basic_black hover:bg-secondary"
               >
@@ -39,7 +39,7 @@
             </li>
             <li class="flex items-center mb-2">
               <a
-                :href="company_instagram"
+                :href="$GetCloumn('company_instagram')"
                 target="_blank"
                 class="p-2 text-white transition-colors duration-200 rounded-md bg-basic_black hover:bg-secondary"
               >
@@ -58,13 +58,19 @@
         <img src="@/assets/img/credit_card.svg" class="mb-10 mr-5" />
         <ol class="flex items-center mb-10 -mx-2 text-sm md:mx-0">
           <li class="border-r border-basic_black">
-            <router-link class="px-2 link_color" to="/">服務條款</router-link>
+            <router-link class="px-2 link_color" to="/terms/terms_of_customer"
+              >服務條款</router-link
+            >
           </li>
           <li class="border-r border-basic_black">
-            <router-link class="px-2 link_color" to="/">隱私政策</router-link>
+            <router-link class="px-2 link_color" to="/terms/site_privacy"
+              >隱私政策</router-link
+            >
           </li>
           <li>
-            <router-link class="px-2 link_color" to="/">訂單查詢</router-link>
+            <router-link class="px-2 link_color" to="/order_search/search"
+              >訂單查詢</router-link
+            >
           </li>
         </ol>
       </div>
@@ -92,47 +98,6 @@ export default {
   components: {
     FacebookIcon,
     InstagramIcon,
-  },
-  computed: {
-    common_column_data() {
-      return this.$store.state.common_column_data;
-    },
-    company_phone() {
-      let tmp_data = this.common_column_data.filter(
-        (item) => item.Title == 'company_phone'
-      )[0].Content;
-      return tmp_data;
-    },
-    company_time() {
-      let tmp_data = this.common_column_data.filter(
-        (item) => item.Title == 'company_time'
-      )[0].Content;
-      return tmp_data;
-    },
-    company_email() {
-      let tmp_data = this.common_column_data.filter(
-        (item) => item.Title == 'company_email'
-      )[0].Content;
-      return tmp_data;
-    },
-    company_facebook() {
-      let tmp_data = this.common_column_data.filter(
-        (item) => item.Title == 'company_facebook'
-      )[0].Content;
-      return tmp_data;
-    },
-    company_instagram() {
-      let tmp_data = this.common_column_data.filter(
-        (item) => item.Title == 'company_instagram'
-      )[0].Content;
-      return tmp_data;
-    },
-    logo_image() {
-      let tmp_data = this.common_column_data.filter(
-        (item) => item.Title == 'logo_image'
-      )[0].Content;
-      return tmp_data;
-    },
   },
 };
 </script>

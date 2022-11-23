@@ -1,6 +1,9 @@
 <template>
   <main id="NewsPage" class="relative z-10 w-full">
-    <div class="w-full max-w-screen-xl px-5 pb-40 mx-auto xl:px-0 sm:px-10">
+    <div
+      v-if="news_data != null && news_data != 'error'"
+      class="w-full max-w-screen-xl px-5 pb-40 mx-auto xl:px-0 sm:px-10"
+    >
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
       <h2 class="mb-5 text-2xl font-semibold sm:text-4xl">
         {{ news_data.Title }}
@@ -103,6 +106,7 @@ import FacebookIcon from '@/components/svg/FacebookIcon.vue';
 import LineIcon from '@/components/svg/LineIcon.vue';
 import NextIcon from '@/components/svg/Carousel/NextIcon.vue';
 import PrevIcon from '@/components/svg/Carousel/PrevIcon.vue';
+import { GetMetaData } from '@/common/meta';
 export default {
   name: 'NewsPageView',
   components: {
@@ -155,10 +159,29 @@ export default {
       this.bread_crumb_path[1].link = `/news/${this.active_caregory.NewsCategoryID}`;
       this.bread_crumb_path[2].title = this.news_data.Title;
       this.bread_crumb_path[2].link = `/news/${this.news_data.NewsID}`;
+
+      let description = this.news_data.Content.replaceAll(/<[^>]+>/g, '');
+      this.meta_data = GetMetaData(
+        this.news_data.Title,
+        description.slice(0, 150),
+        this.news_data.Image1
+      );
+
+      this.$nextTick(() => {
+        this.$refs.clone.value = window.location.href;
+        window.prerenderReady = true;
+      });
+    } else {
+      this.$router.push('/error_page');
     }
   },
-  mounted() {
-    this.$refs.clone.value = window.location.href;
+  metaInfo() {
+    return this.meta_data;
+  },
+  watch: {
+    news_data() {
+      this.news_data == 'error' ? this.$router.push('/error_page') : '';
+    },
   },
   computed: {
     news_category_data() {

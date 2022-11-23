@@ -47,7 +47,7 @@ export class shopcart_dialog_gsap_animation {
         this.progress,
         {
           scaleX: 1,
-          duration: 3,
+          duration: 2,
           onComplete: () => {
             this.close();
           },

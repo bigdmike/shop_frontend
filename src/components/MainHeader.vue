@@ -15,7 +15,10 @@
             @click.native="CloseMenu"
             class="absolute block transform -translate-x-1/2 -translate-y-1/2 md:relative md:top-0 md:left-0 top-1/2 left-1/2 md:translate-x-0 md:translate-y-0"
           >
-            <img :src="$ImageUrl(logo_image)" class="w-32 lg:w-44 sm:w-36" />
+            <img
+              :src="$ImageUrl($GetCloumn('logo_image'))"
+              class="w-32 lg:w-44 sm:w-36"
+            />
           </router-link>
           <div class="flex items-center md:hidden">
             <button
@@ -149,15 +152,6 @@ export default {
       });
 
       return count;
-    },
-    common_column_data() {
-      return this.$store.state.common_column_data;
-    },
-    logo_image() {
-      let tmp_data = this.common_column_data.filter(
-        (item) => item.Title == 'logo_image'
-      )[0].Content;
-      return tmp_data;
     },
   },
 };

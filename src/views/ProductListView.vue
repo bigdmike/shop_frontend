@@ -1,24 +1,24 @@
 <template>
-  <main id="ProductList" class="w-full relative z-10 pb-40">
+  <main id="ProductList" class="relative z-10 w-full pb-40">
     <div
-      class="w-full max-w-screen-xl mx-auto xl:px-0 px-5 flex items-stretch flex-wrap"
+      class="flex flex-wrap items-stretch w-full max-w-screen-xl px-5 mx-auto xl:px-0"
     >
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
       <FilterBar
-        class="w-full flex items-center justify-end mb-10"
+        class="flex items-center justify-end w-full mb-10"
         :active_category="active_category"
         :sort_type="sort_type"
         :category_data="category_data"
         @change-type="ChangeSortType"
-        @change-category="ChangeCategory"
+        @change-category="$router.push(`/collections/${$event}`)"
       />
       <CategoryMenu
         :active_category="active_category"
         :category_data="category_data"
-        class="w-1/4 md:block hidden pr-10"
+        class="hidden w-1/4 pr-10 md:block"
       />
       <ProductList
-        class="md:w-3/4 w-full"
+        class="w-full md:w-3/4"
         :page_product_data="page_product_data"
         :product_data="product_data"
         @next-page="page += 1"
@@ -32,6 +32,7 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import CategoryMenu from '@/components/product_list/category_menu.vue';
 import ProductList from '@/components/product_list/product_list.vue';
 import FilterBar from '@/components/product_list/filter_bar.vue';
+import { GetMetaData } from '@/common/meta';
 export default {
   name: 'ProductListView',
   components: {
@@ -46,6 +47,7 @@ export default {
       count_per_page: 9,
       page: 0,
       sort_type: '推薦排序',
+      meta_data: null,
       bread_crumb_path: [
         {
           title: '首頁',
@@ -65,11 +67,19 @@ export default {
         this.bread_crumb_path[1].title = '全部商品';
         this.bread_crumb_path[1].link = '/collections/all';
       } else {
-        const category = this.category_data.filter(
+        let category = this.category_data.filter(
           (item) => item.MenuID == this.active_category
-        )[0];
-        this.bread_crumb_path[1].title = category.Title;
-        this.bread_crumb_path[1].link = `/collections/${category.MenuID}`;
+        );
+        if (category.length > 0) {
+          category = category[0];
+          this.bread_crumb_path[1].title = category.Title;
+          this.bread_crumb_path[1].link = `/collections/${category.MenuID}`;
+          this.$nextTick(() => {
+            window.prerenderReady = true;
+          });
+        } else {
+          this.$router.push('/error_page');
+        }
       }
     },
     ChangeSortType(val) {
@@ -88,11 +98,15 @@ export default {
   },
   created() {
     this.SetActiveCategory();
+    this.meta_data = GetMetaData('productlist', '', '');
+  },
+  metaInfo() {
+    return this.meta_data;
   },
   watch: {
-    active_category() {
-      this.$router.push(`/collections/${this.active_category}`);
-    },
+    // active_category() {
+    //   this.$router.push(`/collections/${this.active_category}`);
+    // },
     $route() {
       this.SetActiveCategory();
     },

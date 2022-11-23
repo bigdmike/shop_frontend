@@ -1,20 +1,20 @@
 <template>
-  <main class="w-full relative z-10">
-    <div class="w-full max-w-screen-xl mx-auto xl:px-0 sm:px-10 px-5">
+  <main class="relative z-10 w-full">
+    <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10">
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
 
       <div class="flex items-center justify-between">
-        <h2 class="text-4xl font-bold text-primary mb-5">{{ $route.name }}</h2>
+        <h2 class="mb-5 text-4xl font-bold text-primary">{{ $route.name }}</h2>
         <button
           @click="Logout"
-          class="px-6 py-2 rounded-full bg-secondary text-white text-sm transition-colors duration-200 hover:bg-opacity-70"
+          class="px-6 py-2 text-sm text-white transition-colors duration-200 rounded-full bg-secondary hover:bg-opacity-70"
         >
           登出
         </button>
       </div>
-      <div class="flex flex-wrap items-start border-t border-zinc-300 pt-5">
-        <div class="md:w-1/4 w-full md:mb-0 mb-10">
-          <ol class="md:flex-col flex-row flex flex-wrap">
+      <div class="flex flex-wrap items-start pt-5 border-t border-zinc-300">
+        <div class="w-full mb-10 md:w-1/4 md:mb-0">
+          <ol class="flex flex-row flex-wrap md:flex-col">
             <li v-for="item in menu_list" :key="item.title">
               <router-link
                 :to="item.link"
@@ -23,14 +23,14 @@
                     ? 'md:text-secondary md:bg-transparent bg-secondary text-white rounded-xl'
                     : ''
                 "
-                class="block p-3 link_color md:text-base text-sm"
+                class="block p-3 text-sm link_color md:text-base"
               >
                 {{ item.title }}
               </router-link>
             </li>
           </ol>
         </div>
-        <div class="md:w-3/4 w-full"><router-view></router-view></div>
+        <div class="w-full md:w-3/4"><router-view></router-view></div>
       </div>
     </div>
   </main>
@@ -39,6 +39,7 @@
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import { delLocalStorage } from '@/common/cookie';
+import { GetMetaData } from '@/common/meta';
 export default {
   name: 'MemberCenterView',
   components: {
@@ -46,6 +47,7 @@ export default {
   },
   data() {
     return {
+      meta_data: null,
       bread_crumb_path: [
         {
           title: '首頁',
@@ -93,6 +95,13 @@ export default {
   created() {
     this.bread_crumb_path[2].title = this.$route.name;
     this.bread_crumb_path[2].link = this.$route.path;
+    this.meta_data = GetMetaData('會員中心', '', '');
+    this.$nextTick(() => {
+      window.prerenderReady = true;
+    });
+  },
+  metaInfo() {
+    return this.meta_data;
   },
   methods: {
     Logout() {

@@ -9,8 +9,6 @@ const service = axios.create({
   baseURL: baseURL,
   timeout: 600000, // 請求超時時間
   headers: {
-    // 'Content-Type': 'application/json;charset=UTF-8',
-    // 'content-type': 'application/x-www-form-urlencoded',
     'Content-Type': 'application/json;charset=UTF-8',
   },
 });
@@ -40,21 +38,6 @@ const err = (error) => {
 const getCookie = (name) => {
   return getLocalStorage(name);
 };
-
-// const showDialog = (res) => {
-//   store.commit('SetDialog', {
-//     title: '發生錯誤',
-//     content: res,
-//     status: true,
-//   });
-// };
-
-// const showSnackBar = (text) => {
-//   store.commit('SetSnackbar', {
-//     content: text,
-//     status: true,
-//   });
-// };
 
 // request攔截器
 service.interceptors.request.use(
@@ -154,7 +137,6 @@ export function put(url, params = {}) {
       data: params,
     })
       .then((response) => {
-        console.log(response);
         if (response.code == 302) {
           delLocalStorage('account_token');
           store.commit('SetDialog', {

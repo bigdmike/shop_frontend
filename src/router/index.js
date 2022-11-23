@@ -179,6 +179,12 @@ const routes = [
       ),
   },
   {
+    path: '/terms/:type',
+    name: '網站條款',
+    component: () =>
+      import(/* webpackChunkName: "terms_page" */ '../views/TermsPageView.vue'),
+  },
+  {
     path: '*',
     redirect: '/error_page',
   },

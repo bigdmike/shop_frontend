@@ -118,13 +118,13 @@
               註冊表示同意
               <router-link
                 class="text-sm underline transition-colors duration-200 text-secondary hover:text-opacity-50"
-                to="/terms_of_member"
+                to="/terms/terms_of_member"
                 >商店服務條款</router-link
               >
               與
               <router-link
                 class="text-sm underline transition-colors duration-200 text-secondary hover:text-opacity-50"
-                to="/privacy"
+                to="/terms/site_privacy"
                 >網站隱私政策</router-link
               >
             </p>
@@ -141,6 +141,7 @@ import { validEmail, validName, validPhone } from '@/common/validate';
 import { SendSignUpData } from '@/api/member';
 import { getLocalStorage } from '@/common/cookie';
 import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
+import { GetMetaData } from '@/common/meta';
 export default {
   name: 'SignupView',
   components: {
@@ -157,6 +158,7 @@ export default {
       birthday: '',
       sex: 'M',
       errors: [],
+      meta_data: null,
       bread_crumb_path: [
         {
           title: '首頁',
@@ -201,7 +203,6 @@ export default {
         Sex: this.sex,
       };
       SendSignUpData(signup_data).then(async (res) => {
-        console.log(res);
         if (res.code == 200) {
           this.$store.commit('SetDialog', {
             status: true,
@@ -216,6 +217,13 @@ export default {
     if (getLocalStorage('account_token')) {
       this.$router.push('/account/account_edit');
     }
+    this.meta_data = GetMetaData('會員註冊', '', '');
+    this.$nextTick(() => {
+      window.prerenderReady = true;
+    });
+  },
+  metaInfo() {
+    return this.meta_data;
   },
 };
 </script>

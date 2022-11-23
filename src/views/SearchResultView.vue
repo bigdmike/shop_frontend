@@ -1,11 +1,11 @@
 <template>
-  <main id="ProductList" class="w-full relative z-10 pb-40">
+  <main id="ProductList" class="relative z-10 w-full pb-40">
     <div
-      class="w-full max-w-screen-xl mx-auto xl:px-0 px-5 flex items-stretch flex-wrap"
+      class="flex flex-wrap items-stretch w-full max-w-screen-xl px-5 mx-auto xl:px-0"
     >
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
       <FilterBar
-        class="w-full flex items-center justify-end mb-10"
+        class="flex items-center justify-end w-full mb-10"
         :sort_type="sort_type"
         :product_data="product_data"
         @change-type="ChangeSortType"
@@ -24,6 +24,7 @@
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import ProductList from '@/components/search_result/product_list.vue';
 import FilterBar from '@/components/search_result/filter_bar.vue';
+import { GetMetaData } from '@/common/meta';
 export default {
   name: 'ProductListView',
   components: {
@@ -36,6 +37,7 @@ export default {
       count_per_page: 9,
       page: 0,
       sort_type: '推薦排序',
+      meta_data: null,
       bread_crumb_path: [
         {
           title: '首頁',
@@ -106,6 +108,15 @@ export default {
         this.page * this.count_per_page + this.count_per_page
       );
     },
+  },
+  created() {
+    this.meta_data = GetMetaData('商品搜尋', '', '');
+    this.$nextTick(() => {
+      window.prerenderReady = true;
+    });
+  },
+  metaInfo() {
+    return this.meta_data;
   },
 };
 </script>

@@ -56,6 +56,7 @@ import { SaveShopCart, SaveOnlineShopCart } from '@/common/shopcart';
 import { getLocalStorage } from '@/common/cookie';
 import { addShopcart, getShopcart } from '@/api/member';
 import { getSingleProductData } from '@/api/page_data';
+import { GetMetaData } from '@/common/meta';
 export default {
   name: 'ProductPage',
   components: {
@@ -87,6 +88,7 @@ export default {
       active_option: [],
       active_tab: '商品介紹',
       product_data: null,
+      meta_data: null,
     };
   },
   methods: {
@@ -224,18 +226,34 @@ export default {
     },
     GetProductData() {
       getSingleProductData(this.$route.params.id).then((res) => {
-        console.log(res);
-        res.data.Picture.sort((a, b) => {
-          return a.Seq - b.Seq;
-        });
-        this.product_data = res.data;
+        if (res.code == 200) {
+          res.data.Picture.sort((a, b) => {
+            return a.Seq - b.Seq;
+          });
+          res.data.Stock = res.data.Stock.filter((item) => item.Status == 'Y');
+          this.product_data = res.data;
+
+          let description = this.product_data.Memo1.replaceAll(/<[^>]+>/g, '');
+          this.meta_data = GetMetaData(
+            this.product_data.Title,
+            description.slice(0, 150),
+            this.$ImageUrl(this.product_data.Image1)
+          );
+          this.$nextTick(() => {
+            window.prerenderReady = true;
+          });
+        } else if (res.code == 500) {
+          this.$router.push('/error_page');
+        }
       });
     },
   },
   created() {
     this.GetProductData();
   },
-  mounted() {},
+  metaInfo() {
+    return this.meta_data;
+  },
   watch: {
     product_data() {
       if (this.product_data != null) {
@@ -252,12 +270,6 @@ export default {
     product_list() {
       return this.$store.state.product_data;
     },
-    // product_data() {
-    //   const tmp_product = this.product_list.filter(
-    //     (item) => item.GoodsID == this.$route.params.id
-    //   );
-    //   return tmp_product.length <= 0 ? 'error' : tmp_product[0];
-    // },
     category_data() {
       return this.$store.state.category_data;
     },

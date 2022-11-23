@@ -62,6 +62,7 @@ import { validEmail } from '@/common/validate';
 import { sendLoginData, addShopcart, getShopcart } from '@/api/member';
 import { setLocalStorage, getLocalStorage } from '@/common/cookie';
 import { SaveOnlineShopCart } from '@/common/shopcart';
+import { GetMetaData } from '@/common/meta';
 export default {
   name: 'LoginView',
   components: {
@@ -131,6 +132,13 @@ export default {
     if (getLocalStorage('account_token')) {
       this.$router.push('/account/account_edit');
     }
+    this.meta_data = GetMetaData('會員登入', '', '');
+    this.$nextTick(() => {
+      window.prerenderReady = true;
+    });
+  },
+  metaInfo() {
+    return this.meta_data;
   },
 };
 </script>

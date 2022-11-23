@@ -203,6 +203,7 @@
 <script>
 import { SaveShopCart } from '@/common/shopcart';
 import { getLocalStorage, delLocalStorage } from '@/common/cookie';
+import { GetMetaData } from '@/common/meta';
 export default {
   name: 'TradeFinishView',
   data() {
@@ -210,6 +211,7 @@ export default {
       form_data: null,
       shopcart: null,
       checkout_data: null,
+      meta_data: null,
     };
   },
   methods: {
@@ -323,9 +325,16 @@ export default {
       delLocalStorage('trade_checkout_data');
       SaveShopCart([]);
       this.$store.commit('SetShopCart', []);
+      this.meta_data = GetMetaData('訂單完成', '', '');
+      this.$nextTick(() => {
+        window.prerenderReady = true;
+      });
     } else {
       this.$router.push('/');
     }
+  },
+  metaInfo() {
+    return this.meta_data;
   },
 };
 </script>

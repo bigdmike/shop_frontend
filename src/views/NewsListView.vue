@@ -1,24 +1,24 @@
 <template>
-  <main id="NewsList" class="w-full relative z-10 pb-40">
+  <main id="NewsList" class="relative z-10 w-full pb-40">
     <div
-      class="w-full max-w-screen-xl mx-auto xl:px-0 px-5 flex items-stretch flex-wrap"
+      class="flex flex-wrap items-stretch w-full max-w-screen-xl px-5 mx-auto xl:px-0"
     >
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
       <FilterBar
-        class="w-full flex items-center justify-end mb-10"
+        class="flex items-center justify-end w-full mb-10"
         :active_category="active_category"
         :sort_type="sort_type"
         :category_data="category_data"
-        @change-type="ChangeSortType"
-        @change-category="ChangeCategory"
+        @change-type="sort_type = $event"
+        @change-category="$router.push(`/news/${$event}`)"
       />
       <CategoryMenu
         :active_category="active_category"
         :category_data="category_data"
-        class="w-1/4 md:block hidden pr-10"
+        class="hidden w-1/4 pr-10 md:block"
       />
       <ProductList
-        class="md:w-3/4 w-full"
+        class="w-full md:w-3/4"
         :page_news_data="page_news_data"
         :news_data="news_data"
         @next-page="page += 1"
@@ -32,6 +32,7 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import CategoryMenu from '@/components/news_list/category_menu.vue';
 import ProductList from '@/components/news_list/news_list.vue';
 import FilterBar from '@/components/news_list/filter_bar.vue';
+import { GetMetaData } from '@/common/meta';
 export default {
   name: 'NewsListView',
   components: {
@@ -46,6 +47,7 @@ export default {
       count_per_page: 9,
       page: 0,
       sort_type: '推薦排序',
+      meta_data: null,
       bread_crumb_path: [
         {
           title: '首頁',
@@ -65,18 +67,21 @@ export default {
         this.bread_crumb_path[1].title = '最新消息';
         this.bread_crumb_path[1].link = '/news/all';
       } else {
-        const category = this.category_data.filter(
+        let category = this.category_data.filter(
           (item) => item.NewsCategoryID == this.active_category
-        )[0];
-        this.bread_crumb_path[1].title = category.Title;
-        this.bread_crumb_path[1].link = `/news/${category.NewsCategoryID}`;
+        );
+
+        if (category.length > 0) {
+          category = category[0];
+          this.bread_crumb_path[1].title = category.Title;
+          this.bread_crumb_path[1].link = `/news/${category.NewsCategoryID}`;
+          this.$nextTick(() => {
+            window.prerenderReady = true;
+          });
+        } else {
+          this.$router.push('/error_page');
+        }
       }
-    },
-    ChangeSortType(val) {
-      this.sort_type = val;
-    },
-    ChangeCategory(val) {
-      this.active_category = val;
     },
     GetPrice(item) {
       let tmp_data = JSON.parse(JSON.stringify(item.Stock));
@@ -88,11 +93,12 @@ export default {
   },
   created() {
     this.SetActiveCategory();
+    this.meta_data = GetMetaData('newslist', '', '');
+  },
+  metaInfo() {
+    return this.meta_data;
   },
   watch: {
-    active_category() {
-      this.$router.push(`/news/${this.active_category}`);
-    },
     $route() {
       this.SetActiveCategory();
     },

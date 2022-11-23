@@ -142,6 +142,7 @@ import {
   delLocalStorage,
 } from '@/common/cookie';
 import { SaveShopCart } from '@/common/shopcart';
+import { GetMetaData } from '@/common/meta';
 export default {
   name: 'ShopCartView',
   components: {
@@ -182,6 +183,7 @@ export default {
       ],
       checkout_data: null,
       shop_cart_first_load: false,
+      meta_data: null,
     };
   },
   methods: {
@@ -222,7 +224,6 @@ export default {
         this.form_data.ship_way,
         this.shopcart
       ).then((res) => {
-        console.log(res);
         if (res.code == 200) {
           this.checkout_data = res.data;
         } else if (res.msg.indexOf('超過物流限制') != -1) {
@@ -238,7 +239,13 @@ export default {
             content: '很抱歉！<br/>您所輸入的優惠代碼不存在或已經兌換完畢',
           });
           this.form_data.coupon = '';
+        } else if (res.msg.indexOf('已無庫存') != -1) {
+          this.$store.commit('SetDialog', {
+            status: true,
+            content: `很抱歉！<br/><b class="text-primary">${res.msg}</b><br/>請先將商品移除後再次結帳`,
+          });
         }
+        // 庫存數量不足
       });
     },
     ValidateForm() {
@@ -278,7 +285,6 @@ export default {
     },
     SendData() {
       SendCheckout(this.form_data, this.shopcart).then((res) => {
-        console.log(res);
         if (res.code == 200) {
           setLocalStorage('trade_data', JSON.stringify(this.form_data));
           setLocalStorage('trade_shopcart', JSON.stringify(this.shopcart));
@@ -311,6 +317,13 @@ export default {
       this.form_data.shop_address = this.$route.query.CVSAddress;
       delLocalStorage('check_out_form');
     }
+    this.meta_data = GetMetaData('結帳', '', '');
+    this.$nextTick(() => {
+      window.prerenderReady = true;
+    });
+  },
+  metaInfo() {
+    return this.meta_data;
   },
   watch: {
     shopcart() {

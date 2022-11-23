@@ -1,75 +1,68 @@
 import store from '@/store/index';
-import router from '@/router/index';
 
-// var default_meta = {
-//   title: '官方網站',
-//   content:
-//     '泳欣設計始終是引領你成功的品牌舵手。專業的品牌顧問團隊以品牌設計為核心，結合數位媒體行銷，打造真正屬於自我的品牌市場。',
-//   image: '/img/share/index.jpg',
-// };
-
-export function GetMatchMetaData() {
-  let meta_data_list = store.state.seo_meta_data;
-  let base_meta_data = meta_data_list.filter((item) => item.base_meta > 0)[0];
-  let match_list = [];
-  let most_match = null;
-  meta_data_list.forEach((item) => {
-    if (
-      item.base_meta == 0 &&
-      router.currentRoute.path.indexOf(item.link) != -1
-    ) {
-      match_list.push(item);
-    }
-  });
-  match_list.forEach((item) => {
-    if (most_match == null) {
-      most_match = item;
-    } else if (item.link.length > most_match.link.length) {
-      most_match = item;
-    }
-  });
-  if (most_match == null) {
-    return null;
+export function GetMatchMetaData(column_title) {
+  let meta_data_list = store.state.common_column_data;
+  let title = meta_data_list.filter(
+    (item) => item.Title == `meta_title_${column_title}`
+  );
+  let content = meta_data_list.filter(
+    (item) => item.Title == `meta_content_${column_title}`
+  );
+  let image = meta_data_list.filter(
+    (item) => item.Title == `meta_image_${column_title}`
+  );
+  if (title.length > 0) {
+    return {
+      title: title[0].Content,
+      content: content[0].Content,
+      image: GetImageUrl(image[0].Content),
+    };
   } else {
-    //
-    most_match.image == '' ? (most_match.image = base_meta_data.image) : '';
-    most_match.description == ''
-      ? (most_match.description = base_meta_data.description)
-      : '';
-    return most_match;
+    return false;
   }
 }
 
 export function GetBaseMetaData() {
-  let meta_data_list = store.state.seo_meta_data;
-  let base_meta_data = meta_data_list.filter((item) => item.base_meta > 0)[0];
-  return base_meta_data;
+  let meta_data_list = store.state.common_column_data;
+  let base_title = meta_data_list.filter(
+    (item) => item.Title == 'meta_title_home'
+  )[0];
+  let base_content = meta_data_list.filter(
+    (item) => item.Title == 'meta_content_home'
+  )[0];
+  let base_image = meta_data_list.filter(
+    (item) => item.Title == 'meta_image_home'
+  )[0];
+  return {
+    title: base_title.Content,
+    content: base_content.Content,
+    image: GetImageUrl(base_image.Content),
+  };
 }
 
 export function GetMetaData(title, content, image) {
-  let match_meta = GetMatchMetaData();
+  let match_meta = GetMatchMetaData(title);
   let default_meta = GetBaseMetaData();
-  if (match_meta == null) {
-    title = title == '' ? default_meta.title : title;
+  if (match_meta == false) {
     return {
-      title: title + ' | 泳欣設計 | YongXin Design',
+      title: title + ' | 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
       meta: [
         {
           property: 'og:description',
           name: 'og:description',
-          content: content == '' ? default_meta.description : content,
+          content: content == '' ? default_meta.content : content,
           vmid: 'og:description',
         },
         {
           property: 'twitter:description',
           name: 'twitter:description',
-          content: content == '' ? default_meta.description : content,
+          content: content == '' ? default_meta.content : content,
           vmid: 'twitter:description',
         },
         {
           property: 'description',
           name: 'description',
-          content: content == '' ? default_meta.description : content,
+          content: content == '' ? default_meta.content : content,
           vmid: 'description',
         },
         {
@@ -81,19 +74,20 @@ export function GetMetaData(title, content, image) {
         {
           property: 'apple-mobile-web-app-title',
           name: 'apple-mobile-web-app-title',
-          content: title + ' | 泳欣設計 | YongXin Design',
+          content: title + ' | 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
           vmid: 'apple-mobile-web-app-title',
         },
         {
           property: 'application-name',
           name: 'application-name',
-          content: title + ' | 泳欣設計 | YongXin Design',
+          content: title + ' | 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
           vmid: 'application-name',
         },
         {
           property: 'og:site_name',
           name: 'og:site_name',
-          content: '官方網站 | 泳欣設計 | YongXin Design',
+          content:
+            '官方網站 ｜ 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
           vmid: 'og:site_name',
         },
         {
@@ -112,24 +106,26 @@ export function GetMetaData(title, content, image) {
     };
   } else {
     return {
-      title: match_meta.title + ' | 泳欣設計 | YongXin Design',
+      title:
+        match_meta.title +
+        ' ｜ 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
       meta: [
         {
           property: 'og:description',
           name: 'og:description',
-          content: match_meta.description,
+          content: match_meta.content,
           vmid: 'og:description',
         },
         {
           property: 'twitter:description',
           name: 'twitter:description',
-          content: match_meta.description,
+          content: match_meta.content,
           vmid: 'twitter:description',
         },
         {
           property: 'description',
           name: 'description',
-          content: match_meta.description,
+          content: match_meta.content,
           vmid: 'description',
         },
         {
@@ -141,19 +137,24 @@ export function GetMetaData(title, content, image) {
         {
           property: 'apple-mobile-web-app-title',
           name: 'apple-mobile-web-app-title',
-          content: match_meta.title + ' | 泳欣設計 | YongXin Design',
+          content:
+            match_meta.title +
+            ' ｜ 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
           vmid: 'apple-mobile-web-app-title',
         },
         {
           property: 'application-name',
           name: 'application-name',
-          content: match_meta.title + ' | 泳欣設計 | YongXin Design',
+          content:
+            match_meta.title +
+            ' ｜ 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
           vmid: 'application-name',
         },
         {
           property: 'og:site_name',
           name: 'og:site_name',
-          content: '官方網站 | 泳欣設計 | YongXin Design',
+          content:
+            '官方網站 ｜ 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
           vmid: 'og:site_name',
         },
         {
@@ -171,4 +172,8 @@ export function GetMetaData(title, content, image) {
       ],
     };
   }
+}
+
+function GetImageUrl(item) {
+  return item == '' ? '' : process.env.VUE_APP_BASE_API + item;
 }

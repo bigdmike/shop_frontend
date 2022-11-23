@@ -20,7 +20,7 @@
     </button>
     <a
       v-if="data_load_finish"
-      :href="company_messenger"
+      :href="$GetCloumn('company_messenger')"
       target="_blank"
       class="fixed z-20 flex items-center justify-center transition-all duration-300 rounded-full md:bottom-5 sm:bottom-20 bottom-16 sm:right-7 right-2 sm:w-14 sm:h-14 w-11 h-11 bg-primary hover:bg-opacity-70"
     >
@@ -114,12 +114,6 @@ export default {
     },
     common_column_data() {
       return this.$store.state.common_column_data;
-    },
-    company_messenger() {
-      let tmp_data = this.common_column_data.filter(
-        (item) => item.Title == 'company_messenger'
-      )[0].Content;
-      return tmp_data;
     },
     carousel_data() {
       return this.$store.state.carousel_data;

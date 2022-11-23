@@ -54,6 +54,7 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import { validPhone } from '@/common/validate';
 import { GetOrder } from '@/api/shopcart';
 import { setLocalStorage } from '@/common/cookie';
+import { GetMetaData } from '@/common/meta';
 export default {
   name: 'OrderSearch',
   components: {
@@ -74,6 +75,7 @@ export default {
       phone: '',
       trade_no: '',
       errors: [],
+      meta_data: null,
     };
   },
   methods: {
@@ -90,7 +92,6 @@ export default {
     },
     SendData() {
       GetOrder(this.trade_no, this.phone).then((res) => {
-        console.log(res);
         if (res.code == 500) {
           this.$store.commit('SetDialog', { status: true, content: res.msg });
         } else {
@@ -99,6 +100,15 @@ export default {
         }
       });
     },
+  },
+  created() {
+    this.meta_data = GetMetaData('訂單查詢', '', '');
+    this.$nextTick(() => {
+      window.prerenderReady = true;
+    });
+  },
+  metaInfo() {
+    return this.meta_data;
   },
 };
 </script>
