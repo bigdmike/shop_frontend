@@ -137,7 +137,10 @@ export default new Vuex.Store({
     },
     getProductData(state) {
       getProductData().then((res) => {
-        let tmp_data = res.data.sort((a, b) => {
+        let tmp_data = res.data.filter((item) => {
+          return item.deleted_at == null;
+        });
+        tmp_data = tmp_data.sort((a, b) => {
           return parseInt(a.Seq) - parseInt(b.Seq);
         });
         state.commit('SetStateData', {

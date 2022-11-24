@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ol class="flex items-stretch justify-start flex-wrap -mx-2">
+    <ol class="flex flex-wrap items-stretch justify-start -mx-2">
       <li
         v-for="(item, item_index) in page_product_data"
         :key="`product_${item_index}`"
@@ -8,18 +8,18 @@
       >
         <router-link
           :to="`/product/${item.GoodsID}`"
-          class="rounded-xl overflow-hidden mb-2 block"
+          class="block mb-2 overflow-hidden rounded-xl"
         >
           <img
             :src="$ImageUrl(item.Image1)"
-            class="w-full block hover:scale-110 transform transition-all duration-200"
+            class="block w-full transition-all duration-200 transform hover:scale-110"
           />
         </router-link>
-        <h4 class="truncate mb-2 font-semibold">{{ item.Title }}</h4>
+        <h4 class="mb-2 font-semibold truncate">{{ item.Title }}</h4>
         <p>
           <span
             v-if="GetPrice(item).Price != GetPrice(item).SellPrice"
-            class="line-through mr-1 text-gray-500 text-xs"
+            class="mr-1 text-xs text-gray-500 line-through"
             >NT${{ GetPrice(item).Price | currency }}</span
           >
           <span class="text-green"
@@ -31,7 +31,7 @@
         <button
           @click="$emit('next-page')"
           v-if="page_product_data.length != product_data.length"
-          class="px-16 py-3 font-bold text-primary bg-transparent rounded-full border border-primary transition-colors duration-200 hover:bg-primary hover:text-white"
+          class="px-16 py-3 font-bold transition-colors duration-200 bg-transparent border rounded-full text-primary border-primary hover:bg-primary hover:text-white"
         >
           查看更多商品
         </button>

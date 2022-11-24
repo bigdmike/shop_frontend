@@ -244,8 +244,16 @@ export default {
             status: true,
             content: `很抱歉！<br/><b class="text-primary">${res.msg}</b><br/>請先將商品移除後再次結帳`,
           });
+          this.$router.push('/');
+        } else if (res.msg.indexOf('庫存數量不足') != -1) {
+          const product_name = res.msg.split('庫存數量不足')[0];
+          const count = res.msg.split('庫存數量不足:')[1];
+          this.$store.commit('SetDialog', {
+            status: true,
+            content: `很抱歉！<br/><b class="text-primary">${product_name}<br/>目前庫存剩餘${count}</b><br/>請先移除超出的數量後再次結帳`,
+          });
+          this.$router.push('/');
         }
-        // 庫存數量不足
       });
     },
     ValidateForm() {
