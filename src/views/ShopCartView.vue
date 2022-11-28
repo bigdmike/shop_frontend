@@ -302,7 +302,10 @@ export default {
           );
           SaveShopCart([]);
           this.$store.commit('SetShopCart', []);
-          if (this.checkout_data.PaymentInfo.PaymentType == 'PCHomeCredit') {
+          if (
+            this.checkout_data.PaymentInfo.PaymentType == 'PCHomeCredit' ||
+            this.checkout_data.PaymentInfo.PaymentType == 'PCHomeATM'
+          ) {
             window.location.replace(res.data.PaymentHTML);
           } else {
             document
