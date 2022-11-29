@@ -64,7 +64,7 @@ export function SendCheckout(user_data, shopcart) {
       });
     }
   });
-  if (getLocalStorage('member_token')) {
+  if (getLocalStorage('account_token')) {
     return post('member/checkout', data);
   } else {
     return post('nonMember/checkout', data);
