@@ -59,7 +59,7 @@
 
 <script>
 import VueSlickCarousel from 'vue-slick-carousel';
-import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import '@/assets/css/vue-slick-carousel.css';
 
 export default {
   name: 'ProductSection',

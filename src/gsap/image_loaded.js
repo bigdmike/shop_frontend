@@ -1,4 +1,4 @@
-import { gsap } from 'gsap';
+import gsap from 'gsap';
 import store from '@/store/index';
 export function LoadImage() {
   //初始化
