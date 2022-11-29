@@ -13,42 +13,45 @@
       >
         <PrevIcon class="w-2 sm:w-4" />
       </button>
-
-      <div class="swiper-wrapper">
+      <VueSlickCarousel
+        ref="big_swiper"
+        :asNavFor="$refs.small_swiper"
+        v-bind="big_slick_option"
+      >
         <div
-          class="overflow-hidden swiper-slide rounded-xl"
+          class="overflow-hidden rounded-xl"
           v-for="(item, item_index) in images"
           :key="`big_carousel_${item_index}`"
         >
           <img :src="$ImageUrl(item.Image)" class="w-full" />
         </div>
-      </div>
+      </VueSlickCarousel>
     </div>
-    <div thumbsSlider="" ref="SmallSwiper" class="swiper mySwiper">
-      <div class="swiper-wrapper">
+    <VueSlickCarousel
+      ref="small_swiper"
+      :asNavFor="$refs.big_swiper"
+      v-bind="small_slick_option"
+    >
+      <div
+        v-for="(item, item_index) in images"
+        :key="`big_carousel_${item_index}`"
+      >
         <div
-          class="swiper-slide"
-          v-for="(item, item_index) in images"
-          :key="`big_carousel_${item_index}`"
+          @click="SlideToIndex(item_index)"
+          class="overflow-hidden transition-all duration-300 border-2 border-transparent rounded-md hover:border-primary"
         >
-          <div
-            class="overflow-hidden transition-all duration-300 border-2 border-transparent rounded-md hover:border-primary"
-          >
-            <img :src="$ImageUrl(item.Image)" class="w-full" />
-          </div>
+          <img :src="$ImageUrl(item.Image)" class="w-full" />
         </div>
       </div>
-    </div>
+    </VueSlickCarousel>
   </div>
 </template>
 
 <script>
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import NextIcon from '@/components/svg/Carousel/NextIcon';
 import PrevIcon from '@/components/svg/Carousel/PrevIcon';
-import { Autoplay, Thumbs, FreeMode } from 'swiper';
-import Swiper from 'swiper';
-Swiper.use([Autoplay, Thumbs, FreeMode]);
-import '@/assets/css/swiper.min.css';
 export default {
   name: 'ProductImageGallery',
   props: {
@@ -60,76 +63,41 @@ export default {
   components: {
     NextIcon,
     PrevIcon,
+    VueSlickCarousel,
   },
   data() {
     return {
-      // images: [
-      //   {
-      //     GoodsPictureID: '124',
-      //     GoodsID: '40',
-      //     ColorID: '0',
-      //     SizeID: '0',
-      //     Image: '/image/picture/1642754818_936d7e7e3fb7bdbe5722.jpg',
-      //     Seq: '1',
-      //     created_at: '2022-01-21 16:46:59',
-      //     updated_at: '2022-01-21 16:46:59',
-      //   },
-      //   {
-      //     GoodsPictureID: '125',
-      //     GoodsID: '40',
-      //     ColorID: '0',
-      //     SizeID: '0',
-      //     Image: '/image/picture/1642754822_4ca5c213872a97d4ca79.jpg',
-      //     Seq: '1',
-      //     created_at: '2022-01-21 16:47:02',
-      //     updated_at: '2022-01-21 16:47:02',
-      //   },
-      //   {
-      //     GoodsPictureID: '126',
-      //     GoodsID: '40',
-      //     ColorID: '0',
-      //     SizeID: '0',
-      //     Image: '/image/picture/1642754826_39ebbba0e3d7cd3bfb2f.jpg',
-      //     Seq: '1',
-      //     created_at: '2022-01-21 16:47:06',
-      //     updated_at: '2022-01-21 16:47:06',
-      //   },
-      // ],
+      big_slick_option: {
+        ifinite: true,
+        speed: 500,
+        draggable: true,
+        arrows: false,
+      },
+      small_slick_option: {
+        ifinite: true,
+        slidesPerRow: 5,
+        slidesToShow: 1,
+        speed: 500,
+        draggable: true,
+        arrows: false,
+        focusOnSelect: true,
+      },
       big_swiper: null,
       small_swiper: null,
     };
   },
   methods: {
-    InitSwiper() {
-      this.big_swiper = null;
-      this.small_swiper = null;
-
-      this.small_swiper = new Swiper(this.$refs.SmallSwiper, {
-        spaceBetween: 20,
-        slidesPerView: 6,
-        freeMode: true,
-        watchSlidesProgress: true,
-        // loop: true,
-      });
-
-      this.big_swiper = new Swiper(this.$refs.BigSwiper, {
-        spaceBetween: 10,
-        loop: true,
-        thumbs: {
-          swiper: this.small_swiper,
-        },
-      });
-    },
     SlideSwiper(val) {
       if (val == -1) {
-        this.big_swiper.slidePrev();
+        this.$refs.big_swiper.prev();
       } else {
-        this.big_swiper.slideNext();
+        this.$refs.big_swiper.next();
       }
     },
+    SlideToIndex(val) {
+      this.$refs.big_swiper.goTo(val);
+    },
   },
-  mounted() {
-    this.InitSwiper();
-  },
+  mounted() {},
 };
 </script>

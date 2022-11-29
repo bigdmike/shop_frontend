@@ -1,37 +1,47 @@
 <template>
-  <section class="w-full max-w-screen-xl mx-auto relative">
+  <section class="relative w-full max-w-screen-xl mx-auto">
     <button
       @click="SlideSwiper(1)"
-      class="absolute z-10 top-1/2 right-0 transform -translate-y-1/2 sm:pr-3 pr-2 sm:pl-8 pl-5 sm:py-9 py-6 bg-white bg-opacity-50 rounded-tl-full rounded-bl-full transition-colors duration-200 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
+      class="absolute right-0 z-10 py-6 pl-5 pr-2 transition-colors duration-200 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-tl-full rounded-bl-full top-1/2 sm:pr-3 sm:pl-8 sm:py-9 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
     >
-      <NextIcon class="sm:w-4 w-2" />
+      <NextIcon class="w-2 sm:w-4" />
     </button>
     <button
       @click="SlideSwiper(-1)"
-      class="absolute z-10 top-1/2 left-0 transform -translate-y-1/2 sm:pl-3 pl-2 sm:pr-8 pr-5 sm:py-9 py-6 bg-white bg-opacity-50 rounded-tr-full rounded-br-full transition-colors duration-200 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
+      class="absolute left-0 z-10 py-6 pl-2 pr-5 transition-colors duration-200 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-tr-full rounded-br-full top-1/2 sm:pl-3 sm:pr-8 sm:py-9 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
     >
-      <PrevIcon class="sm:w-4 w-2" />
+      <PrevIcon class="w-2 sm:w-4" />
     </button>
-    <div ref="swiper" class="flex-shrink-0 w-full swiper">
-      <ol class="relative z-0 flex items-stretch swiper-wrapper">
-        <li
-          class="flex-shrink-0 w-full swiper-slide"
-          v-for="(item, item_index) in carousel_data"
-          :key="`carousel_${item_index}`"
-        >
-          <img class="hidden w-full md:block" :src="$ImageUrl(item.Image1)" />
-          <img class="block w-full md:hidden" :src="$ImageUrl(item.Image2)" />
-        </li>
-      </ol>
-    </div>
+
+    <VueSlickCarousel
+      ref="swiper"
+      v-bind="slick_option"
+      @swipe="setCarouselSwiping(true)"
+      @mouseup.native="setCarouselSwiping(false)"
+      @touchend.native="setCarouselSwiping(false)"
+      :class="{ '--swiping': swiping === true }"
+    >
+      <div
+        class="w-full"
+        v-for="(item, item_index) in carousel_data"
+        :key="`carousel_${item_index}`"
+      >
+        <img
+          class="hidden w-full select-none pc_image"
+          :src="$ImageUrl(item.Image1)"
+        />
+        <img
+          class="block w-full select-none mb_image"
+          :src="$ImageUrl(item.Image2)"
+        />
+      </div>
+    </VueSlickCarousel>
   </section>
 </template>
 
 <script>
-import { Autoplay } from 'swiper';
-import Swiper from 'swiper';
-Swiper.use([Autoplay]);
-import '@/assets/css/swiper.min.css';
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import NextIcon from '@/components/svg/Carousel/NextIcon.vue';
 import PrevIcon from '@/components/svg/Carousel/PrevIcon.vue';
 export default {
@@ -45,36 +55,66 @@ export default {
   components: {
     NextIcon,
     PrevIcon,
+    VueSlickCarousel,
   },
   data() {
     return {
       bg_tl: null,
       swiper: null,
+      swiping: false,
+      slick_option: {
+        ifinite: true,
+        slidesToShow: 1,
+        fade: true,
+        speed: 500,
+        autoplaySpeed: 5000,
+        draggable: true,
+        arrows: false,
+        autoplay: true,
+      },
     };
   },
   methods: {
-    InitSwiper() {
-      this.swiper = null;
-      this.swiper = new Swiper(this.$refs.swiper, {
-        slidesPerView: 1,
-        spaceBetween: 0,
-        autoplay: {
-          delay: 5000,
-        },
-        loop: true,
-        breakpoints: {},
-      });
+    setCarouselSwiping(state) {
+      this.swiping = state;
     },
     SlideSwiper(val) {
       if (val == -1) {
-        this.swiper.slidePrev();
+        this.$refs.swiper.prev();
       } else {
-        this.swiper.slideNext();
+        this.$refs.swiper.next();
       }
     },
   },
-  mounted() {
-    this.InitSwiper();
-  },
+  mounted() {},
 };
 </script>
+
+<style scoped>
+.slick-slide img.pc_image {
+  display: block;
+}
+
+.slick-slide img.mb_image {
+  display: none;
+}
+@media (max-width: 768px) {
+  .slick-slide img.pc_image {
+    display: none;
+  }
+
+  .slick-slide img.mb_image {
+    display: block;
+  }
+}
+
+slick-slider .slick-track,
+.slick-slider .slick-list {
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  transition-delay: 10ms;
+}
+</style>

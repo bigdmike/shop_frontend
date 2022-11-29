@@ -234,10 +234,14 @@ export default {
           this.product_data = res.data;
 
           let description = this.product_data.Memo1.replaceAll(/<[^>]+>/g, '');
+          let image =
+            this.product_data.Image2 != ''
+              ? this.product_data.Image2
+              : this.product_data.Image1;
           this.meta_data = GetMetaData(
             this.product_data.Title,
             description.slice(0, 150),
-            this.$ImageUrl(this.product_data.Image1)
+            this.$ImageUrl(image)
           );
           this.$nextTick(() => {
             window.prerenderReady = true;

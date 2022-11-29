@@ -55,7 +55,10 @@
       class="w-full max-w-screen-xl md:border-t md:border-[#cccccc] mx-auto flex items-center flex-wrap justify-between xl:px-0 px-10 md:pt-5"
     >
       <div class="flex flex-wrap items-center">
-        <img src="@/assets/img/credit_card.svg" class="mb-10 mr-5" />
+        <img
+          src="@/assets/img/logoPChomePay_200x40.webp"
+          class="w-32 mb-10 mr-5"
+        />
         <ol class="flex items-center mb-10 -mx-2 text-sm md:mx-0">
           <li class="border-r border-basic_black">
             <router-link class="px-2 link_color" to="/terms/terms_of_customer"

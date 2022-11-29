@@ -1,61 +1,71 @@
 <template>
-  <section class="w-full relative sm:py-40 py-32">
-    <div class="relative z-10 w-full max-w-screen-xl mx-auto xl:px-0 px-5">
-      <header class="text-center mb-20">
+  <section class="relative w-full py-32 sm:py-40">
+    <div class="relative z-10 w-full max-w-screen-xl px-5 mx-auto xl:px-0">
+      <header class="mb-20 text-center">
         <h2
-          class="md:text-6xl sm:text-4xl text-3xl font-bold text-secondary sm:mb-4"
+          class="text-3xl font-bold md:text-6xl sm:text-4xl text-secondary sm:mb-4"
         >
           {{ title }}
         </h2>
         <span
-          class="md:text-2xl sm:text-xl font-bold text-secondary font-yeseva"
+          class="font-bold md:text-2xl sm:text-xl text-secondary font-yeseva"
           >{{ sub_title }}</span
         >
       </header>
 
-      <div ref="swiper" class="flex-shrink-0 w-full swiper">
-        <ol class="relative z-0 flex items-stretch swiper-wrapper">
-          <li
-            class="flex-shrink-0 w-full swiper-slide"
-            v-for="(item, item_index) in product_data"
-            :key="`product_${item_index}`"
-          >
-            <router-link to="/">
-              <div class="rounded-2xl overflow-hidden mb-2">
-                <img class="w-full" :src="$ImageUrl(item.Image1)" />
-              </div>
-              <div class="">
-                <h4 class="truncate mb-2">{{ item.Title }}</h4>
-                <p class="price">
-                  <span
-                    v-if="GetPrice(item).Price != GetPrice(item).SellPrice"
-                    class="line-through mr-1 text-gray-400 text-sm"
-                    >NT$ {{ GetPrice(item).Price | currency }}</span
-                  >
-                  <span class="text-green"
-                    >NT$ {{ GetPrice(item).SellPrice | currency }}</span
-                  >
-                </p>
-              </div>
-            </router-link>
-          </li>
-        </ol>
-      </div>
+      <VueSlickCarousel
+        v-bind="slick_option"
+        @swipe="setCarouselSwiping(true)"
+        @mouseup.native="setCarouselSwiping(false)"
+        @touchend.native="setCarouselSwiping(false)"
+        :class="{ '--swiping': swiping === true }"
+      >
+        <div
+          class="flex-shrink-0 w-full px-2 mb-4 select-none md:px-4 md:mb-0"
+          v-for="(item, item_index) in product_data"
+          :key="`product_${item_index}`"
+          draggable="false"
+        >
+          <router-link :to="`/product/${item.GoodsID}`" draggable="false">
+            <div class="mb-2 overflow-hidden select-none rounded-2xl">
+              <img
+                class="w-full"
+                :src="$ImageUrl(item.Image1)"
+                draggable="false"
+              />
+            </div>
+            <div class="">
+              <h4 class="mb-2 truncate">{{ item.Title }}</h4>
+              <p class="price">
+                <span
+                  v-if="GetPrice(item).Price != GetPrice(item).SellPrice"
+                  class="mr-1 text-sm text-gray-400 line-through"
+                  >NT$ {{ GetPrice(item).Price | currency }}</span
+                >
+                <span class="text-green"
+                  >NT$ {{ GetPrice(item).SellPrice | currency }}</span
+                >
+              </p>
+            </div>
+          </router-link>
+        </div>
+      </VueSlickCarousel>
     </div>
-    <div class="absolute top-0 left-0 right-0 h-2/3 overflow-hidden">
-      <img :src="background_image" class="w-full h-full object-cover block" />
+    <div class="absolute top-0 left-0 right-0 overflow-hidden h-2/3">
+      <img :src="background_image" class="block object-cover w-full h-full" />
     </div>
   </section>
 </template>
 
 <script>
-import { Autoplay } from 'swiper';
-import Swiper from 'swiper';
-Swiper.use([Autoplay]);
-import 'swiper/css/grid';
-import '@/assets/css/swiper.min.css';
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+
 export default {
   name: 'ProductSection',
+  components: {
+    VueSlickCarousel,
+  },
   props: {
     product_data: {
       type: Array,
@@ -78,33 +88,36 @@ export default {
     return {
       bg_tl: null,
       swiper: null,
+      swiping: false,
+      slick_option: {
+        ifinite: true,
+        slidesToShow: 4,
+        speed: 500,
+        draggable: true,
+        arrows: false,
+        autoplay: true,
+        responsive: [
+          {
+            breakpoint: 768,
+            settings: {
+              rows: 2,
+              slidesToShow: 2,
+            },
+          },
+          {
+            breakpoint: 640,
+            settings: {
+              rows: 2,
+              slidesToShow: 1,
+            },
+          },
+        ],
+      },
     };
   },
   methods: {
-    InitSwiper() {
-      this.swiper = null;
-      this.swiper = new Swiper(this.$refs.swiper, {
-        slidesPerView: 2,
-
-        spaceBetween: 14,
-        autoplay: {
-          delay: 5000,
-        },
-        loop: true,
-        breakpoints: {
-          768: {
-            //当屏幕宽度大于等于768
-            slidesPerView: 4,
-          },
-        },
-      });
-    },
-    SlideSwiper(val) {
-      if (val == -1) {
-        this.swiper.slidePrev();
-      } else {
-        this.swiper.slideNext();
-      }
+    setCarouselSwiping(state) {
+      this.swiping = state;
     },
     GetPrice(item) {
       let tmp_data = JSON.parse(JSON.stringify(item.Stock));
@@ -114,9 +127,7 @@ export default {
       return tmp_data[0];
     },
   },
-  mounted() {
-    this.InitSwiper();
-  },
+  mounted() {},
   filters: {
     currency(price) {
       let val = (price / 1).toFixed(0).replace('.', ',');
@@ -125,3 +136,15 @@ export default {
   },
 };
 </script>
+
+<style>
+.slick-slider.--swiping .slick-list:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+</style>
