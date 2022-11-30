@@ -4,7 +4,10 @@
     <div class="flex items-center justify-between mb-5">
       <h4 class="text-2xl font-bold">配送方式</h4>
     </div>
-    <div class="pb-5 mb-6 border-b border-zinc-300">
+    <div
+      v-if="shipway_data.length > 0"
+      class="pb-5 mb-6 border-b border-zinc-300"
+    >
       <div class="relative">
         <SelectArrowIcon
           class="absolute z-10 w-5 text-black transform -translate-y-1/2 pointer-events-none top-1/2 right-2"
@@ -54,6 +57,10 @@
         請選擇配送方式
       </p>
     </div>
+    <p v-else class="mb-10 text-sm text-red-700">
+      沒有可用的配送方式！<br />
+      您購物車中的商品尺寸或重量總和超過可運送的範圍，請分次下單結帳謝謝！
+    </p>
     <div class="flex items-center justify-between mb-5">
       <h4 class="text-2xl font-bold">收件地址</h4>
       <p class="text-sm text-basic_gray" v-if="!member_login">
@@ -313,6 +320,10 @@ export default {
     coupon_info: {
       require: true,
     },
+    checkout_data: {
+      require: true,
+      type: Object,
+    },
   },
   components: {
     SelectArrowIcon,
@@ -390,13 +401,37 @@ export default {
       }
     },
   },
+  watch: {
+    shipway_data() {
+      if (this.shipway_data.length <= 0) {
+        this.$router.push('/');
+        this.$store.commit('SetDialog', {
+          status: true,
+          content: `很抱歉！<br/><b class="text-primary">您購物車中的商品尺寸或重量總和超過可運送的範圍，請分次下單結帳謝謝！</b>`,
+        });
+      }
+    },
+  },
   computed: {
     shipway_data() {
-      return this.has_forzen_product
-        ? this.forzen_shipway
-        : this.$store.state.shipway_data.filter(
-            (item) => item.DeliveryFrozen == 'N'
-          );
+      let shipway_list = JSON.parse(
+        JSON.stringify(this.$store.state.shipway_data)
+      );
+      if (this.has_forzen_product) {
+        shipway_list = shipway_list.filter(
+          (item) => item.DeliveryFrozen == 'Y'
+        );
+      } else {
+        shipway_list = shipway_list.filter(
+          (item) => item.DeliveryFrozen == 'N'
+        );
+      }
+      shipway_list = shipway_list.filter(
+        (item) =>
+          item.DeliverVolumeMax >= this.checkout_data.TotalDeliverVolume &&
+          item.DeliverWeightMax >= this.checkout_data.TotalDeliverWeight
+      );
+      return shipway_list;
     },
     payment_data() {
       // 如果選擇 7-11物流則只能選 7-11取貨付款
@@ -462,6 +497,13 @@ export default {
       this.member_login = true;
     } else {
       this.member_login = false;
+    }
+    if (this.shipway_data.length <= 0) {
+      this.$router.push('/');
+      this.$store.commit('SetDialog', {
+        status: true,
+        content: `很抱歉！<br/><b class="text-primary">您購物車中的商品尺寸或重量總和超過可運送的範圍，請分次下單結帳謝謝！</b>`,
+      });
     }
   },
 };

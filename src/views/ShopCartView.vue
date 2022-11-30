@@ -10,6 +10,7 @@
           :errors="errors"
           :form_data="form_data"
           :shopcart="shopcart"
+          :checkout_data="checkout_data"
           :coupon_info="checkout_data.CouponInfo"
           @update-action="UpdateForm"
           @validate="ValidateForm"

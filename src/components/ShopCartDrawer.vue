@@ -1,5 +1,5 @@
 <template>
-  <nav ref="MainContent" class="fixed w-screen top-0 left-full bottom-0 z-30">
+  <nav ref="MainContent" class="fixed top-0 bottom-0 z-30 w-screen left-full">
     <div
       data-menu
       class="absolute top-0 bottom-0 left-full sm:w-[432px] w-5/6 bg-white z-10 sm:pt-32 pt-20 md:pb-0"
@@ -8,18 +8,21 @@
         <CloseIcon class="w-5 text-black" />
       </button>
 
-      <h4 class="font-bold sm:text-2xl text-xl mb-10 px-7">您的購物車</h4>
+      <h4 class="mb-10 text-xl font-bold sm:text-2xl px-7">您的購物車</h4>
       <ol class="max-h-[70vh] overflow-y-auto px-7">
         <li
-          class="py-5 border-b border-zinc-300 flex flex-wrap items-start"
+          class="flex flex-wrap items-start py-5 border-b border-zinc-300"
           v-for="(item, item_index) in shopcart"
           :key="`shopcart_${item_index}`"
         >
-          <div class="rounded-lg overflow-hidden w-1/4">
+          <div class="w-1/4 overflow-hidden rounded-lg">
             <img :src="$ImageUrl(item.product_data.Image1)" class="w-full" />
           </div>
-          <div class="w-3/4 pl-3 sm:mb-14 mb-8">
-            <p class="font-bold mb-2">{{ item.product_data.Title }}</p>
+          <div
+            class="w-3/4 pl-3 mb-8 sm:mb-14"
+            v-if="GetActiveOption(item) != 'error'"
+          >
+            <p class="mb-2 font-bold">{{ item.product_data.Title }}</p>
             <p class="text-sm text-basic_gray">
               {{ GetActiveOption(item).ColorTitle }}
             </p>
@@ -30,10 +33,10 @@
               {{ GetActiveOption(item).SizeTitle }}
             </p>
           </div>
-          <div class="w-full flex justify-end">
-            <div class="w-3/4 pl-3 flex items-center justify-between">
+          <div class="flex justify-end w-full">
+            <div class="flex items-center justify-between w-3/4 pl-3">
               <div
-                class="inline-flex items-stretch border border-zinc-300 rounded-sm"
+                class="inline-flex items-stretch border rounded-sm border-zinc-300"
               >
                 <button @click="Remove(item_index)" class="p-2">
                   <MinusIcon class="w-3 text-black" />
@@ -64,14 +67,14 @@
       <router-link
         to="/shopcart"
         @click.native="Close"
-        class="absolute md:bottom-0 bottom-0 left-0 right-0 bg-primary py-5 text-white text-center font-bold transition-colors duration-200 hover:bg-secondary"
+        class="absolute bottom-0 left-0 right-0 py-5 font-bold text-center text-white transition-colors duration-200 md:bottom-0 bg-primary hover:bg-secondary"
       >
         結帳
       </router-link>
     </div>
     <div
       data-menu-bg
-      class="absolute top-0 left-0 right-0 bottom-0 bg-white bg-opacity-60 z-0"
+      class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-white bg-opacity-60"
     ></div>
   </nav>
 </template>
@@ -98,12 +101,13 @@ export default {
   },
   methods: {
     GetActiveOption(shopcart_item) {
-      return shopcart_item.product_data.Stock.filter((item) => {
+      const stock = shopcart_item.product_data.Stock.filter((item) => {
         return (
           item.ColorID == shopcart_item.active_option[0] &&
           item.SizeID == shopcart_item.active_option[1]
         );
-      })[0];
+      });
+      return stock.length > 0 ? stock[0] : 'error';
     },
     Close() {
       this.$store.commit('SetShopcartDrawer', false);
@@ -192,6 +196,19 @@ export default {
   },
   mounted() {
     this.menu_gsap_animation = new menu_gsap_animation(this.$refs.MainContent);
+  },
+  created() {
+    // 檢查商品選項是否可用 如果不能用就移除
+    this.shopcart.forEach((item, item_index) => {
+      const stock = this.GetActiveOption(item);
+      if (stock == 'error') {
+        let count = 0;
+        while (count < item.amount) {
+          this.Remove(item_index);
+          count += 1;
+        }
+      }
+    });
   },
 };
 </script>

@@ -7,7 +7,7 @@
     <MainHeader ref="MainHeader" v-if="data_load_finish" />
     <MainLoading />
     <ShopCartDialog />
-    <ShopCartDrawer />
+    <ShopCartDrawer v-if="data_load_finish" />
     <MainDialog />
     <router-view v-if="data_load_finish" />
     <MainFooter v-if="data_load_finish" />
