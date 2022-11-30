@@ -33,6 +33,7 @@ import CategoryMenu from '@/components/product_list/category_menu.vue';
 import ProductList from '@/components/product_list/product_list.vue';
 import FilterBar from '@/components/product_list/filter_bar.vue';
 import { GetMetaData } from '@/common/meta';
+import { redirectErrorPage } from '@/common/prerender';
 export default {
   name: 'ProductListView',
   components: {
@@ -55,17 +56,19 @@ export default {
         },
         {
           title: '全部商品',
-          link: '/collections/all',
+          link: '/collections?category=all',
         },
       ],
     };
   },
   methods: {
     SetActiveCategory() {
-      this.active_category = this.$route.params.id;
+      this.active_category = this.$route.query.category
+        ? this.$route.query.category
+        : 'all';
       if (this.active_category == 'all') {
         this.bread_crumb_path[1].title = '全部商品';
-        this.bread_crumb_path[1].link = '/collections/all';
+        this.bread_crumb_path[1].link = '/collections?category=all';
       } else {
         let category = this.category_data.filter(
           (item) => item.MenuID == this.active_category
@@ -73,12 +76,13 @@ export default {
         if (category.length > 0) {
           category = category[0];
           this.bread_crumb_path[1].title = category.Title;
-          this.bread_crumb_path[1].link = `/collections/${category.MenuID}`;
+          this.bread_crumb_path[1].link = `/collections?category=${category.MenuID}`;
           this.$nextTick(() => {
             window.prerenderReady = true;
           });
         } else {
-          this.$router.push('/error_page');
+          // this.$router.push('/error_page');
+          redirectErrorPage();
         }
       }
     },

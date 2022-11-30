@@ -107,11 +107,11 @@ export default {
       menu_list: [
         {
           title: '最新商品',
-          link: '/collections/4',
+          link: '/collections?category=4',
         },
         {
           title: '所有商品',
-          link: '/collections/all',
+          link: '/collections?category=all',
         },
         {
           title: '關於我們',
@@ -119,7 +119,7 @@ export default {
         },
         {
           title: '最新消息',
-          link: '/news/all',
+          link: '/news?category=all',
         },
         {
           title: '會員專區',

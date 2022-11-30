@@ -1,11 +1,11 @@
 <template>
   <nav>
-    <h4 class="text-basic_gray font-bold mb-5 text-xl">商品類別</h4>
-    <ol class="border-b border-zinc-300 pb-3">
+    <h4 class="mb-5 text-xl font-bold text-basic_gray">商品類別</h4>
+    <ol class="pb-3 border-b border-zinc-300">
       <li>
         <router-link
-          to="/collections/all"
-          class="py-3 block font-bold link_color"
+          to="/collections?category=all"
+          class="block py-3 font-bold link_color"
           :class="
             active_category == 'all' ? 'text-secondary' : 'text-basic_black'
           "
@@ -18,8 +18,8 @@
         :key="`menu_${item_index}`"
       >
         <router-link
-          :to="`/collections/${item.MenuID}`"
-          class="py-3 block font-bold link_color"
+          :to="`/collections?category=${item.MenuID}`"
+          class="block py-3 font-bold link_color"
           :class="
             active_category == item.MenuID
               ? 'text-secondary'

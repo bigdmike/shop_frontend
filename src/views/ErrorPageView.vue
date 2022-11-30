@@ -50,7 +50,9 @@ export default {
     meta.setAttribute('property', 'prerender-status-code');
     meta.content = '404';
     document.getElementsByTagName('head')[0].appendChild(meta);
-    window.prerenderReady = true;
+    this.$nextTick(() => {
+      window.prerenderReady = true;
+    });
   },
   metaInfo() {
     return this.meta_data;

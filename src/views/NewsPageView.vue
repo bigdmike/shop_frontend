@@ -61,7 +61,7 @@
       >
         <p class="mb-2 text-sm text-basic_gray">下一篇</p>
         <router-link
-          :to="`/news/${next_news_data.NewsCategoryID}/page/${next_news_data.NewsID}`"
+          :to="`/news/page/${next_news_data.NewsID}`"
           class="flex items-start justify-between mb-10"
         >
           <div>
@@ -107,6 +107,7 @@ import LineIcon from '@/components/svg/LineIcon.vue';
 import NextIcon from '@/components/svg/Carousel/NextIcon.vue';
 import PrevIcon from '@/components/svg/Carousel/PrevIcon.vue';
 import { GetMetaData } from '@/common/meta';
+import { redirectErrorPage } from '@/common/prerender';
 export default {
   name: 'NewsPageView',
   components: {
@@ -126,11 +127,11 @@ export default {
         },
         {
           title: '最新消息',
-          link: '/news/all',
+          link: '/news?category=all',
         },
         {
           title: '文章標題',
-          link: '/news/all',
+          link: '/news?category=all',
         },
       ],
     };
@@ -156,9 +157,9 @@ export default {
   created() {
     if (this.news_data != 'error') {
       this.bread_crumb_path[1].title = this.active_caregory.Title;
-      this.bread_crumb_path[1].link = `/news/${this.active_caregory.NewsCategoryID}`;
+      this.bread_crumb_path[1].link = `/news?category=${this.active_caregory.NewsCategoryID}`;
       this.bread_crumb_path[2].title = this.news_data.Title;
-      this.bread_crumb_path[2].link = `/news/${this.news_data.NewsID}`;
+      this.bread_crumb_path[2].link = `/news/page/${this.news_data.NewsID}`;
 
       let description = this.news_data.Content.replaceAll(/<[^>]+>/g, '');
       this.meta_data = GetMetaData(
@@ -172,7 +173,7 @@ export default {
         window.prerenderReady = true;
       });
     } else {
-      this.$router.push('/error_page');
+      redirectErrorPage();
     }
   },
   metaInfo() {
@@ -180,7 +181,7 @@ export default {
   },
   watch: {
     news_data() {
-      this.news_data == 'error' ? this.$router.push('/error_page') : '';
+      this.news_data == 'error' ? redirectErrorPage() : '';
     },
   },
   computed: {
@@ -189,7 +190,7 @@ export default {
     },
     active_caregory() {
       const active_caregory = this.news_category_data.filter(
-        (item) => item.NewsCategoryID == this.$route.params.category
+        (item) => item.NewsCategoryID == this.news_data.NewsCategoryID
       );
       return active_caregory.length > 0 ? active_caregory[0] : 'error';
     },

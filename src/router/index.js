@@ -19,7 +19,7 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
-    path: '/collections/:id/',
+    path: '/collections',
     name: 'ProductList',
     component: () =>
       import(
@@ -59,14 +59,14 @@ const routes = [
       import(/* webpackChunkName: "error_page" */ '../views/ErrorPageView.vue'),
   },
   {
-    path: '/news/:category/',
+    path: '/news',
     name: '最新消息列表',
     component: () =>
       import(/* webpackChunkName: "news_list" */ '../views/NewsListView.vue'),
     meta: { requiresAuth: false },
   },
   {
-    path: '/news/:category/:type/:id',
+    path: '/news/page/:id',
     name: '最新消息',
     component: () =>
       import(/* webpackChunkName: "news_page" */ '../views/NewsPageView.vue'),

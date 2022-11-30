@@ -57,6 +57,7 @@ import { getLocalStorage } from '@/common/cookie';
 import { addShopcart, getShopcart } from '@/api/member';
 import { getSingleProductData } from '@/api/page_data';
 import { GetMetaData } from '@/common/meta';
+import { redirectErrorPage } from '@/common/prerender';
 export default {
   name: 'ProductPage',
   components: {
@@ -76,7 +77,7 @@ export default {
         },
         {
           title: '全部商品',
-          link: '/collections/all',
+          link: '/collections?category=all',
         },
         {
           title: '商品名稱',
@@ -247,7 +248,8 @@ export default {
             window.prerenderReady = true;
           });
         } else if (res.code == 500) {
-          this.$router.push('/error_page');
+          // this.$router.push('/error_page');
+          redirectErrorPage();
         }
       });
     },

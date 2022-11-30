@@ -87,7 +87,7 @@ export default {
         },
         {
           title: '最新商品',
-          link: '/collections/4',
+          link: '/collections?category=4',
           type: 'link',
         },
         {
@@ -102,7 +102,7 @@ export default {
         },
         {
           title: '最新消息',
-          link: '/news/all',
+          link: '/news?category=all',
           type: 'link',
         },
       ],
@@ -154,7 +154,7 @@ export default {
       this.category_data.forEach((item) => {
         tmp_list.push({
           title: item.Title,
-          link: `/collections/${item.MenuID}`,
+          link: `/collections?category=${item.MenuID}`,
         });
       });
       this.menu_list.forEach((item, item_index) => {

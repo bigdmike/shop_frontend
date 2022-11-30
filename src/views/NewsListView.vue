@@ -10,7 +10,7 @@
         :sort_type="sort_type"
         :category_data="category_data"
         @change-type="sort_type = $event"
-        @change-category="$router.push(`/news/${$event}`)"
+        @change-category="$router.push(`/news?category=${$event}`)"
       />
       <CategoryMenu
         :active_category="active_category"
@@ -33,6 +33,7 @@ import CategoryMenu from '@/components/news_list/category_menu.vue';
 import ProductList from '@/components/news_list/news_list.vue';
 import FilterBar from '@/components/news_list/filter_bar.vue';
 import { GetMetaData } from '@/common/meta';
+import { redirectErrorPage } from '@/common/prerender';
 export default {
   name: 'NewsListView',
   components: {
@@ -55,17 +56,19 @@ export default {
         },
         {
           title: '最新消息',
-          link: '/news/all',
+          link: '/news?category=all',
         },
       ],
     };
   },
   methods: {
     SetActiveCategory() {
-      this.active_category = this.$route.params.category;
+      this.active_category = this.$route.query.category
+        ? this.$route.query.category
+        : 'all';
       if (this.active_category == 'all') {
         this.bread_crumb_path[1].title = '最新消息';
-        this.bread_crumb_path[1].link = '/news/all';
+        this.bread_crumb_path[1].link = '/news?category=all';
       } else {
         let category = this.category_data.filter(
           (item) => item.NewsCategoryID == this.active_category
@@ -74,12 +77,13 @@ export default {
         if (category.length > 0) {
           category = category[0];
           this.bread_crumb_path[1].title = category.Title;
-          this.bread_crumb_path[1].link = `/news/${category.NewsCategoryID}`;
+          this.bread_crumb_path[1].link = `/news?category=${category.NewsCategoryID}`;
           this.$nextTick(() => {
             window.prerenderReady = true;
           });
         } else {
-          this.$router.push('/error_page');
+          // this.$router.push('/error_page');
+          redirectErrorPage();
         }
       }
     },

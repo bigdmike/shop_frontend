@@ -1,4 +1,6 @@
 const CompressionPlugin = require('compression-webpack-plugin');
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const cdnConfig = require('./cdn.config.js');
 
 module.exports = {
@@ -78,6 +80,7 @@ module.exports = {
   chainWebpack: (config) => {
     config
       .plugin('webpack-bundle-analyzer')
-      .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
+      .use(BundleAnalyzerPlugin)
+      .init((Plugin) => new Plugin({ analyzerPort: 1234 }));
   },
 };

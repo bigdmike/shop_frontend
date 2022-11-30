@@ -14,7 +14,7 @@ export function GetMatchMetaData(column_title) {
   if (title.length > 0) {
     return {
       title: title[0].Content,
-      content: content[0].Content,
+      content: content[0].Content.replaceAll(/<[^>]+>/g, ''),
       image: GetImageUrl(image[0].Content),
     };
   } else {
@@ -35,7 +35,7 @@ export function GetBaseMetaData() {
   )[0];
   return {
     title: base_title.Content,
-    content: base_content.Content,
+    content: base_content.Content.replaceAll(/<[^>]+>/g, ''),
     image: GetImageUrl(base_image.Content),
   };
 }

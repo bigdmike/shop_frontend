@@ -91,7 +91,8 @@
     >
       <h4 class="mb-4 text-2xl font-bold">購物車內目前沒有商品</h4>
       <p class="mb-10">
-        您可以前往<a href="/collections/all" class="text-primary">瀏覽商品</a
+        您可以前往<a href="/collections?category=all" class="text-primary"
+          >瀏覽商品</a
         >，選購您想要得商品
       </p>
       <div class="flex items-center justify-center">
@@ -102,7 +103,7 @@
           回到首頁
         </router-link>
         <router-link
-          to="/collections/all"
+          to="/collections?category=all"
           class="px-4 py-2 text-white transition-all duration-300 rounded-lg bg-primary hover:bg-opacity-70"
         >
           瀏覽商品
