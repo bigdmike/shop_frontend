@@ -253,7 +253,15 @@ export default {
             content: `很抱歉！<br/><b class="text-primary">${product_name}<br/>目前庫存剩餘${count}</b><br/>請先移除超出的數量後再次結帳`,
           });
           this.$router.push('/');
+        } else if (res.msg.indexOf('庫存為關閉狀態') != -1) {
+          const product_name = res.msg.split('庫存為關閉狀態')[0];
+          this.$store.commit('SetDialog', {
+            status: true,
+            content: `很抱歉！<br/><b class="text-primary">${product_name}<br/>目前所選擇的規格已無庫存</b><br/>請先移除超出的數量後再次結帳`,
+          });
+          this.$router.push('/');
         }
+        //
       });
     },
     ValidateForm() {

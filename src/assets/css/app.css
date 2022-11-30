@@ -747,10 +747,6 @@ video {
   display: inline-flex;
 }
 
-.grid{
-  display: grid;
-}
-
 .hidden{
   display: none;
 }
@@ -855,16 +851,16 @@ video {
   width: 1.25rem;
 }
 
+.w-32{
+  width: 8rem;
+}
+
 .w-1\/4{
   width: 25%;
 }
 
 .w-4{
   width: 1rem;
-}
-
-.w-32{
-  width: 8rem;
 }
 
 .w-96{

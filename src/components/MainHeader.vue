@@ -16,6 +16,7 @@
             class="absolute block transform -translate-x-1/2 -translate-y-1/2 md:relative md:top-0 md:left-0 top-1/2 left-1/2 md:translate-x-0 md:translate-y-0"
           >
             <img
+              :alt="$GetCloumn('company_name')"
               :src="$ImageUrl($GetCloumn('logo_image'))"
               class="w-32 lg:w-44 sm:w-36"
             />

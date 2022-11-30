@@ -6,6 +6,25 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <title>官方網站 | 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒</title>
+    <!-- cdn css -->
+    <% for ( var i in htmlWebpackPlugin.options.cdn &&
+    htmlWebpackPlugin.options.cdn.css) { %>
+    <link
+      href="<%= htmlWebpackPlugin.options.CDN.css[i] %>"
+      rel="preload"
+      as="style"
+    />
+    <link href="<%= htmlWebpackPlugin.options.CDN.css[i] %>" rel="stylesheet" />
+    <% } %>
+    <!-- cdn js -->
+    <% for ( var i in htmlWebpackPlugin.options.CDN &&
+    htmlWebpackPlugin.options.CDN.js) { %>
+    <link
+      href="<%= htmlWebpackPlugin.options.CDN.js[i] %>"
+      rel="preload"
+      as="script"
+    />
+    <% } %>
   </head>
   <body>
     <noscript>
@@ -17,8 +36,9 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
-    <!-- <script src="https://unpkg.com/vue-slick-carousel@1.0.6/dist/vue-slick-carousel.umd.js"></script> -->
+    <% for ( var i in htmlWebpackPlugin.options.CDN &&
+    htmlWebpackPlugin.options.CDN.js) { %>
+    <script src="<%= htmlWebpackPlugin.options.CDN.js[i] %>"></script>
+    <% } %>
   </body>
 </html>

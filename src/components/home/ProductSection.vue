@@ -30,6 +30,7 @@
             <div class="mb-2 overflow-hidden select-none rounded-2xl">
               <img
                 class="w-full"
+                :alt="item.Title"
                 :src="$ImageUrl(item.Image1)"
                 draggable="false"
               />
@@ -52,7 +53,11 @@
       </VueSlickCarousel>
     </div>
     <div class="absolute top-0 left-0 right-0 overflow-hidden h-2/3">
-      <img :src="background_image" class="block object-cover w-full h-full" />
+      <img
+        :src="background_image"
+        :alt="$GetCloumn('company_name') + ' ' + title"
+        class="block object-cover w-full h-full"
+      />
     </div>
   </section>
 </template>

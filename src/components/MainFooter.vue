@@ -4,7 +4,11 @@
       class="flex flex-wrap items-start justify-between w-full max-w-screen-xl px-10 mx-auto xl:px-0 md:mb-12"
     >
       <router-link to="/" class="mb-20">
-        <img :src="$ImageUrl($GetCloumn('logo_image'))" class="w-60" />
+        <img
+          :alt="$GetCloumn('company_name')"
+          :src="$ImageUrl($GetCloumn('logo_image'))"
+          class="w-60"
+        />
       </router-link>
       <div class="flex flex-wrap items-start">
         <div class="mb-20 mr-16">
@@ -56,6 +60,7 @@
     >
       <div class="flex flex-wrap items-center">
         <img
+          alt="PChome支付連"
           src="@/assets/img/logoPChomePay_200x40.webp"
           class="w-32 mb-10 mr-5"
         />
