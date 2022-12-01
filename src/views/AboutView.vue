@@ -1,6 +1,6 @@
 <template>
   <main class="relative z-10 w-full">
-    <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10">
+    <div class="w-full max-w-screen-xl px-5 pt-5 mx-auto xl:px-0 sm:px-10">
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
       <div
         class="flex flex-wrap items-center justify-between mb-10 md:mb-28 sm:mb-20"

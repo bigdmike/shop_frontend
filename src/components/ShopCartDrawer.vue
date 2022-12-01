@@ -2,14 +2,16 @@
   <nav ref="MainContent" class="fixed top-0 bottom-0 z-30 w-screen left-full">
     <div
       data-menu
-      class="absolute top-0 bottom-0 left-full sm:w-[432px] w-5/6 bg-white z-10 sm:pt-32 pt-20 md:pb-0"
+      class="absolute top-0 bottom-0 left-full sm:w-[432px] xs:w-5/6 w-full bg-white z-10 sm:pt-32 xs:pt-20 pt-10 md:pb-0"
     >
-      <button @click="Close" class="absolute top-7 right-7">
+      <button @click="Close" class="absolute xs:top-7 xs:right-7 top-5 right-5">
         <CloseIcon class="w-5 text-black" />
       </button>
 
-      <h4 class="mb-10 text-xl font-bold sm:text-2xl px-7">您的購物車</h4>
-      <ol class="max-h-[70vh] overflow-y-auto px-7">
+      <h4 class="px-5 mb-10 text-xl font-bold sm:text-2xl xs:px-7">
+        您的購物車
+      </h4>
+      <ol class="max-h-[70vh] overflow-y-auto xs:px-7 px-5">
         <li
           class="flex flex-wrap items-start py-5 border-b border-zinc-300"
           v-for="(item, item_index) in shopcart"
@@ -22,7 +24,9 @@
             class="w-3/4 pl-3 mb-8 sm:mb-14"
             v-if="GetActiveOption(item) != 'error'"
           >
-            <p class="mb-2 font-bold">{{ item.product_data.Title }}</p>
+            <p class="mb-2 text-sm font-bold xs:text-base">
+              {{ item.product_data.Title }}
+            </p>
             <p class="text-sm text-basic_gray">
               {{ GetActiveOption(item).ColorTitle }}
             </p>
@@ -34,7 +38,9 @@
             </p>
           </div>
           <div class="flex justify-end w-full">
-            <div class="flex items-center justify-between w-3/4 pl-3">
+            <div
+              class="flex items-center justify-between w-full xs:pl-3 xs:w-3/4"
+            >
               <div
                 class="inline-flex items-stretch border rounded-sm border-zinc-300"
               >
@@ -51,7 +57,7 @@
                   <PlusIcon class="w-3 text-black" />
                 </button>
               </div>
-              <p class="font-bold">
+              <p class="text-sm font-bold xs:text-base">
                 NT$
                 {{
                   $MoneyFormat(

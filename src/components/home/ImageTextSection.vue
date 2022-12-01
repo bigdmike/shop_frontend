@@ -1,9 +1,11 @@
 <template>
-  <section class="relative w-full py-40">
+  <section class="relative w-full py-20 sm:py-40">
     <div
-      class="flex flex-wrap items-center w-full max-w-screen-xl px-10 mx-auto xl:px-0 md:px-5"
+      class="flex flex-wrap items-center w-full max-w-screen-xl px-5 mx-auto xl:px-0"
     >
-      <div class="w-full mb-10 overflow-hidden lg:w-1/2 rounded-3xl lg:mb-0">
+      <div
+        class="w-full mb-10 overflow-hidden lg:w-1/2 sm:rounded-3xl rounded-xl lg:mb-0"
+      >
         <img
           class="block w-full"
           :alt="$GetCloumn('company_name')"
@@ -20,7 +22,7 @@
         <div class="mb-10 tracking-wider" v-html="content"></div>
         <router-link
           to="/About"
-          class="px-16 py-3 font-bold transition-colors duration-200 bg-transparent border rounded-full text-primary border-primary hover:bg-primary hover:text-white"
+          class="px-16 py-3 text-sm font-bold transition-colors duration-200 bg-transparent border rounded-full sm:text-base text-primary border-primary hover:bg-primary hover:text-white"
           >瞭解更多</router-link
         >
       </div>

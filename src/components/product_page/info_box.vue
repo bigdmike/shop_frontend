@@ -1,7 +1,7 @@
 <template>
   <section class="relative z-10 w-full">
     <EventImageDialog ref="EventImageDialog" />
-    <h2 class="mb-5 text-2xl font-bold sm:text-3xl">
+    <h2 class="mb-5 text-xl font-bold xs:text-2xl sm:text-3xl">
       {{ product_data.Title }}
     </h2>
     <div
@@ -44,8 +44,8 @@
       >
         <li
           class="flex items-center px-4 py-1 text-sm"
-          v-for="(item, item_index) in product_data.Discount"
           :key="`event_${item_index}`"
+          v-for="(item, item_index) in product_data.Discount"
         >
           {{ item.Title }}
           <a

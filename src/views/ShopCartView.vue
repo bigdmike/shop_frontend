@@ -4,8 +4,10 @@
       v-if="checkout_data != null"
       class="relative flex w-full max-w-screen-xl mx-auto"
     >
-      <div class="w-full px-5 pb-32 md:w-2/3 xl:pl-0 sm:pl-10 sm:pr-10">
-        <BreadCrumb :path="bread_crumb_path" class="mb-20" />
+      <div
+        class="w-full px-5 pt-5 pb-32 md:w-2/3 xl:pl-0 sm:pl-10 sm:pr-10 xs:pt-0"
+      >
+        <BreadCrumb :path="bread_crumb_path" class="mb-10 sm:mb-20" />
         <ShopCartForm
           :errors="errors"
           :form_data="form_data"

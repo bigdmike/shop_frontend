@@ -63,14 +63,10 @@
 </template>
 
 <script>
-import VueSlickCarousel from 'vue-slick-carousel';
 import '@/assets/css/vue-slick-carousel.css';
 
 export default {
   name: 'ProductSection',
-  components: {
-    VueSlickCarousel,
-  },
   props: {
     product_data: {
       type: Array,

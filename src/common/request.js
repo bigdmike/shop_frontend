@@ -3,7 +3,7 @@ import store from '@/store/index.js';
 import router from '@/router';
 import { getLocalStorage, delLocalStorage } from '@/common/cookie';
 
-let baseURL = process.env.VUE_APP_BASE_API;
+let baseURL = process.env.VUE_APP_BASE_API + '/';
 // 建立axios例項
 const service = axios.create({
   baseURL: baseURL,

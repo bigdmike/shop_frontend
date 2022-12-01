@@ -23,7 +23,7 @@
                     ? 'md:text-secondary md:bg-transparent bg-secondary text-white rounded-xl'
                     : ''
                 "
-                class="block p-3 text-sm link_color md:text-base"
+                class="block p-3 text-sm md:link_color md:text-base"
               >
                 {{ item.title }}
               </router-link>

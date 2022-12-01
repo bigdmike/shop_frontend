@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import VueSlickCarousel from 'vue-slick-carousel';
 import '@/assets/css/vue-slick-carousel.css';
 import NextIcon from '@/components/svg/Carousel/NextIcon.vue';
 import PrevIcon from '@/components/svg/Carousel/PrevIcon.vue';
@@ -55,7 +54,6 @@ export default {
   components: {
     NextIcon,
     PrevIcon,
-    VueSlickCarousel,
   },
   data() {
     return {

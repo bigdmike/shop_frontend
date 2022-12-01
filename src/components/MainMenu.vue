@@ -2,7 +2,7 @@
   <div ref="MainContent" class="fixed top-0 bottom-0 z-20 w-full left-full">
     <nav
       data-menu
-      class="absolute top-0 z-10 h-screen max-h-screen pt-32 overflow-y-auto bg-white left-full w-96"
+      class="absolute top-0 z-10 h-screen max-w-full max-h-screen pt-32 overflow-y-auto bg-white left-full w-96"
     >
       <button @click="Close" class="absolute top-7 right-7">
         <CloseIcon class="w-5 text-black" />
@@ -109,21 +109,17 @@ export default {
       member_not_login: [
         {
           title: '登入',
-          link: '/Login',
+          link: '/account/login',
         },
         {
           title: '註冊帳號',
-          link: '/Signup',
+          link: '/account/signup',
         },
       ],
       member_is_login: [
         {
           title: '會員中心',
-          link: '/MemberCenter',
-        },
-        {
-          title: '登出',
-          link: '/Logout',
+          link: '/account/account_edit',
         },
       ],
       menu_gsap_animation: null,

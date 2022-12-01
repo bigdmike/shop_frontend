@@ -1,5 +1,5 @@
 <template>
-  <section class="relative w-full py-40">
+  <section class="relative w-full py-20 sm:py-40">
     <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0">
       <header class="mb-20 text-center">
         <h2
@@ -14,7 +14,9 @@
         </span>
       </header>
       <div class="flex flex-wrap items-center w-full">
-        <div class="w-full mb-10 overflow-hidden lg:w-1/2 rounded-3xl lg:mb-0">
+        <div
+          class="w-full mb-10 overflow-hidden lg:w-1/2 sm:rounded-3xl rounded-xl lg:mb-0"
+        >
           <img
             class="block w-full"
             :src="$ImageUrl(image)"

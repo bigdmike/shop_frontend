@@ -1,7 +1,9 @@
 <template>
-  <footer class="relative z-10 border-t bg-white border-[#cccccc] py-32">
+  <footer
+    class="relative z-10 border-t bg-white border-[#cccccc] sm:py-32 py-20"
+  >
     <div
-      class="flex flex-wrap items-start justify-between w-full max-w-screen-xl px-10 mx-auto xl:px-0 md:mb-12"
+      class="flex flex-wrap items-start justify-between w-full max-w-screen-xl px-5 mx-auto xl:px-0 md:mb-12"
     >
       <router-link to="/" class="mb-20">
         <img
@@ -56,7 +58,7 @@
     </div>
 
     <div
-      class="w-full max-w-screen-xl md:border-t md:border-[#cccccc] mx-auto flex items-center flex-wrap justify-between xl:px-0 px-10 md:pt-5"
+      class="w-full max-w-screen-xl md:border-t md:border-[#cccccc] mx-auto flex items-center flex-wrap justify-between xl:px-0 px-5 md:pt-5"
     >
       <div class="flex flex-wrap items-center">
         <img

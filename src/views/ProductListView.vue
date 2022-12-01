@@ -1,7 +1,7 @@
 <template>
   <main id="ProductList" class="relative z-10 w-full pb-40">
     <div
-      class="flex flex-wrap items-stretch w-full max-w-screen-xl px-5 mx-auto xl:px-0"
+      class="flex flex-wrap items-stretch w-full max-w-screen-xl px-5 pt-5 mx-auto xl:px-0"
     >
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
       <FilterBar

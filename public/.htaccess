@@ -1,6 +1,12 @@
+
+<FilesMatch "\.(webp)$">
+    Header set Cache-Control "max-age=18144000, public"
+</FilesMatch>
+
 <FilesMatch "\.(woff|woff2|eot|ttf|svg|webp|png|jpg|jpeg|JPG)$">
     Header set Cache-Control "max-age=18144000, public"
 </FilesMatch>
+
 <FilesMatch "\.(js|css|swf)$">
     Header set Cache-Control "max-age=18144000"
 </FilesMatch>

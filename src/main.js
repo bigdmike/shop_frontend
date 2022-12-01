@@ -3,6 +3,8 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import VueMeta from 'vue-meta';
+import './common/global_methods';
+import { loadScript } from './common/loadScript';
 
 Vue.config.productionTip = false;
 
@@ -10,24 +12,20 @@ Vue.use(VueMeta, {
   refreshOnceOnNavigation: false,
 });
 
-Vue.prototype.$ImageUrl = (item) => {
-  return item == '' ? '' : process.env.VUE_APP_BASE_API + item;
-};
-
-Vue.prototype.$GetCloumn = (key) => {
-  const column = store.state.common_column_data.filter(
-    (column) => column.Title == key
+const loadVueSlickCarousel = () =>
+  loadScript(
+    'https://unpkg.com/vue-slick-carousel@1.0.6/dist/vue-slick-carousel.umd.min.js'
   );
-  return column.length <= 0 ? '' : column[0].Content;
+
+const initVue = () => {
+  Vue.component('VueSlickCarousel', window['vue-slick-carousel']);
+  new Vue({
+    router,
+    store,
+    render: (h) => h(App),
+  }).$mount('#app');
 };
 
-Vue.prototype.$MoneyFormat = (price) => {
-  let val = (price / 1).toFixed(0).replace('.', ',');
-  return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-};
-
-new Vue({
-  router,
-  store,
-  render: (h) => h(App),
-}).$mount('#app');
+loadVueSlickCarousel()
+  .then(initVue)
+  .catch((err) => console.warn(err));

@@ -13,6 +13,9 @@ module.exports = {
       fontFamily: {
         yeseva: "'Yeseva One', 'Noto Serif TC', serif",
       },
+      screens: {
+        xs: '380px',
+      },
     },
   },
   plugins: [],

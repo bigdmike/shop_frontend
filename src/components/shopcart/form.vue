@@ -15,7 +15,7 @@
         <select
           :value="form_data.ship_way"
           @input="UpdateForm('ship_way', $event.target.value)"
-          class="relative z-0 w-full px-2 py-3 border rounded-md appearance-none border-zinc-300 focus:outline-primary"
+          class="relative z-0 w-full px-2 py-3 pr-10 border rounded-md appearance-none border-zinc-300 focus:outline-primary"
         >
           <option value="">選擇配送方式</option>
           <option
@@ -70,7 +70,7 @@
       <button
         @click="OpenAddressDialog"
         v-if="member_login"
-        class="px-5 py-2 text-sm text-white transition-colors duration-200 rounded-full bg-primary hover:bg-opacity-70"
+        class="px-3 py-2 text-xs text-white transition-colors duration-200 rounded-full xs:px-5 xs:text-sm bg-primary hover:bg-opacity-70"
       >
         選擇常用收件資訊
       </button>
@@ -268,6 +268,7 @@
                   ? 'text-primary'
                   : 'text-basic_gray'
               "
+              class="text-sm xs:text-base"
               >{{ item.Title }} (手續費: {{ GetPayemntFee(item) }})</span
             >
           </label>
@@ -279,7 +280,7 @@
       <span class="block w-full mt-5 border-b border-zinc-300"></span>
     </div>
     <div class="">
-      <p class="mb-5">
+      <p class="mb-5 text-sm xs:text-base">
         提交訂單表示同意<b class="text-secondary">耀聞水果世界</b>的<a
           class="text-primary"
           >服務條款</a

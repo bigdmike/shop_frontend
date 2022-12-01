@@ -1,7 +1,15 @@
+import { loadScript } from '@/common/loadScript';
 import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
+const loadScrollTrigger = () =>
+  loadScript(
+    'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/ScrollTrigger.min.js'
+  );
+
+loadScrollTrigger().then(() => {
+  gsap.registerPlugin(window.ScrollTrigger);
+});
+
 gsap.config({
   autoSleep: 60,
   force3D: true,
@@ -49,4 +57,4 @@ gsap.registerPlugin({
   },
 });
 
-export { gsap, ScrollTrigger };
+export { gsap };

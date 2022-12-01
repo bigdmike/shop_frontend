@@ -232,6 +232,9 @@ export default {
             return a.Seq - b.Seq;
           });
           res.data.Stock = res.data.Stock.filter((item) => item.Status == 'Y');
+          res.data.Discount = res.data.Discount.filter(
+            (item) => new Date(item.EndTime) > new Date()
+          );
           this.product_data = res.data;
 
           let description = this.product_data.Memo1.replaceAll(/<[^>]+>/g, '');

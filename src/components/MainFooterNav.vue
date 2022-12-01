@@ -84,7 +84,7 @@ export default {
   },
   watch: {
     $route() {
-      if (this.$route.name == '購物車結帳') {
+      if (this.$route.name == '購物車結帳' || this.$route.name == 'Product') {
         this.show = false;
       } else {
         this.show = true;

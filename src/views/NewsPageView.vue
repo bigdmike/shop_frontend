@@ -2,9 +2,9 @@
   <main id="NewsPage" class="relative z-10 w-full">
     <div
       v-if="news_data != null && news_data != 'error'"
-      class="w-full max-w-screen-xl px-5 pb-40 mx-auto xl:px-0 sm:px-10"
+      class="w-full max-w-screen-xl px-5 pt-5 pb-40 mx-auto xl:px-0 sm:px-10"
     >
-      <BreadCrumb class="mb-20" :path="bread_crumb_path" />
+      <BreadCrumb class="mb-2" :path="bread_crumb_path" />
       <h2 class="mb-5 text-2xl font-semibold sm:text-4xl">
         {{ news_data.Title }}
       </h2>
@@ -129,10 +129,6 @@ export default {
           title: '最新消息',
           link: '/news?category=all',
         },
-        {
-          title: '文章標題',
-          link: '/news?category=all',
-        },
       ],
     };
   },
@@ -158,8 +154,6 @@ export default {
     if (this.news_data != 'error') {
       this.bread_crumb_path[1].title = this.active_caregory.Title;
       this.bread_crumb_path[1].link = `/news?category=${this.active_caregory.NewsCategoryID}`;
-      this.bread_crumb_path[2].title = this.news_data.Title;
-      this.bread_crumb_path[2].link = `/news/page/${this.news_data.NewsID}`;
 
       let description = this.news_data.Content.replaceAll(/<[^>]+>/g, '');
       this.meta_data = GetMetaData(

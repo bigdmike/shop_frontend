@@ -1,5 +1,5 @@
 <template>
-  <header class="fixed left-0 right-0 z-30 top-8">
+  <header class="fixed left-0 right-0 z-30 sm:top-8 top-7">
     <div class="relative z-20 flex items-center w-full h-20 bg-white sm:h-24">
       <div
         class="relative flex items-center justify-between w-full max-w-screen-xl px-5 mx-auto xl:px-0"
