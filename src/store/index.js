@@ -140,6 +140,12 @@ export default new Vuex.Store({
         let tmp_data = res.data.filter((item) => {
           return item.deleted_at == null;
         });
+        tmp_data.forEach((item, item_index) => {
+          tmp_data[item_index].Stock = item.Stock.filter(
+            (stock) => stock.Status == 'Y'
+          );
+        });
+        tmp_data = tmp_data.filter((item) => item.Stock.length > 0);
         tmp_data = tmp_data.sort((a, b) => {
           return parseInt(a.Seq) - parseInt(b.Seq);
         });

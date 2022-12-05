@@ -408,7 +408,9 @@ export default {
         this.$router.push('/');
         this.$store.commit('SetDialog', {
           status: true,
-          content: `很抱歉！<br/><b class="text-primary">您購物車中的商品尺寸或重量總和超過可運送的範圍，請分次下單結帳謝謝！</b>`,
+          content: `很抱歉！<br/>購物車商品超出可運送範圍，您可以分次下單<br/>如需訂購大量商品請<a class="text-primary" href="${this.$GetCloumn(
+            'company_messenger'
+          )}" target="_blank">聯絡我們</a>`,
         });
       }
     },
@@ -503,7 +505,9 @@ export default {
       this.$router.push('/');
       this.$store.commit('SetDialog', {
         status: true,
-        content: `很抱歉！<br/><b class="text-primary">您購物車中的商品尺寸或重量總和超過可運送的範圍，請分次下單結帳謝謝！</b>`,
+        content: `很抱歉！<br/>購物車商品超出可運送範圍，您可以分次下單<br/>如需訂購大量商品請<a class="text-primary" href="${this.$GetCloumn(
+          'company_messenger'
+        )}" target="_blank">聯絡我們</a>`,
       });
     }
   },

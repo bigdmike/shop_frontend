@@ -19,11 +19,14 @@
         v-bind="big_slick_option"
       >
         <div
-          class="overflow-hidden rounded-xl"
+          class="w-full overflow-hidden rounded-xl aspect-square"
           v-for="(item, item_index) in images"
           :key="`big_carousel_${item_index}`"
         >
-          <img :src="$ImageUrl(item.Image)" class="w-full" />
+          <img
+            :src="$ImageUrl(item.Image)"
+            class="object-cover w-full h-full"
+          />
         </div>
       </VueSlickCarousel>
     </div>
@@ -38,9 +41,12 @@
       >
         <div
           @click="SlideToIndex(item_index)"
-          class="overflow-hidden transition-all duration-300 border-2 border-transparent rounded-md hover:border-primary"
+          class="overflow-hidden transition-all duration-300 border-2 border-transparent rounded-md hover:border-primary aspect-square"
         >
-          <img :src="$ImageUrl(item.Image)" class="w-full" />
+          <img
+            :src="$ImageUrl(item.Image)"
+            class="object-cover w-full h-full"
+          />
         </div>
       </div>
     </VueSlickCarousel>

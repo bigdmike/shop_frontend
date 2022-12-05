@@ -6,18 +6,20 @@
       :content="$GetCloumn('about_section_1_content')"
     />
     <ProductSection
+      v-if="new_product_data.length > 0"
       :product_data="new_product_data"
       title="最新商品"
       sub_title="New Products"
       :background_image="$ImageUrl($GetCloumn('home_main_product_bg'))"
     />
     <ProductSection
+      v-if="promote_product_data.length > 0"
       :product_data="promote_product_data"
       title="推薦商品"
       sub_title="Discount Products"
       :background_image="$ImageUrl($GetCloumn('home_new_product_bg'))"
     />
-    <AdGallerySection :gallery="promotes_data" />
+    <AdGallerySection :images="ad_gallery_data" />
     <CompanyInfoSection :image="$GetCloumn('company_image')" />
   </div>
 </template>
@@ -81,6 +83,22 @@ export default {
     },
     promotes_data() {
       return this.$store.state.promote_data;
+    },
+    ad_gallery_data() {
+      let images = [];
+      images.push({
+        Image1: this.$GetCloumn('home_promote_1_image'),
+        Link: this.$GetCloumn('home_promote_1_link'),
+      });
+      images.push({
+        Image1: this.$GetCloumn('home_promote_2_image'),
+        Link: this.$GetCloumn('home_promote_2_link'),
+      });
+      images.push({
+        Image1: this.$GetCloumn('home_promote_3_image'),
+        Link: this.$GetCloumn('home_promote_3_link'),
+      });
+      return images;
     },
   },
   created() {

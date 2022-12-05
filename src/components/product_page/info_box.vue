@@ -58,8 +58,8 @@
       </ol>
     </div>
     <div class="w-full mt-5 mb-10">
-      <p class="mb-2 font-semibold">選項一</p>
-      <div class="relative w-full mb-5">
+      <p class="mb-2 font-semibold" v-if="first_options.length > 0">選項一</p>
+      <div class="relative w-full mb-5" v-if="first_options.length > 0">
         <SelectArrowIcon
           class="absolute z-10 w-4 transform -translate-y-1/2 pointer-events-none top-1/2 right-5"
         />
@@ -77,8 +77,8 @@
           </option>
         </select>
       </div>
-      <p class="mb-2 font-semibold">選項二</p>
-      <div class="relative w-full mb-5">
+      <p class="mb-2 font-semibold" v-if="second_options.length > 0">選項二</p>
+      <div class="relative w-full mb-5" v-if="second_options.length > 0">
         <SelectArrowIcon
           class="absolute z-10 w-4 transform -translate-y-1/2 pointer-events-none top-1/2 right-5"
         />
@@ -96,7 +96,7 @@
           </option>
         </select>
       </div>
-      <p class="mb-2 font-semibold">
+      <p class="mb-2 font-semibold" v-if="second_options.length > 0">
         數量
 
         <span class="ml-3 text-sm text-center text-primary">
@@ -104,6 +104,7 @@
         </span>
       </p>
       <div
+        v-if="product_data.Stock.length > 0"
         class="relative flex items-stretch w-full overflow-hidden border rounded-lg border-zinc-300"
       >
         <button

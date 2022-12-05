@@ -27,9 +27,11 @@
           draggable="false"
         >
           <router-link :to="`/product/${item.GoodsID}`" draggable="false">
-            <div class="mb-2 overflow-hidden select-none rounded-2xl">
+            <div
+              class="mb-2 overflow-hidden select-none rounded-2xl aspect-square"
+            >
               <img
-                class="w-full"
+                class="object-cover w-full h-full"
                 :alt="item.Title"
                 :src="$ImageUrl(item.Image1)"
                 draggable="false"

@@ -233,8 +233,9 @@ export default {
         } else if (res.msg.indexOf('超過物流限制') != -1) {
           this.$store.commit('SetDialog', {
             status: true,
-            content:
-              '很抱歉！<br/>購物車商品超出物流的積材上限，請選擇其他物流方式或分次下單',
+            content: `很抱歉！<br/>購物車商品超出可運送範圍，您可以分次下單<br/>如需訂購大量商品請<a class="text-primary" href="${this.$GetCloumn(
+              'company_messenger'
+            )}" target="_blank">聯絡我們</a>`,
           });
           this.form_data.ship_way = '';
         } else if (res.msg == '現金折抵優惠券錯誤') {
