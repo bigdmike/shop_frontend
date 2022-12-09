@@ -15,8 +15,8 @@
     <ProductSection
       v-if="promote_product_data.length > 0"
       :product_data="promote_product_data"
-      title="推薦商品"
-      sub_title="Discount Products"
+      title="早鳥優惠"
+      sub_title="Early Bird Discount"
       :background_image="$ImageUrl($GetCloumn('home_new_product_bg'))"
     />
     <AdGallerySection :images="ad_gallery_data" />
@@ -52,15 +52,15 @@ export default {
     product_data() {
       return this.$store.state.product_data;
     },
-    promote_product_category_id() {
-      return this.category_data.filter((item) => item.Title == '推薦商品')[0]
-        .MenuID;
-    },
+    // promote_product_category_id() {
+    //   return this.category_data.filter((item) => item.Title == '推薦商品')[0]
+    //     .MenuID;
+    // },
     promote_product_data() {
       return this.product_data.filter((item) => {
         return (
           item.Menu.filter((menu) => {
-            return menu.MenuID == this.promote_product_category_id;
+            return menu.MenuID == 7;
           }).length > 0
         );
       });

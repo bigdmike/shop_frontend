@@ -8,7 +8,7 @@
       >
         <router-link
           :to="`/product/${item.GoodsID}`"
-          class="block mb-2 overflow-hidden rounded-xl"
+          class="block mb-2 overflow-hidden rounded-xl aspect-square"
         >
           <img
             :src="$ImageUrl(item.Image1)"

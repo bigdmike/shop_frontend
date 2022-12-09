@@ -235,6 +235,11 @@ export default {
           res.data.Discount = res.data.Discount.filter(
             (item) => new Date(item.EndTime) > new Date()
           );
+          if (res.data.Picture.length <= 0) {
+            res.data.Picture.push({
+              Image: '/image/product_default.webp',
+            });
+          }
           this.product_data = res.data;
 
           let description = this.product_data.Memo1.replaceAll(/<[^>]+>/g, '');

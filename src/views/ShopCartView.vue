@@ -320,6 +320,19 @@ export default {
             this.checkout_data.PaymentInfo.PaymentType == 'PCHomeATM'
           ) {
             window.location.replace(res.data.PaymentHTML);
+          } else if (
+            this.checkout_data.PaymentInfo.PaymentType == 'NormalATM'
+          ) {
+            //
+            let atm_info = this.$GetCloumn('ATMInfo');
+            atm_info = atm_info.split(',');
+            const msg = `感謝您的訂購，請在三天內完成匯款：<br/>${atm_info[0]}-${atm_info[1]}<br/>${atm_info[2]}<br/>${atm_info[3]}<br/>${atm_info[4]}`;
+            this.$store.commit('SetDialog', {
+              status: true,
+              content: msg,
+            });
+
+            this.$router.push(`/order_create/${res.data.TradeData.TradeID}`);
           } else {
             document
               .querySelector('body')

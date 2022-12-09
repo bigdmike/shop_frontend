@@ -144,6 +144,9 @@ export default new Vuex.Store({
           tmp_data[item_index].Stock = item.Stock.filter(
             (stock) => stock.Status == 'Y'
           );
+          if (item.Image1 == '') {
+            tmp_data[item_index].Image1 = '/image/product_default.webp';
+          }
         });
         tmp_data = tmp_data.filter((item) => item.Stock.length > 0);
         tmp_data = tmp_data.sort((a, b) => {
