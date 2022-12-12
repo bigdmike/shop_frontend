@@ -1,8 +1,11 @@
 <template>
   <section class="w-full">
     <AddressDialog @update-action="UpdateAddress" ref="AddressDialog" />
-    <div class="flex items-center justify-between mb-5">
+    <div class="mb-5">
       <h4 class="text-2xl font-bold">配送方式</h4>
+      <p class="text-sm text-primary">
+        若購物車商品積材超出運送範圍，則只能選擇門市自取。
+      </p>
     </div>
     <div
       v-if="shipway_data.length > 0"
