@@ -215,7 +215,7 @@
           :value="form_data.coupon"
           @input="UpdateForm('coupon', $event.target.value)"
           class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
-          placeholder="詳細地址"
+          placeholder="請輸入優惠代碼"
         />
         <button
           @click="$emit('update-coupon')"

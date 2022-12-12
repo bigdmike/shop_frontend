@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full relative z-10 pb-32">
+  <div class="relative z-10 w-full pb-32">
     <div>
       <div class="mb-4">
         <p class="mb-1">姓名</p>
@@ -9,9 +9,9 @@
           type="text"
           name="name"
           placeholder="請輸入中文姓名"
-          class="w-full border border-zinc-200 rounded-md px-3 py-2"
+          class="w-full px-3 py-2 border rounded-md border-zinc-200"
         />
-        <p v-if="GetError('name')" class="text-red-600 text-xs">
+        <p v-if="GetError('name')" class="text-xs text-red-600">
           請輸入正確的中文姓名
         </p>
       </div>
@@ -22,9 +22,9 @@
           type="tel"
           name="phone"
           placeholder="請輸入手機號碼"
-          class="w-full border border-zinc-200 rounded-md px-3 py-2"
+          class="w-full px-3 py-2 border rounded-md border-zinc-200"
         />
-        <p v-if="GetError('phone')" class="text-red-600 text-xs">
+        <p v-if="GetError('phone')" class="text-xs text-red-600">
           請輸入正確的手機號碼
         </p>
       </div>
@@ -36,9 +36,9 @@
           name="email"
           readonly
           placeholder="請輸入電子郵件"
-          class="w-full border border-zinc-200 rounded-md px-3 py-2"
+          class="w-full px-3 py-2 border rounded-md border-zinc-200"
         />
-        <p v-if="GetError('account')" class="text-red-600 text-xs">
+        <p v-if="GetError('account')" class="text-xs text-red-600">
           請輸入正確的電子郵件
         </p>
       </div>
@@ -49,9 +49,9 @@
           type="date"
           name="birthday"
           placeholder="請選擇出生日期"
-          class="w-full border border-zinc-200 rounded-md px-3 py-2"
+          class="w-full px-3 py-2 border rounded-md border-zinc-200"
         />
-        <p v-if="GetError('birthday')" class="text-red-600 text-xs">
+        <p v-if="GetError('birthday')" class="text-xs text-red-600">
           請選擇出生日期
         </p>
       </div>
@@ -59,23 +59,23 @@
         <p class="mb-1">性別</p>
         <div class="relative">
           <SelectArrowIcon
-            class="absolute top-1/2 right-5 w-5 pointer-events-none text-black z-10 transform -translate-y-1/2"
+            class="absolute z-10 w-5 text-black transform -translate-y-1/2 pointer-events-none top-1/2 right-5"
           />
           <select
             v-model="form_data.sex"
-            class="w-full border border-zinc-200 rounded-md px-3 py-2 relative z-0 appearance-none"
+            class="relative z-0 w-full px-3 py-2 border rounded-md appearance-none border-zinc-200"
           >
             <option value="M">男</option>
-            <option value="W">女</option>
+            <option value="F">女</option>
           </select>
         </div>
-        <p v-if="GetError('sex')" class="text-red-600 text-xs">請選擇性別</p>
+        <p v-if="GetError('sex')" class="text-xs text-red-600">請選擇性別</p>
       </div>
 
       <div>
         <button
           @click="ValidateForm"
-          class="px-16 py-3 font-bold text-white bg-primary rounded-full border border-primary transition-colors duration-200 hover:bg-transparent hover:text-primary"
+          class="px-16 py-3 font-bold text-white transition-colors duration-200 border rounded-full bg-primary border-primary hover:bg-transparent hover:text-primary"
         >
           更新資料
         </button>

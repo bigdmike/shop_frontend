@@ -96,6 +96,13 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
+    path: '/account/forget_pwd',
+    name: '忘記密碼',
+    component: () =>
+      import(/* webpackChunkName: "login" */ '../views/ForgetPasswordView.vue'),
+    meta: { requiresAuth: false },
+  },
+  {
     path: '/account/signup',
     name: '會員註冊',
     component: () =>

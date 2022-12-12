@@ -14,6 +14,11 @@ export function SendSignUpData(data) {
   return post('member/register', data);
 }
 
+//忘記密碼
+export function resetPwdData(data) {
+  return post('member/forgetPassword', data);
+}
+
 //登入
 export async function sendLoginData(data) {
   // 登入會員後
@@ -81,6 +86,20 @@ export function getOrderList() {
 }
 
 //常用收件資訊
+export function getAddressAndEmail() {
+  let member_info = get('member/my');
+  let address_info = get('member/receiver');
+  let promise_list = [member_info, address_info];
+
+  return Promise.all(GetPromise(promise_list)).then(
+    (res) => {
+      if (promise_list.length == res.length) {
+        return res;
+      }
+    },
+    (err) => console.log(err)
+  );
+}
 export function getAddressData() {
   return get('member/receiver');
 }

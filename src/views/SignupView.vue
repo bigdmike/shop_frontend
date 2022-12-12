@@ -72,7 +72,7 @@
                 class="relative z-0 w-full px-2 py-3 border rounded-md appearance-none border-zinc-300 focus:outline-primary"
               >
                 <option value="M">男</option>
-                <option value="W">女</option>
+                <option value="F">女</option>
               </select>
             </div>
             <p v-if="GetError('sex')" class="text-xs text-red-600">
@@ -209,6 +209,11 @@ export default {
             content: '註冊成功，請由登入頁面進行登入',
           });
           this.$router.push('/account/login');
+        } else {
+          this.$store.commit('SetDialog', {
+            status: true,
+            content: res.msg,
+          });
         }
       });
     },

@@ -10,7 +10,9 @@
           <p class="mb-4 text-primary">訂單編號 #{{ tade_no }}</p>
           <p class="mb-10 text-basic_gray">
             以下是您的購物明細，也可至
-            <router-link to="/order_search" class="underline text-secondary"
+            <router-link
+              :to="order_search_link"
+              class="underline text-secondary"
               >訂單查詢</router-link
             >
             追蹤您的訂單。
@@ -310,6 +312,13 @@ export default {
       return this.payment_data.filter(
         (item) => item.PaymentID == this.form_data.pay_way
       )[0].Title;
+    },
+    order_search_link() {
+      if (getLocalStorage('account_token')) {
+        return '/account/orders';
+      } else {
+        return '/order_search/search';
+      }
     },
   },
   created() {

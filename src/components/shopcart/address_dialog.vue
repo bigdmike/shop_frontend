@@ -8,7 +8,10 @@
         data-dialog-box
         class="w-[600px] max-w-[95%] bg-white relative z-10 p-10 rounded-2xl"
       >
-        <ol class="w-full max-h-[300px] overflow-y-auto mb-5">
+        <ol
+          v-if="address_list.length > 0"
+          class="w-full max-h-[300px] overflow-y-auto mb-5"
+        >
           <li
             class="w-full mb-5"
             v-for="(item, item_index) in address_list"
@@ -36,7 +39,14 @@
             </button>
           </li>
         </ol>
-        <div class="flex items-center justify-center">
+        <p class="mb-5 text-center" v-else>
+          沒有常用收件資訊<br />請先前往<b class="text-primary">會員中心</b> >
+          <b class="text-primary">收件地址管理</b>，設定常用收件地址。
+        </p>
+        <div
+          v-if="address_list.length > 0"
+          class="flex items-center justify-center"
+        >
           <button
             @click="Close"
             class="px-10 py-2 mr-1 text-sm font-bold transition-colors duration-200 bg-transparent border rounded-full text-primary border-primary hover:bg-primary hover:text-white"
@@ -46,6 +56,14 @@
           <button
             @click="Submit"
             class="px-10 py-2 ml-1 text-sm font-bold text-white transition-colors duration-200 border rounded-full bg-primary border-primary hover:bg-transparent hover:text-primary"
+          >
+            確定
+          </button>
+        </div>
+        <div v-else class="text-center">
+          <button
+            @click="Close"
+            class="px-10 py-2 mr-1 text-sm font-bold transition-colors duration-200 bg-transparent border rounded-full text-primary border-primary hover:bg-primary hover:text-white"
           >
             確定
           </button>
@@ -61,7 +79,7 @@
 <script>
 import Teleport from 'vue2-teleport';
 import { dialog_animation } from '@/gsap/dialog';
-import { getAddressData } from '@/api/member';
+import { getAddressAndEmail } from '@/api/member';
 import { delLocalStorage, getLocalStorage } from '@/common/cookie';
 export default {
   name: 'AddressDeleteDialog',
@@ -72,6 +90,7 @@ export default {
     return {
       dialog_animation: null,
       status: false,
+      email: '',
       address_list: [],
       active_index: 0,
     };
@@ -89,16 +108,22 @@ export default {
       const form_data = {
         consignee_first_name: active_address_data.Name.slice(1, 3),
         consignee_last_name: active_address_data.Name.slice(0, 1),
+        consignee_email: this.email,
         consignee_phone: active_address_data.Phone,
         consignee_city: this.GetZipData(active_address_data.Zip).City,
-        consignee_area: this.GetZipData(active_address_data.Zip).Area,
         consignee_address: active_address_data.Address,
       };
       this.$emit('update-action', form_data);
+      const area_data = {
+        consignee_area: this.GetZipData(active_address_data.Zip).Area,
+      };
+      setTimeout(() => {
+        this.$emit('update-action', area_data);
+      }, 500);
       this.status = false;
     },
     GetData() {
-      getAddressData().then((res) => {
+      getAddressAndEmail().then((res) => {
         if (res.code == 302) {
           // token過期
           delLocalStorage('account_token');
@@ -108,7 +133,8 @@ export default {
             content: '帳號授權過期，請重新登入',
           });
         } else {
-          this.address_list = res.data;
+          this.email = res[0].data.Account;
+          this.address_list = res[1].data;
         }
       });
     },

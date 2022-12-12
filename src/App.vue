@@ -22,8 +22,16 @@
       v-if="data_load_finish"
       :href="$GetCloumn('company_messenger')"
       target="_blank"
+      @mouseenter="messenger_hvoer = true"
+      @mouseleave="messenger_hvoer = false"
       class="fixed z-20 flex items-center justify-center transition-all duration-300 rounded-full md:bottom-5 sm:bottom-20 bottom-16 sm:right-7 right-2 sm:w-14 sm:h-14 w-11 h-11 bg-primary hover:bg-opacity-70"
     >
+      <div
+        :class="messenger_hvoer ? 'opacity-100 -translate-y-1/2' : 'opacity-0'"
+        class="md:block hidden absolute pointer-events-none transition-all duration-300 top-1/2 shadow-xl -left-2 transform -translate-x-full bg-white rounded-t-full rounded-bl-full w-[180px] py-2 px-4"
+      >
+        <p class="block text-primary">歡迎私訊小編喔～</p>
+      </div>
       <MessageIcon class="w-6 text-white transform md:w-8 -scale-y-100" />
     </a>
   </div>
@@ -59,6 +67,11 @@ export default {
     MainFooterNav,
     MessageIcon,
     SelectArrowIcon,
+  },
+  data() {
+    return {
+      messenger_hvoer: false,
+    };
   },
   methods: {
     ScrollToTop() {

@@ -200,6 +200,7 @@ export default {
       })[0];
     },
     UpdateForm(key, val) {
+      console.log(key, val);
       this.$set(this.form_data, key, val);
       if (key == 'city') {
         this.$set(this.form_data, 'area', '');
