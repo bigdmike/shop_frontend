@@ -54,8 +54,10 @@ export async function SaveOnlineShopCart(shopcart) {
 
   tmp_list.forEach((item, item_index) => {
     const option_status = CheckActiveOption(item);
-    option_status == 'error' ? delete_list.push(item) : '';
-    tmp_list.splice(item_index, 1);
+    if (option_status == 'error') {
+      delete_list.push(item);
+      tmp_list.splice(item_index, 1);
+    }
   });
 
   for (let item of delete_list) {
