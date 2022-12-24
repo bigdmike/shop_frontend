@@ -135,12 +135,12 @@
             <p class="font-semibold">NT$ {{ $MoneyFormat(payment_price) }}</p>
           </li>
           <li
-            v-if="coupon_discount != 0"
+            v-if="trade_data.CouponMoney != 0"
             class="flex items-center justify-between w-full mt-3 text-sm"
           >
             <p class="font-medium">優惠代碼折抵</p>
             <p class="font-semibold">
-              - NT$ {{ $MoneyFormat(coupon_discount) }}
+              - NT$ {{ $MoneyFormat(trade_data.CouponMoney) }}
             </p>
           </li>
         </ol>
@@ -186,7 +186,7 @@ export default {
       })[0];
     },
     GetDiscountAndPrice(item) {
-      let product = this.checkout_data.CheckoutList.filter((checkout_item) => {
+      let product = this.trade_data.CheckoutList.filter((checkout_item) => {
         return (
           checkout_item.GoodsID == item.product_data.GoodsID &&
           checkout_item.ColorID == item.active_option[0] &&
@@ -209,10 +209,14 @@ export default {
   },
   computed: {
     product_total_price() {
-      if (this.checkout_data == null) {
+      if (this.trade_data == null) {
         return 0;
       }
-      return this.checkout_data.DiscountFullTotal;
+      let price = 0;
+      this.trade_data.SubTradeList.forEach((item) => {
+        price += parseInt(item.FinalPrice);
+      });
+      return price;
     },
     shipway_data() {
       return this.$store.state.shipway_data;
@@ -224,37 +228,34 @@ export default {
       return this.$store.state.product_data;
     },
     ship_price() {
-      if (this.checkout_data == null) {
+      if (this.trade_data == null) {
         return 0;
       } else {
-        return this.form_data.outlying
-          ? this.checkout_data.ShippingFeeOutlying
-          : this.checkout_data.ShippingFee;
+        return this.trade_data.ShippingFee;
       }
     },
     payment_price() {
-      if (this.checkout_data == null) {
+      if (this.trade_data == null) {
         return 0;
       } else {
-        return this.checkout_data.PaymentSubtotalFee;
+        return this.trade_data.PaymentSubtotalFee;
       }
     },
     total_price() {
-      if (this.checkout_data == null) {
+      if (this.trade_data == null) {
         return 0;
       } else {
-        return this.checkout_data.FinalTotal;
+        return this.trade_data.Price;
       }
       // AfterCouponTotal
       // return parseInt(this.product_total_price) + parseInt(this.ship_price);
     },
     coupon_discount() {
-      if (this.checkout_data == null) {
+      if (this.trade_data == null) {
         return 0;
       }
-      return this.checkout_data.CouponInfo.length != 0
-        ? this.checkout_data.DiscountFullTotal -
-            this.checkout_data.AfterCouponTotal
+      return this.trade_data.CouponInfo.length != 0
+        ? this.trade_data.DiscountFullTotal - this.trade_data.AfterCouponTotal
         : 0;
     },
     active_shipway() {

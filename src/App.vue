@@ -97,17 +97,17 @@ export default {
       this.payment_data == null ? this.$store.dispatch('getPaymentData') : '';
       this.shipway_data == null ? this.$store.dispatch('getShipwayData') : '';
     },
-    InitShopCart() {
+    async InitShopCart() {
       // 判斷是否有登入會員
       if (getLocalStorage('account_token')) {
         // 1.取得api購物車
         // 2.存入Store購物車
-        getShopcart().then((res) => {
+        getShopcart().then(async (res) => {
           if (res.code == 302) {
             // token 過期
             this.InitShopCart();
           } else {
-            const shop_cart = SaveOnlineShopCart(res.data);
+            const shop_cart = await SaveOnlineShopCart(res.data);
             this.$store.commit('SetShopCart', shop_cart);
           }
         });
