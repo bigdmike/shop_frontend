@@ -32,7 +32,7 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import CategoryMenu from '@/components/product_list/category_menu.vue';
 import ProductList from '@/components/product_list/product_list.vue';
 import FilterBar from '@/components/product_list/filter_bar.vue';
-import { GetMetaData } from '@/common/meta';
+import { GetMetaData, ChangeTitle } from '@/common/meta';
 import { redirectErrorPage } from '@/common/prerender';
 export default {
   name: 'ProductListView',
@@ -69,6 +69,22 @@ export default {
       if (this.active_category == 'all') {
         this.bread_crumb_path[1].title = '全部商品';
         this.bread_crumb_path[1].link = '/collections?category=all';
+        this.$nextTick(() => {
+          this.meta_data = GetMetaData('productlist', '', '');
+          window.prerenderReady = true;
+          window.dataLayer.push({
+            event: 'viewItemList',
+            item_list_name: '全部商品',
+            item_list_id: 'all',
+            value: 0,
+            currency: 'TWD',
+          });
+
+          window.dataLayer.push({
+            event: 'page_view',
+            page_title: this.meta_data.title,
+          });
+        });
       } else {
         let category = this.category_data.filter(
           (item) => item.MenuID == this.active_category
@@ -78,10 +94,23 @@ export default {
           this.bread_crumb_path[1].title = category.Title;
           this.bread_crumb_path[1].link = `/collections?category=${category.MenuID}`;
           this.$nextTick(() => {
+            this.meta_data = GetMetaData('productlist', '', '');
+            this.meta_data = ChangeTitle(this.meta_data, category.Title);
             window.prerenderReady = true;
+            window.dataLayer.push({
+              event: 'viewItemList',
+              item_list_name: category.Title,
+              item_list_id: category.MenuID,
+              value: 0,
+              currency: 'TWD',
+            });
+
+            window.dataLayer.push({
+              event: 'page_view',
+              page_title: this.meta_data.title,
+            });
           });
         } else {
-          // this.$router.push('/error_page');
           redirectErrorPage();
         }
       }
@@ -102,7 +131,6 @@ export default {
   },
   created() {
     this.SetActiveCategory();
-    this.meta_data = GetMetaData('productlist', '', '');
   },
   metaInfo() {
     return this.meta_data;

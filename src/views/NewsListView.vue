@@ -69,6 +69,15 @@ export default {
       if (this.active_category == 'all') {
         this.bread_crumb_path[1].title = '最新消息';
         this.bread_crumb_path[1].link = '/news?category=all';
+        this.$nextTick(() => {
+          this.meta_data = GetMetaData('newslist', '', '');
+          window.prerenderReady = true;
+
+          window.dataLayer.push({
+            event: 'page_view',
+            page_title: this.meta_data.title,
+          });
+        });
       } else {
         let category = this.category_data.filter(
           (item) => item.NewsCategoryID == this.active_category
@@ -79,7 +88,13 @@ export default {
           this.bread_crumb_path[1].title = category.Title;
           this.bread_crumb_path[1].link = `/news?category=${category.NewsCategoryID}`;
           this.$nextTick(() => {
+            this.meta_data = GetMetaData('newslist', '', '');
             window.prerenderReady = true;
+
+            window.dataLayer.push({
+              event: 'page_view',
+              page_title: this.meta_data.title,
+            });
           });
         } else {
           // this.$router.push('/error_page');
@@ -97,7 +112,6 @@ export default {
   },
   created() {
     this.SetActiveCategory();
-    this.meta_data = GetMetaData('newslist', '', '');
   },
   metaInfo() {
     return this.meta_data;

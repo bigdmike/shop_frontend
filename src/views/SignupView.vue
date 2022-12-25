@@ -204,6 +204,10 @@ export default {
       };
       SendSignUpData(signup_data).then(async (res) => {
         if (res.code == 200) {
+          window.dataLayer.push({
+            event: 'signup',
+          });
+
           this.$store.commit('SetDialog', {
             status: true,
             content: '註冊成功，請由登入頁面進行登入',
@@ -225,6 +229,10 @@ export default {
     this.meta_data = GetMetaData('會員註冊', '', '');
     this.$nextTick(() => {
       window.prerenderReady = true;
+      window.dataLayer.push({
+        event: 'page_view',
+        page_title: this.meta_data.title,
+      });
     });
   },
   metaInfo() {

@@ -18,10 +18,9 @@
     >
       <SelectArrowIcon class="w-6 text-white transform md:w-8 -scale-y-100" />
     </button>
-    <a
+    <button
       v-if="data_load_finish"
-      :href="$GetCloumn('company_messenger')"
-      target="_blank"
+      @click="OpenMessenger"
       @mouseenter="messenger_hvoer = true"
       @mouseleave="messenger_hvoer = false"
       class="fixed z-20 flex items-center justify-center transition-all duration-300 rounded-full md:bottom-5 sm:bottom-20 bottom-16 sm:right-7 right-2 sm:w-14 sm:h-14 w-11 h-11 bg-primary hover:bg-opacity-70"
@@ -33,7 +32,7 @@
         <p class="block text-primary">歡迎私訊小編喔～</p>
       </div>
       <MessageIcon class="w-6 text-white transform md:w-8 -scale-y-100" />
-    </a>
+    </button>
   </div>
 </template>
 
@@ -71,6 +70,7 @@ export default {
   data() {
     return {
       messenger_hvoer: false,
+      first_time_load: true,
     };
   },
   methods: {
@@ -119,6 +119,12 @@ export default {
     },
     OpenMenu() {
       this.$refs.MainHeader.OpenMenu();
+    },
+    OpenMessenger() {
+      window.dataLayer.push({
+        event: 'open_messenger',
+      });
+      window.open(this.$GetCloumn('company_messenger'), '_blank');
     },
   },
   computed: {
@@ -193,6 +199,9 @@ export default {
     data_load_finish() {
       if (this.data_load_finish) {
         this.InitShopCart();
+      }
+      if (this.data_load_finish && this.first_time_load) {
+        this.first_time_load = false;
       }
     },
   },

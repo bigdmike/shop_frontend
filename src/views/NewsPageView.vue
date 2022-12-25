@@ -5,16 +5,35 @@
       class="w-full max-w-screen-xl px-5 pt-5 pb-40 mx-auto xl:px-0 sm:px-10"
     >
       <BreadCrumb class="mb-2" :path="bread_crumb_path" />
-      <h2 class="mb-5 text-2xl font-semibold sm:text-4xl">
+      <h1 itemprop="headline" class="mb-5 text-2xl font-semibold sm:text-4xl">
         {{ news_data.Title }}
-      </h2>
+      </h1>
+      <span
+        class="hidden"
+        itemprop="author"
+        itemscope
+        itemtype="https://schema.org/Person"
+      >
+        <span itemprop="name">{{ $GetCloumn('company_name') }}</span>
+      </span>
       <div
         class="flex items-center justify-between pb-2 mb-10 border-b border-zinc-300"
       >
         <div class="flex items-center">
-          <p class="mr-2 text-sm font-semibold text-basic_gray sm:text-base">
+          <p
+            itemprop="datePublished"
+            :content="news_data.created_at"
+            class="mr-2 text-sm font-semibold text-basic_gray sm:text-base"
+          >
             {{ news_data.created_at.slice(0, 10) }}
           </p>
+          <span
+            itemprop="dateModified"
+            :content="news_data.updated_at"
+            class="hidden"
+          >
+            {{ news_data.updated_at }}
+          </span>
           <span
             class="text-xs inline-block px-2 py-[2px] bg-primary text-white font-medium rounded-md"
             >{{ news_data.CategoryTitle }}</span
@@ -48,7 +67,14 @@
         </div>
       </div>
       <div class="mb-10">
-        <img :src="$ImageUrl(news_data.Image1)" class="block w-full" />
+        <img
+          width="1280"
+          height="1280"
+          :alt="news_data.Title"
+          itemprop="image"
+          :src="$ImageUrl(news_data.Image1)"
+          class="block w-full"
+        />
       </div>
       <div
         id="NewsContent"
@@ -165,6 +191,10 @@ export default {
       this.$nextTick(() => {
         this.$refs.clone.value = window.location.href;
         window.prerenderReady = true;
+        window.dataLayer.push({
+          event: 'page_view',
+          page_title: this.meta_data.title,
+        });
       });
     } else {
       redirectErrorPage();

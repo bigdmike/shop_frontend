@@ -7,7 +7,7 @@
         <div class="mb-10 text-center">
           <img src="@/assets/img/check.svg" class="mx-auto mb-5" />
           <h2 class="mb-1 text-2xl font-bold text-primary">感謝您的訂購</h2>
-          <p class="mb-4 text-primary">訂單編號 #{{ tade_no }}</p>
+          <p class="mb-4 text-primary">訂單編號 #{{ trade_no }}</p>
           <p class="mb-10 text-basic_gray">
             以下是您的購物明細，也可至
             <router-link
@@ -206,6 +206,7 @@
 import { SaveShopCart } from '@/common/shopcart';
 import { getLocalStorage, delLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
+import { ConvertAddShopCartData } from '@/common/gtm_methods';
 export default {
   name: 'TradeFinishView',
   data() {
@@ -246,9 +247,31 @@ export default {
         sell_price: product.SellPrice,
       };
     },
+    SendPurchase() {
+      // GTM事件
+      let products = [];
+      this.shopcart.forEach((item) => {
+        const product = ConvertAddShopCartData(
+          item.product_data,
+          item.active_option,
+          item.amount
+        );
+        products.push(product);
+      });
+      window.dataLayer.push({
+        event: 'purchase',
+        trade_no: this.trade_no,
+        items: products,
+        value: this.total_price,
+        currency: 'TWD',
+        tax: 0,
+        shipping: this.ship_price,
+        coupon: this.trade_data.coupon,
+      });
+    },
   },
   computed: {
-    tade_no() {
+    trade_no() {
       return this.$route.params.id;
     },
     product_total_price() {
@@ -302,7 +325,7 @@ export default {
         return '';
       }
       return this.shipway_data.filter(
-        (item) => item.ShippingID == this.form_data.ship_way
+        (item) => item.ShippingID == this.trade_data.ship_way
       )[0].Title;
     },
     active_payment() {
@@ -310,7 +333,7 @@ export default {
         return '';
       }
       return this.payment_data.filter(
-        (item) => item.PaymentID == this.form_data.pay_way
+        (item) => item.PaymentID == this.trade_data.pay_way
       )[0].Title;
     },
     order_search_link() {
@@ -337,6 +360,10 @@ export default {
       this.meta_data = GetMetaData('訂單完成', '', '');
       this.$nextTick(() => {
         window.prerenderReady = true;
+        window.dataLayer.push({
+          event: 'page_view',
+          page_title: this.meta_data.title,
+        });
       });
     } else {
       this.$router.push('/');

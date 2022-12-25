@@ -1,9 +1,32 @@
 <template>
   <section class="relative z-10 w-full">
     <EventImageDialog ref="EventImageDialog" />
-    <h2 class="mb-5 text-xl font-bold xs:text-2xl sm:text-3xl">
+    <h1 class="mb-5 text-xl font-bold xs:text-2xl sm:text-3xl">
       {{ product_data.Title }}
-    </h2>
+    </h1>
+    <meta itemprop="name" :content="product_data.Title" />
+    <div
+      itemprop="offers"
+      itemtype="https://schema.org/AggregateOffer"
+      itemscope
+    >
+      <meta itemprop="lowPrice" :content="low_price" />
+      <meta itemprop="highPrice" :content="high_price" />
+      <meta itemprop="offerCount" :content="offer_count" />
+      <meta itemprop="priceCurrency" content="TWD" />
+    </div>
+    <div
+      itemprop="aggregateRating"
+      itemtype="https://schema.org/AggregateRating"
+      itemscope
+    >
+      <meta itemprop="reviewCount" content="10" />
+      <meta itemprop="ratingValue" content="5" />
+    </div>
+    <meta itemprop="sku" :content="`yaowen_${product_data.GoodsID}`" />
+    <div itemprop="brand" itemtype="https://schema.org/Brand" itemscope>
+      <meta itemprop="name" :content="$GetCloumn('company_name')" />
+    </div>
     <div
       class="flex items-center justify-between pb-2 mb-5 border-b border-zinc-300"
     >
@@ -242,6 +265,27 @@ export default {
       return stock.length > 0
         ? stock[0]
         : { Status: 'N', Price: 0, SellPrice: 0 };
+    },
+    low_price() {
+      let price = 99999999;
+      this.product_data.Stock.forEach((item) => {
+        parseInt(item.SellPrice) < price ? (price = item.Price) : '';
+      });
+      return price == 99999999 ? 0 : price;
+    },
+    high_price() {
+      let price = 0;
+      this.product_data.Stock.forEach((item) => {
+        parseInt(item.SellPrice) > price ? (price = item.Price) : '';
+      });
+      return price;
+    },
+    offer_count() {
+      let count = 0;
+      this.product_data.Stock.forEach((item) => {
+        count += parseInt(item.Stock);
+      });
+      return count;
     },
   },
 };

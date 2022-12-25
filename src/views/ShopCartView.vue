@@ -147,6 +147,7 @@ import {
 } from '@/common/cookie';
 import { SaveShopCart } from '@/common/shopcart';
 import { GetMetaData } from '@/common/meta';
+import { ConvertAddShopCartData } from '@/common/gtm_methods';
 export default {
   name: 'ShopCartView',
   components: {
@@ -188,6 +189,9 @@ export default {
       checkout_data: null,
       shop_cart_first_load: false,
       meta_data: null,
+      first_enter: true,
+      first_choose_shipping: true,
+      first_choose_payment: true,
     };
   },
   methods: {
@@ -200,7 +204,6 @@ export default {
       })[0];
     },
     UpdateForm(key, val) {
-      console.log(key, val);
       this.$set(this.form_data, key, val);
       if (key == 'city') {
         this.$set(this.form_data, 'area', '');
@@ -221,6 +224,14 @@ export default {
       if (key == 'ship_way' || key == 'pay_way') {
         this.GetCashier();
       }
+      if (key == 'ship_way' && this.first_choose_shipping) {
+        this.first_choose_shipping = false;
+        this.AddShipInfo();
+      }
+      if (key == 'pay_way' && this.first_choose_payment) {
+        this.first_choose_payment = false;
+        this.AddPaymentInfo();
+      }
     },
     GetCashier() {
       getCashier(
@@ -231,6 +242,25 @@ export default {
       ).then((res) => {
         if (res.code == 200) {
           this.checkout_data = res.data;
+          if (this.first_enter) {
+            this.first_enter = false;
+            // GTM事件
+            let products = [];
+            this.shopcart.forEach((item) => {
+              const product = ConvertAddShopCartData(
+                item.product_data,
+                item.active_option,
+                1
+              );
+              products.push(product);
+            });
+            window.dataLayer.push({
+              event: 'beginCheckout',
+              items: products,
+              value: 0,
+              currency: 'TWD',
+            });
+          }
         } else if (res.msg.indexOf('超過物流限制') != -1) {
           this.$store.commit('SetDialog', {
             status: true,
@@ -343,6 +373,51 @@ export default {
         }
       });
     },
+    AddShipInfo() {
+      // GTM事件
+      const shipway = this.shipway_data.filter(
+        (item) => item.ShippingID == this.form_data.ship_way
+      )[0];
+      let products = [];
+      this.shopcart.forEach((item) => {
+        const product = ConvertAddShopCartData(
+          item.product_data,
+          item.active_option,
+          item.amount
+        );
+        products.push(product);
+      });
+      window.dataLayer.push({
+        event: 'addShippingInfo',
+        items: products,
+        value: 0,
+        currency: 'TWD',
+        shipping: this.ship_price,
+        shipping_tier: shipway.Title,
+      });
+    },
+    AddPaymentInfo() {
+      // GTM事件
+      const payment_type = this.payment_data.filter(
+        (item) => item.PaymentID == this.form_data.pay_way
+      )[0];
+      let products = [];
+      this.shopcart.forEach((item) => {
+        const product = ConvertAddShopCartData(
+          item.product_data,
+          item.active_option,
+          item.amount
+        );
+        products.push(product);
+      });
+      window.dataLayer.push({
+        event: 'addPaymentInfo',
+        items: products,
+        value: 0,
+        currency: 'TWD',
+        payment_type: payment_type.Title,
+      });
+    },
   },
   created() {
     if (this.shopcart.length > 0) {
@@ -358,6 +433,10 @@ export default {
     this.meta_data = GetMetaData('結帳', '', '');
     this.$nextTick(() => {
       window.prerenderReady = true;
+      window.dataLayer.push({
+        event: 'page_view',
+        page_title: this.meta_data.title,
+      });
     });
   },
   metaInfo() {
@@ -391,6 +470,9 @@ export default {
         return 0;
       }
       return this.checkout_data.DiscountFullTotal;
+    },
+    payment_data() {
+      return this.$store.state.payment_data;
     },
     shipway_data() {
       return this.$store.state.shipway_data;

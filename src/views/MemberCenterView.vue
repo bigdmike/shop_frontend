@@ -98,6 +98,10 @@ export default {
     this.meta_data = GetMetaData('會員中心', '', '');
     this.$nextTick(() => {
       window.prerenderReady = true;
+      window.dataLayer.push({
+        event: 'page_view',
+        page_title: this.meta_data.title,
+      });
     });
   },
   metaInfo() {

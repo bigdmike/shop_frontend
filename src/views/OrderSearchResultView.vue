@@ -316,6 +316,10 @@ export default {
       this.meta_data = GetMetaData('訂單查詢', '', '');
       this.$nextTick(() => {
         window.prerenderReady = true;
+        window.dataLayer.push({
+          event: 'page_view',
+          page_title: this.meta_data.title,
+        });
       });
     } else {
       this.$router.push('/order_search/search');

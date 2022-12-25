@@ -93,6 +93,7 @@ import { menu_gsap_animation } from '@/gsap/main_menu';
 import { SaveShopCart, SaveOnlineShopCart } from '@/common/shopcart';
 import { getLocalStorage } from '@/common/cookie';
 import { addShopcart, getShopcart, removeShopcart } from '@/api/member';
+import { ConvertAddShopCartData } from '@/common/gtm_methods';
 export default {
   name: 'ShopCartDrawer',
   components: {
@@ -159,6 +160,18 @@ export default {
       } else {
         this.RemoveOffline(index);
       }
+      window.dataLayer.push({
+        event: 'removeFromCart',
+        items: [
+          ConvertAddShopCartData(
+            this.shopcart[index].product_data,
+            this.shopcart[index].active_option,
+            1
+          ),
+        ],
+        value: 0,
+        currency: 'TWD',
+      });
     },
     RemoveOnline(index) {
       const shop_cart_item = this.$store.state.shopcart[index];
@@ -183,12 +196,31 @@ export default {
       this.$store.commit('SetShopCart', tmp_shopcart);
       SaveShopCart(tmp_shopcart);
     },
+    OpenShopCart() {
+      // GTM事件
+      let products = [];
+      this.shopcart.forEach((item) => {
+        const product = ConvertAddShopCartData(
+          item.product_data,
+          item.active_option,
+          1
+        );
+        products.push(product);
+      });
+      window.dataLayer.push({
+        event: 'viewCart',
+        items: products,
+        value: 0,
+        currency: 'TWD',
+      });
+    },
   },
   watch: {
     dialog() {
       if (this.dialog) {
         this.menu_gsap_animation.open();
         this.$store.commit('SetBodyLock', 1);
+        this.OpenShopCart();
       }
     },
   },

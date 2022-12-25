@@ -1,4 +1,5 @@
 import store from '@/store/index';
+import router from '@/router/index';
 
 export function GetMatchMetaData(column_title) {
   let meta_data_list = store.state.common_column_data;
@@ -47,6 +48,19 @@ export function GetMetaData(title, content, image) {
     return {
       title: title + ' | 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
       meta: [
+        {
+          property: 'og:url',
+          name: 'og:url',
+          content:
+            process.env.VUE_APP_BASEURL + router.history.current.fullPath,
+          vmid: 'og:url',
+        },
+        {
+          property: 'og:title',
+          name: 'og:title',
+          content: title + ' | 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
+          vmid: 'og:title',
+        },
         {
           property: 'og:description',
           name: 'og:description',
@@ -111,6 +125,21 @@ export function GetMetaData(title, content, image) {
         ' ｜ 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
       meta: [
         {
+          property: 'og:url',
+          name: 'og:url',
+          content:
+            process.env.VUE_APP_BASEURL + router.history.current.fullPath,
+          vmid: 'og:url',
+        },
+        {
+          property: 'og:title',
+          name: 'og:title',
+          content:
+            match_meta.title +
+            ' ｜ 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
+          vmid: 'og:title',
+        },
+        {
           property: 'og:description',
           name: 'og:description',
           content: match_meta.content,
@@ -172,6 +201,18 @@ export function GetMetaData(title, content, image) {
       ],
     };
   }
+}
+
+export function ChangeTitle(meta_data, title) {
+  meta_data.title =
+    title + ' | 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒';
+  meta_data.meta[1].content =
+    title + ' | 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒';
+  meta_data.meta[6].content =
+    title + ' | 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒';
+  meta_data.meta[7].content =
+    title + ' | 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒';
+  return meta_data;
 }
 
 function GetImageUrl(item) {

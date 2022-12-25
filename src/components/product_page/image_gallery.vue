@@ -24,6 +24,9 @@
           :key="`big_carousel_${item_index}`"
         >
           <img
+            :alt="title"
+            width="640"
+            height="640"
             :src="$ImageUrl(item.Image)"
             class="object-cover w-full h-full"
           />
@@ -44,12 +47,22 @@
           class="overflow-hidden transition-all duration-300 border-2 border-transparent rounded-md hover:border-primary aspect-square"
         >
           <img
+            :alt="title"
+            width="128"
+            height="128"
             :src="$ImageUrl(item.Image)"
             class="object-cover w-full h-full"
           />
         </div>
       </div>
     </VueSlickCarousel>
+
+    <link
+      v-for="(image, image_index) in images"
+      :key="`image_${image_index}`"
+      itemprop="image"
+      :href="$ImageUrl(image.Image)"
+    />
   </div>
 </template>
 
@@ -63,6 +76,10 @@ export default {
     images: {
       require: true,
       type: Array,
+    },
+    title: {
+      require: true,
+      type: String,
     },
   },
   components: {

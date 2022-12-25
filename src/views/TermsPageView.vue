@@ -52,6 +52,10 @@ export default {
     this.meta_data = GetMetaData(this.title, '', '');
     this.$nextTick(() => {
       window.prerenderReady = true;
+      window.dataLayer.push({
+        event: 'page_view',
+        page_title: this.meta_data.title,
+      });
     });
   },
   computed: {

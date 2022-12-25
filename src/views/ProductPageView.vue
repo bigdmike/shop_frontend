@@ -1,10 +1,19 @@
 <template>
-  <main id="ProductPage" class="relative w-full" v-if="product_data != null">
+  <main
+    id="ProductPage"
+    class="relative w-full"
+    v-if="product_data != null"
+    itemtype="https://schema.org/Product"
+    itemscope
+  >
     <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0">
       <BreadCrumb class="my-5 md:mb-20 md:pt-0" :path="bread_crumb_path" />
       <div class="flex flex-wrap items-start mb-20 -mx-10">
         <div class="w-full px-10 mb-10 md:w-1/2 md:mb-0">
-          <ImageGallery :images="product_data.Picture" />
+          <ImageGallery
+            :images="product_data.Picture"
+            :title="product_data.Title"
+          />
         </div>
         <div class="w-full px-10 md:w-1/2">
           <InfoBox
@@ -29,6 +38,7 @@
         :tabs="tabs"
         @change-tab="ChangeTab"
       />
+      <meta itemprop="description" :content="product_data.Memo1" />
       <div id="Description" class="mb-10" v-html="product_data.Memo1"></div>
       <div
         id="Workflow"
@@ -58,6 +68,10 @@ import { addShopcart, getShopcart } from '@/api/member';
 import { getSingleProductData } from '@/api/page_data';
 import { GetMetaData } from '@/common/meta';
 import { redirectErrorPage } from '@/common/prerender';
+import {
+  ConvertProductData,
+  ConvertAddShopCartData,
+} from '@/common/gtm_methods';
 export default {
   name: 'ProductPage',
   components: {
@@ -120,6 +134,19 @@ export default {
       } else {
         this.AddShopCartOffline();
       }
+
+      window.dataLayer.push({
+        event: 'addToCart',
+        items: [
+          ConvertAddShopCartData(
+            this.product_data,
+            this.active_option,
+            this.amount
+          ),
+        ],
+        value: 0,
+        currency: 'TWD',
+      });
     },
     AddShopCartOnline() {
       // 1.call 加入購物車 api
@@ -162,7 +189,8 @@ export default {
             item.active_option[1] === this.active_option[1]
           ) {
             product_exist = true;
-            tmp_shopcart[item_index].amount += this.amount;
+            tmp_shopcart[item_index].amount =
+              parseInt(tmp_shopcart[item_index].amount) + parseInt(this.amount);
           }
         }
       });
@@ -242,6 +270,13 @@ export default {
           }
           this.product_data = res.data;
 
+          window.dataLayer.push({
+            event: 'viewProduct',
+            items: [ConvertProductData(res.data)],
+            value: 0,
+            currency: 'TWD',
+          });
+
           let description = this.product_data.Memo1.replaceAll(/<[^>]+>/g, '');
           let image =
             this.product_data.Image2 != ''
@@ -254,6 +289,11 @@ export default {
           );
           this.$nextTick(() => {
             window.prerenderReady = true;
+
+            window.dataLayer.push({
+              event: 'page_view',
+              page_title: this.meta_data.title,
+            });
           });
         } else if (res.code == 500) {
           // this.$router.push('/error_page');
