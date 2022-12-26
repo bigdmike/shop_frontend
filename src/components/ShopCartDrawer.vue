@@ -122,6 +122,18 @@ export default {
       this.$store.commit('SetBodyLock', -1);
     },
     Add(index) {
+      window.dataLayer.push({
+        event: 'add_to_cart',
+        items: [
+          ConvertAddShopCartData(
+            this.shopcart[index].product_data,
+            this.shopcart[index].active_option,
+            1
+          ),
+        ],
+        value: 0,
+        currency: 'TWD',
+      });
       if (getLocalStorage('account_token')) {
         this.AddOnline(index);
       } else {
@@ -155,13 +167,8 @@ export default {
       SaveShopCart(tmp_shopcart);
     },
     Remove(index) {
-      if (getLocalStorage('account_token')) {
-        this.RemoveOnline(index);
-      } else {
-        this.RemoveOffline(index);
-      }
       window.dataLayer.push({
-        event: 'removeFromCart',
+        event: 'remove_from_cart',
         items: [
           ConvertAddShopCartData(
             this.shopcart[index].product_data,
@@ -172,6 +179,11 @@ export default {
         value: 0,
         currency: 'TWD',
       });
+      if (getLocalStorage('account_token')) {
+        this.RemoveOnline(index);
+      } else {
+        this.RemoveOffline(index);
+      }
     },
     RemoveOnline(index) {
       const shop_cart_item = this.$store.state.shopcart[index];
@@ -208,7 +220,7 @@ export default {
         products.push(product);
       });
       window.dataLayer.push({
-        event: 'viewCart',
+        event: 'view_cart',
         items: products,
         value: 0,
         currency: 'TWD',

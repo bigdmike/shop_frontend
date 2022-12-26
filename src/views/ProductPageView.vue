@@ -129,14 +129,8 @@ export default {
       this.bread_crumb_path[2].link = `/product/${this.product_data.GoodsID}`;
     },
     AddShopCart() {
-      if (getLocalStorage('account_token')) {
-        this.AddShopCartOnline();
-      } else {
-        this.AddShopCartOffline();
-      }
-
       window.dataLayer.push({
-        event: 'addToCart',
+        event: 'add_to_cart',
         items: [
           ConvertAddShopCartData(
             this.product_data,
@@ -147,6 +141,11 @@ export default {
         value: 0,
         currency: 'TWD',
       });
+      if (getLocalStorage('account_token')) {
+        this.AddShopCartOnline();
+      } else {
+        this.AddShopCartOffline();
+      }
     },
     AddShopCartOnline() {
       // 1.call 加入購物車 api
