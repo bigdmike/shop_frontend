@@ -234,71 +234,73 @@ export default {
       }
     },
     GetCashier() {
-      getCashier(
-        this.form_data.coupon,
-        this.form_data.pay_way,
-        this.form_data.ship_way,
-        this.shopcart
-      ).then((res) => {
-        if (res.code == 200) {
-          this.checkout_data = res.data;
-          if (this.first_enter) {
-            this.first_enter = false;
-            // GTM事件
-            let products = [];
-            this.shopcart.forEach((item) => {
-              const product = ConvertAddShopCartData(
-                item.product_data,
-                item.active_option,
-                1
-              );
-              products.push(product);
+      if (this.shopcart.length > 0) {
+        getCashier(
+          this.form_data.coupon,
+          this.form_data.pay_way,
+          this.form_data.ship_way,
+          this.shopcart
+        ).then((res) => {
+          if (res.code == 200) {
+            this.checkout_data = res.data;
+            if (this.first_enter) {
+              this.first_enter = false;
+              // GTM事件
+              let products = [];
+              this.shopcart.forEach((item) => {
+                const product = ConvertAddShopCartData(
+                  item.product_data,
+                  item.active_option,
+                  1
+                );
+                products.push(product);
+              });
+              window.dataLayer.push({
+                event: 'beginCheckout',
+                items: products,
+                value: 0,
+                currency: 'TWD',
+              });
+            }
+          } else if (res.msg.indexOf('超過物流限制') != -1) {
+            this.$store.commit('SetDialog', {
+              status: true,
+              content: `很抱歉！<br/>購物車商品超出可運送範圍，您可以分次下單<br/>如需訂購大量商品請<a class="text-primary" href="${this.$GetCloumn(
+                'company_messenger'
+              )}" target="_blank">聯絡我們</a>`,
             });
-            window.dataLayer.push({
-              event: 'beginCheckout',
-              items: products,
-              value: 0,
-              currency: 'TWD',
+            this.form_data.ship_way = '';
+          } else if (res.msg == '現金折抵優惠券錯誤') {
+            this.$store.commit('SetDialog', {
+              status: true,
+              content: '很抱歉！<br/>您所輸入的優惠代碼不存在或已經兌換完畢',
             });
+            this.form_data.coupon = '';
+          } else if (res.msg.indexOf('已無庫存') != -1) {
+            this.$store.commit('SetDialog', {
+              status: true,
+              content: `很抱歉！<br/><b class="text-primary">${res.msg}</b><br/>請先將商品移除後再次結帳`,
+            });
+            this.$router.push('/');
+          } else if (res.msg.indexOf('庫存數量不足') != -1) {
+            const product_name = res.msg.split('庫存數量不足')[0];
+            const count = res.msg.split('庫存數量不足:')[1];
+            this.$store.commit('SetDialog', {
+              status: true,
+              content: `很抱歉！<br/><b class="text-primary">${product_name}<br/>目前庫存剩餘${count}</b><br/>請先移除超出的數量後再次結帳`,
+            });
+            this.$router.push('/');
+          } else if (res.msg.indexOf('庫存為關閉狀態') != -1) {
+            const product_name = res.msg.split('庫存為關閉狀態')[0];
+            this.$store.commit('SetDialog', {
+              status: true,
+              content: `很抱歉！<br/><b class="text-primary">${product_name}<br/>目前所選擇的規格已無庫存</b><br/>請先移除超出的數量後再次結帳`,
+            });
+            this.$router.push('/');
           }
-        } else if (res.msg.indexOf('超過物流限制') != -1) {
-          this.$store.commit('SetDialog', {
-            status: true,
-            content: `很抱歉！<br/>購物車商品超出可運送範圍，您可以分次下單<br/>如需訂購大量商品請<a class="text-primary" href="${this.$GetCloumn(
-              'company_messenger'
-            )}" target="_blank">聯絡我們</a>`,
-          });
-          this.form_data.ship_way = '';
-        } else if (res.msg == '現金折抵優惠券錯誤') {
-          this.$store.commit('SetDialog', {
-            status: true,
-            content: '很抱歉！<br/>您所輸入的優惠代碼不存在或已經兌換完畢',
-          });
-          this.form_data.coupon = '';
-        } else if (res.msg.indexOf('已無庫存') != -1) {
-          this.$store.commit('SetDialog', {
-            status: true,
-            content: `很抱歉！<br/><b class="text-primary">${res.msg}</b><br/>請先將商品移除後再次結帳`,
-          });
-          this.$router.push('/');
-        } else if (res.msg.indexOf('庫存數量不足') != -1) {
-          const product_name = res.msg.split('庫存數量不足')[0];
-          const count = res.msg.split('庫存數量不足:')[1];
-          this.$store.commit('SetDialog', {
-            status: true,
-            content: `很抱歉！<br/><b class="text-primary">${product_name}<br/>目前庫存剩餘${count}</b><br/>請先移除超出的數量後再次結帳`,
-          });
-          this.$router.push('/');
-        } else if (res.msg.indexOf('庫存為關閉狀態') != -1) {
-          const product_name = res.msg.split('庫存為關閉狀態')[0];
-          this.$store.commit('SetDialog', {
-            status: true,
-            content: `很抱歉！<br/><b class="text-primary">${product_name}<br/>目前所選擇的規格已無庫存</b><br/>請先移除超出的數量後再次結帳`,
-          });
-          this.$router.push('/');
-        }
-        //
-      });
+          //
+        });
+      }
     },
     ValidateForm() {
       this.errors = [];

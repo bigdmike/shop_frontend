@@ -1,6 +1,7 @@
 <template>
   <main class="relative z-10 w-full">
     <div
+      v-if="form_data != null"
       class="relative flex items-center justify-center w-full max-w-screen-xl px-5 mx-auto md:px-10 pb-14 pt-14 xl:px-0"
     >
       <div class="w-full">
@@ -266,7 +267,7 @@ export default {
         currency: 'TWD',
         tax: 0,
         shipping: this.ship_price,
-        coupon: this.trade_data.coupon,
+        coupon: this.form_data.coupon,
       });
     },
   },
@@ -325,7 +326,7 @@ export default {
         return '';
       }
       return this.shipway_data.filter(
-        (item) => item.ShippingID == this.trade_data.ship_way
+        (item) => item.ShippingID == this.form_data.ship_way
       )[0].Title;
     },
     active_payment() {
@@ -333,7 +334,7 @@ export default {
         return '';
       }
       return this.payment_data.filter(
-        (item) => item.PaymentID == this.trade_data.pay_way
+        (item) => item.PaymentID == this.form_data.pay_way
       )[0].Title;
     },
     order_search_link() {
