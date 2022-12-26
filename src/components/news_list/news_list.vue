@@ -12,6 +12,7 @@
         >
           <img
             :src="$ImageUrl(item.Image1)"
+            :alt="item.Title"
             class="block w-full transition-all duration-200 transform hover:scale-110"
           />
         </router-link>

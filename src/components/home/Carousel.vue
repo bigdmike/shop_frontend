@@ -29,10 +29,12 @@
         <img
           class="hidden w-full select-none pc_image"
           :src="$ImageUrl(item.Image1)"
+          :alt="$GetCloumn('company_name')"
         />
         <img
           class="block w-full select-none mb_image"
           :src="$ImageUrl(item.Image2)"
+          :alt="$GetCloumn('company_name')"
         />
       </div>
     </VueSlickCarousel>

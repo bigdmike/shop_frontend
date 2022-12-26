@@ -7,6 +7,7 @@
       >
         <div class="w-full mb-10 overflow-hidden md:w-1/2 rounded-2xl md:mb-0">
           <img
+            :alt="$GetCloumn('company_name')"
             :src="$ImageUrl($GetCloumn('about_section_1_image'))"
             class="block w-full"
           />
@@ -27,6 +28,7 @@
       >
         <div class="w-full mb-10 overflow-hidden md:w-1/2 rounded-2xl md:mb-0">
           <img
+            :alt="$GetCloumn('company_name')"
             :src="$ImageUrl($GetCloumn('about_section_2_image'))"
             class="block w-full"
           />
@@ -47,6 +49,7 @@
       >
         <div class="w-full mb-10 overflow-hidden md:w-1/2 rounded-2xl md:mb-0">
           <img
+            :alt="$GetCloumn('company_name')"
             :src="$ImageUrl($GetCloumn('about_section_3_image'))"
             class="block w-full"
           />
@@ -67,6 +70,7 @@
       >
         <div class="w-full mb-10 overflow-hidden md:w-1/2 rounded-2xl md:mb-0">
           <img
+            :alt="$GetCloumn('company_name')"
             :src="$ImageUrl($GetCloumn('about_section_4_image'))"
             class="block w-full"
           />

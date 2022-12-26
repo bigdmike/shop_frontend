@@ -45,6 +45,9 @@ export function GetMetaData(title, content, image) {
   let match_meta = GetMatchMetaData(title);
   let default_meta = GetBaseMetaData();
   if (match_meta == false) {
+    default_meta.content.length > 155
+      ? (default_meta.content = default_meta.content.slice(0, 155) + '...')
+      : '';
     return {
       title: title + ' | 耀聞水果世界 - 進口水果批發商、零售、客製化禮盒',
       meta: [
@@ -119,6 +122,9 @@ export function GetMetaData(title, content, image) {
       ],
     };
   } else {
+    match_meta.content.length > 155
+      ? (match_meta.content = match_meta.content.slice(0, 155) + '...')
+      : '';
     return {
       title:
         match_meta.title +

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full">
+  <main class="relative w-full">
     <CarouselSection :carousel_data="carousel_data" />
     <ImageTextSection
       :image="$GetCloumn('about_section_1_image')"
@@ -21,7 +21,7 @@
     />
     <AdGallerySection :images="ad_gallery_data" />
     <CompanyInfoSection :image="$GetCloumn('company_image')" />
-  </div>
+  </main>
 </template>
 
 <script>

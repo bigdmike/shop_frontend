@@ -8,7 +8,11 @@
             :href="images[0].Link"
             class="block w-full overflow-hidden rounded-xl"
           >
-            <img :src="$ImageUrl(images[0].Image1)" class="block w-full" />
+            <img
+              :src="$ImageUrl(images[0].Image1)"
+              class="block w-full"
+              :alt="$GetCloumn('company_name')"
+            />
           </a>
         </div>
         <div class="w-full px-2 mb-4 md:w-1/2">
@@ -17,7 +21,11 @@
             :href="images[1].Link"
             class="block w-full overflow-hidden rounded-xl"
           >
-            <img :src="$ImageUrl(images[1].Image1)" class="block w-full" />
+            <img
+              :src="$ImageUrl(images[1].Image1)"
+              class="block w-full"
+              :alt="$GetCloumn('company_name')"
+            />
           </a>
         </div>
         <div class="w-full px-2 mb-4">
@@ -26,7 +34,11 @@
             :href="images[2].Link"
             class="block w-full overflow-hidden rounded-xl"
           >
-            <img :src="$ImageUrl(images[2].Image1)" class="block w-full" />
+            <img
+              :src="$ImageUrl(images[2].Image1)"
+              class="block w-full"
+              :alt="$GetCloumn('company_name')"
+            />
           </a>
         </div>
       </div>
