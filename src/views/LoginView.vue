@@ -119,8 +119,8 @@ export default {
           // 2.將cookie購物車整合至會員購物車並刪除cookie購物車
           await addShopcart(this.shopcart);
           // 3.撈取會員購物車整合至store
-          getShopcart().then((res) => {
-            const shop_cart = SaveOnlineShopCart(res.data);
+          getShopcart().then(async (res) => {
+            const shop_cart = await SaveOnlineShopCart(res.data);
             this.$store.commit('SetShopCart', shop_cart);
             this.$router.push('/account/account_edit');
           });

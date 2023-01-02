@@ -421,6 +421,10 @@ export default {
       });
     },
   },
+  beforeRouteLeave(to, from, next) {
+    setLocalStorage('check_out_form', JSON.stringify(this.form_data));
+    next();
+  },
   created() {
     if (this.shopcart.length > 0) {
       this.GetCashier();

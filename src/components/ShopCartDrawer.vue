@@ -17,8 +17,11 @@
           v-for="(item, item_index) in shopcart"
           :key="`shopcart_${item_index}`"
         >
-          <div class="w-1/4 overflow-hidden rounded-lg">
-            <img :src="$ImageUrl(item.product_data.Image1)" class="w-full" />
+          <div class="w-1/4 overflow-hidden rounded-lg aspect-square">
+            <img
+              :src="$ImageUrl(item.product_data.Image1)"
+              class="object-cover w-full h-full"
+            />
           </div>
           <div
             class="w-3/4 pl-3 mb-8 sm:mb-14"
@@ -38,23 +41,29 @@
             </p>
           </div>
           <div class="flex justify-end w-full">
-            <div
-              class="flex items-center justify-between w-full xs:pl-3 xs:w-3/4"
-            >
-              <div
-                class="inline-flex items-stretch border rounded-sm border-zinc-300"
-              >
-                <button @click="Remove(item_index)" class="p-2">
-                  <MinusIcon class="w-3 text-black" />
-                </button>
-                <input
-                  type="text"
-                  readonly
-                  :value="item.amount"
-                  class="w-10 text-center"
-                />
-                <button @click="Add(item_index)" class="p-2">
-                  <PlusIcon class="w-3 text-black" />
+            <div class="flex items-center justify-between w-full">
+              <div class="flex items-center">
+                <div
+                  class="inline-flex items-stretch mr-5 border rounded-sm border-zinc-300"
+                >
+                  <button @click="Remove(item_index, 1)" class="p-2">
+                    <MinusIcon class="w-3 text-black" />
+                  </button>
+                  <input
+                    type="text"
+                    readonly
+                    :value="item.amount"
+                    class="w-10 text-center"
+                  />
+                  <button @click="Add(item_index)" class="p-2">
+                    <PlusIcon class="w-3 text-black" />
+                  </button>
+                </div>
+                <button
+                  @click="Remove(item_index, item.amount)"
+                  class="text-sm underline text-secondary"
+                >
+                  移除
                 </button>
               </div>
               <p class="text-sm font-bold xs:text-base">
@@ -79,6 +88,7 @@
       </router-link>
     </div>
     <div
+      @click="Close"
       data-menu-bg
       class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-white bg-opacity-60"
     ></div>
@@ -153,8 +163,8 @@ export default {
         if (res.code == 302) {
           this.$store.commit('SetShopCart', []);
         } else {
-          getShopcart().then((res) => {
-            const shop_cart = SaveOnlineShopCart(res.data);
+          getShopcart().then(async (res) => {
+            const shop_cart = await SaveOnlineShopCart(res.data);
             this.$store.commit('SetShopCart', shop_cart);
           });
         }
@@ -162,11 +172,11 @@ export default {
     },
     AddOffline(index) {
       let tmp_shopcart = JSON.parse(JSON.stringify(this.$store.state.shopcart));
-      tmp_shopcart[index].amount += 1;
+      tmp_shopcart[index].amount = parseInt(tmp_shopcart[index].amount) + 1;
       this.$store.commit('SetShopCart', tmp_shopcart);
       SaveShopCart(tmp_shopcart);
     },
-    Remove(index) {
+    Remove(index, count) {
       window.dataLayer.push({
         event: 'remove_from_cart',
         items: [
@@ -180,28 +190,43 @@ export default {
         currency: 'TWD',
       });
       if (getLocalStorage('account_token')) {
-        this.RemoveOnline(index);
+        this.RemoveOnline(index, count);
       } else {
-        this.RemoveOffline(index);
+        this.RemoveOffline(index, count);
       }
     },
-    RemoveOnline(index) {
+    async RemoveOnline(index, count) {
       const shop_cart_item = this.$store.state.shopcart[index];
-      removeShopcart(shop_cart_item.shopcart_id[0]).then((res) => {
-        if (res.code == 302) {
-          this.$store.commit('SetShopCart', []);
-          SaveShopCart([]);
-        } else {
-          getShopcart().then((res) => {
-            const shop_cart = SaveOnlineShopCart(res.data);
-            this.$store.commit('SetShopCart', shop_cart);
-          });
+      for (let i in shop_cart_item.shopcart_id) {
+        if (i < count) {
+          const res = await removeShopcart(shop_cart_item.shopcart_id[i]);
+
+          if (res.code == 302) {
+            this.$store.commit('SetShopCart', []);
+            SaveShopCart([]);
+          }
         }
+      }
+      getShopcart().then(async (res) => {
+        const shop_cart = await SaveOnlineShopCart(res.data);
+        this.$store.commit('SetShopCart', shop_cart);
       });
+
+      // removeShopcart(shop_cart_item.shopcart_id[0]).then((res) => {
+      //   if (res.code == 302) {
+      //     this.$store.commit('SetShopCart', []);
+      //     SaveShopCart([]);
+      //   } else {
+      //     getShopcart().then(async (res) => {
+      //       const shop_cart = await SaveOnlineShopCart(res.data);
+      //       this.$store.commit('SetShopCart', shop_cart);
+      //     });
+      //   }
+      // });
     },
-    RemoveOffline(index) {
+    RemoveOffline(index, count) {
       let tmp_shopcart = JSON.parse(JSON.stringify(this.$store.state.shopcart));
-      tmp_shopcart[index].amount -= 1;
+      tmp_shopcart[index].amount -= count;
       if (tmp_shopcart[index].amount <= 0) {
         tmp_shopcart.splice(index, 1);
       }
@@ -254,7 +279,7 @@ export default {
       if (stock == 'error') {
         let count = 0;
         while (count < item.amount) {
-          this.Remove(item_index);
+          this.Remove(item_index, count + 1);
           count += 1;
         }
       }

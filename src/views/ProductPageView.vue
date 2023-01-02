@@ -163,12 +163,12 @@ export default {
           this.AddShopCartOffline();
         } else {
           // 2.call 取得購物車 api 並存入 store
-          getShopcart().then((res) => {
+          getShopcart().then(async (res) => {
             if (res.code == 302) {
               this.$store.commit('SetShopCart', []);
               SaveShopCart([]);
             } else {
-              const shop_cart = SaveOnlineShopCart(res.data);
+              const shop_cart = await SaveOnlineShopCart(res.data);
               this.$store.commit('SetShopCart', shop_cart);
             }
             this.$store.commit('SetAddCartMessage', true);
