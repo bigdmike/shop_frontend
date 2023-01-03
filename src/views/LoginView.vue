@@ -87,7 +87,7 @@ export default {
   },
   computed: {
     shopcart() {
-      return this.$store.state.shopcart;
+      return this.$store.state.shopcart_module.shopcart;
     },
   },
   methods: {

@@ -141,10 +141,16 @@ export default {
         value: 0,
         currency: 'TWD',
       });
+      const shop_cart_item = {
+        product: this.product_data,
+        options: this.active_option,
+        amount: this.amount,
+        show_message: true,
+      };
       if (getLocalStorage('account_token')) {
-        this.AddShopCartOnline();
+        this.$store.dispatch('shopcart_module/AddShopCart', shop_cart_item);
       } else {
-        this.AddShopCartOffline();
+        this.$store.commit('shopcart_module/AddShopCart', shop_cart_item);
       }
     },
     AddShopCartOnline() {
@@ -177,6 +183,13 @@ export default {
       });
     },
     AddShopCartOffline() {
+      // let shopcart_item = {
+      //   product: this.product_data,
+      //   options: JSON.parse(JSON.stringify(this.active_option)),
+      //   amount: JSON.parse(JSON.stringify(this.amount)),
+      // };
+      // this.$store.commit('shopcart_module/AddShopCart', shopcart_item);
+
       let product_exist = false;
       let tmp_shopcart = JSON.parse(JSON.stringify(this.shopcart));
       tmp_shopcart.forEach((item, item_index) => {
@@ -328,7 +341,7 @@ export default {
       return this.$store.state.category_data;
     },
     shopcart() {
-      return this.$store.state.shopcart;
+      return this.$store.state.shopcart_module.shopcart;
     },
   },
 };

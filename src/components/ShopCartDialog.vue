@@ -1,7 +1,7 @@
 <template>
   <div
     ref="MainContent"
-    class="fixed top-0 left-full w-screen right-0 bottom-0 z-30 flex items-center justify-center overflow-hidden"
+    class="fixed top-0 bottom-0 right-0 z-30 flex items-center justify-center w-screen overflow-hidden left-full"
   >
     <div
       data-dialog-box
@@ -15,7 +15,7 @@
     </div>
     <div
       data-dialog-bg
-      class="absolute top-0 left-0 right-0 bottom-0 bg-white bg-opacity-30 z-0"
+      class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-white bg-opacity-30"
     ></div>
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
   name: 'ShopCartDialog',
   computed: {
     add_cart_message() {
-      return this.$store.state.add_cart_message;
+      return this.$store.state.shopcart_module.add_cart_message;
     },
   },
   data() {

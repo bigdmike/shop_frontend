@@ -15,6 +15,8 @@ import {
   getShipwayData,
 } from '@/api/page_data.js';
 
+import { shopcart_module } from './shopcart';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -135,7 +137,7 @@ export default new Vuex.Store({
         });
       });
     },
-    getProductData(state) {
+    getProductData({ commit }) {
       getProductData().then((res) => {
         let tmp_data = res.data.filter((item) => {
           return item.deleted_at == null;
@@ -152,9 +154,12 @@ export default new Vuex.Store({
         tmp_data = tmp_data.sort((a, b) => {
           return parseInt(a.Seq) - parseInt(b.Seq);
         });
-        state.commit('SetStateData', {
+        commit('SetStateData', {
           key: 'product_data',
           val: tmp_data,
+        });
+        commit('shopcart_module/SetProductData', tmp_data, {
+          root: true,
         });
       });
     },
@@ -190,5 +195,8 @@ export default new Vuex.Store({
         });
       });
     },
+  },
+  modules: {
+    shopcart_module: shopcart_module,
   },
 });

@@ -144,11 +144,25 @@ export default {
         value: 0,
         currency: 'TWD',
       });
+      const shop_cart_item = {
+        product: this.shopcart[index].product_data,
+        options: this.shopcart[index].active_option,
+        amount: 1,
+      };
       if (getLocalStorage('account_token')) {
-        this.AddOnline(index);
+        // product, options, amount
+        this.$store.dispatch('shopcart_module/AddShopCart', shop_cart_item);
+        // this.AddShopCartOnline();
       } else {
-        this.AddOffline(index);
+        this.$store.commit('shopcart_module/AddShopCart', shop_cart_item);
+        // this.AddShopCartOffline();
       }
+
+      // if (getLocalStorage('account_token')) {
+      //   this.AddOnline(index);
+      // } else {
+      //   this.AddOffline(index);
+      // }
     },
     AddOnline(index) {
       const shopcart_item = this.$store.state.shopcart[index];
@@ -171,7 +185,7 @@ export default {
       });
     },
     AddOffline(index) {
-      let tmp_shopcart = JSON.parse(JSON.stringify(this.$store.state.shopcart));
+      let tmp_shopcart = JSON.parse(JSON.stringify(this.shopcart));
       tmp_shopcart[index].amount = parseInt(tmp_shopcart[index].amount) + 1;
       this.$store.commit('SetShopCart', tmp_shopcart);
       SaveShopCart(tmp_shopcart);
@@ -189,14 +203,24 @@ export default {
         value: 0,
         currency: 'TWD',
       });
+
+      // RemoveShopCart({ index:index, amount:count })
       if (getLocalStorage('account_token')) {
-        this.RemoveOnline(index, count);
+        // this.RemoveOnline(index, count);
+        this.$store.dispatch('shopcart_module/RemoveShopCart', {
+          index: index,
+          amount: count,
+        });
       } else {
-        this.RemoveOffline(index, count);
+        // this.RemoveOffline(index, count);
+        this.$store.commit('shopcart_module/RemoveShopCart', {
+          index: index,
+          amount: count,
+        });
       }
     },
     async RemoveOnline(index, count) {
-      const shop_cart_item = this.$store.state.shopcart[index];
+      const shop_cart_item = this.shopcart[index];
       for (let i in shop_cart_item.shopcart_id) {
         if (i < count) {
           const res = await removeShopcart(shop_cart_item.shopcart_id[i]);
@@ -225,7 +249,7 @@ export default {
       // });
     },
     RemoveOffline(index, count) {
-      let tmp_shopcart = JSON.parse(JSON.stringify(this.$store.state.shopcart));
+      let tmp_shopcart = JSON.parse(JSON.stringify(this.shopcart));
       tmp_shopcart[index].amount -= count;
       if (tmp_shopcart[index].amount <= 0) {
         tmp_shopcart.splice(index, 1);
@@ -263,7 +287,7 @@ export default {
   },
   computed: {
     shopcart() {
-      return this.$store.state.shopcart;
+      return this.$store.state.shopcart_module.shopcart;
     },
     dialog() {
       return this.$store.state.shopcart_drawer;

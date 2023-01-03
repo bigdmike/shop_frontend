@@ -1,6 +1,6 @@
 import store from '@/store/index.js';
 import { getLocalStorage } from '@/common/cookie.js';
-import { get, post } from '@/common/request.js';
+import { get, post, put, del } from '@/common/request.js';
 
 // cahiser
 export function getCashier(coupon = '', payment = 0, shipping = 0, shopcart) {
@@ -79,6 +79,7 @@ export function Get711Map() {
     return get('nonMember/711Map');
   }
 }
+
 export function GetFamilyMap() {
   if (getLocalStorage('member_token')) {
     return get('member/FamilyMap');
@@ -93,4 +94,54 @@ export function GetOrder(trade_id, phone) {
     ReceiverPhone: phone,
   };
   return post('nonMember/trade', data);
+}
+
+export function AddShopCart(product, amount) {
+  let promise_list = [];
+  // eslint-disable-next-line no-unused-vars
+  for (let i = 0; i < amount; i++) {
+    promise_list.push(put('member/shoppingCart', product));
+  }
+
+  return Promise.all(GetPromise(promise_list)).then(
+    (res) => {
+      if (promise_list.length == res.length) {
+        // delLocalStorage('shopcart');
+        let error = false;
+        res.forEach((item) => {
+          item.code != 200 ? (error = item) : '';
+        });
+        return error != false ? error : res[0];
+      }
+    },
+    (err) => console.log(err)
+  );
+}
+
+export function RemoveShopCart(remove_list) {
+  let promise_list = [];
+  // eslint-disable-next-line no-unused-vars
+  for (let i = 0; i < remove_list.length; i++) {
+    promise_list.push(del('member/shoppingCart/' + remove_list[i]));
+  }
+  return Promise.all(GetPromise(promise_list)).then(
+    (res) => {
+      if (promise_list.length == res.length) {
+        let error = false;
+        res.forEach((item) => {
+          item.code != 200 ? (error = item) : '';
+        });
+        return error != false ? error : res[0];
+      }
+    },
+    (err) => console.log(err)
+  );
+}
+
+export function GetShopCart() {
+  return get('member/shoppingCart');
+}
+
+function GetPromise(promiseList) {
+  return promiseList.map((promise) => promise.then((res) => res));
 }

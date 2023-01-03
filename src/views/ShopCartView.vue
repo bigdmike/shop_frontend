@@ -469,7 +469,7 @@ export default {
       return this.$store.state.shopcart_drawer;
     },
     shopcart() {
-      return this.$store.state.shopcart;
+      return this.$store.state.shopcart_module.shopcart;
     },
     product_total_price() {
       if (this.checkout_data == null) {

@@ -71,7 +71,7 @@ export default {
   },
   computed: {
     shopcart() {
-      return this.$store.state.shopcart;
+      return this.$store.state.shopcart_module.shopcart;
     },
     shopcart_count() {
       let count = 0;

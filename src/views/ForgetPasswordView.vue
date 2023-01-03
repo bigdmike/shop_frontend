@@ -69,11 +69,6 @@ export default {
       ],
     };
   },
-  computed: {
-    shopcart() {
-      return this.$store.state.shopcart;
-    },
-  },
   methods: {
     GetError(key) {
       return this.errors.indexOf(key) != -1;

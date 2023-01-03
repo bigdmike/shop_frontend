@@ -49,9 +49,9 @@ import MainDialog from '@/components/MainDialog.vue';
 import MainFooterNav from '@/components/MainFooterNav.vue';
 import MessageIcon from '@/components/svg/MessageIcon.vue';
 import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
-import { ReadShopCart, SaveOnlineShopCart } from '@/common/shopcart';
-import { getShopcart } from '@/api/member';
-import { getLocalStorage } from '@/common/cookie';
+// import { ReadShopCart, SaveOnlineShopCart } from '@/common/shopcart';
+// import { getShopcart } from '@/api/member';
+// import { getLocalStorage } from '@/common/cookie';
 
 export default {
   name: 'App',
@@ -99,23 +99,24 @@ export default {
     },
     async InitShopCart() {
       // 判斷是否有登入會員
-      if (getLocalStorage('account_token')) {
-        // 1.取得api購物車
-        // 2.存入Store購物車
-        getShopcart().then(async (res) => {
-          if (res.code == 302) {
-            // token 過期
-            this.InitShopCart();
-          } else {
-            const shop_cart = await SaveOnlineShopCart(res.data);
-            this.$store.commit('SetShopCart', shop_cart);
-          }
-        });
-      } else {
-        // 1.取得cookie購物車
-        // 2.存入Store購物車
-        this.$store.commit('SetShopCart', ReadShopCart());
-      }
+      // if (getLocalStorage('account_token')) {
+      //   // 1.取得api購物車
+      //   // 2.存入Store購物車
+      //   getShopcart().then(async (res) => {
+      //     if (res.code == 302) {
+      //       // token 過期
+      //       this.InitShopCart();
+      //     } else {
+      //       const shop_cart = await SaveOnlineShopCart(res.data);
+      //       this.$store.commit('SetShopCart', shop_cart);
+      //     }
+      //   });
+      // } else {
+      //   // 1.取得cookie購物車
+      //   // 2.存入Store購物車
+      //   this.$store.commit('SetShopCart', ReadShopCart());
+      // }
+      this.$store.dispatch('shopcart_module/GetShopCart');
     },
     OpenMenu() {
       this.$refs.MainHeader.OpenMenu();

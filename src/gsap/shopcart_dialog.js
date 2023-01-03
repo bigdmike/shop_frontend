@@ -78,7 +78,7 @@ export class shopcart_dialog_gsap_animation {
       .set(this.el, {
         x: '0%',
         onComplete: () => {
-          store.commit('SetAddCartMessage', false);
+          store.commit('shopcart_module/SetAddCartMessage', false);
         },
       });
   }
