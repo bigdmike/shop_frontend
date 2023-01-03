@@ -100,9 +100,7 @@ import CloseIcon from '@/components/svg/CloseIcon.vue';
 import PlusIcon from '@/components/svg/PlusIcon.vue';
 import MinusIcon from '@/components/svg/MinusIcon.vue';
 import { menu_gsap_animation } from '@/gsap/main_menu';
-import { SaveShopCart, SaveOnlineShopCart } from '@/common/shopcart';
 import { getLocalStorage } from '@/common/cookie';
-import { addShopcart, getShopcart, removeShopcart } from '@/api/member';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
 export default {
   name: 'ShopCartDrawer',
@@ -150,45 +148,10 @@ export default {
         amount: 1,
       };
       if (getLocalStorage('account_token')) {
-        // product, options, amount
         this.$store.dispatch('shopcart_module/AddShopCart', shop_cart_item);
-        // this.AddShopCartOnline();
       } else {
         this.$store.commit('shopcart_module/AddShopCart', shop_cart_item);
-        // this.AddShopCartOffline();
       }
-
-      // if (getLocalStorage('account_token')) {
-      //   this.AddOnline(index);
-      // } else {
-      //   this.AddOffline(index);
-      // }
-    },
-    AddOnline(index) {
-      const shopcart_item = this.$store.state.shopcart[index];
-      const shopcart = [
-        {
-          product_data: shopcart_item.product_data,
-          active_option: shopcart_item.active_option,
-          amount: 1,
-        },
-      ];
-      addShopcart(shopcart).then((res) => {
-        if (res.code == 302) {
-          this.$store.commit('SetShopCart', []);
-        } else {
-          getShopcart().then(async (res) => {
-            const shop_cart = await SaveOnlineShopCart(res.data);
-            this.$store.commit('SetShopCart', shop_cart);
-          });
-        }
-      });
-    },
-    AddOffline(index) {
-      let tmp_shopcart = JSON.parse(JSON.stringify(this.shopcart));
-      tmp_shopcart[index].amount = parseInt(tmp_shopcart[index].amount) + 1;
-      this.$store.commit('SetShopCart', tmp_shopcart);
-      SaveShopCart(tmp_shopcart);
     },
     Remove(index, count) {
       window.dataLayer.push({
@@ -218,44 +181,6 @@ export default {
           amount: count,
         });
       }
-    },
-    async RemoveOnline(index, count) {
-      const shop_cart_item = this.shopcart[index];
-      for (let i in shop_cart_item.shopcart_id) {
-        if (i < count) {
-          const res = await removeShopcart(shop_cart_item.shopcart_id[i]);
-
-          if (res.code == 302) {
-            this.$store.commit('SetShopCart', []);
-            SaveShopCart([]);
-          }
-        }
-      }
-      getShopcart().then(async (res) => {
-        const shop_cart = await SaveOnlineShopCart(res.data);
-        this.$store.commit('SetShopCart', shop_cart);
-      });
-
-      // removeShopcart(shop_cart_item.shopcart_id[0]).then((res) => {
-      //   if (res.code == 302) {
-      //     this.$store.commit('SetShopCart', []);
-      //     SaveShopCart([]);
-      //   } else {
-      //     getShopcart().then(async (res) => {
-      //       const shop_cart = await SaveOnlineShopCart(res.data);
-      //       this.$store.commit('SetShopCart', shop_cart);
-      //     });
-      //   }
-      // });
-    },
-    RemoveOffline(index, count) {
-      let tmp_shopcart = JSON.parse(JSON.stringify(this.shopcart));
-      tmp_shopcart[index].amount -= count;
-      if (tmp_shopcart[index].amount <= 0) {
-        tmp_shopcart.splice(index, 1);
-      }
-      this.$store.commit('SetShopCart', tmp_shopcart);
-      SaveShopCart(tmp_shopcart);
     },
     OpenShopCart() {
       // GTM事件

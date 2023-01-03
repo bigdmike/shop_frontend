@@ -49,9 +49,6 @@ import MainDialog from '@/components/MainDialog.vue';
 import MainFooterNav from '@/components/MainFooterNav.vue';
 import MessageIcon from '@/components/svg/MessageIcon.vue';
 import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
-// import { ReadShopCart, SaveOnlineShopCart } from '@/common/shopcart';
-// import { getShopcart } from '@/api/member';
-// import { getLocalStorage } from '@/common/cookie';
 
 export default {
   name: 'App',

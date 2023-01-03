@@ -61,7 +61,7 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import { validEmail } from '@/common/validate';
 import { sendLoginData, addShopcart, getShopcart } from '@/api/member';
 import { setLocalStorage, getLocalStorage } from '@/common/cookie';
-import { SaveOnlineShopCart } from '@/common/shopcart';
+// import { SaveOnlineShopCart } from '@/common/shopcart';
 import { GetMetaData } from '@/common/meta';
 export default {
   name: 'LoginView',
@@ -119,11 +119,16 @@ export default {
           // 2.將cookie購物車整合至會員購物車並刪除cookie購物車
           await addShopcart(this.shopcart);
           // 3.撈取會員購物車整合至store
-          getShopcart().then(async (res) => {
-            const shop_cart = await SaveOnlineShopCart(res.data);
-            this.$store.commit('SetShopCart', shop_cart);
-            this.$router.push('/account/account_edit');
-          });
+
+          // 先讀取本地購物車
+          // this.$store.dispatch('shopcart_module/GetLocalShopCart');
+          // 將本地購物車依序加入線上購物車
+
+          // getShopcart().then(async (res) => {
+          //   // const shop_cart = await SaveOnlineShopCart(res.data);
+          //   // this.$store.commit('SetShopCart', shop_cart);
+          //   this.$router.push('/account/account_edit');
+          // });
         }
       });
     },
