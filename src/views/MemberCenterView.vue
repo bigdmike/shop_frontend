@@ -110,7 +110,7 @@ export default {
   methods: {
     Logout() {
       delLocalStorage('account_token');
-      this.$store.commit('SetShopCart', []);
+      this.$store.commit('shopcart_module/SetShopCart', []);
       this.$router.push('/account/login');
     },
   },

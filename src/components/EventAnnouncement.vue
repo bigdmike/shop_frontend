@@ -11,11 +11,5 @@
 <script>
 export default {
   name: 'EventAnnouncement',
-  props: {
-    text: {
-      require: true,
-      type: String,
-    },
-  },
 };
 </script>

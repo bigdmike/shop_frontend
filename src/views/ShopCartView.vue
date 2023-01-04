@@ -145,7 +145,6 @@ import {
   setLocalStorage,
   delLocalStorage,
 } from '@/common/cookie';
-import { SaveShopCart } from '@/common/shopcart';
 import { GetMetaData } from '@/common/meta';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
 export default {
@@ -346,8 +345,7 @@ export default {
             'trade_checkout_data',
             JSON.stringify(this.checkout_data)
           );
-          SaveShopCart([]);
-          this.$store.commit('SetShopCart', []);
+          this.$store.commit('shopcart_module/SetShopCart', []);
           if (
             this.checkout_data.PaymentInfo.PaymentType == 'PCHomeCredit' ||
             this.checkout_data.PaymentInfo.PaymentType == 'PCHomeATM'

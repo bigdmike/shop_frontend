@@ -204,7 +204,6 @@
 </template>
 
 <script>
-import { SaveShopCart } from '@/common/shopcart';
 import { getLocalStorage, delLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
@@ -356,8 +355,7 @@ export default {
       delLocalStorage('trade_data');
       delLocalStorage('trade_shopcart');
       delLocalStorage('trade_checkout_data');
-      SaveShopCart([]);
-      this.$store.commit('SetShopCart', []);
+      this.$store.commit('shopcart_module/SetShopCart', []);
       this.meta_data = GetMetaData('訂單完成', '', '');
       this.$nextTick(() => {
         window.prerenderReady = true;

@@ -1,5 +1,9 @@
 import { AddShopCart, GetShopCart, RemoveShopCart } from '@/api/shopcart';
-import { setLocalStorage, getLocalStorage } from '@/common/cookie';
+import {
+  setLocalStorage,
+  getLocalStorage,
+  delLocalStorage,
+} from '@/common/cookie';
 
 const GetShopCartItemIndex = (state, { product, options }) => {
   let index = -1;
@@ -38,8 +42,9 @@ const SetLocalShopCart = (shopcart) => {
     item_index != 0 ? (tmp_list += ';') : '';
     tmp_list += `${item.product_data.GoodsID},${item.active_option[0]},${item.active_option[1]},${item.amount}`;
   });
-
-  setLocalStorage('shopcart', tmp_list);
+  tmp_list == ''
+    ? delLocalStorage('shopcart')
+    : setLocalStorage('shopcart', tmp_list);
 };
 
 const shopcart_module = {

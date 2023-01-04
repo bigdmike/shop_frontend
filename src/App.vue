@@ -1,9 +1,6 @@
 <template>
   <div id="app" class="relative overflow-x-hidden sm:pt-32 pt-28">
-    <EventAnnouncement
-      v-if="data_load_finish"
-      text="全館消費滿NT$1500 台灣本島免運優惠"
-    />
+    <EventAnnouncement v-if="data_load_finish" />
     <MainHeader ref="MainHeader" v-if="data_load_finish" />
     <MainLoading />
     <ShopCartDialog />
@@ -94,27 +91,6 @@ export default {
       this.payment_data == null ? this.$store.dispatch('getPaymentData') : '';
       this.shipway_data == null ? this.$store.dispatch('getShipwayData') : '';
     },
-    async InitShopCart() {
-      // 判斷是否有登入會員
-      // if (getLocalStorage('account_token')) {
-      //   // 1.取得api購物車
-      //   // 2.存入Store購物車
-      //   getShopcart().then(async (res) => {
-      //     if (res.code == 302) {
-      //       // token 過期
-      //       this.InitShopCart();
-      //     } else {
-      //       const shop_cart = await SaveOnlineShopCart(res.data);
-      //       this.$store.commit('SetShopCart', shop_cart);
-      //     }
-      //   });
-      // } else {
-      //   // 1.取得cookie購物車
-      //   // 2.存入Store購物車
-      //   this.$store.commit('SetShopCart', ReadShopCart());
-      // }
-      this.$store.dispatch('shopcart_module/GetShopCart');
-    },
     OpenMenu() {
       this.$refs.MainHeader.OpenMenu();
     },
@@ -196,7 +172,7 @@ export default {
     },
     data_load_finish() {
       if (this.data_load_finish) {
-        this.InitShopCart();
+        this.$store.dispatch('shopcart_module/GetShopCart');
       }
       if (this.data_load_finish && this.first_time_load) {
         this.first_time_load = false;

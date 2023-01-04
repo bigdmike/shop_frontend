@@ -59,9 +59,8 @@
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import { validEmail } from '@/common/validate';
-import { sendLoginData, addShopcart, getShopcart } from '@/api/member';
+import { sendLoginData } from '@/api/member';
 import { setLocalStorage, getLocalStorage } from '@/common/cookie';
-// import { SaveOnlineShopCart } from '@/common/shopcart';
 import { GetMetaData } from '@/common/meta';
 export default {
   name: 'LoginView',
@@ -114,23 +113,34 @@ export default {
             content: '登入失敗，請確認您的帳號密碼是否正確',
           });
         } else {
-          // 1.將會員token存入cookie
+          // 將會員token存入cookie
           setLocalStorage('account_token', res.data.Token);
-          // 2.將cookie購物車整合至會員購物車並刪除cookie購物車
-          await addShopcart(this.shopcart);
-          // 3.撈取會員購物車整合至store
-
-          // 先讀取本地購物車
-          // this.$store.dispatch('shopcart_module/GetLocalShopCart');
-          // 將本地購物車依序加入線上購物車
-
-          // getShopcart().then(async (res) => {
-          //   // const shop_cart = await SaveOnlineShopCart(res.data);
-          //   // this.$store.commit('SetShopCart', shop_cart);
-          //   this.$router.push('/account/account_edit');
-          // });
+          // 將本地購物車新增至會員線上購物車
+          await this.SaveMemberShopcart();
+          // 5.頁面轉跳進入會員中心
+          this.$router.push('/account/account_edit');
         }
       });
+    },
+    async SaveMemberShopcart() {
+      // 1.先讀取本地shopcart
+      this.$store.dispatch('shopcart_module/GetLocalShopCart');
+      // 2.將本地shopcart拷貝一份
+      const local_shopcart = JSON.parse(JSON.stringify(this.shopcart));
+      // 3.依序將shopcart中的商品新增至會員線上購物車
+      for (const item of local_shopcart) {
+        const shopcart_item = {
+          product: item.product_data,
+          options: item.active_option,
+          amount: item.amount,
+        };
+        await this.$store.dispatch(
+          'shopcart_module/AddShopCart',
+          shopcart_item
+        );
+      }
+      // 4.重新取得會員線上購物車
+      this.$store.dispatch('shopcart_module/GetShopCart');
     },
   },
   created() {
