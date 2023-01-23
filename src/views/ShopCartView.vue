@@ -436,11 +436,7 @@ export default {
     }
     this.meta_data = GetMetaData('結帳', '', '');
     this.$nextTick(() => {
-      window.prerenderReady = true;
-      window.dataLayer.push({
-        event: 'page_view',
-        page_title: this.meta_data.title,
-      });
+      this.$PageReady(this.meta_data.title);
     });
   },
   metaInfo() {

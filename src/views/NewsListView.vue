@@ -33,7 +33,6 @@ import CategoryMenu from '@/components/news_list/category_menu.vue';
 import ProductList from '@/components/news_list/news_list.vue';
 import FilterBar from '@/components/news_list/filter_bar.vue';
 import { GetMetaData } from '@/common/meta';
-import { redirectErrorPage } from '@/common/prerender';
 export default {
   name: 'NewsListView',
   components: {
@@ -71,12 +70,7 @@ export default {
         this.bread_crumb_path[1].link = '/news?category=all';
         this.$nextTick(() => {
           this.meta_data = GetMetaData('newslist', '', '');
-          window.prerenderReady = true;
-
-          window.dataLayer.push({
-            event: 'page_view',
-            page_title: this.meta_data.title,
-          });
+          this.$PageReady(this.meta_data.title);
         });
       } else {
         let category = this.category_data.filter(
@@ -89,16 +83,10 @@ export default {
           this.bread_crumb_path[1].link = `/news?category=${category.NewsCategoryID}`;
           this.$nextTick(() => {
             this.meta_data = GetMetaData('newslist', '', '');
-            window.prerenderReady = true;
-
-            window.dataLayer.push({
-              event: 'page_view',
-              page_title: this.meta_data.title,
-            });
+            this.$PageReady(this.meta_data.title);
           });
         } else {
-          // this.$router.push('/error_page');
-          redirectErrorPage();
+          this.$RedirectError();
         }
       }
     },

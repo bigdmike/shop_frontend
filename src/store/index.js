@@ -42,6 +42,80 @@ export default new Vuex.Store({
     payment_data: null,
     shipway_data: null,
   },
+  getters: {
+    data_load_finish(state) {
+      if (
+        state.common_column_data != null &&
+        state.carousel_data != null &&
+        state.news_data != null &&
+        state.news_category_data != null &&
+        state.promote_data != null &&
+        state.category_data != null &&
+        state.product_data != null &&
+        state.question_category_data != null &&
+        state.question_data != null &&
+        state.zipcode_data != null &&
+        state.payment_data != null &&
+        state.shipway_data != null
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    promote_product_data(state) {
+      if (state.product_data == null) {
+        return null;
+      }
+      return state.product_data.filter((item) => {
+        return (
+          item.Menu.filter((menu) => {
+            return menu.MenuID == 7;
+          }).length > 0
+        );
+      });
+    },
+    new_product_data(state) {
+      if (state.product_data == null) {
+        return null;
+      }
+      const menu_id = state.category_data.filter(
+        (item) => item.Title == '最新商品'
+      )[0].MenuID;
+      return state.product_data.filter((item) => {
+        return (
+          item.Menu.filter((menu) => {
+            return menu.MenuID == menu_id;
+          }).length > 0
+        );
+      });
+    },
+    home_ad_data(state, getters) {
+      let images = [];
+      images.push({
+        Image1: getters.getCommonColumn('home_promote_1_image'),
+        Link: getters.getCommonColumn('home_promote_1_link'),
+      });
+      images.push({
+        Image1: getters.getCommonColumn('home_promote_2_image'),
+        Link: getters.getCommonColumn('home_promote_2_link'),
+      });
+      images.push({
+        Image1: getters.getCommonColumn('home_promote_3_image'),
+        Link: getters.getCommonColumn('home_promote_3_link'),
+      });
+      return images;
+    },
+    getCommonColumn: (state) => (key) => {
+      if (state.common_column_data == null) {
+        return null;
+      }
+      const column_data = state.common_column_data.filter(
+        (column) => column.Title == key
+      );
+      return column_data.length > 0 ? column_data[0].Content : '';
+    },
+  },
   mutations: {
     SetBodyLock(state, action) {
       state.body_lock + action < 0

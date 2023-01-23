@@ -51,11 +51,7 @@ export default {
     this.bread_crumb_path[1].link = '/terms/' + this.$route.params.type;
     this.meta_data = GetMetaData(this.title, '', '');
     this.$nextTick(() => {
-      window.prerenderReady = true;
-      window.dataLayer.push({
-        event: 'page_view',
-        page_title: this.meta_data.title,
-      });
+      this.$PageReady(this.meta_data.title);
     });
   },
   computed: {

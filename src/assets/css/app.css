@@ -779,6 +779,10 @@ video {
   height: 100vh;
 }
 
+.h-full{
+  height: 100%;
+}
+
 .h-7{
   height: 1.75rem;
 }
@@ -789,10 +793,6 @@ video {
 
 .h-\[1px\]{
   height: 1px;
-}
-
-.h-full{
-  height: 100%;
 }
 
 .h-2\/3{
@@ -1795,10 +1795,6 @@ video {
     width: 83.333333%;
   }
 
-  .xs\:w-3\/4{
-    width: 75%;
-  }
-
   .xs\:px-7{
     padding-left: 1.75rem;
     padding-right: 1.75rem;
@@ -1811,10 +1807,6 @@ video {
 
   .xs\:pt-20{
     padding-top: 5rem;
-  }
-
-  .xs\:pl-3{
-    padding-left: 0.75rem;
   }
 
   .xs\:pt-0{

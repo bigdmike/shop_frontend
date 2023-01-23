@@ -4,7 +4,6 @@ import router from './router';
 import store from './store';
 import VueMeta from 'vue-meta';
 import './common/global_methods';
-import { loadScript } from './common/loadScript';
 
 Vue.config.productionTip = false;
 
@@ -13,7 +12,7 @@ Vue.use(VueMeta, {
 });
 
 const loadVueSlickCarousel = () =>
-  loadScript(
+  Vue.prototype.$LoadScript(
     'https://unpkg.com/vue-slick-carousel@1.0.6/dist/vue-slick-carousel.umd.min.js'
   );
 

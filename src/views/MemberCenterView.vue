@@ -97,11 +97,7 @@ export default {
     this.bread_crumb_path[2].link = this.$route.path;
     this.meta_data = GetMetaData('會員中心', '', '');
     this.$nextTick(() => {
-      window.prerenderReady = true;
-      window.dataLayer.push({
-        event: 'page_view',
-        page_title: this.meta_data.title,
-      });
+      this.$PageReady(this.meta_data.title);
     });
   },
   metaInfo() {

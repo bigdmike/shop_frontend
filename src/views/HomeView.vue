@@ -19,7 +19,7 @@
       sub_title="Early Bird Discount"
       :background_image="$ImageUrl($GetCloumn('home_new_product_bg'))"
     />
-    <AdGallerySection :images="ad_gallery_data" />
+    <AdGallerySection :images="home_ad_data" />
     <CompanyInfoSection :image="$GetCloumn('company_image')" />
   </main>
 </template>
@@ -31,6 +31,7 @@ import ProductSection from '@/components/home/ProductSection.vue';
 import AdGallerySection from '@/components/home/AdGallerySection.vue';
 import CompanyInfoSection from '@/components/home/CompantInfoSection.vue';
 import { GetMetaData } from '@/common/meta';
+import { mapGetters, mapState } from 'vuex';
 export default {
   name: 'HomeView',
   components: {
@@ -46,69 +47,18 @@ export default {
     };
   },
   computed: {
-    carousel_data() {
-      return this.$store.state.carousel_data;
-    },
-    product_data() {
-      return this.$store.state.product_data;
-    },
-    // promote_product_category_id() {
-    //   return this.category_data.filter((item) => item.Title == '推薦商品')[0]
-    //     .MenuID;
-    // },
-    promote_product_data() {
-      return this.product_data.filter((item) => {
-        return (
-          item.Menu.filter((menu) => {
-            return menu.MenuID == 7;
-          }).length > 0
-        );
-      });
-    },
-    new_product_category_id() {
-      return this.category_data.filter((item) => item.Title == '最新商品')[0]
-        .MenuID;
-    },
-    new_product_data() {
-      return this.product_data.filter((item) => {
-        return (
-          item.Menu.filter((menu) => {
-            return menu.MenuID == this.new_product_category_id;
-          }).length > 0
-        );
-      });
-    },
-    category_data() {
-      return this.$store.state.category_data;
-    },
-    promotes_data() {
-      return this.$store.state.promote_data;
-    },
-    ad_gallery_data() {
-      let images = [];
-      images.push({
-        Image1: this.$GetCloumn('home_promote_1_image'),
-        Link: this.$GetCloumn('home_promote_1_link'),
-      });
-      images.push({
-        Image1: this.$GetCloumn('home_promote_2_image'),
-        Link: this.$GetCloumn('home_promote_2_link'),
-      });
-      images.push({
-        Image1: this.$GetCloumn('home_promote_3_image'),
-        Link: this.$GetCloumn('home_promote_3_link'),
-      });
-      return images;
-    },
+    ...mapGetters(['promote_product_data', 'new_product_data', 'home_ad_data']),
+    ...mapState([
+      'carousel_data',
+      'product_data',
+      'category_data',
+      'promotes_data',
+    ]),
   },
   created() {
     this.meta_data = GetMetaData('home', '', '');
     this.$nextTick(() => {
-      window.prerenderReady = true;
-      window.dataLayer.push({
-        event: 'page_view',
-        page_title: this.meta_data.title,
-      });
+      this.$PageReady(this.meta_data.title);
     });
   },
   metaInfo() {

@@ -33,7 +33,6 @@ import CategoryMenu from '@/components/product_list/category_menu.vue';
 import ProductList from '@/components/product_list/product_list.vue';
 import FilterBar from '@/components/product_list/filter_bar.vue';
 import { GetMetaData, ChangeTitle } from '@/common/meta';
-import { redirectErrorPage } from '@/common/prerender';
 export default {
   name: 'ProductListView',
   components: {
@@ -71,7 +70,6 @@ export default {
         this.bread_crumb_path[1].link = '/collections?category=all';
         this.$nextTick(() => {
           this.meta_data = GetMetaData('productlist', '', '');
-          window.prerenderReady = true;
           window.dataLayer.push({
             event: 'viewItemList',
             item_list_name: '全部商品',
@@ -80,10 +78,7 @@ export default {
             currency: 'TWD',
           });
 
-          window.dataLayer.push({
-            event: 'page_view',
-            page_title: this.meta_data.title,
-          });
+          this.$PageReady(this.meta_data.title);
         });
       } else {
         let category = this.category_data.filter(
@@ -96,7 +91,7 @@ export default {
           this.$nextTick(() => {
             this.meta_data = GetMetaData('productlist', '', '');
             this.meta_data = ChangeTitle(this.meta_data, category.Title);
-            window.prerenderReady = true;
+
             window.dataLayer.push({
               event: 'viewItemList',
               item_list_name: category.Title,
@@ -105,13 +100,10 @@ export default {
               currency: 'TWD',
             });
 
-            window.dataLayer.push({
-              event: 'page_view',
-              page_title: this.meta_data.title,
-            });
+            this.$PageReady(this.meta_data.title);
           });
         } else {
-          redirectErrorPage();
+          this.$RedirectError();
         }
       }
     },
@@ -136,9 +128,6 @@ export default {
     return this.meta_data;
   },
   watch: {
-    // active_category() {
-    //   this.$router.push(`/collections/${this.active_category}`);
-    // },
     $route() {
       this.SetActiveCategory();
     },

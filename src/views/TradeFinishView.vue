@@ -358,11 +358,7 @@ export default {
       this.$store.commit('shopcart_module/SetShopCart', []);
       this.meta_data = GetMetaData('訂單完成', '', '');
       this.$nextTick(() => {
-        window.prerenderReady = true;
-        window.dataLayer.push({
-          event: 'page_view',
-          page_title: this.meta_data.title,
-        });
+        this.$PageReady(this.meta_data.title);
       });
     } else {
       this.$router.push('/');

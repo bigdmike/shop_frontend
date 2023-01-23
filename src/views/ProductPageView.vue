@@ -65,7 +65,6 @@ import FixedFooter from '@/components/product_page/fixed_footer.vue';
 import { getLocalStorage } from '@/common/cookie';
 import { getSingleProductData } from '@/api/page_data';
 import { GetMetaData } from '@/common/meta';
-import { redirectErrorPage } from '@/common/prerender';
 import {
   ConvertProductData,
   ConvertAddShopCartData,
@@ -233,15 +232,10 @@ export default {
             this.$ImageUrl(image)
           );
           this.$nextTick(() => {
-            window.prerenderReady = true;
-            window.dataLayer.push({
-              event: 'page_view',
-              page_title: this.meta_data.title,
-            });
+            this.$PageReady(this.meta_data.title);
           });
         } else if (res.code == 500) {
-          // this.$router.push('/error_page');
-          redirectErrorPage();
+          this.$RedirectError();
         }
       });
     },

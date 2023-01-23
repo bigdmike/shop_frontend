@@ -13,14 +13,14 @@ VueRouter.prototype.push = function push(location) {
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: '首頁',
     component: () =>
       import(/* webpackChunkName: "Home" */ '../views/HomeView.vue'),
     meta: { requiresAuth: false },
   },
   {
     path: '/collections',
-    name: 'ProductList',
+    name: '商品列表',
     component: () =>
       import(
         /* webpackChunkName: "product_list" */ '../views/ProductListView.vue'
@@ -29,7 +29,7 @@ const routes = [
   },
   {
     path: '/product/:id',
-    name: 'Product',
+    name: '商品介紹',
     component: () =>
       import(
         /* webpackChunkName: "product_page" */ '../views/ProductPageView.vue'
@@ -176,6 +176,7 @@ const routes = [
       import(
         /* webpackChunkName: "order_search" */ '../views/OrderSearchView.vue'
       ),
+    meta: { requiresAuth: false },
   },
   {
     path: '/order_search/result',
@@ -184,44 +185,19 @@ const routes = [
       import(
         /* webpackChunkName: "order_search_result" */ '../views/OrderSearchResultView.vue'
       ),
+    meta: { requiresAuth: false },
   },
   {
     path: '/terms/:type',
     name: '網站條款',
     component: () =>
       import(/* webpackChunkName: "terms_page" */ '../views/TermsPageView.vue'),
+    meta: { requiresAuth: false },
   },
   {
     path: '*',
     redirect: '/error_page',
   },
-  // {
-  //   path: '/account/signup',
-  //   name: '註冊會員',
-  //   component: () =>
-  //     import(/* webpackChunkName: "sign_up" */ '../views/SignUp.vue'),
-  // },
-  // {
-  //   path: '/account/password/new',
-  //   name: '忘記密碼',
-  //   component: () =>
-  //     import(
-  //       /* webpackChunkName: "forget_password" */ '../views/ForgetPassword.vue'
-  //     ),
-  // },
-
-  // {
-  //   path: '/question',
-  //   name: 'Question',
-  //   component: () =>
-  //     import(/* webpackChunkName: "question" */ '../views/Question.vue'),
-  // },
-  // {
-  //   path: '/contact',
-  //   name: 'Contact',
-  //   component: () =>
-  //     import(/* webpackChunkName: "contact" */ '../views/Contact.vue'),
-  // },
 ];
 
 const router = new VueRouter({
@@ -240,12 +216,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // 而不是去检查每条路由记录
-  // to.matched.some(record => record.meta.requiresAuth)
   const account_token = getLocalStorage('account_token');
   if (to.meta.requiresAuth && account_token == '') {
-    // 此路由需要授权，请检查是否已登录
-    // 如果没有，则重定向到登录页面
     next({
       path: '/account/login',
     });

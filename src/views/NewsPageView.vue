@@ -133,7 +133,6 @@ import LineIcon from '@/components/svg/LineIcon.vue';
 import NextIcon from '@/components/svg/Carousel/NextIcon.vue';
 import PrevIcon from '@/components/svg/Carousel/PrevIcon.vue';
 import { GetMetaData } from '@/common/meta';
-import { redirectErrorPage } from '@/common/prerender';
 export default {
   name: 'NewsPageView',
   components: {
@@ -190,14 +189,10 @@ export default {
 
       this.$nextTick(() => {
         this.$refs.clone.value = window.location.href;
-        window.prerenderReady = true;
-        window.dataLayer.push({
-          event: 'page_view',
-          page_title: this.meta_data.title,
-        });
+        this.$PageReady(this.meta_data.title);
       });
     } else {
-      redirectErrorPage();
+      this.$RedirectError();
     }
   },
   metaInfo() {
@@ -205,7 +200,7 @@ export default {
   },
   watch: {
     news_data() {
-      this.news_data == 'error' ? redirectErrorPage() : '';
+      this.news_data == 'error' ? this.$RedirectError() : '';
     },
   },
   computed: {

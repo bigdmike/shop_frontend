@@ -12,40 +12,38 @@ const service = axios.create({
     'Content-Type': 'application/json;charset=UTF-8',
   },
 });
+
 const err = (error) => {
   if (error.response) {
     let data = error.response.data;
     console.log(`message: ${data.msg}`);
-    // showDialog(data.msg);
     if (error.response.status == 401) {
       router.push('/account/login');
-      store.commit('SetDialog', {
-        content: '會員憑證過期，請重新登入',
-        status: true,
-      });
+      setDialog('會員憑證過期，請重新登入');
     }
     if (error.response.status == 302) {
       delLocalStorage('account_token');
-      store.commit('SetDialog', {
-        content: '會員憑證過期，請重新登入',
-        status: true,
-      });
+      setDialog('會員憑證過期，請重新登入');
     }
   }
   return Promise.reject(error);
 };
 
-const getCookie = (name) => {
-  return getLocalStorage(name);
+const setDialog = (content) => {
+  store.commit('SetDialog', {
+    content: content,
+    status: true,
+  });
 };
 
 // request攔截器
 service.interceptors.request.use(
   (config) => {
-    const token = getCookie('account_token');
+    const token = getLocalStorage('account_token');
     if (token) {
       config.headers['Authorization'] = 'Bearer ' + token;
     }
+    store.commit('SetLoading', 1);
     return config;
   },
   (error) => {
@@ -56,7 +54,11 @@ service.interceptors.request.use(
 );
 // respone攔截器
 service.interceptors.response.use((response) => {
-  // console.log("response.data", response.data);
+  if (response.data.code == 302) {
+    delLocalStorage('account_token');
+    setDialog('會員憑證過期，請重新登入');
+  }
+  store.commit('SetLoading', -1);
   return response.data;
 }, err);
 
@@ -66,9 +68,7 @@ service.interceptors.response.use((response) => {
  *  params:引數
  * */
 export function get(url, params = {}) {
-  store.commit('SetLoading', 1);
   return new Promise((resolve, reject) => {
-    // console.log("process.env.VUE_APP_BASE_API", process.env.VUE_APP_BASE_API);
     service({
       url: url,
       method: 'get',
@@ -76,18 +76,9 @@ export function get(url, params = {}) {
     })
       .then((response) => {
         resolve(response);
-        if (response.code == 302) {
-          delLocalStorage('account_token');
-          store.commit('SetDialog', {
-            content: '會員憑證過期，請重新登入',
-            status: true,
-          });
-        }
-        store.commit('SetLoading', -1);
       })
       .catch((error) => {
         reject(error);
-        store.commit('SetLoading', -1);
       });
   });
 }
@@ -98,7 +89,6 @@ export function get(url, params = {}) {
  *  params:引數
  * */
 export function post(url, params = {}) {
-  store.commit('SetLoading', 1);
   return new Promise((resolve, reject) => {
     service({
       url: url,
@@ -106,18 +96,9 @@ export function post(url, params = {}) {
       data: params,
     })
       .then((response) => {
-        if (response.code == 302) {
-          delLocalStorage('account_token');
-          store.commit('SetDialog', {
-            content: '會員憑證過期，請重新登入',
-            status: true,
-          });
-        }
-        store.commit('SetLoading', -1);
         resolve(response);
       })
       .catch((error) => {
-        store.commit('SetLoading', -1);
         reject(error);
       });
   });
@@ -129,7 +110,6 @@ export function post(url, params = {}) {
  *  params:引數
  * */
 export function put(url, params = {}) {
-  store.commit('SetLoading', 1);
   return new Promise((resolve, reject) => {
     service({
       url: url,
@@ -137,18 +117,9 @@ export function put(url, params = {}) {
       data: params,
     })
       .then((response) => {
-        if (response.code == 302) {
-          delLocalStorage('account_token');
-          store.commit('SetDialog', {
-            content: '會員憑證過期，請重新登入',
-            status: true,
-          });
-        }
-        store.commit('SetLoading', -1);
         resolve(response);
       })
       .catch((error) => {
-        store.commit('SetLoading', -1);
         reject(error);
       });
   });
@@ -160,7 +131,6 @@ export function put(url, params = {}) {
  *  params:引數
  * */
 export function patch(url, params = {}) {
-  store.commit('SetLoading', 1);
   return new Promise((resolve, reject) => {
     service({
       url: url,
@@ -171,18 +141,9 @@ export function patch(url, params = {}) {
       },
     })
       .then((response) => {
-        if (response.code == 302) {
-          delLocalStorage('account_token');
-          store.commit('SetDialog', {
-            content: '會員憑證過期，請重新登入',
-            status: true,
-          });
-        }
-        store.commit('SetLoading', -1);
         resolve(response);
       })
       .catch((error) => {
-        store.commit('SetLoading', -1);
         reject(error);
       });
   });
@@ -194,7 +155,6 @@ export function patch(url, params = {}) {
  *  params:引數
  * */
 export function del(url, params = {}) {
-  store.commit('SetLoading', 1);
   return new Promise((resolve, reject) => {
     service({
       url: url,
@@ -205,18 +165,9 @@ export function del(url, params = {}) {
       },
     })
       .then((response) => {
-        if (response.code == 302) {
-          delLocalStorage('account_token');
-          store.commit('SetDialog', {
-            content: '會員憑證過期，請重新登入',
-            status: true,
-          });
-        }
-        store.commit('SetLoading', -1);
         resolve(response);
       })
       .catch((error) => {
-        store.commit('SetLoading', -1);
         reject(error);
       });
   });
@@ -228,10 +179,7 @@ export function del(url, params = {}) {
  *  params:引數
  * */
 export function post_form(url, params = {}) {
-  store.commit('SetLoading', 1);
   return new Promise((resolve, reject) => {
-    // console.log(service)
-    // service.headers["Content-Type"] = "multipart/form-data;charset=UTF-8"
     service({
       url: url,
       method: 'post',
@@ -241,19 +189,9 @@ export function post_form(url, params = {}) {
       },
     })
       .then((response) => {
-        // console.log(response)
-        if (response.code == 302) {
-          delLocalStorage('account_token');
-          store.commit('SetDialog', {
-            content: '會員憑證過期，請重新登入',
-            status: true,
-          });
-        }
-        store.commit('SetLoading', -1);
         resolve(response);
       })
       .catch((error) => {
-        store.commit('SetLoading', -1);
         reject(error);
       });
   });

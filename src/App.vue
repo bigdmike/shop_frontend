@@ -46,6 +46,7 @@ import MainDialog from '@/components/MainDialog.vue';
 import MainFooterNav from '@/components/MainFooterNav.vue';
 import MessageIcon from '@/components/svg/MessageIcon.vue';
 import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
+import { mapState } from 'vuex';
 
 export default {
   name: 'App',
@@ -102,64 +103,23 @@ export default {
     },
   },
   computed: {
-    body_lock() {
-      return this.$store.state.body_lock;
-    },
-    common_column_data() {
-      return this.$store.state.common_column_data;
-    },
-    carousel_data() {
-      return this.$store.state.carousel_data;
-    },
-    news_data() {
-      return this.$store.state.news_data;
-    },
-    news_category_data() {
-      return this.$store.state.news_category_data;
-    },
-    promote_data() {
-      return this.$store.state.promote_data;
-    },
-    category_data() {
-      return this.$store.state.category_data;
-    },
-    product_data() {
-      return this.$store.state.product_data;
-    },
-    question_category_data() {
-      return this.$store.state.question_category_data;
-    },
-    question_data() {
-      return this.$store.state.question_data;
-    },
-    zipcode_data() {
-      return this.$store.state.zipcode_data;
-    },
-    payment_data() {
-      return this.$store.state.payment_data;
-    },
-    shipway_data() {
-      return this.$store.state.shipway_data;
-    },
+    ...mapState([
+      'body_lock',
+      'common_column_data',
+      'carousel_data',
+      'news_data',
+      'news_category_data',
+      'promote_data',
+      'category_data',
+      'product_data',
+      'question_category_data',
+      'question_data',
+      'zipcode_data',
+      'payment_data',
+      'shipway_data',
+    ]),
     data_load_finish() {
-      if (
-        this.common_column_data != null &&
-        this.carousel_data != null &&
-        this.news_data != null &&
-        this.news_category_data != null &&
-        this.promote_data != null &&
-        this.category_data != null &&
-        this.product_data != null &&
-        this.question_category_data != null &&
-        this.question_data != null &&
-        this.zipcode_data != null &&
-        this.payment_data != null &&
-        this.shipway_data != null
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.$store.getters.data_load_finish;
     },
   },
   watch: {

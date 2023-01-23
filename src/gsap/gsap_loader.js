@@ -1,10 +1,17 @@
-import { loadScript } from '@/common/loadScript';
 import gsap from 'gsap';
 
-const loadScrollTrigger = () =>
-  loadScript(
-    'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/ScrollTrigger.min.js'
-  );
+const loadScrollTrigger = () => {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.setAttribute(
+      'src',
+      'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/ScrollTrigger.min.js'
+    );
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+};
 
 loadScrollTrigger().then(() => {
   gsap.registerPlugin(window.ScrollTrigger);
