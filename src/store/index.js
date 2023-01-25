@@ -197,6 +197,7 @@ export default new Vuex.Store({
         let tmp_data = res.data.sort((a, b) => {
           return parseInt(a.Seq) - parseInt(b.Seq);
         });
+        tmp_data = tmp_data.filter((item) => item.Content5 != '獨立銷售頁');
         state.commit('SetStateData', {
           key: 'category_data',
           val: tmp_data,
