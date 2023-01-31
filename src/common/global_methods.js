@@ -28,11 +28,11 @@ Vue.prototype.$PageReady = (title) => {
 
 Vue.prototype.$RedirectError = () => {
   var meta = document.createElement('meta');
+  meta.setAttribute('property', 'prerender-status-code');
   meta.setAttribute('name', 'prerender-status-code');
   meta.content = '404';
   document.getElementsByTagName('head')[0].appendChild(meta);
   router.push('/error_page');
-  window.prerenderReady = true;
 };
 
 Vue.prototype.$LoadScript = (src) => {

@@ -43,11 +43,13 @@ export default {
     this.meta_data = GetMetaData('找不到頁面', '', '');
     this.meta_data.meta.push({
       property: 'prerender-status-code',
+      name: 'prerender-status-code',
       content: '404',
       vmid: 'prerender-status-code',
     });
     var meta = document.createElement('meta');
     meta.setAttribute('property', 'prerender-status-code');
+    meta.setAttribute('name', 'prerender-status-code');
     meta.content = '404';
     document.getElementsByTagName('head')[0].appendChild(meta);
     this.$nextTick(() => {
