@@ -195,6 +195,13 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
+    path: '/event/:id',
+    name: '活動銷售頁',
+    component: () =>
+      import(/* webpackChunkName: "event_page" */ '../views/EventPageView.vue'),
+    meta: { requiresAuth: false },
+  },
+  {
     path: '*',
     redirect: '/error_page',
   },
@@ -217,13 +224,37 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const account_token = getLocalStorage('account_token');
+  let page_data = {
+    fullPath: to.fullPath,
+    query: to.query,
+  };
   if (to.meta.requiresAuth && account_token == '') {
-    next({
-      path: '/account/login',
-    });
-  } else {
-    next();
+    // 如果前往的頁面需要會員權限，但目前沒有權限則導回login頁面
+    to.path = '/account/login';
+    to.query = from.query.order_memo
+      ? { order_memo: from.query.order_memo }
+      : {};
+
+    page_data.fullPath = '/account/login';
   }
+  if (from.query.order_memo && !to.query.order_memo) {
+    // 如果前往的頁面路徑不包含order_memo，但目前的頁面路徑包含order_memo
+    // 則將路徑補上order_memo
+    if (Object.keys(to.query).length <= 0) {
+      page_data.fullPath += '?order_memo=' + from.query.order_memo;
+    } else {
+      page_data.fullPath += '&order_memo=' + from.query.order_memo;
+    }
+    page_data.query.order_memo = from.query.order_memo;
+    next({
+      path: page_data.fullPath,
+      query: page_data.query,
+    });
+  }
+  // 下一頁
+  next({
+    query: page_data.query,
+  });
 });
 
 export default router;

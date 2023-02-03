@@ -46,6 +46,31 @@
         </ol>
         <div class="mb-5">
           <p class="px-2 py-2 font-bold text-primary bg-primary bg-opacity-20">
+            購買人資訊
+          </p>
+        </div>
+        <ol class="w-full">
+          <li class="flex items-center justify-between w-full mb-3">
+            <p class="text-sm">購買人姓名</p>
+            <p class="text-sm font-bold sm:text-base">
+              {{ form_data.buyer_last_name + form_data.buyer_first_name }}
+            </p>
+          </li>
+          <li class="flex items-center justify-between w-full mb-3">
+            <p class="text-sm">購買人電話</p>
+            <p class="text-sm font-bold sm:text-base">
+              {{ form_data.buyer_phone }}
+            </p>
+          </li>
+          <li class="flex items-center justify-between w-full mb-3">
+            <p class="text-sm">購買人信箱</p>
+            <p class="text-sm font-bold sm:text-base">
+              {{ form_data.consignee_email }}
+            </p>
+          </li>
+        </ol>
+        <div class="mb-5">
+          <p class="px-2 py-2 font-bold text-primary bg-primary bg-opacity-20">
             收件資訊
           </p>
         </div>

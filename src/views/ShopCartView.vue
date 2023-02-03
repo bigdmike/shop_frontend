@@ -14,6 +14,7 @@
           :shopcart="shopcart"
           :checkout_data="checkout_data"
           :coupon_info="checkout_data.CouponInfo"
+          @set-samebuyer="SetSameBuyer"
           @update-action="UpdateForm"
           @validate="ValidateForm"
           @update-coupon="GetCashier"
@@ -139,6 +140,7 @@ import {
   validPhone,
   validAddress,
 } from '@/common/validate';
+import { getAccountInfo } from '@/api/member';
 import { getCashier, SendCheckout } from '@/api/shopcart';
 import {
   getLocalStorage,
@@ -159,13 +161,16 @@ export default {
     return {
       form_data: {
         ship_way: '',
-        consignee_first_name: '',
-        consignee_last_name: '',
-        consignee_email: '',
-        consignee_phone: '',
-        consignee_city: '',
-        consignee_area: '',
-        consignee_address: '',
+        consignee_first_name: '', //收件人姓名
+        consignee_last_name: '', //收件人姓名
+        consignee_phone: '', //收件人電話
+        consignee_city: '', //收件人地址
+        consignee_area: '', //收件人地址
+        consignee_address: '', //收件人地址
+        consignee_email: '', //購買人信箱
+        buyer_first_name: '', //購買人姓名
+        buyer_last_name: '', //購買人姓名
+        buyer_phone: '', //收購買人電話
         comment: '',
         pay_way: '',
         outlying: false,
@@ -201,6 +206,11 @@ export default {
           item.SizeID == shopcart_item.active_option[1]
         );
       })[0];
+    },
+    SetSameBuyer() {
+      this.form_data.consignee_first_name = this.form_data.buyer_first_name;
+      this.form_data.consignee_last_name = this.form_data.buyer_last_name;
+      this.form_data.consignee_phone = this.form_data.buyer_phone;
     },
     UpdateForm(key, val) {
       this.$set(this.form_data, key, val);
@@ -304,6 +314,19 @@ export default {
     ValidateForm() {
       this.errors = [];
       this.form_data.ship_way == '' ? this.errors.push('ship_way') : '';
+
+      if (
+        !validName(
+          this.form_data.buyer_last_name + this.form_data.buyer_first_name
+        )
+      ) {
+        this.errors.push('buyer_first_name');
+        this.errors.push('buyer_last_name');
+      }
+      !validPhone(this.form_data.buyer_phone)
+        ? this.errors.push('buyer_phone')
+        : '';
+
       if (
         !validName(
           this.form_data.consignee_last_name +
@@ -424,6 +447,19 @@ export default {
     next();
   },
   created() {
+    if (getLocalStorage('account_token')) {
+      getAccountInfo().then((res) => {
+        if (res.code == 302) {
+          // token過期
+          this.$router.push('/account/login');
+        } else {
+          this.form_data.consignee_email = res.data.Account;
+          this.form_data.buyer_first_name = res.data.Name.slice(1);
+          this.form_data.buyer_last_name = res.data.Name[0];
+          this.form_data.buyer_phone = res.data.Phone;
+        }
+      });
+    }
     if (this.shopcart.length > 0) {
       this.GetCashier();
     }

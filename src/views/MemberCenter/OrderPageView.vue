@@ -104,6 +104,25 @@
         </ol>
       </div>
       <div class="mb-5">
+        <p class="mb-3 text-sm">購買人資訊</p>
+        <ol class="px-2 border rounded-md border-zinc-300">
+          <li class="flex items-center px-2 py-3 border-b border-zinc-300">
+            <p class="w-20 text-sm text-basic_gray">購買人</p>
+            <p class="text-sm">
+              {{ trade_data.BuyerName }}
+            </p>
+          </li>
+          <li class="flex items-center px-2 py-3">
+            <p class="w-20 text-sm text-basic_gray">購買人電話</p>
+            <p class="text-sm">{{ trade_data.BuyerPhone }}</p>
+          </li>
+          <li class="flex items-center px-2 py-3">
+            <p class="w-20 text-sm text-basic_gray">購買人信箱</p>
+            <p class="text-sm">{{ trade_data.ReceiverEmail }}</p>
+          </li>
+        </ol>
+      </div>
+      <div class="mb-5">
         <p class="mb-3 text-sm">收件資訊</p>
         <ol class="px-2 border rounded-md border-zinc-300">
           <li class="flex items-center px-2 py-3 border-b border-zinc-300">

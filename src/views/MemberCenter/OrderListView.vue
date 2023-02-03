@@ -1,14 +1,14 @@
 <template>
-  <div class="w-full relative z-10 pb-32">
+  <div class="relative z-10 w-full pb-32">
     <div>
       <ol>
         <li
-          class="w-full p-3 border border-zinc-300 rounded-md mb-5"
+          class="w-full p-3 mb-5 border rounded-md border-zinc-300"
           v-for="(item, item_index) in page_count"
           :key="`order_${item_index}`"
         >
           <div
-            class="flex items-center justify-between pb-3 border-b border-zinc-300 mb-3"
+            class="flex items-center justify-between pb-3 mb-3 border-b border-zinc-300"
           >
             <p class="text-sm text-basic_gray">
               訂單編號：<span class="text-secondary">{{ item.TradeID }}</span>
@@ -20,10 +20,10 @@
             </p>
           </div>
           <div class="">
-            <p class="text-sm text-basic_gray mb-3">
+            <p class="mb-3 text-sm text-basic_gray">
               訂單狀態 <span class="text-secondary">{{ item.StatusTxt }}</span>
             </p>
-            <p class="text-sm text-basic_gray mb-3">
+            <p class="mb-3 text-sm text-basic_gray">
               付款方式
               <span class="text-secondary">{{
                 GetPayment(item.PaymentID).Title
@@ -37,7 +37,7 @@
           <div class="flex items-center justify-end">
             <router-link
               :to="`/account/order/${item.TradeID}`"
-              class="text-xs px-5 py-2 bg-primary rounded-md text-white transition-colors duration-200 hover:bg-opacity-70"
+              class="px-5 py-2 text-xs text-white transition-colors duration-200 rounded-md bg-primary hover:bg-opacity-70"
             >
               訂單詳細
             </router-link>
@@ -48,7 +48,7 @@
         <button
           @click="page += 1"
           v-if="count_per_page * page < trade_list.length"
-          class="px-16 py-2 font-bold text-white bg-primary rounded-full border border-primary transition-colors duration-200 hover:bg-transparent hover:text-primary"
+          class="px-16 py-2 font-bold text-white transition-colors duration-200 border rounded-full bg-primary border-primary hover:bg-transparent hover:text-primary"
         >
           載入更多
         </button>
@@ -81,7 +81,8 @@ export default {
       });
     },
     GetPayment(id) {
-      return this.payment_data.filter((item) => item.PaymentID == id)[0];
+      let payment = this.payment_data.filter((item) => item.PaymentID == id);
+      return payment.length > 0 ? payment[0] : { Title: '查無付款方式' };
     },
     GetShipway(id) {
       return this.shipway_data.filter((item) => item.ShippingID == id)[0];

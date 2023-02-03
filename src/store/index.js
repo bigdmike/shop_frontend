@@ -35,6 +35,7 @@ export default new Vuex.Store({
     news_category_data: null,
     promote_data: null,
     category_data: null,
+    event_data: null,
     product_data: null,
     question_category_data: null,
     question_data: null,
@@ -114,6 +115,13 @@ export default new Vuex.Store({
         (column) => column.Title == key
       );
       return column_data.length > 0 ? column_data[0].Content : '';
+    },
+    event_data: (state) => (key) => {
+      if (state.event_data == null) {
+        return null;
+      }
+      const event_data = state.event_data.filter((item) => item.MenuID == key);
+      return event_data.length > 0 ? event_data[0] : 'error';
     },
   },
   mutations: {
@@ -197,10 +205,17 @@ export default new Vuex.Store({
         let tmp_data = res.data.sort((a, b) => {
           return parseInt(a.Seq) - parseInt(b.Seq);
         });
-        tmp_data = tmp_data.filter((item) => item.Content5 != '獨立銷售頁');
+        const category = tmp_data.filter(
+          (item) => item.Content5 != '獨立銷售頁'
+        );
         state.commit('SetStateData', {
           key: 'category_data',
-          val: tmp_data,
+          val: category,
+        });
+        const event = tmp_data.filter((item) => item.Content5 == '獨立銷售頁');
+        state.commit('SetStateData', {
+          key: 'event_data',
+          val: event,
         });
       });
     },

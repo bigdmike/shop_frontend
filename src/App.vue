@@ -47,6 +47,7 @@ import MainFooterNav from '@/components/MainFooterNav.vue';
 import MessageIcon from '@/components/svg/MessageIcon.vue';
 import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import { mapState } from 'vuex';
+import { setLocalStorage, delLocalStorage } from '@/common/cookie';
 
 export default {
   name: 'App',
@@ -101,6 +102,15 @@ export default {
       });
       window.open(this.$GetCloumn('company_messenger'), '_blank');
     },
+    GetOrderMemo() {
+      // 取得分潤標籤
+      console.log(this.$route.query.name);
+      if (this.$route.query.name) {
+        setLocalStorage('order_memo', this.$route.query.name);
+      } else {
+        delLocalStorage('order_memo');
+      }
+    },
   },
   computed: {
     ...mapState([
@@ -140,6 +150,7 @@ export default {
     },
   },
   created() {
+    this.GetOrderMemo();
     this.CheckPageData();
   },
 };

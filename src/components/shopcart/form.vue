@@ -56,27 +56,102 @@
           {{ form_data.shop_id == '' ? '選擇取貨門市' : '重新選擇取貨門市' }}
         </button>
       </div>
-      <p v-if="GetError('ship_way')" class="text-xs text-red-600">
-        請選擇配送方式
-      </p>
+      <template v-if="form_data.ship_way == 1 || form_data.ship_way == 2">
+        <p v-if="GetError('ship_way')" class="text-xs text-red-600">
+          請選擇配送方式
+        </p>
+      </template>
     </div>
     <p v-else class="mb-10 text-sm text-red-700">
       沒有可用的配送方式！<br />
       您購物車中的商品尺寸或重量總和超過可運送的範圍，請分次下單結帳謝謝！
     </p>
+    <!-- buyer -->
+
     <div class="flex items-center justify-between mb-5">
-      <h4 class="text-2xl font-bold">收件地址</h4>
+      <h4 class="text-2xl font-bold">購買人資訊</h4>
       <p class="text-sm text-basic_gray" v-if="!member_login">
         已經有帳戶？
         <router-link class="text-primary" to="/account/login">登入</router-link>
       </p>
-      <button
-        @click="OpenAddressDialog"
-        v-if="member_login"
-        class="px-3 py-2 text-xs text-white transition-colors duration-200 rounded-full xs:px-5 xs:text-sm bg-primary hover:bg-opacity-70"
-      >
-        選擇常用收件資訊
-      </button>
+    </div>
+    <div class="flex flex-wrap items-center mb-6 -mx-2">
+      <div class="w-1/2 px-2 mb-4">
+        <input
+          type="text"
+          name="first_name"
+          :value="form_data.buyer_first_name"
+          @input="UpdateForm('buyer_first_name', $event.target.value)"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          placeholder="名字"
+        />
+        <p v-if="GetError('buyer_first_name')" class="text-xs text-red-600">
+          請輸入正確的中文姓名
+        </p>
+      </div>
+      <div class="w-1/2 px-2 mb-4">
+        <input
+          type="text"
+          name="last_name"
+          :value="form_data.buyer_last_name"
+          @input="UpdateForm('buyer_last_name', $event.target.value)"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          placeholder="姓氏"
+        />
+        <p v-if="GetError('buyer_last_name')" class="text-xs text-red-600">
+          請輸入正確的中文姓名
+        </p>
+      </div>
+      <div class="w-full px-2 mb-4">
+        <input
+          type="email"
+          name="email"
+          :value="form_data.consignee_email"
+          @input="UpdateForm('consignee_email', $event.target.value)"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          placeholder="電子郵件"
+        />
+        <p v-if="GetError('consignee_email')" class="text-xs text-red-600">
+          請輸入正確的電子郵件
+        </p>
+      </div>
+      <div class="w-full px-2 mb-4">
+        <input
+          type="tel"
+          name="phone"
+          :value="form_data.buyer_phone"
+          @input="UpdateForm('buyer_phone', $event.target.value)"
+          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          placeholder="手機號碼"
+        />
+        <p v-if="GetError('buyer_phone')" class="text-xs text-red-600">
+          請輸入正確的手機號碼
+        </p>
+      </div>
+      <div class="w-full px-2">
+        <span class="block w-full border-b border-zinc-300"></span>
+      </div>
+    </div>
+    <!-- buyer -->
+
+    <!-- resiver -->
+    <div class="flex flex-wrap items-center justify-between mb-5">
+      <h4 class="mb-5 text-2xl font-bold sm:mb-0">收件人資訊</h4>
+      <div class="flex items-center w-full sm:w-auto">
+        <button
+          @click="$emit('set-samebuyer')"
+          class="px-3 py-2 mr-2 text-xs text-white transition-colors duration-200 rounded-full xs:px-5 xs:text-sm bg-secondary hover:bg-opacity-70"
+        >
+          同購買人
+        </button>
+        <button
+          @click="OpenAddressDialog"
+          v-if="member_login"
+          class="px-3 py-2 text-xs text-white transition-colors duration-200 rounded-full xs:px-5 xs:text-sm bg-primary hover:bg-opacity-70"
+        >
+          選擇常用收件資訊
+        </button>
+      </div>
     </div>
     <div class="flex flex-wrap items-center mb-6 -mx-2">
       <div class="w-1/2 px-2 mb-4">
@@ -103,19 +178,6 @@
         />
         <p v-if="GetError('consignee_last_name')" class="text-xs text-red-600">
           請輸入正確的中文姓名
-        </p>
-      </div>
-      <div class="w-full px-2 mb-4">
-        <input
-          type="email"
-          name="email"
-          :value="form_data.consignee_email"
-          @input="UpdateForm('consignee_email', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
-          placeholder="電子郵件"
-        />
-        <p v-if="GetError('consignee_email')" class="text-xs text-red-600">
-          請輸入正確的電子郵件
         </p>
       </div>
       <div class="w-full px-2 mb-4">
@@ -190,6 +252,7 @@
         <span class="block w-full border-b border-zinc-300"></span>
       </div>
     </div>
+    <!-- resiver -->
     <div class="flex items-center justify-between mb-5">
       <h4 class="text-2xl font-bold">訂單備註</h4>
     </div>

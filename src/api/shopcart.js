@@ -35,6 +35,8 @@ export function SendCheckout(user_data, shopcart) {
       item.Area == user_data.consignee_area
   )[0].ZipCode;
   let data = {
+    BuyerName: user_data.buyer_last_name + user_data.buyer_first_name,
+    BuyerPhone: user_data.buyer_phone,
     ReceiverName:
       user_data.consignee_last_name + user_data.consignee_first_name,
     ReceiverPhone: user_data.consignee_phone,
