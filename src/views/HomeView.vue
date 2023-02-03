@@ -15,7 +15,7 @@
     <ProductSection
       v-if="promote_product_data.length > 0"
       :product_data="promote_product_data"
-      title="早鳥優惠"
+      title="店長推薦"
       sub_title="Early Bird Discount"
       :background_image="$ImageUrl($GetCloumn('home_new_product_bg'))"
     />
