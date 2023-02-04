@@ -121,6 +121,14 @@ export default new Vuex.Store({
         return null;
       }
       const event_data = state.event_data.filter((item) => item.MenuID == key);
+      if (event_data.length <= 0) {
+        return 'error';
+      }
+      console.log(new Date(), new Date(event_data[0].MenuTimeEnd));
+      console.log(new Date() > new Date(event_data[0].MenuTimeEnd));
+      if (new Date() > new Date(event_data[0].MenuTimeEnd)) {
+        return 'error';
+      }
       return event_data.length > 0 ? event_data[0] : 'error';
     },
   },

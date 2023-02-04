@@ -104,9 +104,8 @@ export default {
     },
     GetOrderMemo() {
       // 取得分潤標籤
-      console.log(this.$route.query.name);
-      if (this.$route.query.name) {
-        setLocalStorage('order_memo', this.$route.query.name);
+      if (this.$route.query.order_memo != undefined) {
+        setLocalStorage('order_memo', this.$route.query.order_memo);
       } else {
         delLocalStorage('order_memo');
       }
@@ -148,9 +147,11 @@ export default {
         this.first_time_load = false;
       }
     },
+    $route() {
+      this.GetOrderMemo();
+    },
   },
   created() {
-    this.GetOrderMemo();
     this.CheckPageData();
   },
 };

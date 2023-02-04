@@ -60,6 +60,12 @@
       </div>
     </div>
 
+    <EventTimer
+      ref="EventTimer"
+      :product_data="product_data"
+      v-if="product_data.GoodsTimeEnd != null"
+    />
+
     <div v-if="product_data.Discount.length > 0" class="mb-5">
       <p class="mb-2 text-sm text-primary">此商品參與的優惠活動</p>
       <ol
@@ -176,6 +182,7 @@ import FacebookIcon from '@/components/svg/FacebookIcon.vue';
 import LineIcon from '@/components/svg/LineIcon.vue';
 import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import EventImageDialog from '@/components/product_page/EventImageDialog.vue';
+import EventTimer from '@/components/product_page/EventTimer.vue';
 export default {
   name: 'ProductInfoBox',
   components: {
@@ -186,6 +193,7 @@ export default {
     MinusIcon,
     PlusIcon,
     EventImageDialog,
+    EventTimer,
   },
   props: {
     product_data: {
@@ -221,6 +229,11 @@ export default {
     ShareToLine() {
       window.open(`line://msg/text/${window.location.href}`, '_blank').focus();
     },
+  },
+  mounted() {
+    if (this.product_data.GoodsTimeEnd != null) {
+      this.$refs.EventTimer.SetTimer();
+    }
   },
   computed: {
     first_options() {

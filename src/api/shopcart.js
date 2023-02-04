@@ -49,12 +49,17 @@ export function SendCheckout(user_data, shopcart) {
     ShippingID: user_data.ship_way,
     ReceiverStoreNo: '',
     ReceiverStoreInfo: '',
+    OrderMemo: '',
     ShoppingCart: [],
   };
   // 如果是超商取貨
   if (data.ShippingID == 1 || data.ShippingID == 2) {
     data.ReceiverStoreNo = user_data.shop_id;
     data.ReceiverStoreInfo = user_data.shop_name;
+  }
+  // 如果有分潤標籤
+  if (getLocalStorage('order_memo')) {
+    data.OrderMemo = getLocalStorage('order_memo');
   }
 
   shopcart.forEach((item) => {
@@ -66,6 +71,7 @@ export function SendCheckout(user_data, shopcart) {
       });
     }
   });
+  // console.log(data);
   if (getLocalStorage('account_token')) {
     return post('member/checkout', data);
   } else {
