@@ -229,9 +229,11 @@ export default new Vuex.Store({
     },
     getProductData({ commit }) {
       getProductData().then((res) => {
+        // 篩選已刪除商品
         let tmp_data = res.data.filter((item) => {
           return item.deleted_at == null;
         });
+        // 篩選停用的庫存，並判斷若商品沒有圖片則顯示預設圖片
         tmp_data.forEach((item, item_index) => {
           tmp_data[item_index].Stock = item.Stock.filter(
             (stock) => stock.Status == 'Y'
@@ -240,7 +242,11 @@ export default new Vuex.Store({
             tmp_data[item_index].Image1 = '/image/product_default.webp';
           }
         });
+        // 篩選沒有庫存選項的商品
         tmp_data = tmp_data.filter((item) => item.Stock.length > 0);
+        // 篩選停用的商品
+        tmp_data = tmp_data.filter((item) => item.Status == 'Y');
+        // 排序
         tmp_data = tmp_data.sort((a, b) => {
           return parseInt(a.Seq) - parseInt(b.Seq);
         });
