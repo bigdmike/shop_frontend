@@ -17,12 +17,15 @@
         :category_data="category_data"
         class="hidden w-1/4 pr-10 md:block"
       />
-      <ProductList
-        class="w-full md:w-3/4"
-        :page_product_data="page_product_data"
-        :product_data="product_data"
-        @next-page="page += 1"
-      />
+      <div class="w-full md:w-3/4">
+        <EventTimer ref="EventTimer" :event_data="active_category_data" />
+        <ProductList
+          class="w-full"
+          :page_product_data="page_product_data"
+          :product_data="product_data"
+          @next-page="page += 1"
+        />
+      </div>
     </div>
   </main>
 </template>
@@ -32,6 +35,7 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import CategoryMenu from '@/components/product_list/category_menu.vue';
 import ProductList from '@/components/product_list/product_list.vue';
 import FilterBar from '@/components/product_list/filter_bar.vue';
+import EventTimer from '@/components/product_list/EventTimer.vue';
 import { GetMetaData, ChangeTitle } from '@/common/meta';
 export default {
   name: 'ProductListView',
@@ -40,6 +44,7 @@ export default {
     CategoryMenu,
     ProductList,
     FilterBar,
+    EventTimer,
   },
   data() {
     return {
@@ -102,6 +107,9 @@ export default {
 
             this.$PageReady(this.meta_data.title);
           });
+          this.$nextTick(() => {
+            this.$refs.EventTimer.SetTimer();
+          });
         } else {
           this.$RedirectError();
         }
@@ -135,6 +143,12 @@ export default {
   computed: {
     category_data() {
       return this.$store.state.category_data;
+    },
+    active_category_data() {
+      let active_category_data = this.category_data.filter(
+        (item) => item.MenuID == this.active_category
+      );
+      return active_category_data.length > 0 ? active_category_data[0] : null;
     },
     product_list() {
       return this.$store.state.product_data;

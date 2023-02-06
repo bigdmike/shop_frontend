@@ -6,7 +6,7 @@
     >
       <div
         data-dialog-box
-        class="sm:w-[500px] w-full sm:max-h-[90%] h-full overflow-y-auto max-w-full bg-white relative z-10 rounded-2xl"
+        class="sm:w-[500px] w-full sm:max-h-[90%] sm:h-auto h-full overflow-y-auto max-w-full bg-white relative z-10 rounded-2xl"
       >
         <template v-if="product_data != null">
           <div

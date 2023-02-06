@@ -213,6 +213,13 @@ export default new Vuex.Store({
         let tmp_data = res.data.sort((a, b) => {
           return parseInt(a.Seq) - parseInt(b.Seq);
         });
+        tmp_data = tmp_data.filter((item) => {
+          if (item.MenuTimeEnd != null) {
+            return new Date() < new Date(item.MenuTimeEnd);
+          } else {
+            return true;
+          }
+        });
         const category = tmp_data.filter(
           (item) => item.Content5 != '獨立銷售頁'
         );
