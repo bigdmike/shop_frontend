@@ -151,7 +151,9 @@ export default {
       return active_category_data.length > 0 ? active_category_data[0] : null;
     },
     product_list() {
-      return this.$store.state.product_data;
+      return this.$store.state.product_data.filter(
+        (item) => item.Status == 'Y'
+      );
     },
     product_data() {
       if (this.active_category == 'all') {

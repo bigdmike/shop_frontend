@@ -252,7 +252,7 @@ export default new Vuex.Store({
         // 篩選沒有庫存選項的商品
         tmp_data = tmp_data.filter((item) => item.Stock.length > 0);
         // 篩選停用的商品
-        tmp_data = tmp_data.filter((item) => item.Status == 'Y');
+        // tmp_data = tmp_data.filter((item) => item.Status == 'Y');
         // 排序
         tmp_data = tmp_data.sort((a, b) => {
           return parseInt(a.Seq) - parseInt(b.Seq);

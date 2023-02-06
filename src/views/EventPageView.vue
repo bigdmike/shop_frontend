@@ -182,7 +182,7 @@ export default {
         );
 
         category.length <= 0 ? (enable = false) : '';
-        item.Status == 'N' ? (enable = false) : '';
+        // item.Status == 'N' ? (enable = false) : '';
         if (item.GoodsTimeEnd != null) {
           new Date() > new Date(item.GoodsTimeEnd) ? (enable = false) : '';
         }
