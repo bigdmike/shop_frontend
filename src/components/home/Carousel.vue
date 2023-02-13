@@ -1,17 +1,27 @@
 <template>
-  <section class="relative w-full max-w-screen-xl mx-auto">
-    <button
-      @click="SlideSwiper(1)"
-      class="absolute right-0 z-10 py-6 pl-5 pr-2 transition-colors duration-200 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-tl-full rounded-bl-full top-1/2 sm:pr-3 sm:pl-8 sm:py-9 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
+  <section class="relative w-full">
+    <div
+      class="absolute top-0 left-0 right-0 z-10 pointer-events-none bottom-20"
     >
-      <NextIcon class="w-2 sm:w-4" />
-    </button>
-    <button
-      @click="SlideSwiper(-1)"
-      class="absolute left-0 z-10 py-6 pl-2 pr-5 transition-colors duration-200 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-tr-full rounded-br-full top-1/2 sm:pl-3 sm:pr-8 sm:py-9 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
-    >
-      <PrevIcon class="w-2 sm:w-4" />
-    </button>
+      <div
+        class="absolute z-10 flex items-center pointer-events-auto md:bottom-14 md:top-auto sm:top-32 top-20 md:right-14 sm:right-10 right-5"
+      >
+        <button
+          @click="SlideSwiper(-1)"
+          class="flex items-center justify-center w-6 h-6 mr-3 transition-colors duration-500 border rounded-sm sm:text-xl sm:rounded-md sm:w-8 sm:h-8 md:mr-5 md:w-10 md:h-10 text-basic_white border-basic_white basic_button hover:text-primary"
+        >
+          <span class="icon-chevron_left"></span>
+        </button>
+        <button
+          @click="SlideSwiper(1)"
+          class="flex items-center justify-center w-6 h-6 transition-colors duration-500 border rounded-sm sm:rounded-md sm:text-xl sm:w-8 sm:h-8 md:w-10 md:h-10 text-basic_white border-basic_white basic_button hover:text-primary"
+        >
+          <span class="icon-chevron_right"></span>
+        </button>
+      </div>
+
+      <CarouselTimeline ref="CarouselTimeline" :carousel_data="carousel_data" />
+    </div>
 
     <VueSlickCarousel
       ref="swiper"
@@ -22,17 +32,17 @@
       :class="{ '--swiping': swiping === true }"
     >
       <div
-        class="w-full"
+        class="w-full h-full"
         v-for="(item, item_index) in carousel_data"
         :key="`carousel_${item_index}`"
       >
         <img
-          class="hidden w-full select-none pc_image"
+          class="w-full h-full select-none pc_image"
           :src="$ImageUrl(item.Image1)"
           :alt="$GetCloumn('company_name')"
         />
         <img
-          class="block w-full select-none mb_image"
+          class="w-full h-full select-none mb_image"
           :src="$ImageUrl(item.Image2)"
           :alt="$GetCloumn('company_name')"
         />
@@ -43,19 +53,17 @@
 
 <script>
 import '@/assets/css/vue-slick-carousel.css';
-import NextIcon from '@/components/svg/Carousel/NextIcon.vue';
-import PrevIcon from '@/components/svg/Carousel/PrevIcon.vue';
+import CarouselTimeline from '@/components/home/carousel/Timeline.vue';
 export default {
   name: 'CarouselSection',
+  components: {
+    CarouselTimeline,
+  },
   props: {
     carousel_data: {
       require: true,
       type: Array,
     },
-  },
-  components: {
-    NextIcon,
-    PrevIcon,
   },
   data() {
     return {
@@ -67,11 +75,13 @@ export default {
         slidesToShow: 1,
         fade: true,
         speed: 500,
-        autoplaySpeed: 5000,
-        draggable: true,
+        // autoplaySpeed: 5000,
+        // draggable: true,
         arrows: false,
-        autoplay: true,
+        // autoplay: true,
       },
+      active_index: 0,
+      timer: null,
     };
   },
   methods: {
@@ -84,9 +94,39 @@ export default {
       } else {
         this.$refs.swiper.next();
       }
+      this.SetActiveIndex(val);
+      this.SetTimer();
+    },
+    SetActiveIndex(action) {
+      const end_index = this.carousel_data.length - 1;
+      if (action == -1) {
+        this.active_index =
+          this.active_index == 0 ? end_index : this.active_index - 1;
+      } else {
+        this.active_index =
+          this.active_index == end_index ? 0 : this.active_index + 1;
+      }
+    },
+    SetTimer() {
+      const end_index = this.carousel_data.length - 1;
+      let next_index = -1;
+      next_index = this.active_index == end_index ? 0 : this.active_index + 1;
+      this.timer != null ? clearTimeout(this.timer) : '';
+      this.timer = setTimeout(() => {
+        this.SlideSwiper(1);
+        this.SetTimer();
+      }, 5000);
+      this.$refs.CarouselTimeline.Next(this.active_index, next_index);
+    },
+    SetGsap() {
+      this.SetActiveIndex(0);
+      this.SetTimer();
     },
   },
-  mounted() {},
+  beforeDestroy() {
+    console.log('HOME Carousel DESTROY');
+    this.timer != null ? clearTimeout(this.timer) : '';
+  },
 };
 </script>
 
@@ -116,5 +156,9 @@ slick-slider .slick-track,
   -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
   transition-delay: 10ms;
+}
+
+.slick-slider div {
+  display: block !important;
 }
 </style>

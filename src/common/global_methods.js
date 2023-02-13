@@ -1,16 +1,18 @@
 import Vue from 'vue';
-import store from '@/store';
+// import store from '@/store';
 import router from '@/router';
 
 Vue.prototype.$ImageUrl = (item) => {
-  return item == '' ? '' : process.env.VUE_APP_BASE_API + item;
+  return item;
+  // return item == '' ? '' : process.env.VUE_APP_BASE_API + item;
 };
 
 Vue.prototype.$GetCloumn = (key) => {
-  const column = store.state.common_column_data.filter(
-    (column) => column.Title == key
-  );
-  return column.length <= 0 ? '' : column[0].Content;
+  return key;
+  // const column = store.state.common_column_data.filter(
+  //   (column) => column.Title == key
+  // );
+  // return column.length <= 0 ? '' : column[0].Content;
 };
 
 Vue.prototype.$MoneyFormat = (price) => {
@@ -43,4 +45,8 @@ Vue.prototype.$LoadScript = (src) => {
     script.onerror = reject;
     document.head.appendChild(script);
   });
+};
+
+Vue.prototype.$AddZeroPad = (val) => {
+  return parseInt(val) < 10 ? '0' + val : val;
 };

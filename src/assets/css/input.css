@@ -1,10 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700;900&family=Yeseva+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anybody:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+@import url('./icon.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
-  font-family: 'Noto Serif TC', serif;
+  font-family: 'Noto Sans TC', sans-serif;
 }
 
 .link_color {
@@ -13,4 +14,24 @@
 
 .link_color:hover {
   @apply text-secondary;
+}
+
+.basic_button {
+  @apply relative overflow-hidden;
+}
+.basic_button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  transform: skewX(-45deg) scaleX(2) translateX(-100%);
+  transition: all 0.3s;
+  @apply bg-basic_white;
+}
+
+.basic_button:hover::before {
+  transform: skewX(-45deg) scaleX(2) translateX(0%);
 }

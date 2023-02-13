@@ -1,12 +1,12 @@
 <template>
-  <div id="app" class="relative overflow-x-hidden sm:pt-32 pt-28">
-    <EventAnnouncement v-if="data_load_finish" />
+  <div id="app" class="relative overflow-x-hidden">
     <MainHeader ref="MainHeader" v-if="data_load_finish" />
     <MainLoading />
     <ShopCartDialog />
     <ShopCartDrawer v-if="data_load_finish" />
     <MainDialog />
-    <router-view v-if="data_load_finish" />
+    <!--  v-if="data_load_finish" -->
+    <router-view />
     <MainFooter v-if="data_load_finish" />
     <MainFooterNav @open-menu="OpenMenu" />
     <button
@@ -36,7 +36,6 @@
 <style src="@/assets/css/app.css"></style>
 
 <script>
-import EventAnnouncement from '@/components/EventAnnouncement.vue';
 import MainHeader from '@/components/MainHeader.vue';
 import MainLoading from '@/components/MainLoading';
 import MainFooter from '@/components/MainFooter.vue';
@@ -52,7 +51,6 @@ import { setLocalStorage, delLocalStorage } from '@/common/cookie';
 export default {
   name: 'App',
   components: {
-    EventAnnouncement,
     MainHeader,
     MainFooter,
     MainLoading,
@@ -140,19 +138,19 @@ export default {
       }
     },
     data_load_finish() {
-      if (this.data_load_finish) {
-        this.$store.dispatch('shopcart_module/GetShopCart');
-      }
-      if (this.data_load_finish && this.first_time_load) {
-        this.first_time_load = false;
-      }
+      // if (this.data_load_finish) {
+      //   this.$store.dispatch('shopcart_module/GetShopCart');
+      // }
+      // if (this.data_load_finish && this.first_time_load) {
+      //   this.first_time_load = false;
+      // }
     },
     $route() {
-      this.GetOrderMemo();
+      // this.GetOrderMemo();
     },
   },
   created() {
-    this.CheckPageData();
+    // this.CheckPageData();
   },
 };
 </script>
