@@ -86,20 +86,17 @@
           <div v-html="$GetCloumn('about_section_4_content')"></div>
         </div>
       </div>
-      <CompanyInfoSection :image="$GetCloumn('company_image')" />
     </div>
   </main>
 </template>
 
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
-import CompanyInfoSection from '@/components/home/CompantInfoSection.vue';
 import { GetMetaData } from '@/common/meta';
 export default {
   name: 'AboutView',
   components: {
     BreadCrumb,
-    CompanyInfoSection,
   },
   data() {
     return {

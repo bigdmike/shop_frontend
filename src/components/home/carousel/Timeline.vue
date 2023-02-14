@@ -3,7 +3,7 @@
     ref="MainContent"
     class="absolute z-10 flex items-center transform md:-translate-y-1/2 md:top-1/2 sm:top-32 top-20 md:right-14 md:left-auto sm:left-10 left-5 md:block"
   >
-    <p data-number-box class="relative sm:h-[14px] h-6 overflow-hidden">
+    <p data-number-box class="relative sm:h-6 h-[14px] overflow-hidden">
       <span
         class="block text-sm font-bold leading-none tracking-widest text-center sm:text-base font-anybody text-primary"
         v-for="number in carousel_data.length"
@@ -28,7 +28,7 @@
         class="absolute top-0 bottom-0 left-0 right-0 block origin-left transform bg-primary"
       ></i>
     </span>
-    <p data-number-box class="relative sm:h-[14px] h-6 overflow-hidden">
+    <p data-number-box class="relative sm:h-6 h-[14px] overflow-hidden">
       <span
         class="block text-sm font-bold leading-none tracking-widest text-center sm:text-base font-anybody text-basic_gray"
         v-for="number in carousel_data.length"

@@ -7,14 +7,15 @@
     <MainDialog />
     <!--  v-if="data_load_finish" -->
     <router-view />
+    <ContactFooter />
     <MainFooter v-if="data_load_finish" />
     <MainFooterNav @open-menu="OpenMenu" />
-    <button
+    <!-- <button
       @click="ScrollToTop"
       class="fixed z-20 flex items-center justify-center transition-all duration-300 rounded-full cursor-pointer md:bottom-24 sm:bottom-36 bottom-28 sm:right-7 right-2 sm:w-14 sm:h-14 w-11 h-11 bg-primary hover:bg-opacity-70"
     >
       <SelectArrowIcon class="w-6 text-white transform md:w-8 -scale-y-100" />
-    </button>
+    </button> -->
     <button
       v-if="data_load_finish"
       @click="OpenMessenger"
@@ -44,7 +45,8 @@ import ShopCartDrawer from '@/components/ShopCartDrawer.vue';
 import MainDialog from '@/components/MainDialog.vue';
 import MainFooterNav from '@/components/MainFooterNav.vue';
 import MessageIcon from '@/components/svg/MessageIcon.vue';
-import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
+import ContactFooter from '@/components/ContactFooter.vue';
+// import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import { mapState } from 'vuex';
 import { setLocalStorage, delLocalStorage } from '@/common/cookie';
 
@@ -59,7 +61,8 @@ export default {
     MainDialog,
     MainFooterNav,
     MessageIcon,
-    SelectArrowIcon,
+    ContactFooter,
+    // SelectArrowIcon,
   },
   data() {
     return {

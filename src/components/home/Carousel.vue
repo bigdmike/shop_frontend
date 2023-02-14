@@ -1,53 +1,69 @@
 <template>
-  <section class="relative w-full">
-    <div
-      class="absolute top-0 left-0 right-0 z-10 pointer-events-none bottom-20"
-    >
+  <section class="relative z-0 w-full">
+    <div class="fixed top-0 left-0 z-10 w-full">
       <div
-        class="absolute z-10 flex items-center pointer-events-auto md:bottom-14 md:top-auto sm:top-32 top-20 md:right-14 sm:right-10 right-5"
+        class="absolute top-0 left-0 right-0 z-10 pointer-events-none bottom-20"
       >
-        <button
-          @click="SlideSwiper(-1)"
-          class="flex items-center justify-center w-6 h-6 mr-3 transition-colors duration-500 border rounded-sm sm:text-xl sm:rounded-md sm:w-8 sm:h-8 md:mr-5 md:w-10 md:h-10 text-basic_white border-basic_white basic_button hover:text-primary"
+        <div
+          class="absolute z-10 flex items-center pointer-events-auto md:bottom-14 md:top-auto sm:top-32 top-20 md:right-14 sm:right-10 right-5"
         >
-          <span class="icon-chevron_left"></span>
-        </button>
-        <button
-          @click="SlideSwiper(1)"
-          class="flex items-center justify-center w-6 h-6 transition-colors duration-500 border rounded-sm sm:rounded-md sm:text-xl sm:w-8 sm:h-8 md:w-10 md:h-10 text-basic_white border-basic_white basic_button hover:text-primary"
-        >
-          <span class="icon-chevron_right"></span>
-        </button>
+          <button
+            @click="SlideSwiper(-1)"
+            class="flex items-center justify-center w-6 h-6 mr-3 transition-colors duration-500 border rounded-sm sm:text-xl sm:rounded-md sm:w-8 sm:h-8 md:mr-5 md:w-10 md:h-10 text-basic_white border-basic_white basic_button hover:text-primary"
+          >
+            <span class="icon-chevron_left"></span>
+          </button>
+          <button
+            @click="SlideSwiper(1)"
+            class="flex items-center justify-center w-6 h-6 transition-colors duration-500 border rounded-sm sm:rounded-md sm:text-xl sm:w-8 sm:h-8 md:w-10 md:h-10 text-basic_white border-basic_white basic_button hover:text-primary"
+          >
+            <span class="icon-chevron_right"></span>
+          </button>
+        </div>
+
+        <CarouselTimeline
+          ref="CarouselTimeline"
+          :carousel_data="carousel_data"
+        />
       </div>
 
-      <CarouselTimeline ref="CarouselTimeline" :carousel_data="carousel_data" />
+      <VueSlickCarousel
+        ref="swiper"
+        v-bind="slick_option"
+        @swipe="setCarouselSwiping(true)"
+        @mouseup.native="setCarouselSwiping(false)"
+        @touchend.native="setCarouselSwiping(false)"
+        :class="{ '--swiping': swiping === true }"
+      >
+        <div
+          class="w-full"
+          v-for="(item, item_index) in carousel_data"
+          :key="`carousel_${item_index}`"
+        >
+          <img
+            class="w-full select-none pc_image"
+            :src="$ImageUrl(item.Image1)"
+            :alt="$GetCloumn('company_name')"
+          />
+          <img
+            class="w-full select-none mb_image"
+            :src="$ImageUrl(item.Image2)"
+            :alt="$GetCloumn('company_name')"
+          />
+        </div>
+      </VueSlickCarousel>
     </div>
 
-    <VueSlickCarousel
-      ref="swiper"
-      v-bind="slick_option"
-      @swipe="setCarouselSwiping(true)"
-      @mouseup.native="setCarouselSwiping(false)"
-      @touchend.native="setCarouselSwiping(false)"
-      :class="{ '--swiping': swiping === true }"
-    >
-      <div
-        class="w-full h-full"
-        v-for="(item, item_index) in carousel_data"
-        :key="`carousel_${item_index}`"
-      >
-        <img
-          class="w-full h-full select-none pc_image"
-          :src="$ImageUrl(item.Image1)"
-          :alt="$GetCloumn('company_name')"
-        />
-        <img
-          class="w-full h-full select-none mb_image"
-          :src="$ImageUrl(item.Image2)"
-          :alt="$GetCloumn('company_name')"
-        />
-      </div>
-    </VueSlickCarousel>
+    <img
+      class="hidden w-full opacity-0 select-none md:block"
+      :src="$ImageUrl(carousel_data[0].Image1)"
+      :alt="$GetCloumn('company_name')"
+    />
+    <img
+      class="block w-full opacity-0 select-none md:hidden"
+      :src="$ImageUrl(carousel_data[1].Image2)"
+      :alt="$GetCloumn('company_name')"
+    />
   </section>
 </template>
 
@@ -119,7 +135,7 @@ export default {
       this.$refs.CarouselTimeline.Next(this.active_index, next_index);
     },
     SetGsap() {
-      this.SetActiveIndex(0);
+      // this.SetActiveIndex(0);
       this.SetTimer();
     },
   },

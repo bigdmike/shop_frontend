@@ -7,23 +7,7 @@
       :content="$GetCloumn('about_section_1_content')"
     />
     <VideoSection ref="VideoSection" />
-    <!-- 
-    <ProductSection
-      v-if="new_product_data.length > 0"
-      :product_data="new_product_data"
-      title="最新商品"
-      sub_title="New Products"
-      :background_image="$ImageUrl($GetCloumn('home_main_product_bg'))"
-    />
-    <ProductSection
-      v-if="promote_product_data.length > 0"
-      :product_data="promote_product_data"
-      title="店長推薦"
-      sub_title="Early Bird Discount"
-      :background_image="$ImageUrl($GetCloumn('home_new_product_bg'))"
-    />
-    <AdGallerySection :images="home_ad_data" />
-    <CompanyInfoSection :image="$GetCloumn('company_image')" /> -->
+    <NewsListSection ref="NewsListSection" />
   </main>
 </template>
 
@@ -32,9 +16,7 @@ import CarouselSection from '@/components/home/Carousel.vue';
 import MainProductSection from '@/components/home/MainProductSection.vue';
 import AboutSection from '@/components/home/AboutSection.vue';
 import VideoSection from '@/components/home/VideoSection.vue';
-// import ProductSection from '@/components/home/ProductSection.vue';
-// import AdGallerySection from '@/components/home/AdGallerySection.vue';
-// import CompanyInfoSection from '@/components/home/CompantInfoSection.vue';
+import NewsListSection from '@/components/home/NewsListSection.vue';
 import { GetMetaData } from '@/common/meta';
 // import { mapGetters, mapState } from 'vuex';
 export default {
@@ -44,9 +26,7 @@ export default {
     MainProductSection,
     AboutSection,
     VideoSection,
-    // ProductSection,
-    // AdGallerySection,
-    // CompanyInfoSection,
+    NewsListSection,
   },
   data() {
     return {
@@ -66,6 +46,7 @@ export default {
   methods: {
     SetGsap() {
       this.$refs.CarouselSection.SetGsap();
+      this.$refs.NewsListSection.SetGsap();
     },
   },
   computed: {
