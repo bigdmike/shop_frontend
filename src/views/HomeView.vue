@@ -2,10 +2,12 @@
   <main class="relative w-full">
     <CarouselSection ref="CarouselSection" :carousel_data="carousel_data" />
     <MainProductSection ref="MainProductSection" />
-    <!-- <ImageTextSection
-      :image="$GetCloumn('about_section_1_image')"
+    <AboutSection
+      ref="AboutSection"
       :content="$GetCloumn('about_section_1_content')"
     />
+    <VideoSection ref="VideoSection" />
+    <!-- 
     <ProductSection
       v-if="new_product_data.length > 0"
       :product_data="new_product_data"
@@ -28,7 +30,8 @@
 <script>
 import CarouselSection from '@/components/home/Carousel.vue';
 import MainProductSection from '@/components/home/MainProductSection.vue';
-// import ImageTextSection from '@/components/home/ImageTextSection.vue';
+import AboutSection from '@/components/home/AboutSection.vue';
+import VideoSection from '@/components/home/VideoSection.vue';
 // import ProductSection from '@/components/home/ProductSection.vue';
 // import AdGallerySection from '@/components/home/AdGallerySection.vue';
 // import CompanyInfoSection from '@/components/home/CompantInfoSection.vue';
@@ -39,7 +42,8 @@ export default {
   components: {
     CarouselSection,
     MainProductSection,
-    // ImageTextSection,
+    AboutSection,
+    VideoSection,
     // ProductSection,
     // AdGallerySection,
     // CompanyInfoSection,
