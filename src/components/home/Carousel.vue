@@ -1,32 +1,26 @@
 <template>
   <section class="relative z-0 w-full">
-    <div class="fixed top-0 left-0 z-10 w-full">
+    <div class="absolute top-0 left-0 right-0 z-10 bottom-20">
       <div
-        class="absolute top-0 left-0 right-0 z-10 pointer-events-none bottom-20"
+        class="fixed z-10 flex items-center pointer-events-auto md:bottom-14 md:top-auto sm:top-32 top-20 md:right-14 sm:right-10 right-5"
       >
-        <div
-          class="absolute z-10 flex items-center pointer-events-auto md:bottom-14 md:top-auto sm:top-32 top-20 md:right-14 sm:right-10 right-5"
+        <button
+          @click="SlideSwiper(-1)"
+          class="flex items-center justify-center w-6 h-6 mr-3 transition-colors duration-500 border rounded-sm sm:text-xl sm:rounded-md sm:w-8 sm:h-8 md:mr-5 md:w-10 md:h-10 text-basic_white border-basic_white basic_button hover:text-primary"
         >
-          <button
-            @click="SlideSwiper(-1)"
-            class="flex items-center justify-center w-6 h-6 mr-3 transition-colors duration-500 border rounded-sm sm:text-xl sm:rounded-md sm:w-8 sm:h-8 md:mr-5 md:w-10 md:h-10 text-basic_white border-basic_white basic_button hover:text-primary"
-          >
-            <span class="icon-chevron_left"></span>
-          </button>
-          <button
-            @click="SlideSwiper(1)"
-            class="flex items-center justify-center w-6 h-6 transition-colors duration-500 border rounded-sm sm:rounded-md sm:text-xl sm:w-8 sm:h-8 md:w-10 md:h-10 text-basic_white border-basic_white basic_button hover:text-primary"
-          >
-            <span class="icon-chevron_right"></span>
-          </button>
-        </div>
-
-        <CarouselTimeline
-          ref="CarouselTimeline"
-          :carousel_data="carousel_data"
-        />
+          <span class="icon-chevron_left"></span>
+        </button>
+        <button
+          @click="SlideSwiper(1)"
+          class="flex items-center justify-center w-6 h-6 transition-colors duration-500 border rounded-sm sm:rounded-md sm:text-xl sm:w-8 sm:h-8 md:w-10 md:h-10 text-basic_white border-basic_white basic_button hover:text-primary"
+        >
+          <span class="icon-chevron_right"></span>
+        </button>
       </div>
 
+      <CarouselTimeline ref="CarouselTimeline" :carousel_data="carousel_data" />
+    </div>
+    <div class="fixed top-0 left-0 z-0 w-full">
       <VueSlickCarousel
         ref="swiper"
         v-bind="slick_option"

@@ -7,8 +7,8 @@
     <div
       class="relative flex items-center justify-center w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10"
     >
-      <button class="relative z-10 inline-block py-5 px-14">
-        <div class="relative z-10">
+      <button class="relative z-10 inline-block py-5 sm:px-14">
+        <!-- <div class="relative z-10">
           <h3
             :class="
               hover ? 'text-basic_black' : 'text-basic_white text-opacity-20'
@@ -23,24 +23,38 @@
           >
             聯絡我們
           </h4>
+        </div> -->
+
+        <div class="relative w-full max-w-screen-md">
+          <img
+            src="/img/ContactButtonBg.webp"
+            :class="hover ? 'opacity-0' : 'opacity-100'"
+            class="relative z-0 hidden object-contain w-full transition-all duration-500 sm:block"
+          />
+          <img
+            src="/img/ContactButtonBg_active.webp"
+            :class="hover ? 'opacity-100' : 'opacity-0'"
+            class="absolute top-0 bottom-0 left-0 z-0 hidden object-contain w-full h-full transition-all duration-500 sm:block"
+          />
+          <img
+            src="/img/ContactButtonBg@sm.webp"
+            :class="hover ? 'opacity-0' : 'opacity-100'"
+            class="relative z-0 block object-contain w-full transition-all duration-500 sm:hidden"
+          />
+          <img
+            src="/img/ContactButtonBg@sm_active.webp"
+            :class="hover ? 'opacity-100' : 'opacity-0'"
+            class="absolute top-0 bottom-0 left-0 z-0 block object-contain w-full h-full transition-all duration-500 sm:hidden"
+          />
+          <span
+            :class="
+              hover
+                ? 'md:-translate-y-6 -translate-y-6 -translate-x-6 opacity-20'
+                : '-translate-y-20 -translate-x-12 opacity-0'
+            "
+            class="absolute -scale-100 top-0 left-0 transform md:text-[180px] text-[180px] z-[-1] transition-all duration-700 icon-triangle text-primary"
+          ></span>
         </div>
-
-        <img
-          src="/img/ContactButtonBg.webp"
-          class="absolute top-0 bottom-0 left-0 z-0 w-full h-full"
-        />
-
-        <span
-          class="absolute bottom-0 right-0 text-2xl md:text-4xl icon-triangle text-primary"
-        ></span>
-        <span
-          :class="
-            hover
-              ? 'md:-translate-y-10 -translate-y-6 -translate-x-6 opacity-20'
-              : '-translate-y-20 -translate-x-12 opacity-0'
-          "
-          class="absolute -scale-100 top-0 left-0 transform md:text-[240px] text-[180px] z-0 transition-all duration-700 icon-triangle text-primary"
-        ></span>
       </button>
     </div>
 

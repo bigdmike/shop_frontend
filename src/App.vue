@@ -8,14 +8,9 @@
     <!--  v-if="data_load_finish" -->
     <router-view />
     <ContactFooter />
-    <MainFooter v-if="data_load_finish" />
+    <!--  v-if="data_load_finish" -->
+    <MainFooter />
     <MainFooterNav @open-menu="OpenMenu" />
-    <!-- <button
-      @click="ScrollToTop"
-      class="fixed z-20 flex items-center justify-center transition-all duration-300 rounded-full cursor-pointer md:bottom-24 sm:bottom-36 bottom-28 sm:right-7 right-2 sm:w-14 sm:h-14 w-11 h-11 bg-primary hover:bg-opacity-70"
-    >
-      <SelectArrowIcon class="w-6 text-white transform md:w-8 -scale-y-100" />
-    </button> -->
     <button
       v-if="data_load_finish"
       @click="OpenMessenger"
@@ -49,6 +44,7 @@ import ContactFooter from '@/components/ContactFooter.vue';
 // import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import { mapState } from 'vuex';
 import { setLocalStorage, delLocalStorage } from '@/common/cookie';
+import { marquee } from '@/gsap/marquee';
 
 export default {
   name: 'App',
@@ -68,6 +64,7 @@ export default {
     return {
       messenger_hvoer: false,
       first_time_load: true,
+      marquee_animation: null,
     };
   },
   methods: {
@@ -134,11 +131,11 @@ export default {
   },
   watch: {
     body_lock() {
-      if (this.body_lock != 0) {
-        document.querySelector('body').style.overflowY = 'hidden';
-      } else {
-        document.querySelector('body').style.overflowY = 'auto';
-      }
+      // if (this.body_lock != 0) {
+      //   document.querySelector('body').style.overflowY = 'hidden';
+      // } else {
+      //   document.querySelector('body').style.overflowY = 'auto';
+      // }
     },
     data_load_finish() {
       // if (this.data_load_finish) {
@@ -154,6 +151,13 @@ export default {
   },
   created() {
     // this.CheckPageData();
+  },
+  mounted() {
+    const h_full_el = document.querySelectorAll('.h-screen');
+    h_full_el.forEach((item) => {
+      item.style.height = `${window.innerHeight}px`;
+    });
+    this.marquee_animation = new marquee();
   },
 };
 </script>

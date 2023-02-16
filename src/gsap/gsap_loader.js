@@ -1,21 +1,24 @@
 import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
-const loadScrollTrigger = () => {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.setAttribute(
-      'src',
-      'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/ScrollTrigger.min.js'
-    );
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-};
+// const loadScrollTrigger = () => {
+//   return new Promise((resolve, reject) => {
+//     const script = document.createElement('script');
+//     script.setAttribute(
+//       'src',
+//       'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/ScrollTrigger.min.js'
+//     );
+//     script.onload = resolve;
+//     script.onerror = reject;
+//     document.head.appendChild(script);
+//   });
+// };
+// loadScrollTrigger().then(() => {
+//   gsap.registerPlugin(window.ScrollTrigger);
+// });
 
-loadScrollTrigger().then(() => {
-  gsap.registerPlugin(window.ScrollTrigger);
-});
+gsap.registerPlugin(ScrollTrigger);
+// ScrollTrigger.normalizeScroll(true);
 
 gsap.config({
   autoSleep: 60,

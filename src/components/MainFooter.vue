@@ -1,113 +1,120 @@
 <template>
-  <footer
-    class="relative z-10 border-t bg-white border-[#cccccc] sm:py-32 py-20"
-  >
+  <footer class="relative z-20 pb-24 pt-14 md:pb-14 bg-basic_gray">
     <div
-      class="flex flex-wrap items-start justify-between w-full max-w-screen-xl px-5 mx-auto xl:px-0 md:mb-12"
+      data-marquee-box
+      data-direction="left"
+      data-duration="10"
+      class="absolute top-0 left-0 right-0 z-20 flex transform -translate-y-1/2"
     >
-      <router-link to="/" class="mb-20">
-        <img
-          :alt="$GetCloumn('company_name')"
-          :src="$ImageUrl($GetCloumn('logo_image'))"
-          class="w-60"
-        />
-      </router-link>
-      <div class="flex flex-wrap items-start">
-        <div class="mb-20 mr-16">
-          <h4 class="mb-5 text-2xl font-bold">聯絡我們</h4>
-          <ol class="text-basic_gray">
-            <li class="flex flex-wrap items-center mb-4 sm:mb-2 sm:flex-nowrap">
-              <p class="flex-shrink-0 w-full mr-3 sm:w-auto">聯絡電話</p>
-              <p>{{ $GetCloumn('company_phone') }}</p>
-            </li>
-            <li class="flex flex-wrap items-center mb-4 sm:mb-2 sm:flex-nowrap">
-              <p class="flex-shrink-0 w-full mr-3 sm:w-auto">電子郵件</p>
-              <p>{{ $GetCloumn('company_email') }}</p>
-            </li>
-
-            <li class="flex flex-wrap items-center sm:flex-nowrap">
-              <p class="flex-shrink-0 w-full mr-3 sm:w-auto">營業時間</p>
-              <p>{{ $GetCloumn('company_time') }}</p>
-            </li>
-          </ol>
-        </div>
-        <div class="mb-20">
-          <h4 class="mb-5 text-2xl font-bold">追蹤我們</h4>
-          <ol class="flex text-basic_gray">
-            <li class="flex items-center mb-2 mr-2">
-              <a
-                :href="$GetCloumn('company_facebook')"
-                target="_blank"
-                class="p-2 text-white transition-colors duration-200 rounded-md bg-basic_black hover:bg-secondary"
-              >
-                <FacebookIcon class="w-5" />
-              </a>
-            </li>
-            <li class="flex items-center mb-2">
-              <a
-                :href="$GetCloumn('company_instagram')"
-                target="_blank"
-                class="p-2 text-white transition-colors duration-200 rounded-md bg-basic_black hover:bg-secondary"
-              >
-                <InstagramIcon class="w-5" />
-              </a>
-            </li>
-          </ol>
-        </div>
-      </div>
+      <span
+        data-marquee-item
+        v-for="item in 10"
+        :key="`marquee_${item}`"
+        class="text-basic_white block text-opacity-10 leading-none mr-4 text-[80px] md:text-[160px] sm:text-[120px] flex-shrink-0 font-anybody font-semibold"
+        >Krace</span
+      >
     </div>
-
-    <div
-      class="w-full max-w-screen-xl md:border-t md:border-[#cccccc] mx-auto flex items-center flex-wrap justify-between xl:px-0 px-5 md:pt-5"
-    >
-      <div class="flex flex-wrap items-center">
-        <img
-          alt="PChome支付連"
-          src="@/assets/img/logoPChomePay_200x40.webp"
-          class="w-32 mb-10 mr-5"
-        />
-        <ol class="flex items-center mb-10 -mx-2 text-sm md:mx-0">
-          <li class="border-r border-basic_black">
-            <router-link class="px-2 link_color" to="/terms/terms_of_customer"
-              >服務條款</router-link
-            >
-          </li>
-          <li class="border-r border-basic_black">
-            <router-link class="px-2 link_color" to="/terms/site_privacy"
-              >隱私政策</router-link
-            >
-          </li>
-          <li>
-            <router-link class="px-2 link_color" to="/order_search/search"
-              >訂單查詢</router-link
-            >
-          </li>
-        </ol>
+    <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10">
+      <div class="flex justify-end">
+        <button
+          @click="ScrollToTop"
+          class="relative w-[106px] aspect-square text-basic_black"
+        >
+          <div class="px-2 py-4">
+            <span class="text-4xl sm:text-5xl icon-arrow_up"></span>
+            <p class="font-bold font-anybody">Page Top</p>
+          </div>
+          <span
+            class="absolute bottom-0 right-0 text-xs icon-triangle text-primary"
+          ></span>
+        </button>
       </div>
-      <div class="flex items-center mb-10 text-xs text-basic_gray">
-        <p class="mr-3">© 耀聞水果世界 2022</p>
-        <p>
-          網站設計
-          <a
-            class="text-secondary"
-            target="_blank"
-            href="https://www.yongxin-design.com"
-            >泳欣事業有限公司</a
+      <div class="flex flex-wrap justify-between lg:flex-nowrap">
+        <router-link to="/" class="block mb-10 mr-32 lg:mb-0">
+          <img src="/img/logo.svg" class="block w-64" />
+        </router-link>
+        <div class="w-full">
+          <ol class="mb-10 lg:mb-14">
+            <li class="mb-2 font-medium font-anybody">
+              <span class="mr-4 font-bold">聯絡電話 </span> 04-2271-6109
+            </li>
+            <li class="mb-2 font-medium font-anybody">
+              <span class="mr-4 font-bold">傳真號碼</span> 04-2271-6112
+            </li>
+          </ol>
+          <div
+            class="flex flex-wrap items-center justify-between flex-1 pt-4 border-t md:flex-nowrap border-basic_black"
           >
-        </p>
+            <ol class="flex flex-wrap items-center mb-4 -mx-2 md:mb-0">
+              <li
+                v-for="(item, item_index) in menu_list"
+                :key="`menu_${item_index}`"
+                class="mb-2"
+              >
+                <router-link
+                  :to="item.link"
+                  class="px-2 font-bold font-anybody"
+                  >{{ item.title }}</router-link
+                >
+              </li>
+            </ol>
+            <div class="flex items-center w-full md:w-auto">
+              <p
+                class="mr-4 font-bold leading-none tracking-wider font-anybody"
+              >
+                Follow Us
+              </p>
+              <a class="mr-2">
+                <span class="text-2xl icon-facebook"></span>
+              </a>
+              <a>
+                <span class="text-2xl icon-instagram"></span>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </footer>
 </template>
 
 <script>
-import FacebookIcon from '@/components/svg/FacebookIcon.vue';
-import InstagramIcon from '@/components/svg/InstagramIcon.vue';
 export default {
   name: 'MainFooter',
-  components: {
-    FacebookIcon,
-    InstagramIcon,
+  data() {
+    return {
+      menu_list: [
+        {
+          title: 'About',
+          link: '/about',
+        },
+        {
+          title: 'Products',
+          link: '/products',
+        },
+        {
+          title: 'News',
+          link: '/news',
+        },
+        {
+          title: 'Dealer',
+          link: '/dealer',
+        },
+        {
+          title: 'Contact',
+          link: '/contact',
+        },
+      ],
+    };
+  },
+  methods: {
+    ScrollToTop() {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    },
   },
 };
 </script>
