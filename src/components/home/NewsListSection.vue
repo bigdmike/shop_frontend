@@ -1,36 +1,44 @@
 <template>
   <section
     ref="MainContent"
-    class="relative w-full py-32 -mt-20 sm:py-40 bg-basic_black"
+    class="relative w-full py-32 overflow-hidden sm:py-40 bg-basic_black"
   >
     <div class="relative w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10">
       <header class="relative z-10 flex items-end justify-between mb-20">
-        <div class="flex flex-col-reverse">
-          <h2
-            class="relative font-bold sm:text-xl md:text-2xl text-basic_white"
-          >
+        <div class="flex flex-col-reverse items-start">
+          <h2 class="relative inline-block px-8">
             <span
-              class="inline-block mr-[2px] text-lg transform icon-triangle text-primary -scale-100"
+              data-section-subtitle-arrow
+              class="absolute top-0 left-0 block text-lg leading-none transform icon-triangle text-primary -scale-100"
             ></span>
-            最新消息
             <span
-              class="text-lg inline-block ml-[2px] icon-triangle text-primary"
+              data-section-subtitle
+              class="block font-bold leading-none sm:text-xl md:text-2xl md:leading-none text-basic_white"
+              >最新消息</span
+            >
+            <span
+              data-section-subtitle-arrow
+              class="absolute bottom-0 right-0 block text-lg leading-none icon-triangle text-primary"
             ></span>
           </h2>
-          <h3
-            class="text-5xl font-black md:text-8xl sm:text-7xl text-basic_white font-anybody text-opacity-20"
-          >
-            News
+          <h3 class="overflow-hidden">
+            <span
+              data-section-title
+              class="block text-5xl font-black md:text-8xl sm:text-7xl text-basic_white font-anybody text-opacity-20"
+            >
+              News
+            </span>
           </h3>
         </div>
         <router-link
+          data-section-subtitle
           class="inline-block text-sm font-bold tracking-wider underline md:text-2xl sm:text-xl font-anybody text-primary"
           to="/news_list"
           >View ALL</router-link
         >
       </header>
 
-      <div class="flex items-stretch mb-10 -mx-5 md:mx-0">
+      <div data-section-content class="flex items-stretch mb-10 -mx-5 md:mx-0">
         <div
           data-carousel-item
           class="flex flex-wrap items-center justify-between flex-shrink-0 w-full px-5 md:px-0 md:w-11/12"
@@ -81,7 +89,10 @@
         </div>
       </div>
 
-      <div class="flex items-center justify-between w-full">
+      <div
+        data-section-content
+        class="flex items-center justify-between w-full"
+      >
         <button
           @click="Prev"
           class="flex items-center justify-center font-bold leading-none tracking-widest text-primary font-anybody"
@@ -104,6 +115,7 @@
 <script>
 import MoreLinkButton from '@/components/ui/MoreLinkButton';
 import { news_list_gsap } from '@/gsap/home/news_list';
+import { section_animation } from '@/gsap/section.js';
 export default {
   name: 'NewsListSection',
   components: {
@@ -144,6 +156,7 @@ export default {
       active_index: 0,
       timer: null,
       news_list_gsap: null,
+      section_animation: null,
     };
   },
   methods: {
@@ -152,6 +165,7 @@ export default {
         this.$refs.MainContent,
         this.news_list
       );
+      this.section_animation = new section_animation(this.$refs.MainContent);
     },
     Next() {
       this.news_list_gsap.next();
@@ -159,6 +173,9 @@ export default {
     Prev() {
       this.news_list_gsap.prev();
     },
+  },
+  mounted() {
+    console.log('home news mounted');
   },
 };
 </script>

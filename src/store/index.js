@@ -25,6 +25,7 @@ export default new Vuex.Store({
       status: false,
       content: '',
     },
+    image_loaded: false,
     member_token: '',
     shopcart_drawer: false,
     loading: 0,
@@ -133,6 +134,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    SetImageLoaded(state, action) {
+      state.image_loaded = action;
+    },
     SetBodyLock(state, action) {
       state.body_lock + action < 0
         ? (state.body_lock = 0)

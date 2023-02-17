@@ -1,111 +1,60 @@
 <template>
-  <div ref="MainContent" class="fixed top-0 bottom-0 z-20 w-full left-full">
+  <div
+    ref="MainContent"
+    class="fixed top-0 bottom-0 z-20 w-full overflow-hidden left-full"
+  >
     <nav
       data-menu
-      class="absolute top-0 z-10 h-screen max-w-full max-h-screen pt-32 overflow-y-auto bg-white left-full w-96"
+      class="absolute top-0 left-0 z-10 w-full h-screen max-h-screen p-10 overflow-y-auto opacity-0 bg-basic_gray"
     >
       <button @click="Close" class="absolute top-7 right-7">
         <CloseIcon class="w-5 text-black" />
       </button>
 
-      <div class="relative mb-10 border-b border-zinc-300">
-        <SearchIcon
-          class="absolute w-6 transform -translate-y-1/2 top-1/2 left-5"
-        />
-        <input
-          type="text"
-          name="search"
-          v-model="key_word"
-          @keypress.enter="Search"
-          class="w-full py-3 pl-14 focus:outline-none"
-          placeholder="搜尋商品關鍵字"
-        />
+      <div class="flex flex-col w-full">
+        <ol class="flex flex-wrap items-stretch justify-start flex-1 w-full">
+          <li
+            v-for="(item, item_index) in menu_list"
+            :key="`menu_item_${item_index}`"
+            class="w-1/2"
+          >
+            <router-link :to="item.link">
+              {{ item.title }}
+            </router-link>
+          </li>
+        </ol>
       </div>
-      <ol>
-        <template v-for="item in menu_list">
-          <li
-            class="border-b border-zinc-200"
-            :key="item.title"
-            v-if="item.type == 'link'"
-          >
-            <router-link
-              @click.native="Close"
-              class="block p-5 font-bold link_color"
-              :to="item.link"
-              >{{ item.title }}</router-link
-            >
-          </li>
 
-          <li
-            class="border-b border-zinc-200"
-            :key="item.title"
-            v-if="item.type == 'collapse'"
-          >
-            <MenuCollapse
-              :title="item.title"
-              :list="item.list"
-              @close-action="Close"
-            />
-          </li>
-        </template>
-
-        <li class="mt-10 border-b border-zinc-200">
-          <MenuCollapse
-            title="會員專區"
-            :list="member_menu_list"
-            @close-action="Close"
-          />
-        </li>
-      </ol>
+      <div class="absolute top-0 left-0 z-0 block w-full h-full p-10 md:hidden">
+        <img src="/img/menu_bg.webp" class="block w-full h-full" />
+      </div>
     </nav>
     <div
       data-menu-bg
-      class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-white bg-opacity-50 opacity-0"
+      class="absolute top-0 left-0 z-0 h-screen bg-basic_gray -translate-x-1/3 -translate-y-1/3 aspect-square triangle_bg"
+    ></div>
+    <div
+      data-menu-bg
+      class="absolute bottom-0 right-0 z-0 h-screen transform bg-basic_gray translate-x-1/3 translate-y-1/3 aspect-square -scale-100 triangle_bg"
     ></div>
   </div>
 </template>
 
 <script>
 import CloseIcon from '@/components/svg/CloseIcon.vue';
-import SearchIcon from '@/components/svg/SearchIcon.vue';
-import MenuCollapse from '@/components/main_menu/collapse.vue';
 import { menu_gsap_animation } from '@/gsap/main_menu';
 export default {
   name: 'MainMenu',
   components: {
     CloseIcon,
-    SearchIcon,
-    MenuCollapse,
+  },
+  props: {
+    menu_list: {
+      type: Array,
+    },
   },
   data() {
     return {
-      menu_list: [
-        {
-          title: '首頁',
-          link: '/',
-          type: 'link',
-        },
-        {
-          title: '最新商品',
-          link: '/collections?category=4',
-          type: 'link',
-        },
-        {
-          title: '所有商品',
-          type: 'collapse',
-          list: [],
-        },
-        {
-          title: '關於我們',
-          link: '/about',
-          type: 'link',
-        },
-        {
-          title: '最新消息',
-          link: '/news?category=all',
-          type: 'link',
-        },
-      ],
       member_not_login: [
         {
           title: '登入',
@@ -145,20 +94,6 @@ export default {
         this.key_word = '';
       }
     },
-    SetProductCategoryMenu() {
-      let tmp_list = [];
-      this.category_data.forEach((item) => {
-        tmp_list.push({
-          title: item.Title,
-          link: `/collections?category=${item.MenuID}`,
-        });
-      });
-      this.menu_list.forEach((item, item_index) => {
-        if (item.title == '所有商品') {
-          this.menu_list[item_index].list = tmp_list;
-        }
-      });
-    },
   },
   computed: {
     member_token() {
@@ -174,7 +109,6 @@ export default {
     },
   },
   mounted() {
-    this.SetProductCategoryMenu();
     this.menu_gsap_animation = new menu_gsap_animation(this.$refs.MainContent);
     window.addEventListener('resize', () => {
       this.Close();
@@ -182,3 +116,21 @@ export default {
   },
 };
 </script>
+<style scoped>
+.triangle_bg {
+  -webkit-clip-path: polygon(
+    100% 0,
+    0 100%,
+
+    0 100%,
+    0 0%
+  );
+  clip-path: polygon(
+    100% 0,
+    0 100%,
+
+    0 100%,
+    0 0%
+  );
+}
+</style>

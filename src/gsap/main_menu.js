@@ -9,8 +9,9 @@ export class menu_gsap_animation {
 
   reset() {
     gsap.set(this.el, { x: 0 });
-    gsap.set(this.menu, { x: 0 });
-    gsap.set(this.white_background, { opacity: 0 });
+    gsap.set(this.menu, { opacity: 0 });
+    gsap.set(this.white_background[0], { y: '-30%', x: '-30%', opacity: 0 });
+    gsap.set(this.white_background[1], { y: '30%', x: '30%', opacity: 0 });
     this.tween != null ? this.tween.kill() : '';
     this.tween = null;
   }
@@ -24,8 +25,19 @@ export class menu_gsap_animation {
         x: '-100%',
       })
       .to(
-        this.white_background,
+        this.white_background[0],
         {
+          y: '0%',
+          x: '0%',
+          opacity: 1,
+        },
+        'menu_show'
+      )
+      .to(
+        this.white_background[1],
+        {
+          y: '0%',
+          x: '0%',
           opacity: 1,
         },
         'menu_show'
@@ -33,7 +45,7 @@ export class menu_gsap_animation {
       .to(
         this.menu,
         {
-          x: '-100%',
+          opacity: 1,
           delay: 0.3,
         },
         'menu_show'
@@ -48,16 +60,18 @@ export class menu_gsap_animation {
       .to(
         this.menu,
         {
-          x: '0%',
+          opacity: 0,
         },
         'menu_show'
       )
       .to(
-        this.white_background,
-        {
-          opacity: 0,
-          delay: 0.3,
-        },
+        this.white_background[0],
+        { y: '-30%', x: '-30%', opacity: 0 },
+        'menu_show'
+      )
+      .to(
+        this.white_background[1],
+        { y: '30%', x: '30%', opacity: 0 },
         'menu_show'
       )
       .set(this.el, {

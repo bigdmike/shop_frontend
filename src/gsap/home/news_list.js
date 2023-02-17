@@ -23,6 +23,7 @@ export class news_list_gsap {
     this.scroll_timeline != null ? this.scroll_timeline.kill() : '';
     this.scroll_timeline = gsap.timeline({
       scrollTrigger: {
+        scroller: '#app',
         trigger: this.el,
         start: 'top 60%',
         toggleActions: 'restart play play reverse',

@@ -1,27 +1,38 @@
 <template>
   <section
+    ref="MainContent"
     class="relative w-full py-32 -mt-20 sm:py-40 bg-basic_gray section_corner"
   >
     <div class="w-full max-w-screen-xl px-5 mx-auto sm:px-10 xl:px-0">
       <header
-        class="relative z-10 flex flex-col-reverse w-full mb-10 text-center md:mb-5 md:text-left"
+        class="relative z-10 flex flex-col-reverse items-start w-full mb-10"
       >
-        <h2 class="relative font-bold sm:text-xl md:text-2xl text-basic_black">
+        <h2 class="relative inline-block px-8">
           <span
-            class="inline-block mr-[2px] text-lg transform icon-triangle text-primary -scale-100"
+            data-section-subtitle-arrow
+            class="absolute top-0 left-0 block text-lg leading-none transform icon-triangle text-primary -scale-100"
           ></span>
-          關於我們
           <span
-            class="text-lg inline-block ml-[2px] icon-triangle text-primary"
+            data-section-subtitle
+            class="block font-bold leading-none sm:text-xl md:text-2xl md:leading-none text-basic_black"
+            >關於我們</span
+          >
+          <span
+            data-section-subtitle-arrow
+            class="absolute bottom-0 right-0 block text-lg leading-none icon-triangle text-primary"
           ></span>
         </h2>
-        <h3
-          class="text-5xl font-black md:text-8xl sm:text-7xl text-primary font-anybody"
-        >
-          About us
+        <h3 class="overflow-hidden">
+          <span
+            data-section-title
+            class="block text-5xl font-black md:text-8xl sm:text-7xl text-primary font-anybody"
+          >
+            About Us
+          </span>
         </h3>
       </header>
       <div
+        data-section-content
         class="relative z-10 text-center md:flex md:items-center md:text-left md:justify-between"
       >
         <p class="mb-20 font-semibold md:mr-10 md:mb-0">
@@ -57,6 +68,7 @@
 </template>
 
 <script>
+import { section_animation } from '@/gsap/section.js';
 export default {
   name: 'ImageTextSection',
   props: {
@@ -72,7 +84,13 @@ export default {
   data() {
     return {
       button_hover: false,
+      section_animation: null,
     };
+  },
+  methods: {
+    SetGsap() {
+      this.section_animation = new section_animation(this.$refs.MainContent);
+    },
   },
 };
 </script>

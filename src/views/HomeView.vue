@@ -1,5 +1,5 @@
 <template>
-  <main class="relative w-full">
+  <main id="Home" class="relative w-full">
     <CarouselSection ref="CarouselSection" :carousel_data="carousel_data" />
     <MainProductSection ref="MainProductSection" />
     <AboutSection
@@ -45,8 +45,11 @@ export default {
   },
   methods: {
     SetGsap() {
+      console.log('load gsap');
       this.$refs.CarouselSection.SetGsap();
       this.$refs.NewsListSection.SetGsap();
+      this.$refs.MainProductSection.SetGsap();
+      this.$refs.AboutSection.SetGsap();
     },
   },
   computed: {
@@ -57,15 +60,31 @@ export default {
     //   'category_data',
     //   'promotes_data',
     // ]),
+    image_loaded() {
+      return this.$store.state.image_loaded;
+    },
+  },
+  watch: {
+    image_loaded() {
+      console.log(this.image_loaded);
+      this.image_loaded ? this.SetGsap() : '';
+    },
   },
   mounted() {
-    this.SetGsap();
+    // this.SetGsap();
+    console.log('home mounted');
+    console.log(this.image_loaded);
+    this.$nextTick(() => {
+      this.$emit('load-image', 'home');
+      console.log(this.image_loaded);
+    });
   },
   created() {
+    console.log(this.image_loaded);
     this.meta_data = GetMetaData('home', '', '');
-    this.$nextTick(() => {
-      this.$PageReady(this.meta_data.title);
-    });
+    // this.$nextTick(() => {
+    //   this.$PageReady(this.meta_data.title);
+    // });
   },
   metaInfo() {
     return this.meta_data;

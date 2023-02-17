@@ -1,15 +1,19 @@
 <template>
-  <div id="app" class="relative overflow-x-hidden">
-    <MainHeader ref="MainHeader" v-if="data_load_finish" />
+  <div id="container" class="">
+    <!-- v-if="data_load_finish" -->
+    <MainHeader ref="MainHeader" />
     <MainLoading />
     <ShopCartDialog />
     <ShopCartDrawer v-if="data_load_finish" />
     <MainDialog />
-    <!--  v-if="data_load_finish" -->
-    <router-view />
-    <ContactFooter />
-    <!--  v-if="data_load_finish" -->
-    <MainFooter />
+
+    <div id="app">
+      <!--  v-if="data_load_finish" -->
+      <router-view @load-image="LoadImage" />
+      <ContactFooter />
+      <!--  v-if="data_load_finish" -->
+      <MainFooter @scroll-top="ScrollToTop" />
+    </div>
     <MainFooterNav @open-menu="OpenMenu" />
     <button
       v-if="data_load_finish"
@@ -45,6 +49,7 @@ import ContactFooter from '@/components/ContactFooter.vue';
 import { mapState } from 'vuex';
 import { setLocalStorage, delLocalStorage } from '@/common/cookie';
 import { marquee } from '@/gsap/marquee';
+import { ImageLoader } from '@/gsap/image_loaded';
 
 export default {
   name: 'App',
@@ -65,11 +70,21 @@ export default {
       messenger_hvoer: false,
       first_time_load: true,
       marquee_animation: null,
+      image_loader: null,
     };
   },
   methods: {
+    LoadImage(from) {
+      this.$nextTick(() => {
+        console.log('load from ' + from);
+        this.image_loader != null
+          ? this.image_loader.Destroy()
+          : (this.image_loader = new ImageLoader());
+        this.image_loader.LoadImage();
+      });
+    },
     ScrollToTop() {
-      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      this.image_loader.locoScroll.scrollTo('top');
     },
     CheckPageData() {
       this.common_column_data == null
@@ -153,10 +168,13 @@ export default {
     // this.CheckPageData();
   },
   mounted() {
-    const h_full_el = document.querySelectorAll('.h-screen');
-    h_full_el.forEach((item) => {
-      item.style.height = `${window.innerHeight}px`;
-    });
+    // const h_full_el = document.querySelectorAll('.h-screen');
+    // h_full_el.forEach((item) => {
+    //   item.style.height = `${window.innerHeight}px`;
+    // });
+    // this.pageLoad();
+    console.log('app mounted');
+    // this.LoadImage('app');
     this.marquee_animation = new marquee();
   },
 };

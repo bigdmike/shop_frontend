@@ -1,8 +1,8 @@
 <template>
-  <section class="relative z-0 w-full">
+  <section ref="MainContent" class="relative z-0 w-full">
     <div class="absolute top-0 left-0 right-0 z-10 bottom-20">
       <div
-        class="fixed z-10 flex items-center pointer-events-auto md:bottom-14 md:top-auto sm:top-32 top-20 md:right-14 sm:right-10 right-5"
+        class="absolute z-10 flex items-center pointer-events-auto md:bottom-14 md:top-auto sm:top-32 top-20 md:right-14 sm:right-10 right-5"
       >
         <button
           @click="SlideSwiper(-1)"
@@ -20,7 +20,7 @@
 
       <CarouselTimeline ref="CarouselTimeline" :carousel_data="carousel_data" />
     </div>
-    <div class="fixed top-0 left-0 z-0 w-full">
+    <div class="relative top-0 left-0 z-0 w-full">
       <VueSlickCarousel
         ref="swiper"
         v-bind="slick_option"
@@ -48,7 +48,7 @@
       </VueSlickCarousel>
     </div>
 
-    <img
+    <!-- <img
       class="hidden w-full opacity-0 select-none md:block"
       :src="$ImageUrl(carousel_data[0].Image1)"
       :alt="$GetCloumn('company_name')"
@@ -57,13 +57,14 @@
       class="block w-full opacity-0 select-none md:hidden"
       :src="$ImageUrl(carousel_data[1].Image2)"
       :alt="$GetCloumn('company_name')"
-    />
+    /> -->
   </section>
 </template>
 
 <script>
 import '@/assets/css/vue-slick-carousel.css';
 import CarouselTimeline from '@/components/home/carousel/Timeline.vue';
+import { carousel_pin_scroll } from '@/gsap/home/carousel';
 export default {
   name: 'CarouselSection',
   components: {
@@ -92,6 +93,7 @@ export default {
       },
       active_index: 0,
       timer: null,
+      carousel_pin_scroll: null,
     };
   },
   methods: {
@@ -130,6 +132,9 @@ export default {
     },
     SetGsap() {
       // this.SetActiveIndex(0);
+      this.carousel_pin_scroll = new carousel_pin_scroll(
+        this.$refs.MainContent
+      );
       this.SetTimer();
     },
   },

@@ -1,45 +1,54 @@
 <template>
   <div
+    data-product-card
     @mouseenter="hover = true"
     @mouseleave="hover = false"
     class="relative w-full"
   >
     <div
-      :class="
-        reverse
-          ? 'ml-auto translate-x-5 sm:translate-x-10'
-          : '-translate-x-5 sm:-translate-x-10'
-      "
-      class="relative z-0 block w-full overflow-hidden transform md:w-2/3 md:translate-x-0"
+      data-card-image
+      :class="reverse ? 'ml-auto ' : ''"
+      class="relative z-0 w-full md:w-2/3"
     >
-      <span
-        :class="
-          hover
-            ? '-translate-x-0 -translate-y-0'
-            : 'md:-translate-x-full md:-translate-y-full -translate-x-0 -translate-y-0'
-        "
-        class="absolute top-0 left-0 z-20 transition-all duration-700 transform image_corner"
-      ></span>
-      <span
-        :class="
-          hover
-            ? 'translate-x-0 translate-y-0'
-            : 'md:translate-x-full md:translate-y-full translate-x-0 translate-y-0'
-        "
-        class="absolute bottom-0 right-0 z-20 transition-all duration-700 transform image_corner -scale-100"
-      ></span>
       <div
-        :class="reverse ? 'md:bg-gradient-to-r' : 'md:bg-gradient-to-l'"
-        class="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-basic_black to-transparent"
-      ></div>
-      <img
-        :class="hover ? 'scale-125' : 'scale-100'"
-        class="relative z-0 block transition-all duration-700"
-        :src="image"
-        :alt="$GetCloumn('company_name')"
-      />
+        :class="
+          reverse
+            ? ' translate-x-5 sm:translate-x-10'
+            : '-translate-x-5 sm:-translate-x-10'
+        "
+        class="relative z-0 block w-full overflow-hidden transform md:translate-x-0"
+      >
+        <span
+          :class="
+            hover
+              ? '-translate-x-0 -translate-y-0'
+              : 'md:-translate-x-full md:-translate-y-full -translate-x-0 -translate-y-0'
+          "
+          class="absolute top-0 left-0 z-20 transition-all duration-700 transform image_corner"
+        ></span>
+        <span
+          :class="
+            hover
+              ? 'translate-x-0 translate-y-0'
+              : 'md:translate-x-full md:translate-y-full translate-x-0 translate-y-0'
+          "
+          class="absolute bottom-0 right-0 z-20 transition-all duration-700 transform image_corner -scale-100"
+        ></span>
+        <div
+          :class="reverse ? 'md:bg-gradient-to-r' : 'md:bg-gradient-to-l'"
+          class="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-basic_black to-transparent"
+        ></div>
+        <img
+          :class="hover ? 'scale-125' : 'scale-100'"
+          class="relative z-0 block transition-all duration-700"
+          :src="image"
+          :alt="$GetCloumn('company_name')"
+        />
+      </div>
     </div>
+
     <div
+      data-card-content
       :class="reverse ? 'md:left-0 md:pl-10' : 'md:right-0 md:pr-10'"
       class="z-10 min-w-[45%] transform md:absolute md:-translate-y-1/2 -translate-y-1/3 md:top-1/2"
     >
@@ -62,15 +71,20 @@
         </h4>
       </div>
     </div>
-    <span
+    <div
+      data-card-number
       :class="
         reverse
           ? 'sm:right-20 sm:left-auto left-0 md:left-0'
           : 'sm:right-20 right-10 md:right-0'
       "
-      class="lg:text-[200px] sm:text-[160px] text-[100px] leading-none font-anybody font-black text-basic_white text-opacity-20 absolute top-0 sm:right-20 right-10 md:right-0 z-10 transform sm:-translate-y-[60%] -translate-y-full"
-      >{{ number }}</span
+      class="absolute top-0 sm:right-20 right-10 md:right-0"
     >
+      <span
+        class="lg:text-[200px] sm:text-[160px] text-[100px] leading-none font-anybody font-black text-basic_white text-opacity-20 relative z-10 transform sm:-translate-y-[60%] -translate-y-full block"
+        >{{ number }}</span
+      >
+    </div>
   </div>
 </template>
 

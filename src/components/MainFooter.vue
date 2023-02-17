@@ -1,5 +1,7 @@
 <template>
-  <footer class="relative z-20 pb-24 pt-14 md:pb-14 bg-basic_gray">
+  <footer
+    class="relative z-20 pb-24 overflow-hidden pt-14 md:pb-14 bg-basic_gray"
+  >
     <div
       data-marquee-box
       data-direction="left"
@@ -104,17 +106,25 @@ export default {
           title: 'Contact',
           link: '/contact',
         },
+        {
+          title: 'Member',
+          link: '/account/login',
+        },
       ],
     };
   },
   methods: {
     ScrollToTop() {
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth',
-      });
+      // window.scrollTo({
+      //   top: 0,
+      //   left: 0,
+      //   behavior: 'smooth',
+      // });
+      this.$emit('scroll-top');
     },
+  },
+  mounted() {
+    console.log('footer mounted');
   },
 };
 </script>

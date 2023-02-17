@@ -1,49 +1,49 @@
 <template>
-  <header class="fixed left-0 right-0 z-30 sm:top-8 top-7">
-    <div class="relative z-20 flex items-center w-full h-20 bg-white sm:h-24">
+  <header class="fixed top-0 left-0 right-0 z-30">
+    <div class="relative z-20 flex items-center w-full md:h-20 h-14">
       <div
-        class="relative flex items-center justify-between w-full max-w-screen-xl px-5 mx-auto xl:px-0"
+        class="relative z-10 flex items-center justify-end w-full h-full px-2 mx-auto sm:px-5 lg:px-14"
       >
         <div
-          class="relative flex items-center justify-between w-full md:w-auto"
+          class="absolute top-0 left-0 flex items-center h-full lg:pl-14 sm:pl-10 px-8 pr-[80px] sm:pr-[90px] lg:pr-[120px] bg-basic_white bg-opacity-80 logo_box"
         >
-          <button @click="OpenMenu" class="md:hidden">
-            <MenuIcon class="w-6 sm:w-8" />
-          </button>
           <router-link
             to="/"
             @click.native="CloseMenu"
-            class="absolute block transform -translate-x-1/2 -translate-y-1/2 md:relative md:top-0 md:left-0 top-1/2 left-1/2 md:translate-x-0 md:translate-y-0"
+            class="relative block transform"
           >
             <img
               :alt="$GetCloumn('company_name')"
-              :src="$ImageUrl($GetCloumn('logo_image'))"
-              class="w-32 lg:w-44 sm:w-36"
+              src="/img/logo.svg"
+              class="relative block md:w-[180px] sm:w-[140px] w-[120px]"
             />
           </router-link>
-          <div class="flex items-center md:hidden">
-            <button
-              @click="TriggerSearhBar"
-              class="pr-2 sm:pr-3 focus:outline-none"
-            >
-              <SearchIcon class="w-6 sm:w-8" />
-            </button>
-            <button
-              @click="OpenShopcart"
-              class="relative pl-2 sm:pl-3 md:hidden focus:outline-none"
-            >
-              <span
-                class="absolute top-0 right-0 flex items-center justify-center w-4 h-4 transform translate-x-2 -translate-y-2 rounded-full bg-primary"
-              >
-                <p class="text-xs font-bold text-white transform scale-75">
-                  {{ shopcart_count }}
-                </p>
-              </span>
-              <ShopCartIcon class="w-6 lg:w-7" />
-            </button>
-          </div>
         </div>
-        <div class="items-center hidden md:flex">
+        <div class="flex items-center lg:hidden">
+          <button @click="TriggerSearhBar" class="px-2 focus:outline-none">
+            <span class="text-2xl text-white icon-search"></span>
+          </button>
+          <button @click="TriggerSearhBar" class="px-2 focus:outline-none">
+            <span class="text-2xl text-white icon-search"></span>
+          </button>
+          <button
+            @click="OpenShopcart"
+            class="relative px-2 lg:hidden focus:outline-none"
+          >
+            <span
+              class="absolute top-0 right-0 flex items-center justify-center w-4 h-4 transform -translate-x-1 rounded-full -translate-y-0 bg-primary"
+            >
+              <p class="text-xs font-bold text-white transform scale-75">
+                {{ shopcart_count }}
+              </p>
+            </span>
+            <span class="text-2xl text-white icon-cart"></span>
+          </button>
+          <button @click="OpenMenu" class="px-2 lg:hidden">
+            <span class="text-2xl text-white icon-menu"></span>
+          </button>
+        </div>
+        <div class="items-center hidden lg:flex">
           <ol class="flex items-center">
             <li
               class=""
@@ -53,7 +53,7 @@
               <router-link
                 :to="item.link"
                 @click.native="CloseMenu"
-                class="px-3 text-sm font-bold transition-colors duration-300 cursor-pointer lg:px-4 lg:text-base hover:text-primary"
+                class="px-3 text-sm font-bold text-white transition-colors duration-300 cursor-pointer font-anybody lg:px-4 lg:text-base hover:text-primary"
               >
                 {{ item.title }}
               </router-link>
@@ -63,7 +63,13 @@
             @click="TriggerSearhBar"
             class="pl-4 pr-3 transition-colors duration-300 hover:text-secondary"
           >
-            <SearchIcon class="w-6 lg:w-7" />
+            <span class="text-2xl text-white icon-search"></span>
+          </button>
+          <button
+            @click="TriggerSearhBar"
+            class="pl-4 pr-3 transition-colors duration-300 hover:text-secondary"
+          >
+            <span class="text-2xl text-white icon-search"></span>
           </button>
           <button
             @click="OpenShopcart"
@@ -76,55 +82,53 @@
                 {{ shopcart_count }}
               </p>
             </span>
-            <ShopCartIcon class="w-6 lg:w-7" />
+            <span class="text-2xl text-white icon-cart"></span>
           </button>
         </div>
       </div>
+      <div
+        class="absolute top-0 left-0 right-0 z-0 h-full bg-gradient-to-b from-basic_black to-transparent"
+      ></div>
     </div>
 
-    <MainMenu ref="MainMenu" />
-    <SearchBar ref="SearchBar" />
+    <MainMenu ref="MainMenu" :menu_list="menu_list" />
   </header>
 </template>
 
 <script>
-import SearchIcon from '@/components/svg/SearchIcon';
-import ShopCartIcon from '@/components/svg/ShopCartIcon.vue';
-import MenuIcon from '@/components/svg/MenuIcon.vue';
 import MainMenu from '@/components/MainMenu.vue';
-import SearchBar from '@/components/main_menu/search_bar.vue';
 export default {
   name: 'MainHeader',
   components: {
-    SearchIcon,
-    ShopCartIcon,
-    MenuIcon,
     MainMenu,
-    SearchBar,
   },
   data() {
     return {
       menu_list: [
         {
-          title: '最新商品',
-          link: '/collections?category=4',
-        },
-        {
-          title: '所有商品',
-          link: '/collections?category=all',
-        },
-        {
-          title: '關於我們',
+          title: 'About',
           link: '/about',
         },
         {
-          title: '最新消息',
-          link: '/news?category=all',
+          title: 'Products',
+          link: '/products',
         },
         {
-          title: '會員專區',
-          link: '/account/login',
+          title: 'News',
+          link: '/news',
         },
+        {
+          title: 'Dealer',
+          link: '/dealer',
+        },
+        {
+          title: 'Contact',
+          link: '/contact',
+        },
+        // {
+        //   title: 'Member',
+        //   link: '/account/login',
+        // },
       ],
     };
   },
@@ -157,3 +161,55 @@ export default {
   },
 };
 </script>
+
+// logo_box
+
+<style scoped>
+.logo_box {
+  -webkit-clip-path: polygon(
+    100% 0,
+    calc(100% - 80px) 100%,
+
+    calc(100% - 80px) 100%,
+    0 100%,
+
+    0 100%,
+    0 0%
+  );
+  clip-path: polygon(
+    100% 0,
+    calc(100% - 80px) 100%,
+
+    calc(100% - 80px) 100%,
+    0 100%,
+
+    0 100%,
+    0 0%
+  );
+}
+
+@media (max-width: 1024px) {
+  .logo_box {
+    -webkit-clip-path: polygon(
+      100% 0,
+      calc(100% - 54px) 100%,
+
+      calc(100% - 54px) 100%,
+      0 100%,
+
+      0 100%,
+      0 0%
+    );
+    clip-path: polygon(
+      100% 0,
+      calc(100% - 54px) 100%,
+
+      calc(100% - 54px) 100%,
+      0 100%,
+
+      0 100%,
+      0 0%
+    );
+  }
+}
+</style>

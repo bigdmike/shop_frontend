@@ -27,7 +27,7 @@ export class Loading {
 
   loading(el) {
     this.reset(el);
-    document.querySelector('body').style.overflow = 'hidden';
+    // document.querySelector('body').style.overflow = 'hidden';
     this.tweens = [];
     const content = el.querySelectorAll('[data-loading-content]');
     const logo = el.querySelectorAll('[data-logo]');
@@ -189,7 +189,7 @@ export class Loading {
       .set(el, {
         x: '-105%',
         onComplete: () => {
-          document.querySelector('body').style.overflow = 'auto';
+          // document.querySelector('body').style.overflow = 'auto';
           this.reset(el);
         },
       });
