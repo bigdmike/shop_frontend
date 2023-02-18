@@ -27,6 +27,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-home:before {
+  content: '\e911';
+}
+.icon-user:before {
+  content: '\e912';
+}
 .icon-instagram:before {
   content: '\e900';
 }
