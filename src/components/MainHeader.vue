@@ -20,18 +20,24 @@
           </router-link>
         </div>
         <div class="flex items-center lg:hidden">
-          <button @click="TriggerSearhBar" class="px-2 focus:outline-none">
-            <span class="text-2xl text-white icon-search"></span>
+          <button
+            @click="$router.push('/account/login')"
+            class="hidden px-2 focus:outline-none md:block"
+          >
+            <span class="text-2xl text-white icon-user"></span>
           </button>
-          <button @click="TriggerSearhBar" class="px-2 focus:outline-none">
+          <button
+            @click="TriggerSearhBar"
+            class="hidden px-2 focus:outline-none md:block"
+          >
             <span class="text-2xl text-white icon-search"></span>
           </button>
           <button
             @click="OpenShopcart"
-            class="relative px-2 lg:hidden focus:outline-none"
+            class="relative hidden px-2 lg:hidden focus:outline-none md:block"
           >
             <span
-              class="absolute top-0 right-0 flex items-center justify-center w-4 h-4 transform -translate-x-1 rounded-full -translate-y-0 bg-primary"
+              class="absolute top-0 right-0 flex items-center justify-center w-4 h-4 transform -translate-x-[2px] rounded-full -translate-y-0 bg-primary"
             >
               <p class="text-xs font-bold text-white transform scale-75">
                 {{ shopcart_count }}
@@ -39,6 +45,7 @@
             </span>
             <span class="text-2xl text-white icon-cart"></span>
           </button>
+
           <button @click="OpenMenu" class="px-2 lg:hidden">
             <span class="text-2xl text-white icon-menu"></span>
           </button>
