@@ -11,18 +11,34 @@
         <CloseIcon class="w-5 text-black" />
       </button>
 
-      <div class="flex flex-col w-full">
-        <ol class="flex flex-wrap items-stretch justify-start flex-1 w-full">
-          <li
-            v-for="(item, item_index) in menu_list"
-            :key="`menu_item_${item_index}`"
-            class="w-1/2"
-          >
-            <router-link :to="item.link">
-              {{ item.title }}
+      <div class="flex flex-col w-full h-full">
+        <div class="flex flex-col justify-center flex-1">
+          <div class="flex items-end justify-between w-full mb-20">
+            <router-link to="/" class="w-1/3">
+              <img src="/img/logo.svg" class="block w-full" />
             </router-link>
-          </li>
-        </ol>
+          </div>
+          <ol class="flex flex-wrap items-stretch justify-start w-full">
+            <li
+              v-for="(item, item_index) in menu_list"
+              :key="`menu_item_${item_index}`"
+              class="w-1/2"
+            >
+              <router-link
+                :to="item.link"
+                class="relative block px-6 py-3 mb-10"
+              >
+                <span
+                  class="absolute top-0 left-0 z-0 transform icon-triangle -scale-100"
+                ></span>
+                <h4 class="text-2xl font-bold font-anybody">
+                  {{ item.title }}
+                </h4>
+                <p class="font-bold">{{ item.sub_title }}</p>
+              </router-link>
+            </li>
+          </ol>
+        </div>
       </div>
 
       <div class="absolute top-0 left-0 z-0 block w-full h-full p-10 md:hidden">

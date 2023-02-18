@@ -107,22 +107,27 @@ export default {
       menu_list: [
         {
           title: 'About',
+          sub_title: '關於我們',
           link: '/about',
         },
         {
           title: 'Products',
+          sub_title: '商品列表',
           link: '/products',
         },
         {
           title: 'News',
+          sub_title: '最新消息',
           link: '/news',
         },
         {
           title: 'Dealer',
+          sub_title: '經銷列表',
           link: '/dealer',
         },
         {
           title: 'Contact',
+          sub_title: '聯絡我們',
           link: '/contact',
         },
         // {

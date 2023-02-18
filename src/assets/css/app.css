@@ -1302,6 +1302,10 @@ video {
   width: 140px;
 }
 
+.w-40{
+  width: 10rem;
+}
+
 .min-w-\[45\%\]{
   min-width: 45%;
 }
