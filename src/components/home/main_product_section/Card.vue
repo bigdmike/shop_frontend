@@ -24,7 +24,7 @@
               ? '-translate-x-0 -translate-y-0'
               : 'md:-translate-x-full md:-translate-y-full -translate-x-0 -translate-y-0'
           "
-          class="absolute top-0 left-0 z-20 transition-all duration-700 transform image_corner"
+          class="absolute -top-[2px] -left-[1px] z-20 transition-all duration-700 transform scale-105 image_corner"
         ></span>
         <span
           :class="
@@ -32,18 +32,20 @@
               ? 'translate-x-0 translate-y-0'
               : 'md:translate-x-full md:translate-y-full translate-x-0 translate-y-0'
           "
-          class="absolute bottom-0 right-0 z-20 transition-all duration-700 transform image_corner -scale-100"
+          class="absolute -bottom-[1px] -right-[1px] z-20 transition-all duration-700 transform image_corner -scale-105"
         ></span>
         <div
           :class="reverse ? 'md:bg-gradient-to-r' : 'md:bg-gradient-to-l'"
           class="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-basic_black to-transparent"
         ></div>
-        <img
-          :class="hover ? 'scale-125' : 'scale-100'"
-          class="relative z-0 block transition-all duration-700"
-          :src="image"
-          :alt="$GetCloumn('company_name')"
-        />
+        <div class="relative z-0 overflow-hidden">
+          <img
+            :class="hover ? 'scale-125' : 'scale-100'"
+            class="relative z-0 block transition-all duration-700"
+            :src="image"
+            :alt="$GetCloumn('company_name')"
+          />
+        </div>
       </div>
     </div>
 
