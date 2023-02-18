@@ -5,7 +5,7 @@
   >
     <nav
       data-menu
-      class="absolute top-0 left-0 z-10 w-full h-screen max-h-screen p-10 overflow-y-auto opacity-0 bg-basic_gray"
+      class="absolute top-0 left-0 z-10 w-full h-screen max-h-screen p-10 overflow-y-auto opacity-0 md:p-20 bg-basic_gray"
     >
       <button @click="Close" class="absolute top-7 right-7">
         <CloseIcon class="w-5 text-black" />
@@ -13,37 +13,56 @@
 
       <div class="flex flex-col w-full h-full">
         <div class="flex flex-col justify-center flex-1">
-          <div class="flex items-end justify-between w-full mb-20">
-            <router-link to="/" class="w-1/3">
-              <img src="/img/logo.svg" class="block w-full" />
-            </router-link>
-          </div>
-          <ol class="flex flex-wrap items-stretch justify-start w-full">
-            <li
-              v-for="(item, item_index) in menu_list"
-              :key="`menu_item_${item_index}`"
-              class="w-1/2"
-            >
-              <router-link
-                :to="item.link"
-                class="relative block px-6 py-3 mb-10"
-              >
-                <span
-                  class="absolute top-0 left-0 z-0 transform icon-triangle -scale-100"
-                ></span>
-                <h4 class="text-2xl font-bold font-anybody">
-                  {{ item.title }}
-                </h4>
-                <p class="font-bold">{{ item.sub_title }}</p>
+          <div class="flex flex-col justify-center flex-1">
+            <div class="flex items-end justify-between w-full mb-20">
+              <router-link to="/" class="w-1/2 sm:w-1/3">
+                <img src="/img/logo.svg" class="block w-full" />
               </router-link>
-            </li>
-          </ol>
+            </div>
+            <ol class="flex flex-wrap items-stretch justify-start w-full">
+              <li
+                v-for="(item, item_index) in menu_list"
+                :key="`menu_item_${item_index}`"
+                class="w-full sm:w-1/2"
+              >
+                <router-link
+                  :to="item.link"
+                  class="relative block px-5 py-2 mb-5 sm:px-6 sm:py-3 sm:mb-10"
+                >
+                  <span
+                    class="absolute top-0 left-0 z-0 transform icon-triangle -scale-100"
+                  ></span>
+                  <h4 class="font-bold sm:text-2xl font-anybody">
+                    {{ item.title }}
+                  </h4>
+                  <p class="text-sm font-bold sm:text-base">
+                    {{ item.sub_title }}
+                  </p>
+                </router-link>
+              </li>
+            </ol>
+          </div>
+          <div>
+            <h4 class="mb-3 text-xl font-bold font-anybody">Follow Us</h4>
+            <div class="flex items-center">
+              <a
+                class="p-2 mr-2 text-white transition-all duration-500 border border-transparent rounded-lg cursor-pointer hover:text-primary bg-primary hover:bg-transparent hover:border-primary"
+              >
+                <span class="block text-xl leading-none icon-facebook"></span>
+              </a>
+              <a
+                class="p-2 text-white transition-all duration-500 border border-transparent rounded-lg cursor-pointer hover:text-primary bg-primary hover:bg-transparent hover:border-primary"
+              >
+                <span class="block text-xl leading-none icon-instagram"></span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="absolute top-0 left-0 z-0 block w-full h-full p-10 md:hidden">
-        <img src="/img/menu_bg.webp" class="block w-full h-full" />
-      </div>
+      <span
+        class="icon-triangle sm:text-[120px] text-[80px] text-primary absolute md:bottom-20 bottom-10 md:right-20 right-10 z-0"
+      ></span>
     </nav>
     <div
       data-menu-bg
