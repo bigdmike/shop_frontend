@@ -130,13 +130,20 @@ const shopcart_module = {
             (item) => item.GoodsID == shopcart_item[0]
           );
           if (product_data.length > 0) {
-            // 若商品存在則新增至暫存購物車
-            tmp_list.push({
-              product_data: product_data[0],
-              active_option: [shopcart_item[1], shopcart_item[2]],
-              amount: parseInt(shopcart_item[3]),
-              shopcart_id: [],
-            });
+            // 檢查庫存是否存在
+            const stock_data = {
+              product: product_data[0],
+              options: [shopcart_item[1], shopcart_item[2]],
+            };
+            const option_status = CheckActiveOption(stock_data);
+            if (option_status != 'error') {
+              tmp_list.push({
+                product_data: product_data[0],
+                active_option: [shopcart_item[1], shopcart_item[2]],
+                amount: parseInt(shopcart_item[3]),
+                shopcart_id: [],
+              });
+            }
           }
         });
       }

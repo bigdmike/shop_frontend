@@ -4,7 +4,7 @@
     <MainHeader ref="MainHeader" />
     <MainLoading />
     <ShopCartDialog />
-    <ShopCartDrawer v-if="data_load_finish" />
+    <ShopCartDrawer />
     <MainDialog />
 
     <div id="app">
