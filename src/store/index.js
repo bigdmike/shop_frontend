@@ -27,6 +27,7 @@ export default new Vuex.Store({
     },
     image_loaded: false,
     member_token: '',
+    search_dialog: false,
     shopcart_drawer: false,
     loading: 0,
     body_lock: 0,
@@ -155,6 +156,9 @@ export default new Vuex.Store({
     SetDialog(state, { status, content }) {
       state.main_dialog.status = status;
       state.main_dialog.content = content;
+    },
+    SetSearchDialog(state, status) {
+      state.search_dialog = status;
     },
     SetStateData(state, { key, val }) {
       state[key] = val;

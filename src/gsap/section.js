@@ -3,7 +3,7 @@ import { gsap } from '@/gsap/gsap_loader';
 export class section_animation {
   constructor(el) {
     this.el = el;
-    this.title = el.querySelectorAll('[data-section-title]');
+    this.title = el.querySelector('[data-section-title]');
     this.sub_title = el.querySelectorAll('[data-section-subtitle]');
     this.sub_title_arrow = el.querySelectorAll('[data-section-subtitle-arrow]');
     this.content = el.querySelectorAll('[data-section-content]');
@@ -21,20 +21,33 @@ export class section_animation {
         toggleActions: 'restart play play reverse',
       },
     });
+    // .fromTo(
+    //   this.title,
+    //   {
+    //     text: '',
+    //   },
+    //   {
+    //     text: this.title.dataset.text,
+    //     duration: 1,
+    //   },
+    //   'same'
+    // )
 
     this.timeline
       .fromTo(
         this.title,
         {
-          y: '105%',
-          skewY: '30deg',
+          // y: '105%',
+          // skewY: '30deg',
+          text: '',
           transformOrigin: 'left top',
         },
         {
-          y: '0%',
-          skewY: '0deg',
+          // y: '0%',
+          // skewY: '0deg',
+          text: this.title.dataset.text,
           transformOrigin: 'left top',
-          duration: 1,
+          duration: 0.6,
         },
         'first'
       )

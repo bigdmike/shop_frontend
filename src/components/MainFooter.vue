@@ -1,5 +1,6 @@
 <template>
   <footer
+    data-scroll-section
     class="relative z-20 pb-24 overflow-hidden pt-14 md:pb-14 bg-basic_gray"
   >
     <div

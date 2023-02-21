@@ -1,17 +1,17 @@
 <template>
   <div
     ref="MainContent"
-    class="fixed top-0 left-full w-screen bottom-0 z-30 flex items-center justify-center"
+    class="fixed top-0 bottom-0 z-30 flex items-center justify-center w-screen left-full"
   >
     <div
       data-dialog-box
-      class="w-[400px] max-w-full bg-white relative z-10 p-10 rounded-2xl"
+      class="w-[450px] max-w-full bg-basic_gray relative z-10 px-14 py-14 section_corner"
     >
-      <div v-html="content" class="text-center mb-5"></div>
+      <div v-html="content" class="mb-8 font-semibold text-center"></div>
       <div class="text-center">
         <button
           @click="Close"
-          class="px-10 py-2 text-sm font-bold text-white bg-primary rounded-full border border-primary transition-colors duration-200 hover:bg-transparent hover:text-primary"
+          class="px-5 py-2 text-sm font-bold text-white transition-colors duration-200 border rounded-md bg-primary border-primary hover:bg-transparent hover:text-primary"
         >
           關閉
         </button>
@@ -19,7 +19,7 @@
     </div>
     <div
       data-dialog-bg
-      class="absolute top-0 left-0 right-0 bottom-0 bg-basic_white z-0 bg-opacity-80"
+      class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-basic_black bg-opacity-80"
     ></div>
   </div>
 </template>
@@ -63,3 +63,26 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.section_corner {
+  -webkit-clip-path: polygon(
+    0 40px,
+    40px 0,
+    100% 0,
+    100% calc(100% - 40px),
+    calc(100% - 40px) 100%,
+    0 100%,
+    0 40px
+  );
+  clip-path: polygon(
+    0 40px,
+    40px 0,
+    100% 0,
+    100% calc(100% - 40px),
+    calc(100% - 40px) 100%,
+    0 100%,
+    0 40px
+  );
+}
+</style>

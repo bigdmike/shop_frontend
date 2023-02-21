@@ -8,7 +8,7 @@
       class="absolute top-0 left-0 z-10 w-full h-screen max-h-screen p-10 overflow-y-auto opacity-0 md:p-20 bg-basic_gray"
     >
       <button @click="Close" class="absolute top-7 right-7">
-        <CloseIcon class="w-5 text-black" />
+        <span class="text-2xl icon-close"></span>
       </button>
 
       <div class="flex flex-col w-full h-full">
@@ -76,13 +76,9 @@
 </template>
 
 <script>
-import CloseIcon from '@/components/svg/CloseIcon.vue';
 import { menu_gsap_animation } from '@/gsap/main_menu';
 export default {
   name: 'MainMenu',
-  components: {
-    CloseIcon,
-  },
   props: {
     menu_list: {
       type: Array,

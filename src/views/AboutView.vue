@@ -1,89 +1,198 @@
 <template>
-  <main class="relative z-10 w-full">
-    <div class="w-full max-w-screen-xl px-5 pt-5 mx-auto xl:px-0 sm:px-10">
-      <BreadCrumb class="mb-20" :path="bread_crumb_path" />
+  <main
+    id="About"
+    data-scroll-section
+    class="relative z-10 w-full py-40 bg-basic_gray sm:py-60"
+  >
+    <div id="AboutContainer" class="relative z-10 w-full">
       <div
-        class="flex flex-wrap items-center justify-between mb-10 md:mb-28 sm:mb-20"
+        class="relative z-10 w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10"
       >
-        <div class="w-full mb-10 overflow-hidden md:w-1/2 rounded-2xl md:mb-0">
-          <img
-            :alt="$GetCloumn('company_name')"
-            :src="$ImageUrl($GetCloumn('about_section_1_image'))"
-            class="block w-full"
-          />
-        </div>
-        <div class="w-full md:w-1/2 md:pl-20">
-          <p class="mb-2 sm:text-2xl font-yeseva sm:mb-4 text-primary">01.-</p>
-          <h3 class="mb-3 text-3xl font-bold sm:text-5xl text-primary">
-            {{ $GetCloumn('about_section_1_title') }}
-          </h3>
-          <p class="mb-5 sm:text-2xl font-yeseva sm:mb-10">
-            {{ $GetCloumn('about_section_1_sub_title') }}
-          </p>
-          <div v-html="$GetCloumn('about_section_1_content')"></div>
-        </div>
+        <BreadCrumb class="mb-20" :path="bread_crumb_path" />
+
+        <section
+          ref="StoryContent"
+          class="relative z-10 w-full max-w-screen-md mb-60"
+        >
+          <header
+            class="relative z-10 flex flex-col-reverse items-start w-full md:mb-36 sm:mb-36 mb-28"
+          >
+            <h2 class="relative inline-block px-8">
+              <span
+                data-section-subtitle-arrow
+                class="absolute top-0 left-0 block text-lg leading-none transform icon-triangle text-primary -scale-100"
+              ></span>
+              <span
+                data-section-subtitle
+                class="block font-bold leading-none sm:text-xl md:text-2xl md:leading-none text-basic_black"
+                >關於我們</span
+              >
+              <span
+                data-section-subtitle-arrow
+                class="absolute bottom-0 right-0 block text-lg leading-none icon-triangle text-primary"
+              ></span>
+            </h2>
+            <h3 class="overflow-hidden">
+              <span
+                data-section-title
+                data-text="About Us"
+                class="block text-5xl font-black md:text-8xl sm:text-7xl text-primary font-anybody"
+              >
+                About Us
+              </span>
+            </h3>
+          </header>
+          <div data-section-content>
+            <h3
+              class="mb-10 text-2xl font-bold text-black md:text-3xl font-anybody"
+            >
+              KRACE創立於2016年，著重於CNC、車銑製品開發，展現加工工藝於機車部品上，豐富您的視覺。
+            </h3>
+            <div class="mb-20 font-medium">
+              <p>
+                KRace是汽機車及單車開發CNC零配件的品牌，繼上回的CNC輕量化三角台後，經過車友們的千呼萬喚，
+                KRace終於推出了專為FORCE所打造的CNC後搖臂，客製制化選色，讓車友們享受改裝視覺質感，創造獨家改裝特色。
+              </p>
+              <br />
+              <p>
+                KRace是汽機車及單車開發CNC零配件的品牌，繼上回的CNC輕量化三角台後，經過車友們的千呼萬喚，
+                KRace終於推出了專為FORCE所打造的CNC後搖臂，客製制化選色，讓車友們享受改裝視覺質感，創造獨家改裝特色。
+              </p>
+              <br />
+              <p>
+                KRace是汽機車及單車開發CNC零配件的品牌，繼上回的CNC輕量化三角台後，經過車友們的千呼萬喚，
+                KRace終於推出了專為FORCE所打造的CNC後搖臂，客製制化選色，讓車友們享受改裝視覺質感，創造獨家改裝特色。
+              </p>
+            </div>
+            <div class="w-full overflow-hidden section_corner">
+              <img
+                src="/img/home/main_product/main_product_1.webp"
+                class="block w-full"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section ref="InfoContent" class="relative z-10 w-full">
+          <header
+            class="relative z-10 flex flex-col-reverse items-start w-full md:mb-36 sm:mb-36 mb-28"
+          >
+            <h2 class="relative inline-block px-8">
+              <span
+                data-section-subtitle-arrow
+                class="absolute top-0 left-0 block text-lg leading-none transform icon-triangle text-primary -scale-100"
+              ></span>
+              <span
+                data-section-subtitle
+                class="block font-bold leading-none sm:text-xl md:text-2xl md:leading-none text-basic_black"
+                >公司資訊</span
+              >
+              <span
+                data-section-subtitle-arrow
+                class="absolute bottom-0 right-0 block text-lg leading-none icon-triangle text-primary"
+              ></span>
+            </h2>
+            <h3 class="overflow-hidden">
+              <span
+                data-section-title
+                data-text="Company Info"
+                class="block text-5xl font-black md:text-8xl sm:text-7xl text-primary font-anybody"
+              >
+                Company Info
+              </span>
+            </h3>
+          </header>
+          <ol data-section-content class="max-w-screen-sm mb-20 font-medium">
+            <li
+              class="flex items-center py-5 border-b font-anybody border-basic_black"
+            >
+              <p class="w-[140px] leading-none">公司名稱</p>
+              <p
+                class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
+              >
+                宥原有限公司
+              </p>
+            </li>
+            <li
+              class="flex items-center py-5 border-b font-anybody border-basic_black"
+            >
+              <p class="w-[140px] leading-none">成立時間</p>
+              <p
+                class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
+              >
+                2018
+              </p>
+            </li>
+            <li
+              class="flex items-center py-5 border-b font-anybody border-basic_black"
+            >
+              <p class="w-[140px] leading-none">電子郵件</p>
+              <p
+                class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
+              >
+                Nelson1-3-6@hotmail.com
+              </p>
+            </li>
+            <li
+              class="flex items-center py-5 border-b font-anybody border-basic_black"
+            >
+              <p class="w-[140px] leading-none">聯絡電話</p>
+              <p
+                class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
+              >
+                04-2271-6109
+              </p>
+            </li>
+            <li
+              class="flex items-center py-5 border-b font-anybody border-basic_black"
+            >
+              <p class="w-[140px] leading-none">公司地址</p>
+              <p
+                class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
+              >
+                台中市太平區工業15路13號
+              </p>
+            </li>
+            <li
+              class="flex items-center py-5 border-b font-anybody border-basic_black"
+            >
+              <p class="w-[140px] leading-none">營業時間</p>
+              <p
+                class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
+              >
+                08:00 ~ 20:00
+              </p>
+            </li>
+          </ol>
+        </section>
       </div>
       <div
-        class="flex flex-wrap items-center justify-between mb-10 md:flex-row-reverse md:mb-28 sm:mb-20"
+        data-scroll
+        data-scroll-sticky
+        data-scroll-target="#AboutContainer"
+        class="absolute w-1/2 sm:w-[300px] md:w-[432px] md:max-w-[45%] z-0 top-28"
       >
-        <div class="w-full mb-10 overflow-hidden md:w-1/2 rounded-2xl md:mb-0">
+        <div class="overflow-hidden section_corner">
           <img
-            :alt="$GetCloumn('company_name')"
-            :src="$ImageUrl($GetCloumn('about_section_2_image'))"
-            class="block w-full"
+            src="/img/about/about_bg_1.webp"
+            class="block w-full md:opacity-20 opacity-10"
           />
-        </div>
-        <div class="w-full md:w-1/2 md:pr-20">
-          <p class="mb-2 sm:text-2xl font-yeseva sm:mb-4 text-primary">02.-</p>
-          <h3 class="mb-3 text-3xl font-bold sm:text-5xl text-primary">
-            {{ $GetCloumn('about_section_2_title') }}
-          </h3>
-          <p class="mb-5 sm:text-2xl font-yeseva sm:mb-10">
-            {{ $GetCloumn('about_section_2_sub_title') }}
-          </p>
-          <div v-html="$GetCloumn('about_section_2_content')"></div>
         </div>
       </div>
+
       <div
-        class="flex flex-wrap items-center justify-between mb-10 md:mb-28 sm:mb-20"
+        data-scroll
+        data-scroll-sticky
+        data-scroll-target="#AboutContainer"
+        class="absolute w-1/2 sm:w-[300px] md:w-[432px] md:max-w-[45%] z-0 top-28 right-0"
       >
-        <div class="w-full mb-10 overflow-hidden md:w-1/2 rounded-2xl md:mb-0">
+        <div
+          class="overflow-hidden transform translate-y-[150%] sm:translate-y-full section_corner_tl md:translate-y-0"
+        >
           <img
-            :alt="$GetCloumn('company_name')"
-            :src="$ImageUrl($GetCloumn('about_section_3_image'))"
-            class="block w-full"
+            src="/img/about/about_bg_2.webp"
+            class="block w-full md:opacity-20 opacity-10"
           />
-        </div>
-        <div class="w-full md:w-1/2 md:pl-20">
-          <p class="mb-2 sm:text-2xl font-yeseva sm:mb-4 text-primary">03.-</p>
-          <h3 class="mb-3 text-3xl font-bold sm:text-5xl text-primary">
-            {{ $GetCloumn('about_section_3_title') }}
-          </h3>
-          <p class="mb-5 sm:text-2xl font-yeseva sm:mb-10">
-            {{ $GetCloumn('about_section_3_sub_title') }}
-          </p>
-          <div v-html="$GetCloumn('about_section_3_content')"></div>
-        </div>
-      </div>
-      <div
-        class="flex flex-wrap items-center justify-between mb-10 md:flex-row-reverse md:mb-28 sm:mb-20"
-      >
-        <div class="w-full mb-10 overflow-hidden md:w-1/2 rounded-2xl md:mb-0">
-          <img
-            :alt="$GetCloumn('company_name')"
-            :src="$ImageUrl($GetCloumn('about_section_4_image'))"
-            class="block w-full"
-          />
-        </div>
-        <div class="w-full md:w-1/2 md:pr-20">
-          <p class="mb-2 sm:text-2xl font-yeseva sm:mb-4 text-primary">04.-</p>
-          <h3 class="mb-3 text-3xl font-bold sm:text-5xl text-primary">
-            {{ $GetCloumn('about_section_4_title') }}
-          </h3>
-          <p class="mb-5 sm:text-2xl font-yeseva sm:mb-10">
-            {{ $GetCloumn('about_section_4_sub_title') }}
-          </p>
-          <div v-html="$GetCloumn('about_section_4_content')"></div>
         </div>
       </div>
     </div>
@@ -93,6 +202,7 @@
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import { GetMetaData } from '@/common/meta';
+import { section_animation } from '@/gsap/section.js';
 export default {
   name: 'AboutView',
   components: {
@@ -111,7 +221,30 @@ export default {
           link: '/about',
         },
       ],
+      story_secton_gsap: null,
+      info_section_gsap: null,
     };
+  },
+  methods: {
+    SetGsap() {
+      this.story_secton_gsap = new section_animation(this.$refs.StoryContent);
+      this.info_secton_gsap = new section_animation(this.$refs.InfoContent);
+    },
+  },
+  computed: {
+    image_loaded() {
+      return this.$store.state.image_loaded;
+    },
+  },
+  watch: {
+    image_loaded() {
+      this.image_loaded ? this.SetGsap() : '';
+    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$emit('load-image', 'home');
+    });
   },
   created() {
     this.meta_data = GetMetaData('about', '', '');
@@ -124,3 +257,141 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.section_corner {
+  -webkit-clip-path: polygon(
+    100% 0,
+    100% calc(100% - 60px),
+    calc(100% - 60px) 100%,
+    0 100%,
+
+    0% 0%,
+    0% 0%
+  );
+  clip-path: polygon(
+    100% 0,
+    100% calc(100% - 60px),
+    calc(100% - 60px) 100%,
+    0 100%,
+
+    0% 0%,
+    0% 0%
+  );
+}
+
+.section_corner_tl {
+  -webkit-clip-path: polygon(
+    100% 0,
+    100% 100%,
+
+    100% 100%,
+    0 100%,
+
+    0% 60px,
+    60px 0%
+  );
+  clip-path: polygon(
+    100% 0,
+    100% 100%,
+
+    100% 100%,
+    0 100%,
+
+    0% 60px,
+    60px 0%
+  );
+}
+
+@media (max-width: 768px) {
+  .section_corner {
+    -webkit-clip-path: polygon(
+      100% 0,
+      100% calc(100% - 40px),
+      calc(100% - 40px) 100%,
+      0 100%,
+
+      0% 0%,
+      0% 0%
+    );
+    clip-path: polygon(
+      100% 0,
+      100% calc(100% - 40px),
+      calc(100% - 40px) 100%,
+      0 100%,
+
+      0% 0%,
+      0% 0%
+    );
+  }
+
+  .section_corner_tl {
+    -webkit-clip-path: polygon(
+      100% 0,
+      100% 100%,
+
+      100% 100%,
+      0 100%,
+
+      0% 40px,
+      40px 0%
+    );
+    clip-path: polygon(
+      100% 0,
+      100% 100%,
+
+      100% 100%,
+      0 100%,
+
+      0% 40px,
+      40px 0%
+    );
+  }
+}
+
+/* @media (max-width: 600px) {
+  .section_corner {
+    -webkit-clip-path: polygon(
+      100% 0,
+      100% calc(100% - 20px),
+      calc(100% - 20px) 100%,
+      0 100%,
+
+      0% 0%,
+      0% 0%
+    );
+    clip-path: polygon(
+      100% 0,
+      100% calc(100% - 20px),
+      calc(100% - 20px) 100%,
+      0 100%,
+
+      0% 0%,
+      0% 0%
+    );
+  }
+
+  .section_corner_tl {
+    -webkit-clip-path: polygon(
+      100% 0,
+      100% 100%,
+
+      100% 100%,
+      0 100%,
+
+      0% 20px,
+      20px 0%
+    );
+    clip-path: polygon(
+      100% 0,
+      100% 100%,
+
+      100% 100%,
+      0 100%,
+
+      0% 20px,
+      20px 0%
+    );
+  }
+} */
+</style>

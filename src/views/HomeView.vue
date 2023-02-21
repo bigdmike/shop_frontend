@@ -1,5 +1,5 @@
 <template>
-  <main id="Home" class="relative w-full">
+  <main id="Home" data-scroll-section class="relative w-full">
     <CarouselSection ref="CarouselSection" :carousel_data="carousel_data" />
     <MainProductSection ref="MainProductSection" />
     <AboutSection
@@ -72,15 +72,11 @@ export default {
   },
   mounted() {
     // this.SetGsap();
-    console.log('home mounted');
-    console.log(this.image_loaded);
     this.$nextTick(() => {
       this.$emit('load-image', 'home');
-      console.log(this.image_loaded);
     });
   },
   created() {
-    console.log(this.image_loaded);
     this.meta_data = GetMetaData('home', '', '');
     // this.$nextTick(() => {
     //   this.$PageReady(this.meta_data.title);

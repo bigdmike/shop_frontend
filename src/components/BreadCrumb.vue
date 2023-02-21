@@ -1,5 +1,5 @@
 <template>
-  <div class="relative z-10 w-full">
+  <div class="relative z-10 hidden w-full">
     <ol
       itemscope
       itemtype="https://schema.org/BreadcrumbList"

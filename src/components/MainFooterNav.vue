@@ -39,7 +39,7 @@
       </li>
       <li class="w-1/4 text-center">
         <button
-          @click="$router.push('/account/login')"
+          @click="OpenSearchDialog"
           class="flex items-center justify-center w-full h-full py-3 text-white sm:py-4"
         >
           <span class="text-xl text-white icon-search"></span>
@@ -61,6 +61,9 @@ export default {
   methods: {
     OpenShopCart() {
       this.$store.commit('SetShopcartDrawer', true);
+    },
+    OpenSearchDialog() {
+      this.$store.commit('SetSearchDialog', true);
     },
   },
   computed: {

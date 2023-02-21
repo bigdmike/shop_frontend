@@ -6,6 +6,7 @@
     <ShopCartDialog />
     <ShopCartDrawer />
     <MainDialog />
+    <SearchDialog />
 
     <div id="app">
       <!--  v-if="data_load_finish" -->
@@ -45,6 +46,7 @@ import MainDialog from '@/components/MainDialog.vue';
 import MainFooterNav from '@/components/MainFooterNav.vue';
 import MessageIcon from '@/components/svg/MessageIcon.vue';
 import ContactFooter from '@/components/ContactFooter.vue';
+import SearchDialog from '@/components/ProductSearchDialog.vue';
 // import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import { mapState } from 'vuex';
 import { setLocalStorage, delLocalStorage } from '@/common/cookie';
@@ -63,6 +65,7 @@ export default {
     MainFooterNav,
     MessageIcon,
     ContactFooter,
+    SearchDialog,
     // SelectArrowIcon,
   },
   data() {

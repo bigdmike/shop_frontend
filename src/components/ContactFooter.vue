@@ -1,5 +1,6 @@
 <template>
   <section
+    data-scroll-section
     @mouseenter="hover = true"
     @mouseleave="hover = false"
     class="relative z-10 w-full py-32 overflow-hidden bg-basic_black"

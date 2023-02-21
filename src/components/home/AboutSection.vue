@@ -25,6 +25,7 @@
         <h3 class="overflow-hidden">
           <span
             data-section-title
+            data-text="About Us"
             class="block text-5xl font-black md:text-8xl sm:text-7xl text-primary font-anybody"
           >
             About Us

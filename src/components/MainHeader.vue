@@ -27,7 +27,7 @@
             <span class="text-2xl text-white icon-user"></span>
           </button>
           <button
-            @click="TriggerSearhBar"
+            @click="OpenSearchDialog"
             class="hidden px-2 focus:outline-none md:block"
           >
             <span class="text-2xl text-white icon-search"></span>
@@ -60,20 +60,22 @@
               <router-link
                 :to="item.link"
                 @click.native="CloseMenu"
-                class="px-3 text-sm font-bold text-white transition-colors duration-300 cursor-pointer font-anybody lg:px-4 lg:text-base hover:text-primary"
+                :class="
+                  $route.name == item.sub_title ? 'text-primary' : 'text-white'
+                "
+                class="px-3 text-sm font-bold transition-colors duration-300 cursor-pointer font-anybody lg:px-4 lg:text-base hover:text-primary"
               >
                 {{ item.title }}
               </router-link>
             </li>
           </ol>
           <button
-            @click="TriggerSearhBar"
             class="pl-4 pr-3 transition-colors duration-300 hover:text-secondary"
           >
-            <span class="text-2xl text-white icon-search"></span>
+            <span class="text-2xl text-white icon-user"></span>
           </button>
           <button
-            @click="TriggerSearhBar"
+            @click="OpenSearchDialog"
             class="pl-4 pr-3 transition-colors duration-300 hover:text-secondary"
           >
             <span class="text-2xl text-white icon-search"></span>
@@ -94,7 +96,7 @@
         </div>
       </div>
       <div
-        class="absolute top-0 left-0 right-0 z-0 h-full bg-gradient-to-b from-basic_black to-transparent"
+        class="absolute top-0 left-0 right-0 z-0 opacity-50 bottom-3 bg-gradient-to-b from-basic_black to-transparent"
       ></div>
     </div>
 
@@ -154,8 +156,8 @@ export default {
     OpenShopcart() {
       this.$store.commit('SetShopcartDrawer', true);
     },
-    TriggerSearhBar() {
-      this.$refs.SearchBar.TriggerStatus();
+    OpenSearchDialog() {
+      this.$store.commit('SetSearchDialog', true);
     },
   },
   computed: {

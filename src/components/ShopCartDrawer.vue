@@ -1,8 +1,8 @@
 <template>
-  <nav ref="MainContent" class="fixed top-0 bottom-0 left-0 z-30 w-screen">
+  <nav ref="MainContent" class="fixed top-0 bottom-0 z-30 w-screen left-full">
     <div
       data-menu
-      class="absolute top-0 flex flex-col bottom-0 right-0 sm:w-[432px] xs:w-5/6 w-full bg-basic_gray z-10 pt-12 pb-5"
+      class="absolute top-0 flex flex-col bottom-0 left-full sm:w-[432px] xs:w-5/6 w-full bg-basic_gray z-10 pt-12 pb-5"
     >
       <button @click="Close" class="absolute xs:top-7 xs:right-7 top-5 right-5">
         <CloseIcon class="w-5 text-black" />
@@ -43,7 +43,7 @@
           {{ shopcart.length }} 項商品
         </p>
       </div>
-      <ol class="flex-1 overflow-y-auto px-7">
+      <ol class="flex-1 overflow-y-auto custom_scroll px-7">
         <li
           class="flex flex-wrap items-start py-5 border-b border-zinc-300"
           v-for="(item, item_index) in 5"
@@ -131,7 +131,7 @@
     <div
       @click="Close"
       data-menu-bg
-      class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-white bg-opacity-60"
+      class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-black bg-opacity-60"
     ></div>
   </nav>
 </template>
@@ -140,7 +140,7 @@
 import CloseIcon from '@/components/svg/CloseIcon.vue';
 import PlusIcon from '@/components/svg/PlusIcon.vue';
 import MinusIcon from '@/components/svg/MinusIcon.vue';
-import { menu_gsap_animation } from '@/gsap/main_menu';
+import { shopcart_drawer_animation } from '@/gsap/shopcart_drawer.js';
 import { getLocalStorage } from '@/common/cookie';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
 export default {
@@ -260,7 +260,9 @@ export default {
     },
   },
   mounted() {
-    this.menu_gsap_animation = new menu_gsap_animation(this.$refs.MainContent);
+    this.menu_gsap_animation = new shopcart_drawer_animation(
+      this.$refs.MainContent
+    );
   },
 };
 </script>

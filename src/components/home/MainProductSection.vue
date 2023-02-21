@@ -25,6 +25,7 @@
         <h3 class="overflow-hidden">
           <span
             data-section-title
+            data-text="Products"
             class="block text-5xl font-black md:text-8xl sm:text-7xl text-basic_white font-anybody text-opacity-20"
           >
             Products
