@@ -10,7 +10,11 @@
 
     <div id="app">
       <!--  v-if="data_load_finish" -->
-      <router-view @load-image="LoadImage" />
+      <router-view
+        @load-image="LoadImage"
+        @scroll-top="ScrollToTop"
+        @update-scroll="UpdateScroller"
+      />
       <ContactFooter />
       <!--  v-if="data_load_finish" -->
       <MainFooter @scroll-top="ScrollToTop" />
@@ -85,6 +89,9 @@ export default {
           : (this.image_loader = new ImageLoader());
         this.image_loader.LoadImage();
       });
+    },
+    UpdateScroller() {
+      this.image_loader.locoScroll.update();
     },
     ScrollToTop() {
       this.image_loader.locoScroll.scrollTo('top');
