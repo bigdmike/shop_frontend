@@ -1,32 +1,46 @@
 <template>
-  <main class="relative z-10 w-full">
+  <main class="relative z-10 w-full min-h-screen bg-basic_black">
     <div
-      class="flex flex-wrap items-center justify-center w-full max-w-screen-xl px-10 mx-auto py-60 xl:px-0"
+      class="relative z-10 flex items-center md:w-1/2 sm:w-[70%] w-[80%] h-screen ml-auto sm:pr-10 pr-5 xl:pr-0"
     >
-      <div
-        class="flex flex-col items-center w-full mb-10 md:mr-14 md:flex-row md:w-auto md:mb-0"
-      >
-        <h3 class="text-[80px] font-yeseva mr-5">404</h3>
-        <div class="text-center md:text-left">
-          <h4 class="text-2xl font-yeseva">Page Not Found</h4>
-          <p class="text-basic_gray">找不到頁面，您可以嘗試以下動作：</p>
-        </div>
-      </div>
-      <div class="flex items-center md:flex-row flex-col md:w-auto w-[350px]">
-        <a
-          class="block w-full py-2 mb-5 text-center transition-colors duration-200 border rounded-full cursor-pointer px-14 md:w-auto border-primary text-primary md:mr-2 md:mb-0 hover:bg-primary hover:text-white"
-          @click="$router.back(-1)"
-        >
-          回上一頁</a
-        >
+      <div>
+        <h2 class="relative inline-block px-8 mb-4">
+          <span
+            data-section-subtitle-arrow
+            class="absolute top-0 left-0 block text-lg leading-none transform icon-triangle text-primary -scale-100"
+          ></span>
+          <span
+            data-section-subtitle
+            class="block font-bold leading-none text-white sm:text-xl md:text-2xl md:leading-none"
+            >找不到頁面</span
+          >
+          <span
+            data-section-subtitle-arrow
+            class="absolute bottom-0 right-0 block text-lg leading-none icon-triangle text-primary"
+          ></span>
+        </h2>
+        <p class="mb-10 text-sm text-white sm:text-base">
+          非常抱歉，您所搜尋的頁面似乎不存在、或暫時無法使用，若有任何疑問歡迎與我們聯絡。
+        </p>
         <router-link
-          class="block w-full py-2 text-center transition-colors duration-200 border rounded-full px-14 md:w-auto border-primary text-primary hover:bg-primary hover:text-white"
           to="/"
-        >
-          回到首頁</router-link
+          class="px-6 py-2 font-bold text-white rounded-md bg-primary"
+          >回到首頁</router-link
         >
       </div>
     </div>
+    <img
+      src="/img/error_page/error_background@lg.webp"
+      class="absolute top-0 left-0 z-0 hidden object-cover w-full h-full md:block"
+    />
+    <img
+      src="/img/error_page/error_background@md.webp"
+      class="absolute top-0 left-0 z-0 hidden object-cover w-full h-full md:hidden sm:block"
+    />
+    <img
+      src="/img/error_page/error_background@sm.webp"
+      class="absolute top-0 left-0 z-0 block object-cover w-full h-full sm:hidden"
+    />
   </main>
 </template>
 
