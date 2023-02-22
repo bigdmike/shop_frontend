@@ -89,6 +89,13 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
+    path: '/contact',
+    name: '聯絡我們',
+    component: () =>
+      import(/* webpackChunkName: "contact" */ '../views/ContactView.vue'),
+    meta: { requiresAuth: false },
+  },
+  {
     path: '/account/login',
     name: '會員登入',
     component: () =>

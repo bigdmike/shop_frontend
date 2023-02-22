@@ -21,31 +21,22 @@ export class section_animation {
         toggleActions: 'restart play play reverse',
       },
     });
-    // .fromTo(
-    //   this.title,
-    //   {
-    //     text: '',
-    //   },
-    //   {
-    //     text: this.title.dataset.text,
-    //     duration: 1,
-    //   },
-    //   'same'
-    // )
 
     this.timeline
       .fromTo(
         this.title,
         {
-          // y: '105%',
+          y: '50%',
+          opacity: 0,
           // skewY: '30deg',
-          text: '',
+          // text: '',
           transformOrigin: 'left top',
         },
         {
-          // y: '0%',
+          y: '0%',
+          opacity: 1,
           // skewY: '0deg',
-          text: this.title.dataset.text,
+          // text: this.title.dataset.text,
           transformOrigin: 'left top',
           duration: 0.6,
         },
