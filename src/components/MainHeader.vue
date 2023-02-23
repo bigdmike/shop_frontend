@@ -122,7 +122,7 @@ export default {
         {
           title: 'Products',
           sub_title: '商品列表',
-          link: '/products',
+          link: '/collections',
         },
         {
           title: 'News',

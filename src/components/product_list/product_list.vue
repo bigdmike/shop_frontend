@@ -11,21 +11,22 @@
           class="block mb-2 overflow-hidden rounded-xl aspect-square"
         >
           <img
-            :src="$ImageUrl(item.Image1)"
+            src="/img/products/1/單品.webp"
             :alt="item.Title"
             class="block w-full transition-all duration-200 transform hover:scale-110"
           />
+          <!--  :src="$ImageUrl(item.Image1)" -->
         </router-link>
         <h4 class="mb-2 font-semibold truncate">{{ item.Title }}</h4>
         <p>
-          <span
+          <!-- <span
             v-if="GetPrice(item).Price != GetPrice(item).SellPrice"
             class="mr-1 text-xs text-gray-500 line-through"
             >NT${{ GetPrice(item).Price | currency }}</span
           >
           <span class="text-green"
             >NT${{ GetPrice(item).SellPrice | currency }}</span
-          >
+          > -->
         </p>
       </li>
       <li class="w-full text-center">

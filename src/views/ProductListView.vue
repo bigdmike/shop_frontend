@@ -1,22 +1,51 @@
 <template>
-  <main id="ProductList" class="relative z-10 w-full pb-40">
+  <main
+    id="ProductList"
+    data-scroll-section
+    class="relative z-10 w-full pt-40 pb-20 bg-basic_black"
+  >
     <div
       class="flex flex-wrap items-stretch w-full max-w-screen-xl px-5 pt-5 mx-auto xl:px-0"
     >
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
-      <FilterBar
-        class="flex items-center justify-end w-full mb-10"
-        :active_category="active_category"
-        :sort_type="sort_type"
-        :category_data="category_data"
-        @change-type="ChangeSortType"
-        @change-category="$router.push(`/collections/${$event}`)"
-      />
-      <CategoryMenu
-        :active_category="active_category"
-        :category_data="category_data"
-        class="hidden w-1/4 pr-10 md:block"
-      />
+      <header
+        class="relative z-10 flex flex-col-reverse items-center w-full mb-20"
+      >
+        <h2 class="relative inline-block px-8">
+          <span
+            data-section-subtitle-arrow
+            class="absolute top-0 left-0 block text-lg leading-none transform icon-triangle text-primary -scale-100"
+          ></span>
+          <span
+            data-section-subtitle
+            class="block font-bold leading-none sm:text-xl md:text-2xl md:leading-none text-basic_white"
+            >產品列表</span
+          >
+          <span
+            data-section-subtitle-arrow
+            class="absolute bottom-0 right-0 block text-lg leading-none icon-triangle text-primary"
+          ></span>
+        </h2>
+        <h3 class="overflow-hidden">
+          <span
+            data-section-title
+            data-text="News"
+            class="block text-5xl font-black md:text-8xl sm:text-7xl text-basic_white text-opacity-20 font-anybody"
+          >
+            Products
+          </span>
+        </h3>
+      </header>
+      <div class="flex justify-end w-full">
+        <FilterBar
+          class="flex items-center justify-end w-full mb-10"
+          :active_category="active_category"
+          :sort_type="sort_type"
+          :category_data="category_data"
+          @change-type="ChangeSortType"
+          @change-category="$router.push(`/collections/${$event}`)"
+        />
+      </div>
       <div class="w-full md:w-3/4">
         <EventTimer ref="EventTimer" :event_data="active_category_data" />
         <ProductList
@@ -32,16 +61,16 @@
 
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
-import CategoryMenu from '@/components/product_list/category_menu.vue';
 import ProductList from '@/components/product_list/product_list.vue';
 import FilterBar from '@/components/product_list/filter_bar.vue';
 import EventTimer from '@/components/product_list/EventTimer.vue';
 import { GetMetaData, ChangeTitle } from '@/common/meta';
+import product_list from '@/assets/data/goods.json';
+import category_data from '@/assets/data/menu.json';
 export default {
   name: 'ProductListView',
   components: {
     BreadCrumb,
-    CategoryMenu,
     ProductList,
     FilterBar,
     EventTimer,
@@ -63,6 +92,8 @@ export default {
           link: '/collections?category=all',
         },
       ],
+      product_list: product_list.data,
+      category_data: category_data.data,
     };
   },
   methods: {
@@ -128,6 +159,12 @@ export default {
       });
       return tmp_data[0];
     },
+    SetGsap() {},
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$emit('load-image', 'home');
+    });
   },
   created() {
     this.SetActiveCategory();
@@ -139,22 +176,28 @@ export default {
     $route() {
       this.SetActiveCategory();
     },
+    image_loaded() {
+      this.image_loaded ? this.SetGsap() : '';
+    },
   },
   computed: {
-    category_data() {
-      return this.$store.state.category_data;
+    image_loaded() {
+      return this.$store.state.image_loaded;
     },
+    // category_data() {
+    //   return this.$store.state.category_data;
+    // },
     active_category_data() {
       let active_category_data = this.category_data.filter(
         (item) => item.MenuID == this.active_category
       );
       return active_category_data.length > 0 ? active_category_data[0] : null;
     },
-    product_list() {
-      return this.$store.state.product_data.filter(
-        (item) => item.Status == 'Y'
-      );
-    },
+    // product_list() {
+    //   return this.$store.state.product_data.filter(
+    //     (item) => item.Status == 'Y'
+    //   );
+    // },
     product_data() {
       if (this.active_category == 'all') {
         return this.product_list;
