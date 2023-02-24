@@ -1,8 +1,9 @@
 <template>
   <main
     id="ProductList"
+    ref="MainContent"
     data-scroll-section
-    class="relative z-10 w-full pt-40 pb-20 bg-basic_black"
+    class="relative z-10 w-full pt-40 pb-20 bg-bg_black"
   >
     <div
       class="flex flex-wrap items-stretch w-full max-w-screen-xl px-5 pt-5 mx-auto xl:px-0"
@@ -36,24 +37,125 @@
           </span>
         </h3>
       </header>
-      <div class="flex justify-end w-full">
+      <div data-section-content class="flex justify-end w-full pb-8 md:mb-10">
         <FilterBar
-          class="flex items-center justify-end w-full mb-10"
+          class="flex items-center justify-end w-full"
           :active_category="active_category"
           :sort_type="sort_type"
           :category_data="category_data"
-          @change-type="ChangeSortType"
-          @change-category="$router.push(`/collections/${$event}`)"
+          @change-type="sort_type = $event"
+          @change-category="$router.push(`/collections?category=${$event}`)"
         />
       </div>
-      <div class="w-full md:w-3/4">
-        <EventTimer ref="EventTimer" :event_data="active_category_data" />
-        <ProductList
-          class="w-full"
-          :page_product_data="page_product_data"
-          :product_data="product_data"
-          @next-page="page += 1"
-        />
+      <div class="w-full" data-section-content>
+        <div v-if="active_category == 'all'">
+          <div
+            v-if="promote_category_data != null"
+            class="w-full py-5 border-t border-basic_gray border-opacity-10"
+          >
+            <div class="mb-5">
+              <h2 class="relative inline-block px-8">
+                <span
+                  data-section-subtitle-arrow
+                  class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
+                ></span>
+                <span
+                  data-section-subtitle
+                  class="block text-lg font-bold leading-none md:leading-none text-basic_white"
+                >
+                  {{ promote_category_data.Title }}</span
+                >
+                <span
+                  data-section-subtitle-arrow
+                  class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
+                ></span>
+              </h2>
+            </div>
+            <EventTimer ref="EventTimer" :event_data="promote_category_data" />
+
+            <ProductList
+              class="w-full"
+              :promote="true"
+              :page_product_data="GetCategoryProduct(promote_category_data)"
+              :category_data="promote_category_data"
+            />
+            <div class="flex justify-end">
+              <MoreLinkButton
+                text="SEE MORE"
+                :link="`/collections?category=${promote_category_data.MenuID}`"
+              />
+            </div>
+          </div>
+          <template v-for="(item, item_index) in list_category_data">
+            <div
+              class="w-full py-5 border-t border-basic_gray border-opacity-10"
+              :key="`category_${item_index}`"
+              v-if="GetCategoryProduct(item).length > 0"
+            >
+              <div class="mb-5">
+                <h2 class="relative inline-block px-8">
+                  <span
+                    data-section-subtitle-arrow
+                    class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
+                  ></span>
+                  <span
+                    data-section-subtitle
+                    class="block text-lg font-bold leading-none md:leading-none text-basic_white"
+                    >{{ item.Title }}</span
+                  >
+                  <span
+                    data-section-subtitle-arrow
+                    class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
+                  ></span>
+                </h2>
+              </div>
+              <EventTimer ref="EventTimer" :event_data="item" />
+
+              <ProductList
+                class="w-full"
+                :page_product_data="GetCategoryProduct(item)"
+                :category_data="item"
+              />
+              <div class="flex justify-end">
+                <MoreLinkButton
+                  text="SEE MORE"
+                  :link="`/collections?category=${item.MenuID}`"
+                />
+              </div>
+            </div>
+          </template>
+        </div>
+        <div
+          v-else
+          class="w-full py-5 border-t border-basic_gray border-opacity-10"
+        >
+          <div class="mb-5">
+            <h2 class="relative inline-block px-8">
+              <span
+                data-section-subtitle-arrow
+                class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
+              ></span>
+              <span
+                data-section-subtitle
+                class="block text-lg font-bold leading-none md:leading-none text-basic_white"
+              >
+                {{ active_category_data.Title }}</span
+              >
+              <span
+                data-section-subtitle-arrow
+                class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
+              ></span>
+            </h2>
+          </div>
+          <EventTimer ref="EventTimer" :event_data="active_category_data" />
+
+          <AllProductList
+            class="w-full"
+            :promote="true"
+            :page_product_data="GetCategoryProduct(active_category_data)"
+            :category_data="active_category_data"
+          />
+        </div>
       </div>
     </div>
   </main>
@@ -65,8 +167,9 @@ import ProductList from '@/components/product_list/product_list.vue';
 import FilterBar from '@/components/product_list/filter_bar.vue';
 import EventTimer from '@/components/product_list/EventTimer.vue';
 import { GetMetaData, ChangeTitle } from '@/common/meta';
-import product_list from '@/assets/data/goods.json';
-import category_data from '@/assets/data/menu.json';
+import MoreLinkButton from '@/components/ui/MoreLinkButton.vue';
+import AllProductList from '@/components/product_list/all_product_list.vue';
+import { section_animation } from '@/gsap/section';
 export default {
   name: 'ProductListView',
   components: {
@@ -74,6 +177,8 @@ export default {
     ProductList,
     FilterBar,
     EventTimer,
+    MoreLinkButton,
+    AllProductList,
   },
   data() {
     return {
@@ -92,8 +197,7 @@ export default {
           link: '/collections?category=all',
         },
       ],
-      product_list: product_list.data,
-      category_data: category_data.data,
+      section_animation: null,
     };
   },
   methods: {
@@ -101,6 +205,15 @@ export default {
       this.active_category = this.$route.query.category
         ? this.$route.query.category
         : 'all';
+
+      this.SetMetaGTM();
+
+      this.$emit('scroll-top');
+      this.$nextTick(() => {
+        this.$emit('update-scroll');
+      });
+    },
+    SetMetaGTM() {
       if (this.active_category == 'all') {
         this.bread_crumb_path[1].title = '全部商品';
         this.bread_crumb_path[1].link = '/collections?category=all';
@@ -117,40 +230,30 @@ export default {
           this.$PageReady(this.meta_data.title);
         });
       } else {
-        let category = this.category_data.filter(
-          (item) => item.MenuID == this.active_category
-        );
-        if (category.length > 0) {
-          category = category[0];
-          this.bread_crumb_path[1].title = category.Title;
-          this.bread_crumb_path[1].link = `/collections?category=${category.MenuID}`;
+        if (this.active_category_data != null) {
+          this.bread_crumb_path[1].title = this.active_category_data.Title;
+          this.bread_crumb_path[1].link = `/collections?category=${this.active_category_data.MenuID}`;
           this.$nextTick(() => {
             this.meta_data = GetMetaData('productlist', '', '');
-            this.meta_data = ChangeTitle(this.meta_data, category.Title);
+            this.meta_data = ChangeTitle(
+              this.meta_data,
+              this.active_category_data.Title
+            );
 
             window.dataLayer.push({
               event: 'viewItemList',
-              item_list_name: category.Title,
-              item_list_id: category.MenuID,
+              item_list_name: this.active_category_data.Title,
+              item_list_id: this.active_category_data.MenuID,
               value: 0,
               currency: 'TWD',
             });
 
             this.$PageReady(this.meta_data.title);
           });
-          this.$nextTick(() => {
-            this.$refs.EventTimer.SetTimer();
-          });
         } else {
           this.$RedirectError();
         }
       }
-    },
-    ChangeSortType(val) {
-      this.sort_type = val;
-    },
-    ChangeCategory(val) {
-      this.active_category = val;
     },
     GetPrice(item) {
       let tmp_data = JSON.parse(JSON.stringify(item.Stock));
@@ -159,45 +262,84 @@ export default {
       });
       return tmp_data[0];
     },
-    SetGsap() {},
+    GetCategoryProduct(category) {
+      return this.sort_product_data.filter((item) => {
+        return (
+          item.Menu.filter((menu) => menu.MenuID == category.MenuID).length > 0
+        );
+      });
+    },
+    SetGsap() {
+      this.SetActiveCategory();
+      this.section_animation == null
+        ? (this.section_animation = new section_animation(
+            this.$refs.MainContent
+          ))
+        : '';
+    },
+    CheckDataLoaded() {
+      if (this.product_list != null && this.category_data != null) {
+        this.$nextTick(() => {
+          this.$emit('load-image', 'home');
+        });
+      }
+    },
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.$emit('load-image', 'home');
-    });
-  },
-  created() {
-    this.SetActiveCategory();
-  },
+  mounted() {},
   metaInfo() {
     return this.meta_data;
   },
   watch: {
     $route() {
-      this.SetActiveCategory();
+      console.log('router change');
+      this.$nextTick(() => {
+        console.log('router change after tick');
+        this.$emit('load-image', 'home');
+      });
     },
     image_loaded() {
       this.image_loaded ? this.SetGsap() : '';
+    },
+    category_data() {
+      this.category_data != null ? this.CheckDataLoaded() : '';
+    },
+    product_list() {
+      this.product_list != null ? this.CheckDataLoaded() : '';
     },
   },
   computed: {
     image_loaded() {
       return this.$store.state.image_loaded;
     },
-    // category_data() {
-    //   return this.$store.state.category_data;
-    // },
+    category_data() {
+      if (this.$store.state.category_data == null) {
+        return [];
+      }
+      return this.$store.state.category_data;
+    },
+    promote_category_data() {
+      const category = this.category_data.filter((item) => item.MenuID == 7);
+      return category.length > 0 ? category[0] : null;
+    },
+    list_category_data() {
+      let all_category = JSON.parse(JSON.stringify(this.category_data));
+      all_category = all_category.filter((item) => item.MenuID != 7);
+      return all_category;
+    },
     active_category_data() {
       let active_category_data = this.category_data.filter(
         (item) => item.MenuID == this.active_category
       );
       return active_category_data.length > 0 ? active_category_data[0] : null;
     },
-    // product_list() {
-    //   return this.$store.state.product_data.filter(
-    //     (item) => item.Status == 'Y'
-    //   );
-    // },
+    product_list() {
+      if (this.$store.state.product_data == null) {
+        return [];
+      }
+      return this.$store.state.product_data.filter(
+        (item) => item.Status == 'Y'
+      );
+    },
     product_data() {
       if (this.active_category == 'all') {
         return this.product_list;
@@ -237,12 +379,6 @@ export default {
       } else {
         return tmp_product_data;
       }
-    },
-    page_product_data() {
-      return this.sort_product_data.slice(
-        0,
-        this.page * this.count_per_page + this.count_per_page
-      );
     },
   },
 };

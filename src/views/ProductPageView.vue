@@ -1,7 +1,8 @@
 <template>
   <main
     id="ProductPage"
-    class="relative w-full"
+    class="relative z-10 w-full pt-24 pb-20 md:pt-40 bg-bg_black"
+    data-scroll-section
     v-if="product_data != null"
     itemtype="https://schema.org/Product"
     itemscope
@@ -27,30 +28,118 @@
         </div>
       </div>
 
-      <FixedProductTabList
-        :active_tab="active_tab"
-        :tabs="tabs"
-        @change-tab="ChangeTab"
-      />
-
-      <ProductTabList
-        :active_tab="active_tab"
-        :tabs="tabs"
-        @change-tab="ChangeTab"
-      />
       <meta itemprop="description" :content="product_data.Memo1" />
-      <div id="Description" class="mb-10" v-html="product_data.Memo1"></div>
+      <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
+        <div class="mb-10">
+          <h2 class="relative inline-block px-8">
+            <span
+              data-section-subtitle-arrow
+              class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
+            ></span>
+            <span
+              data-section-subtitle
+              class="block text-base font-medium leading-none md:leading-none text-basic_white"
+              >商品描述</span
+            >
+            <span
+              data-section-subtitle-arrow
+              class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
+            ></span>
+          </h2>
+        </div>
+        <div
+          id="Description"
+          class="text-white"
+          v-html="product_data.Memo1"
+        ></div>
+      </div>
+      <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
+        <div class="mb-10">
+          <h2 class="relative inline-block px-8">
+            <span
+              data-section-subtitle-arrow
+              class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
+            ></span>
+            <span
+              data-section-subtitle
+              class="block text-base font-medium leading-none md:leading-none text-basic_white"
+              >運送說明</span
+            >
+            <span
+              data-section-subtitle-arrow
+              class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
+            ></span>
+          </h2>
+        </div>
+        <div id="Workflow" class="text-white" v-html="product_data.Memo2"></div>
+      </div>
+      <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
+        <div class="mb-10">
+          <h2 class="relative inline-block px-8">
+            <span
+              data-section-subtitle-arrow
+              class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
+            ></span>
+            <span
+              data-section-subtitle
+              class="block text-base font-medium leading-none md:leading-none text-basic_white"
+              >注意事項</span
+            >
+            <span
+              data-section-subtitle-arrow
+              class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
+            ></span>
+          </h2>
+        </div>
+
+        <div
+          id="Precautions"
+          class="text-white"
+          v-html="product_data.Memo3"
+        ></div>
+      </div>
       <div
-        id="Workflow"
-        class="pt-10 mb-10 border-t border-zinc-300"
-        v-html="product_data.Memo2"
-      ></div>
-      <div
-        id="Precautions"
-        class="pt-10 mb-10 border-t border-zinc-300"
-        v-html="product_data.Memo3"
-      ></div>
-      <FixedFooter class="flex md:hidden" @add-cart="AddShopCart" />
+        class="w-full py-5 border-t border-basic_gray border-opacity-10"
+        v-if="recommend_category_data != null"
+      >
+        <div class="flex flex-col-reverse items-start mb-16">
+          <h2 class="relative inline-block px-8">
+            <span
+              data-section-subtitle-arrow
+              class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
+            ></span>
+            <span
+              data-section-subtitle
+              class="block text-lg font-bold leading-none md:leading-none text-basic_white"
+              >相關商品</span
+            >
+            <span
+              data-section-subtitle-arrow
+              class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
+            ></span>
+          </h2>
+          <h3 class="overflow-hidden">
+            <span
+              data-section-title
+              data-text="News"
+              class="block text-5xl font-black sm:text-7xl text-basic_white text-opacity-20 font-anybody"
+            >
+              Related
+            </span>
+          </h3>
+        </div>
+        <ProductList
+          class="w-full"
+          :page_product_data="GetCategoryProduct()"
+          :category_data="recommend_category_data"
+        />
+        <div class="flex justify-end">
+          <MoreLinkButton
+            text="SEE MORE"
+            :link="`/collections?category=${recommend_category_data.MenuID}`"
+          />
+        </div>
+      </div>
     </div>
   </main>
 </template>
@@ -59,9 +148,8 @@
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import ImageGallery from '@/components/product_page/image_gallery.vue';
 import InfoBox from '@/components/product_page/info_box.vue';
-import ProductTabList from '@/components/product_page/tab_list.vue';
-import FixedProductTabList from '@/components/product_page/fixed_tab_list.vue';
-import FixedFooter from '@/components/product_page/fixed_footer.vue';
+import ProductList from '@/components/product_list/product_list.vue';
+import MoreLinkButton from '@/components/ui/MoreLinkButton.vue';
 import { getLocalStorage } from '@/common/cookie';
 import { getSingleProductData } from '@/api/page_data';
 import { GetMetaData } from '@/common/meta';
@@ -69,15 +157,17 @@ import {
   ConvertProductData,
   ConvertAddShopCartData,
 } from '@/common/gtm_methods';
+// import product_list from '@/assets/data/goods.json';
+// import product_data from '@/assets/data/single_good.json';
+// import category_data from '@/assets/data/menu.json';
 export default {
   name: 'ProductPage',
   components: {
     BreadCrumb,
     ImageGallery,
     InfoBox,
-    ProductTabList,
-    FixedProductTabList,
-    FixedFooter,
+    ProductList,
+    MoreLinkButton,
   },
   data() {
     return {
@@ -101,6 +191,9 @@ export default {
       active_tab: '商品介紹',
       product_data: null,
       meta_data: null,
+      // product_list: product_list.data,
+      // category_data: category_data.data,
+      // product_data:product_data
     };
   },
   methods: {
@@ -239,6 +332,15 @@ export default {
         }
       });
     },
+    GetCategoryProduct() {
+      return this.product_list.filter((item) => {
+        return (
+          item.Menu.filter(
+            (menu) => menu.MenuID == this.product_data.RecommendMenuID
+          ).length > 0
+        );
+      });
+    },
   },
   created() {
     this.GetProductData();
@@ -266,6 +368,15 @@ export default {
     },
     category_data() {
       return this.$store.state.category_data;
+    },
+    recommend_category_data() {
+      if (this.product_data.RecommendMenuID == '') {
+        return null;
+      } else {
+        return this.category_data.filter(
+          (item) => item.MenuID == this.product_data.RecommendMenuID
+        )[0];
+      }
     },
     shopcart() {
       return this.$store.state.shopcart_module.shopcart;

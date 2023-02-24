@@ -82,11 +82,11 @@ export class section_animation {
         this.content,
         {
           opacity: 0,
-          y: '10%',
+          y: '100px',
         },
         {
           opacity: 1,
-          y: '0%',
+          y: '0px',
         },
         'third'
       );

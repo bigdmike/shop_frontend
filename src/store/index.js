@@ -150,7 +150,7 @@ export default new Vuex.Store({
       if (action == 1) {
         state.loading += 1;
       } else {
-        state.loading -= 1;
+        state.loading > 0 ? (state.loading -= 1) : '';
       }
     },
     SetDialog(state, { status, content }) {

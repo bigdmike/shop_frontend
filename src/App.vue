@@ -7,10 +7,12 @@
     <ShopCartDrawer />
     <MainDialog />
     <SearchDialog />
+    <ProductFooterNav @add-cart="AddShopCart" />
 
     <div id="app">
       <!--  v-if="data_load_finish" -->
       <router-view
+        ref="RouterView"
         @load-image="LoadImage"
         @scroll-top="ScrollToTop"
         @update-scroll="UpdateScroller"
@@ -51,6 +53,7 @@ import MainFooterNav from '@/components/MainFooterNav.vue';
 import MessageIcon from '@/components/svg/MessageIcon.vue';
 import ContactFooter from '@/components/ContactFooter.vue';
 import SearchDialog from '@/components/ProductSearchDialog.vue';
+import ProductFooterNav from '@/components/ProductFooterNav.vue';
 // import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import { mapState } from 'vuex';
 import { setLocalStorage, delLocalStorage } from '@/common/cookie';
@@ -70,6 +73,7 @@ export default {
     MessageIcon,
     ContactFooter,
     SearchDialog,
+    ProductFooterNav,
     // SelectArrowIcon,
   },
   data() {
@@ -81,12 +85,15 @@ export default {
     };
   },
   methods: {
+    AddShopCart() {
+      this.$refs.RouterView.AddShopCart();
+    },
     LoadImage(from) {
       this.$nextTick(() => {
         console.log('load from ' + from);
-        this.image_loader != null
-          ? this.image_loader.Destroy()
-          : (this.image_loader = new ImageLoader());
+        // this.image_loader != null
+        //   ? this.image_loader.Destroy()
+        //   : (this.image_loader = new ImageLoader());
         this.image_loader.LoadImage();
       });
     },
@@ -94,7 +101,7 @@ export default {
       this.image_loader.locoScroll.update();
     },
     ScrollToTop() {
-      this.image_loader.locoScroll.scrollTo('top');
+      this.image_loader.locoScroll.scrollTo('top', { duration: 100 });
     },
     CheckPageData() {
       this.common_column_data == null
@@ -163,19 +170,20 @@ export default {
       // }
     },
     data_load_finish() {
-      // if (this.data_load_finish) {
-      //   this.$store.dispatch('shopcart_module/GetShopCart');
-      // }
-      // if (this.data_load_finish && this.first_time_load) {
-      //   this.first_time_load = false;
-      // }
+      if (this.data_load_finish) {
+        this.$store.dispatch('shopcart_module/GetShopCart');
+      }
+      if (this.data_load_finish && this.first_time_load) {
+        this.first_time_load = false;
+      }
     },
     $route() {
       // this.GetOrderMemo();
+      this.ScrollToTop();
     },
   },
   created() {
-    // this.CheckPageData();
+    this.CheckPageData();
   },
   mounted() {
     // const h_full_el = document.querySelectorAll('.h-screen');
@@ -184,6 +192,8 @@ export default {
     // });
     // this.pageLoad();
     console.log('app mounted');
+    this.image_loader = new ImageLoader();
+    this.image_loader.SetScroller();
     // this.LoadImage('app');
     this.marquee_animation = new marquee();
   },

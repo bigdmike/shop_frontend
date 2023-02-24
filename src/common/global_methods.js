@@ -3,8 +3,8 @@ import Vue from 'vue';
 import router from '@/router';
 
 Vue.prototype.$ImageUrl = (item) => {
-  return item;
-  // return item == '' ? '' : process.env.VUE_APP_BASE_API + item;
+  // return item;
+  return item == '' ? '' : process.env.VUE_APP_BASE_API + item;
 };
 
 Vue.prototype.$GetCloumn = (key) => {

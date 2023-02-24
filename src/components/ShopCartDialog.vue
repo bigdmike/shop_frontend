@@ -5,17 +5,17 @@
   >
     <div
       data-dialog-box
-      class="w-11/12 max-w-[400px] overflow-hidden rounded-xl p-10 bg-primary bg-opacity-60 text-white flex items-center justify-center relative z-10"
+      class="w-11/12 max-w-[400px] overflow-hidden section_corner p-10 bg-basic_black text-white flex items-center justify-center relative z-10"
     >
-      <h4 class="relative z-10">已將商品加入購物車</h4>
+      <h4 class="relative z-10 font-bold">已將商品加入購物車</h4>
       <div
         data-dialog-progress
-        class="absolute top-0 bottom-0 left-0 right-0 origin-left bg-primary"
+        class="absolute top-0 bottom-0 left-0 right-0 origin-left opacity-50 bg-primary"
       ></div>
     </div>
     <div
       data-dialog-bg
-      class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-white bg-opacity-30"
+      class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-black bg-opacity-50"
     ></div>
   </div>
 </template>
@@ -48,3 +48,26 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.section_corner {
+  -webkit-clip-path: polygon(
+    0 40px,
+    40px 0,
+    100% 0,
+    100% calc(100% - 40px),
+    calc(100% - 40px) 100%,
+    0 100%,
+    0 40px
+  );
+  clip-path: polygon(
+    0 40px,
+    40px 0,
+    100% 0,
+    100% calc(100% - 40px),
+    calc(100% - 40px) 100%,
+    0 100%,
+    0 40px
+  );
+}
+</style>

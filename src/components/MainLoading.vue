@@ -1,8 +1,8 @@
 <template>
   <div
     id="MainLoading"
-    class="fixed top-0 bottom-0 left-0 right-0 z-50 flex items-center justify-center bg-white"
-    v-if="status != 0"
+    class="fixed top-0 bottom-0 left-0 right-0 z-50 flex items-center justify-center bg-opacity-80 bg-bg_black"
+    v-if="status > 0"
   >
     <div class="text-center">
       <div class="relative z-50 lds-ellipsis">
@@ -39,7 +39,7 @@ export default {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: #007339;
+  background: #cc1415;
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 .lds-ellipsis div:nth-child(1) {

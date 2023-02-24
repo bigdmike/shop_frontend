@@ -46,22 +46,19 @@
       <ol class="flex-1 overflow-y-auto custom_scroll px-7">
         <li
           class="flex flex-wrap items-start py-5 border-b border-zinc-300"
-          v-for="(item, item_index) in 5"
+          v-for="(item, item_index) in shopcart"
           :key="`shopcart_${item_index}`"
         >
           <div class="w-1/4 overflow-hidden rounded-lg aspect-square">
-            <!-- :src="$ImageUrl(item.product_data.Image1)" -->
             <img
-              src="/img/products/1/單品.webp"
+              :src="$ImageUrl(item.product_data.Image1)"
               class="object-cover w-full h-full"
             />
           </div>
-          <!--  v-if="GetActiveOption(item) != 'error'" -->
-          <div class="w-3/4 pl-3 mb-4">
+          <div class="w-3/4 pl-3 mb-4" v-if="GetActiveOption(item) != 'error'">
             <div class="flex items-center justify-between mb-2">
               <p class="text-sm font-bold truncate xs:text-base">
-                <!-- {{ item.product_data.Title }} -->
-                DRG油箱蓋
+                {{ item.product_data.Title }}
               </p>
               <button
                 @click="Remove(item_index, item.amount)"
@@ -70,17 +67,19 @@
                 <span class="text-xl icon-trash"></span>
               </button>
             </div>
-            <p class="text-sm font-bold text-opacity-60 text-basic_black">
-              <!-- {{ GetActiveOption(item).ColorTitle }} -->
-              <span class="mr-2 text-xs font-medium">選項一</span>金色
+            <p class="text-sm font-medium text-opacity-60 text-basic_black">
+              <span class="block mr-2 text-xs font-medium">選項一</span>
+              {{ GetActiveOption(item).ColorTitle }}
             </p>
-            <!-- v-if="GetActiveOption(item).SizeTitle != '無'" -->
-            <p class="text-sm font-bold text-opacity-60 text-basic_black">
-              <span class="mr-2 text-xs font-medium">選項二</span>銀色
-              <!-- {{ GetActiveOption(item).SizeTitle }} -->
+            <p
+              v-if="GetActiveOption(item).SizeTitle != '無'"
+              class="text-sm font-medium text-opacity-60 text-basic_black"
+            >
+              <span class="block mr-2 text-xs font-medium">選項二</span
+              >{{ GetActiveOption(item).SizeTitle }}
             </p>
           </div>
-          <div class="flex justify-end w-full">
+          <div class="flex justify-end w-full mt-2">
             <div class="flex items-center justify-between w-full">
               <div class="flex items-center">
                 <div
@@ -89,12 +88,11 @@
                   <button @click="Remove(item_index, 1)" class="px-2">
                     <MinusIcon class="w-3 text-black" />
                   </button>
-                  <!--   :value="item.amount" -->
                   <input
+                    :value="item.amount"
                     type="text"
                     readonly
-                    value="1"
-                    class="w-10 text-center font-anybody"
+                    class="w-10 text-center"
                   />
                   <button @click="Add(item_index)" class="px-2">
                     <PlusIcon class="w-3 text-black" />
@@ -102,12 +100,12 @@
                 </div>
               </div>
               <p class="text-sm font-bold font-anybody xs:text-base">
-                NT$9999
-                <!-- {{
+                <!-- NT$9999 -->
+                NT${{
                   $MoneyFormat(
                     parseInt(GetActiveOption(item).SellPrice) * item.amount
                   )
-                }} -->
+                }}
               </p>
             </div>
           </div>
@@ -117,12 +115,14 @@
       <div class="px-5 pt-5">
         <div class="flex items-center mb-2">
           <p class="mr-5 text-xs font-bold">合計</p>
-          <p class="font-bold font-anybody text-primary">NTD 38,320</p>
+          <p class="font-bold font-anybody text-primary">
+            NTD {{ $MoneyFormat(total_price) }}
+          </p>
         </div>
         <router-link
           to="/shopcart"
           @click.native="Close"
-          class="block py-3 font-bold text-center text-white transition-colors duration-200 rounded-md bg-primary hover:bg-secondary"
+          class="block py-3 font-bold text-center text-white transition-colors duration-200 rounded-md bg-primary hover:bg-basic_black hover:text-primary"
         >
           立即購買
         </router-link>
@@ -257,6 +257,13 @@ export default {
     },
     dialog() {
       return this.$store.state.shopcart_drawer;
+    },
+    total_price() {
+      let price = 0;
+      this.shopcart.forEach((item) => {
+        price += parseInt(this.GetActiveOption(item).SellPrice) * item.amount;
+      });
+      return price;
     },
   },
   mounted() {

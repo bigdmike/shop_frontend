@@ -1,7 +1,7 @@
 <template>
   <div>
     <div ref="BigSwiper" class="relative mb-5 swiper">
-      <button
+      <!-- <button
         @click="SlideSwiper(1)"
         class="absolute right-0 z-10 py-6 pl-5 pr-2 transition-colors duration-200 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-tl-full rounded-bl-full top-1/2 sm:pr-3 sm:pl-8 sm:py-9 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
       >
@@ -12,14 +12,15 @@
         class="absolute left-0 z-10 py-6 pl-2 pr-5 transition-colors duration-200 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-tr-full rounded-br-full top-1/2 sm:pl-3 sm:pr-8 sm:py-9 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
       >
         <PrevIcon class="w-2 sm:w-4" />
-      </button>
+      </button> -->
       <VueSlickCarousel
         ref="big_swiper"
         :asNavFor="$refs.small_swiper"
         v-bind="big_slick_option"
+        @beforeChange="SetSlideIndex"
       >
         <div
-          class="w-full overflow-hidden rounded-xl aspect-square"
+          class="relative w-full overflow-hidden bg-gradient-to-b from-basic_black to-transparent section_corner aspect-square"
           v-for="(item, item_index) in images"
           :key="`big_carousel_${item_index}`"
         >
@@ -28,7 +29,11 @@
             width="640"
             height="640"
             :src="$ImageUrl(item.Image)"
-            class="object-cover w-full h-full"
+            class="relative z-10 object-cover w-full h-full"
+          />
+          <img
+            src="/img/logo_white.svg"
+            class="absolute z-0 w-11/12 transform -translate-x-1/2 -translate-y-1/2 opacity-20 top-1/2 left-1/2 mix-blend-overlay"
           />
         </div>
       </VueSlickCarousel>
@@ -44,7 +49,12 @@
       >
         <div
           @click="SlideToIndex(item_index)"
-          class="overflow-hidden transition-all duration-300 border-2 border-transparent rounded-md hover:border-primary aspect-square"
+          :class="
+            sliderPageIndex == item_index
+              ? 'border-opacity-100'
+              : 'border-opacity-20'
+          "
+          class="mx-2 overflow-hidden transition-all duration-300 border-2 rounded-md border-primary hover:border-opacity-100 aspect-square"
         >
           <img
             :alt="title"
@@ -68,8 +78,6 @@
 
 <script>
 import '@/assets/css/vue-slick-carousel.css';
-import NextIcon from '@/components/svg/Carousel/NextIcon';
-import PrevIcon from '@/components/svg/Carousel/PrevIcon';
 export default {
   name: 'ProductImageGallery',
   props: {
@@ -82,10 +90,7 @@ export default {
       type: String,
     },
   },
-  components: {
-    NextIcon,
-    PrevIcon,
-  },
+  components: {},
   data() {
     return {
       big_slick_option: {
@@ -96,7 +101,7 @@ export default {
       },
       small_slick_option: {
         ifinite: true,
-        slidesPerRow: 5,
+        slidesPerRow: 6,
         slidesToShow: 1,
         speed: 500,
         draggable: true,
@@ -105,6 +110,7 @@ export default {
       },
       big_swiper: null,
       small_swiper: null,
+      sliderPageIndex: 0,
     };
   },
   methods: {
@@ -118,7 +124,37 @@ export default {
     SlideToIndex(val) {
       this.$refs.big_swiper.goTo(val);
     },
+    SetSlideIndex(old_val, new_val) {
+      this.sliderPageIndex = new_val;
+    },
   },
   mounted() {},
 };
 </script>
+
+<style scoped>
+.section_corner {
+  -webkit-clip-path: polygon(
+    100% 0,
+    100% 100%,
+
+    100% 100%,
+    0 100%,
+
+    0 100%,
+    0 50px,
+
+    50px 0
+  );
+  clip-path: polygon(
+    100% 0,
+    100% 100%,
+
+    100% 100%,
+    0 100%,
+    0 100%,
+    0 50px,
+    50px 0
+  );
+}
+</style>

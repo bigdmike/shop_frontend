@@ -2,22 +2,19 @@
   <div>
     <ol class="flex flex-wrap items-stretch justify-start -mx-2">
       <li
-        v-for="(item, item_index) in page_product_data.slice(0, 4)"
+        v-for="(item, item_index) in page_product_data"
         :key="`product_${item_index}`"
-        class="w-full px-2 mb-8 md:mb-10"
-        :class="promote ? 'md:w-1/2' : ' lg:w-1/4 md:w-1/3 sm:w-1/2'"
+        class="w-full px-2 mb-8 md:mb-10 md:w-1/4 sm:w-1/2"
       >
         <router-link
           :to="`/product/${item.GoodsID}`"
-          class="relative block mb-2 overflow-hidden section_corner bg-gradient-to-b from-basic_black to-transparent"
-          :class="promote ? 'aspect-video' : 'aspect-square'"
+          class="relative block mb-2 overflow-hidden aspect-square section_corner bg-gradient-to-b from-basic_black to-transparent"
         >
           <img
             :src="$ImageUrl(item.Image1)"
             :alt="item.Title"
             class="relative z-10 block object-contain w-full h-full transition-all duration-200 transform hover:scale-110"
           />
-
           <img
             src="/img/logo_white.svg"
             class="absolute z-0 w-1/3 top-3 right-3 mix-blend-overlay"

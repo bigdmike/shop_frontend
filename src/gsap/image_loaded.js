@@ -10,6 +10,8 @@ export class ImageLoader {
 
   LoadImage() {
     store.commit('SetImageLoaded', false);
+    store.commit('SetLoading', 1);
+    console.log('set load image');
     const images = gsap.utils.toArray('img');
     window.removeEventListener('resize', this.refreshScroll, true);
     window.imagesLoaded(images).on('always', () => {
@@ -23,10 +25,16 @@ export class ImageLoader {
     store.commit('SetImageLoaded', true);
     console.log('all images have been loaded!');
     console.log(document.querySelector('#app').clientHeight);
-    this.SetScroller();
+    console.log(this.locoScroll);
+    // this.locoScroll == null ? this.SetScroller() : this.locoScroll.update();
+    // this.SetScroller();
+    // this.locoScroll.update();
+    store.commit('SetLoading', -1);
   }
 
   SetScroller() {
+    console.log('here');
+    this.Destroy();
     this.locoScroll = new LocomotiveScroll({
       el: document.querySelector('#app'),
       smooth: true,
@@ -43,6 +51,10 @@ export class ImageLoader {
         multiplier: 3,
       },
     });
+
+    new ResizeObserver(() => this.locoScroll.update()).observe(
+      document.querySelector('#app')
+    );
 
     this.locoScroll.on('scroll', ScrollTrigger.update);
 
@@ -67,6 +79,7 @@ export class ImageLoader {
         : 'fixed',
     });
     ScrollTrigger.refresh();
+    store.commit('SetLoading', -1);
   }
 
   refreshScroll() {

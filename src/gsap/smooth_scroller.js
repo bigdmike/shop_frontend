@@ -6,6 +6,10 @@ const locoScroll = new LocomotiveScroll({
   smooth: true,
 });
 
+new ResizeObserver(() => locoScroll.update()).observe(
+  document.querySelector('#scroll_content')
+);
+
 // each time Locomotive Scroll updates, tell ScrollTrigger to update too (sync positioning)
 
 locoScroll.on('scroll', ScrollTrigger.update);
