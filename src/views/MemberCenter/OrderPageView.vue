@@ -1,17 +1,17 @@
 <template>
-  <div class="relative z-10 w-full pb-32">
+  <div class="relative z-10 w-full pb-32 text-white">
     <div
       v-if="trade_data != null && trade_data != 'error'"
-      class="w-full mb-5 rounded-md md:p-3 md:border md:border-zinc-300"
+      class="w-full p-5 mb-5 rounded-md bg-basic_black"
     >
       <div
         class="flex items-center justify-between pb-3 mb-3 border-b border-zinc-300"
       >
         <p class="text-sm text-basic_gray">
-          訂單編號：<span class="text-secondary">{{ trade_data.TradeID }}</span>
+          訂單編號：<span class="text-primary">{{ trade_data.TradeID }}</span>
         </p>
         <p class="text-sm text-basic_gray">
-          訂購日期：<span class="text-black">{{
+          訂購日期：<span class="text-white">{{
             trade_data.created_at.slice(0, 10)
           }}</span>
         </p>
@@ -19,21 +19,20 @@
       <div class="mb-5">
         <p class="mb-3 text-sm text-basic_gray">
           訂單狀態
-          <span class="text-secondary">{{ trade_data.StatusTxt }}</span>
+          <span class="text-primary">{{ trade_data.StatusTxt }}</span>
         </p>
         <p class="mb-3 text-sm text-basic_gray">
           付款方式
-          <span class="text-secondary">{{ payment_data }}</span>
+          <span class="text-primary">{{ payment_data }}</span>
         </p>
       </div>
       <ol class="mb-5">
         <li
           v-for="(item, item_index) in trade_data.SubTradeList"
           :key="`product_${item_index}`"
-          :class="item_index == 0 ? 'rounded-t-md' : ''"
-          class="p-3 border-t border-x"
+          class="p-3 mb-4 bg-black rounded-md"
         >
-          <p class="mb-5">
+          <p class="mb-5 font-bold text-primary">
             {{ GetProduct(item) }}
           </p>
           <template v-if="GetProduct(item) != '商品已移除'">
@@ -45,7 +44,7 @@
               "
             >
               <p class="text-xs">套用優惠：</p>
-              <p class="px-5 py-1 text-sm text-white rounded-md bg-primary">
+              <p class="px-5 py-1 text-sm text-white rounded-md bg-basic_black">
                 {{ item.DiscountID_PercentMenu_Info.Title }}
               </p>
             </div>
@@ -69,29 +68,29 @@
             </div>
           </template>
         </li>
-        <li class="flex items-center justify-end p-3 border-t border-x">
+        <li class="flex items-center justify-end p-3">
           <p class="text-sm">金流手續費</p>
           <p class="w-32 text-sm font-bold text-right">
             NT$ {{ trade_data.PaymentSubtotalFee }}
           </p>
         </li>
-        <li class="flex items-center justify-end p-3 border-t border-x">
+        <li class="flex items-center justify-end p-3">
           <p class="text-sm">運費</p>
           <p class="w-32 text-sm font-bold text-right">
             NT$ {{ trade_data.ShippingFee }}
           </p>
         </li>
-        <li class="flex items-center justify-end p-3 border rounded-b-md">
+        <li class="flex items-center justify-end p-3">
           <p class="">總金額</p>
-          <p class="w-32 font-bold text-right text-secondary">
+          <p class="w-32 font-bold text-right text-primary">
             NT$ {{ trade_data.Price }}
           </p>
         </li>
       </ol>
       <div class="mb-5">
         <p class="mb-3 text-sm">付款資訊</p>
-        <ol class="px-2 py-3 border rounded-md border-zinc-300">
-          <li class="flex items-center px-2 pb-2 border-b border-zinc-300">
+        <ol class="px-2 py-3 bg-black rounded-md">
+          <li class="flex items-center px-2 pb-2">
             <p class="w-20 text-sm text-basic_gray">付款狀態</p>
             <p class="text-sm">
               {{ trade_data.PaymentTime == null ? '尚未付款' : '已完成付款' }}
@@ -105,8 +104,8 @@
       </div>
       <div class="mb-5">
         <p class="mb-3 text-sm">購買人資訊</p>
-        <ol class="px-2 border rounded-md border-zinc-300">
-          <li class="flex items-center px-2 py-3 border-b border-zinc-300">
+        <ol class="px-2 bg-black rounded-md">
+          <li class="flex items-center px-2 py-3">
             <p class="w-20 text-sm text-basic_gray">購買人</p>
             <p class="text-sm">
               {{ trade_data.BuyerName }}
@@ -124,14 +123,14 @@
       </div>
       <div class="mb-5">
         <p class="mb-3 text-sm">收件資訊</p>
-        <ol class="px-2 border rounded-md border-zinc-300">
-          <li class="flex items-center px-2 py-3 border-b border-zinc-300">
+        <ol class="px-2 bg-black rounded-md">
+          <li class="flex items-center px-2 py-3">
             <p class="w-20 text-sm text-basic_gray">收件人</p>
             <p class="text-sm">
               {{ trade_data.ReceiverName }}
             </p>
           </li>
-          <li class="flex items-center px-2 py-3 border-b border-zinc-300">
+          <li class="flex items-center px-2 py-3">
             <p class="w-20 text-sm text-basic_gray">收件地址</p>
             <p class="text-sm">
               {{
@@ -149,7 +148,7 @@
       </div>
       <div class="mb-5">
         <p class="mb-3 text-sm">訂單備註</p>
-        <div class="p-4 border rounded-md border-zinc-300">
+        <div class="p-4 bg-black rounded-md">
           {{
             trade_data.ReceiverMemo == ''
               ? '無任何資訊'

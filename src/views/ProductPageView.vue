@@ -3,7 +3,7 @@
     id="ProductPage"
     class="relative z-10 w-full pt-24 pb-20 md:pt-40 bg-bg_black"
     data-scroll-section
-    v-if="product_data != null"
+    v-if="product_data != null && product_list != null"
     itemtype="https://schema.org/Product"
     itemscope
   >

@@ -2,29 +2,27 @@
   <section class="w-full">
     <AddressDialog @update-action="UpdateAddress" ref="AddressDialog" />
     <div class="mb-5">
-      <h4 class="text-2xl font-bold">配送方式</h4>
-      <p class="text-sm text-primary">
-        若購物車商品積材超出運送範圍，則只能選擇門市自取。
-      </p>
+      <h4 class="text-2xl font-bold text-white">配送方式</h4>
     </div>
     <div
       v-if="shipway_data.length > 0"
       class="pb-5 mb-6 border-b border-zinc-300"
     >
       <div class="relative">
-        <SelectArrowIcon
-          class="absolute z-10 w-5 text-black transform -translate-y-1/2 pointer-events-none top-1/2 right-2"
-        />
+        <span
+          class="absolute z-10 text-white transform rotate-90 -translate-y-1/2 pointer-events-none right-5 icon-chevron_right top-1/2"
+        ></span>
         <select
           :value="form_data.ship_way"
           @input="UpdateForm('ship_way', $event.target.value)"
-          class="relative z-0 w-full px-2 py-3 pr-10 border rounded-md appearance-none border-zinc-300 focus:outline-primary"
+          class="relative z-0 w-full px-4 py-3 pr-10 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
         >
-          <option value="">選擇配送方式</option>
+          <option class="bg-basic_gray" value="">選擇配送方式</option>
           <option
             v-for="(item, item_index) in shipway_data"
             :value="item.ShippingID"
             :key="`ship_way_${item_index}`"
+            class="bg-basic_gray"
           >
             {{ item.Title }}(運費：NT${{
               form_data.outlying ? item.ShippingFeeOutlying : item.ShippingFee
@@ -39,11 +37,9 @@
         v-if="form_data.ship_way == 1 || form_data.ship_way == 2"
         class="relative mt-5"
       >
-        <div
-          class="w-full p-3 mb-3 border rounded-xl border-secondary bg-secondary bg-opacity-5"
-        >
+        <div class="w-full p-3 mb-3 rounded-xl bg-basic_gray bg-opacity-20">
           <p class="text-sm">
-            您已選擇門市：<b class="text-base font-bold text-secondary">{{
+            您已選擇門市：<b class="text-base font-bold text-white">{{
               form_data.shop_name
             }}</b
             >・{{ form_data.shop_address }}
@@ -51,7 +47,7 @@
         </div>
         <button
           @click="GetShopMap"
-          class="px-5 py-2 text-white rounded-lg bg-secondary"
+          class="px-5 py-2 text-white rounded-lg bg-primary"
         >
           {{ form_data.shop_id == '' ? '選擇取貨門市' : '重新選擇取貨門市' }}
         </button>
@@ -69,7 +65,7 @@
     <!-- buyer -->
 
     <div class="flex items-center justify-between mb-5">
-      <h4 class="text-2xl font-bold">購買人資訊</h4>
+      <h4 class="text-2xl font-bold text-white">購買人資訊</h4>
       <p class="text-sm text-basic_gray" v-if="!member_login">
         已經有帳戶？
         <router-link class="text-primary" to="/account/login">登入</router-link>
@@ -82,7 +78,7 @@
           name="first_name"
           :value="form_data.buyer_first_name"
           @input="UpdateForm('buyer_first_name', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           placeholder="名字"
         />
         <p v-if="GetError('buyer_first_name')" class="text-xs text-red-600">
@@ -95,7 +91,7 @@
           name="last_name"
           :value="form_data.buyer_last_name"
           @input="UpdateForm('buyer_last_name', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           placeholder="姓氏"
         />
         <p v-if="GetError('buyer_last_name')" class="text-xs text-red-600">
@@ -108,7 +104,7 @@
           name="email"
           :value="form_data.consignee_email"
           @input="UpdateForm('consignee_email', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           placeholder="電子郵件"
         />
         <p v-if="GetError('consignee_email')" class="text-xs text-red-600">
@@ -121,7 +117,7 @@
           name="phone"
           :value="form_data.buyer_phone"
           @input="UpdateForm('buyer_phone', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           placeholder="手機號碼"
         />
         <p v-if="GetError('buyer_phone')" class="text-xs text-red-600">
@@ -136,11 +132,11 @@
 
     <!-- resiver -->
     <div class="flex flex-wrap items-center justify-between mb-5">
-      <h4 class="mb-5 text-2xl font-bold sm:mb-0">收件人資訊</h4>
+      <h4 class="mb-5 text-2xl font-bold text-white sm:mb-0">收件人資訊</h4>
       <div class="flex items-center w-full sm:w-auto">
         <button
           @click="$emit('set-samebuyer')"
-          class="px-3 py-2 mr-2 text-xs text-white transition-colors duration-200 rounded-full xs:px-5 xs:text-sm bg-secondary hover:bg-opacity-70"
+          class="px-3 py-2 mr-2 text-xs text-white transition-colors duration-200 rounded-full xs:px-5 xs:text-sm bg-primary hover:bg-opacity-70"
         >
           同購買人
         </button>
@@ -160,7 +156,7 @@
           name="first_name"
           :value="form_data.consignee_first_name"
           @input="UpdateForm('consignee_first_name', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           placeholder="名字"
         />
         <p v-if="GetError('consignee_first_name')" class="text-xs text-red-600">
@@ -173,7 +169,7 @@
           name="last_name"
           :value="form_data.consignee_last_name"
           @input="UpdateForm('consignee_last_name', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           placeholder="姓氏"
         />
         <p v-if="GetError('consignee_last_name')" class="text-xs text-red-600">
@@ -186,7 +182,7 @@
           name="phone"
           :value="form_data.consignee_phone"
           @input="UpdateForm('consignee_phone', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           placeholder="手機號碼"
         />
         <p v-if="GetError('consignee_phone')" class="text-xs text-red-600">
@@ -194,17 +190,17 @@
         </p>
       </div>
       <div class="w-1/2 px-2 mb-4">
-        <div class="relative px-2 py-1 border rounded-md border-zinc-300">
-          <SelectArrowIcon
-            class="absolute z-10 w-5 text-black transform -translate-y-1/2 pointer-events-none top-1/2 right-5"
-          />
-          <label class="absolute z-10 text-xs top-2 left-2 text-basic_gray"
+        <div class="relative rounded-md">
+          <label class="absolute z-10 text-xs top-2 left-4 text-basic_gray"
             >縣市</label
           >
+          <span
+            class="absolute z-10 text-white transform rotate-90 -translate-y-1/2 pointer-events-none right-5 icon-chevron_right top-1/2"
+          ></span>
           <select
             :value="form_data.consignee_city"
             @input="UpdateForm('consignee_city', $event.target.value)"
-            class="relative z-0 w-full pt-5 appearance-none focus:outline-none"
+            class="relative z-0 w-full px-4 py-3 pt-6 pr-10 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           >
             <option value="">選擇縣市</option>
             <option v-for="item in city_list" :key="item">{{ item }}</option>
@@ -215,17 +211,17 @@
         </p>
       </div>
       <div class="w-1/2 px-2 mb-4">
-        <div class="relative px-2 py-1 border rounded-md border-zinc-300">
-          <SelectArrowIcon
-            class="absolute z-10 w-5 text-black transform -translate-y-1/2 pointer-events-none top-1/2 right-5"
-          />
-          <label class="absolute z-10 text-xs top-2 left-2 text-basic_gray"
+        <div class="relative rounded-md">
+          <span
+            class="absolute z-10 text-white transform rotate-90 -translate-y-1/2 pointer-events-none right-5 icon-chevron_right top-1/2"
+          ></span>
+          <label class="absolute z-10 text-xs top-2 left-4 text-basic_gray"
             >鄉鎮區域</label
           >
           <select
             :value="form_data.consignee_area"
             @input="UpdateForm('consignee_area', $event.target.value)"
-            class="relative z-0 w-full pt-5 appearance-none focus:outline-none"
+            class="relative z-0 w-full px-4 py-3 pt-6 pr-10 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           >
             <option value="">選擇區域</option>
             <option v-for="item in area_list" :key="item">{{ item }}</option>
@@ -241,7 +237,7 @@
           name="address"
           :value="form_data.consignee_address"
           @input="UpdateForm('consignee_address', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           placeholder="詳細地址"
         />
         <p v-if="GetError('consignee_address')" class="text-xs text-red-600">
@@ -254,7 +250,7 @@
     </div>
     <!-- resiver -->
     <div class="flex items-center justify-between mb-5">
-      <h4 class="text-2xl font-bold">訂單備註</h4>
+      <h4 class="text-2xl font-bold text-white">訂單備註</h4>
     </div>
     <div class="flex flex-wrap items-center mb-6 -mx-2">
       <div class="w-full px-2 mb-4">
@@ -262,13 +258,13 @@
           name="comment"
           :value="form_data.comment"
           @input="UpdateForm('comment', $event.target.value)"
-          class="px-2 py-3 min-h-[130px] border border-zinc-300 rounded-md w-full focus:outline-primary"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary min-h-[150px]"
           placeholder="留言"
         ></textarea>
       </div>
     </div>
     <div class="flex items-center justify-between mb-5">
-      <h4 class="text-2xl font-bold">優惠代碼</h4>
+      <h4 class="text-2xl font-bold text-white">優惠代碼</h4>
     </div>
     <div class="flex flex-wrap items-center mb-6 -mx-2">
       <div class="flex items-stretch w-full px-2">
@@ -277,7 +273,7 @@
           name="coupon"
           :value="form_data.coupon"
           @input="UpdateForm('coupon', $event.target.value)"
-          class="w-full px-2 py-3 border rounded-md border-zinc-300 focus:outline-primary"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           placeholder="請輸入優惠代碼"
         />
         <button
@@ -292,24 +288,22 @@
       v-if="coupon_info.length != 0"
       class="flex flex-wrap items-center mb-6"
     >
-      <div
-        class="w-full p-5 border rounded-xl border-secondary bg-secondary bg-opacity-5"
-      >
+      <div class="w-full p-5 rounded-xl bg-basic_gray bg-opacity-20">
         <p class="text-xs">已套用優惠代碼：</p>
         <h4 class="mb-2 text-2xl font-bold text-primary">
           {{ coupon_info.Title }}
         </h4>
-        <p class="text-sm">
+        <p class="text-sm text-white">
           訂單滿額NT$ {{ coupon_info.Threshold }}，折抵NT$
           {{ coupon_info.Money }}
         </p>
       </div>
     </div>
     <div class="flex items-center justify-between mb-5">
-      <h4 class="text-2xl font-bold">付款方式</h4>
+      <h4 class="text-2xl font-bold text-white">付款方式</h4>
     </div>
     <div class="flex flex-wrap items-center mb-6">
-      <ol class="w-full border rounded-lg border-zinc-300">
+      <ol class="w-full rounded-lg bg-basic_black">
         <li
           v-for="(item, item_index) in payment_data"
           :key="`payment_${item_index}`"
@@ -318,10 +312,10 @@
             @click="UpdateForm('pay_way', item.PaymentID)"
             :class="
               item_index != payment_data.length - 1
-                ? 'border-b border-zinc-300'
+                ? 'border-b border-zinc-300 border-opacity-5'
                 : ''
             "
-            class="block px-2 py-3 transition-colors duration-200 hover:bg-primary hover:bg-opacity-10"
+            class="block px-4 py-3 transition-colors duration-200 hover:bg-primary hover:bg-opacity-10"
           >
             <input
               type="radio"
@@ -346,8 +340,8 @@
       <span class="block w-full mt-5 border-b border-zinc-300"></span>
     </div>
     <div class="">
-      <p class="mb-5 text-sm xs:text-base">
-        提交訂單表示同意<b class="text-secondary">耀聞水果世界</b>的<a
+      <p class="mb-5 text-sm text-white xs:text-base">
+        提交訂單表示同意 <b class="text-white">Krace凱鋭斯</b> 的<a
           class="text-primary"
           >服務條款</a
         >、<a class="text-primary">隱私政策</a>和<a class="text-primary"
@@ -356,7 +350,7 @@
       </p>
       <button
         @click="Validate"
-        class="block w-full py-3 text-white transition-colors duration-200 rounded-md bg-primary hover:bg-opacity-75"
+        class="block w-full py-3 font-bold text-white transition-colors duration-200 rounded-md bg-primary hover:bg-opacity-75"
       >
         立即下單
       </button>
@@ -365,7 +359,6 @@
 </template>
 
 <script>
-import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import AddressDialog from '@/components/shopcart/address_dialog.vue';
 import { getLocalStorage, setLocalStorage } from '@/common/cookie';
 import { Get711Map, GetFamilyMap } from '@/api/shopcart';
@@ -393,7 +386,6 @@ export default {
     },
   },
   components: {
-    SelectArrowIcon,
     AddressDialog,
   },
   data() {

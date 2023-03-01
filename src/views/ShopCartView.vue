@@ -1,13 +1,45 @@
 <template>
-  <main class="relative z-10 w-full min-h-screen overflow-hidden">
+  <main
+    id="ShopcartContainer"
+    data-scroll-section
+    class="relative z-10 w-full bg-bg_black"
+  >
     <div
       v-if="checkout_data != null"
-      class="relative flex w-full max-w-screen-xl mx-auto"
+      class="relative flex w-full max-w-screen-xl pt-24 pb-20 mx-auto md:pt-40"
     >
       <div
         class="w-full px-5 pt-5 pb-32 md:w-2/3 xl:pl-0 sm:pl-10 sm:pr-10 xs:pt-0"
       >
         <BreadCrumb :path="bread_crumb_path" class="mb-10 sm:mb-20" />
+        <header
+          class="relative z-10 flex flex-col-reverse items-start w-full mb-10"
+        >
+          <h2 class="relative inline-block px-8">
+            <span
+              data-section-subtitle-arrow
+              class="absolute top-0 left-0 block text-lg leading-none transform icon-triangle text-primary -scale-100"
+            ></span>
+            <span
+              data-section-subtitle
+              class="block font-bold leading-none text-white md:leading-none"
+              >結帳</span
+            >
+            <span
+              data-section-subtitle-arrow
+              class="absolute bottom-0 right-0 block text-lg leading-none icon-triangle text-primary"
+            ></span>
+          </h2>
+          <h3 class="mb-2 overflow-hidden">
+            <span
+              data-section-title
+              data-text="About Us"
+              class="block text-4xl font-black text-basic_gray text-opacity-20 font-anybody"
+            >
+              Check Out
+            </span>
+          </h3>
+        </header>
         <ShopCartForm
           :errors="errors"
           :form_data="form_data"
@@ -20,71 +52,70 @@
           @update-coupon="GetCashier"
         />
       </div>
+    </div>
 
+    <div
+      v-if="checkout_data != null"
+      data-scroll
+      data-scroll-sticky
+      data-scroll-target="#ShopcartContainer"
+      class="absolute top-0 right-0 z-0 hidden w-1/3 h-screen p-12 pt-40 bg-basic_black sm:pt-44 md:block"
+    >
+      <ShopCart
+        :shopcart="shopcart"
+        :checkout_data="checkout_data.CheckoutList"
+      />
       <div
-        class="fixed top-0 right-0 z-0 hidden w-1/3 h-screen p-12 pt-40 bg-basic_white sm:pt-44 md:block"
+        class="flex flex-wrap items-start pb-5 mb-5 border-b border-zinc-300"
+        v-if="checkout_data.GiveInfo.legnth > 0"
       >
-        <ShopCart
-          :shopcart="shopcart"
-          :checkout_data="checkout_data.CheckoutList"
-        />
-        <div
-          class="flex flex-wrap items-start pb-5 mb-5 border-b border-zinc-300"
-          v-if="checkout_data.GiveInfo.legnth > 0"
-        >
-          <div class="w-full">
-            <h4 class="mb-5 font-bold text-primary">活動贈品</h4>
-          </div>
-          <div class="w-1/4 overflow-hidden rounded-lg">
-            <img
-              :src="$ImageUrl(checkout_data.GiveInfo.Image1)"
-              class="w-full"
-            />
-          </div>
-          <div class="w-3/4 pl-3">
-            <p class="mb-2 text-sm font-bold">
-              {{ checkout_data.GiveInfo.GiveName }}
-            </p>
-            <p class="text-sm text-basic_gray">
-              {{ checkout_data.GiveInfo.Title }}
-            </p>
-          </div>
+        <div class="w-full">
+          <h4 class="mb-5 font-bold text-primary">活動贈品</h4>
         </div>
-        <ol class="pb-5 mb-5 border-b border-zinc-300">
-          <li class="flex items-center justify-between w-full mb-3 text-sm">
-            <p class="font-medium">合計</p>
-            <p class="font-semibold">
-              NT$ {{ $MoneyFormat(product_total_price) }}
-            </p>
-          </li>
-          <li class="flex items-center justify-between text-sm w-ful">
-            <p class="font-medium">運費</p>
-            <p class="font-semibold">NT$ {{ $MoneyFormat(ship_price) }}</p>
-          </li>
-          <li
-            v-if="payment_price != 0"
-            class="flex items-center justify-between w-full mt-3 text-sm"
-          >
-            <p class="font-medium">金流手續費</p>
-            <p class="font-semibold">NT$ {{ $MoneyFormat(payment_price) }}</p>
-          </li>
-          <li
-            v-if="coupon_discount != 0"
-            class="flex items-center justify-between w-full mt-3 text-sm"
-          >
-            <p class="font-medium">優惠代碼折抵</p>
-            <p class="font-semibold">
-              - NT$ {{ $MoneyFormat(coupon_discount) }}
-            </p>
-          </li>
-        </ol>
-        <div class="flex items-center justify-between w-full text-sm">
-          <p class="font-medium">總金額</p>
-          <p class="font-semibold">
-            NT$
-            {{ $MoneyFormat(total_price) }}
+        <div class="w-1/4 overflow-hidden rounded-lg">
+          <img :src="$ImageUrl(checkout_data.GiveInfo.Image1)" class="w-full" />
+        </div>
+        <div class="w-3/4 pl-3">
+          <p class="mb-2 text-sm font-bold text-white">
+            {{ checkout_data.GiveInfo.GiveName }}
+          </p>
+          <p class="text-sm text-basic_gray">
+            {{ checkout_data.GiveInfo.Title }}
           </p>
         </div>
+      </div>
+      <ol class="pb-5 mb-5 text-white border-b border-zinc-300">
+        <li class="flex items-center justify-between w-full mb-3 text-sm">
+          <p class="font-medium">合計</p>
+          <p class="font-semibold">
+            NT$ {{ $MoneyFormat(product_total_price) }}
+          </p>
+        </li>
+        <li class="flex items-center justify-between text-sm w-ful">
+          <p class="font-medium">運費</p>
+          <p class="font-semibold">NT$ {{ $MoneyFormat(ship_price) }}</p>
+        </li>
+        <li
+          v-if="payment_price != 0"
+          class="flex items-center justify-between w-full mt-3 text-sm"
+        >
+          <p class="font-medium">金流手續費</p>
+          <p class="font-semibold">NT$ {{ $MoneyFormat(payment_price) }}</p>
+        </li>
+        <li
+          v-if="coupon_discount != 0"
+          class="flex items-center justify-between w-full mt-3 text-sm"
+        >
+          <p class="font-medium">優惠代碼折抵</p>
+          <p class="font-semibold">- NT$ {{ $MoneyFormat(coupon_discount) }}</p>
+        </li>
+      </ol>
+      <div class="flex items-center justify-between w-full text-sm text-white">
+        <p class="font-medium">總金額</p>
+        <p class="font-semibold">
+          NT$
+          {{ $MoneyFormat(total_price) }}
+        </p>
       </div>
     </div>
 
@@ -92,8 +123,8 @@
       v-if="checkout_data == null"
       class="w-full max-w-screen-xl px-5 py-64 mx-auto text-center xl:px-0"
     >
-      <h4 class="mb-4 text-2xl font-bold">購物車內目前沒有商品</h4>
-      <p class="mb-10">
+      <h4 class="mb-4 text-2xl font-bold text-white">購物車內目前沒有商品</h4>
+      <p class="mb-10 text-white">
         您可以前往<a href="/collections?category=all" class="text-primary"
           >瀏覽商品</a
         >，選購您想要得商品

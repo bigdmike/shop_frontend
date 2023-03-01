@@ -1,51 +1,56 @@
 <template>
-  <main class="relative z-10 w-full">
+  <main
+    data-scroll-section
+    class="relative z-10 w-full py-24 md:py-60 bg-bg_black"
+  >
     <div class="w-full max-w-screen-xl px-5 pb-32 mx-auto xl:px-0 sm:px-10">
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
-      <div class="w-full max-w-screen-sm p-10 mx-auto bg-zinc-50 rounded-2xl">
-        <h4 class="mb-8 text-2xl font-bold text-center">會員註冊</h4>
-        <div class="w-full pt-10 border-t border-zinc-200 md:px-20">
+      <div
+        class="w-full max-w-screen-sm p-10 mx-auto bg-basic_black section_corner"
+      >
+        <h4 class="mb-8 text-2xl font-bold text-center text-white">會員註冊</h4>
+        <div class="w-full md:px-20">
           <div class="mb-4">
-            <p class="text-sm">姓名</p>
+            <p class="mb-2 text-sm text-white">姓名</p>
             <input
               v-model="name"
               type="text"
               name="name"
               placeholder="請輸入中文姓名"
-              class="w-full px-3 py-2 border rounded-md border-zinc-200"
+              class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
             />
             <p v-if="GetError('name')" class="text-xs text-red-600">
               請輸入正確的中文姓名
             </p>
           </div>
           <div class="mb-4">
-            <p class="text-sm">電子郵件</p>
+            <p class="mb-2 text-sm text-white">電子郵件</p>
             <input
               v-model="account"
               type="email"
               name="account"
               placeholder="請輸入電子郵件"
-              class="w-full px-3 py-2 border rounded-md border-zinc-200"
+              class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
             />
             <p v-if="GetError('account')" class="text-xs text-red-600">
               請輸入正確的電子郵件
             </p>
           </div>
           <div class="mb-4">
-            <p class="text-sm">手機號碼</p>
+            <p class="mb-2 text-sm text-white">手機號碼</p>
             <input
               v-model="phone"
               type="tel"
               name="phone"
               placeholder="請輸入手機號碼"
-              class="w-full px-3 py-2 border rounded-md border-zinc-200"
+              class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
             />
             <p v-if="GetError('phone')" class="text-xs text-red-600">
               請輸入正確的手機號碼
             </p>
           </div>
           <div class="mb-4">
-            <p class="text-sm">
+            <p class="mb-2 text-sm text-white">
               出生日期<span class="ml-2 text-xs text-primary"
                 >註冊後無法修改</span
               >
@@ -55,21 +60,21 @@
               type="date"
               name="birthday"
               placeholder="請輸入出生日期"
-              class="w-full px-3 py-2 border rounded-md border-zinc-200"
+              class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
             />
             <p v-if="GetError('birthday')" class="text-xs text-red-600">
               請輸入正確的出生日期
             </p>
           </div>
           <div class="mb-4">
-            <p class="text-sm">性別</p>
+            <p class="mb-2 text-sm text-white">性別</p>
             <div class="relative">
-              <SelectArrowIcon
-                class="absolute z-10 w-5 text-black transform -translate-y-1/2 pointer-events-none top-1/2 right-2"
-              />
+              <span
+                class="absolute z-10 text-white transform rotate-90 -translate-y-1/2 pointer-events-none right-5 icon-chevron_right top-1/2"
+              ></span>
               <select
                 v-model="sex"
-                class="relative z-0 w-full px-2 py-3 border rounded-md appearance-none border-zinc-300 focus:outline-primary"
+                class="relative z-0 w-full px-4 py-3 pr-10 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
               >
                 <option value="M">男</option>
                 <option value="F">女</option>
@@ -80,26 +85,26 @@
             </p>
           </div>
           <div class="mb-4">
-            <p class="text-sm">密碼</p>
+            <p class="mb-2 text-sm text-white">密碼</p>
             <input
               v-model="password"
               type="password"
               name="password"
               placeholder="請輸入密碼"
-              class="w-full px-3 py-2 border rounded-md border-zinc-200"
+              class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
             />
             <p v-if="GetError('password')" class="text-xs text-red-600">
               請輸入密碼
             </p>
           </div>
           <div class="mb-4">
-            <p class="text-sm">再次輸入密碼</p>
+            <p class="mb-2 text-sm text-white">再次輸入密碼</p>
             <input
               v-model="re_password"
               type="password"
               name="re_password"
               placeholder="請再次輸入密碼"
-              class="w-full px-3 py-2 border rounded-md border-zinc-200"
+              class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
             />
             <p v-if="GetError('re_password')" class="text-xs text-red-600">
               兩次密碼輸入不一致
@@ -114,16 +119,16 @@
             </button>
           </div>
           <div class="flex items-center justify-center">
-            <p>
+            <p class="text-white">
               註冊表示同意
               <router-link
-                class="text-sm underline transition-colors duration-200 text-secondary hover:text-opacity-50"
+                class="text-sm underline transition-colors duration-200 text-primary hover:text-opacity-50"
                 to="/terms/terms_of_member"
                 >商店服務條款</router-link
               >
               與
               <router-link
-                class="text-sm underline transition-colors duration-200 text-secondary hover:text-opacity-50"
+                class="text-sm underline transition-colors duration-200 text-primary hover:text-opacity-50"
                 to="/terms/site_privacy"
                 >網站隱私政策</router-link
               >
@@ -140,13 +145,11 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import { validEmail, validName, validPhone } from '@/common/validate';
 import { SendSignUpData } from '@/api/member';
 import { getLocalStorage } from '@/common/cookie';
-import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import { GetMetaData } from '@/common/meta';
 export default {
   name: 'SignupView',
   components: {
     BreadCrumb,
-    SelectArrowIcon,
   },
   data() {
     return {
@@ -231,3 +234,26 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.section_corner {
+  -webkit-clip-path: polygon(
+    0 40px,
+    40px 0,
+    100% 0,
+    100% calc(100% - 40px),
+    calc(100% - 40px) 100%,
+    0 100%,
+    0 40px
+  );
+  clip-path: polygon(
+    0 40px,
+    40px 0,
+    100% 0,
+    100% calc(100% - 40px),
+    calc(100% - 40px) 100%,
+    0 100%,
+    0 40px
+  );
+}
+</style>

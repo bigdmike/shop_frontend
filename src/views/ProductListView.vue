@@ -285,7 +285,6 @@ export default {
       }
     },
   },
-  mounted() {},
   metaInfo() {
     return this.meta_data;
   },

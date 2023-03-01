@@ -4,41 +4,31 @@
       ref="AddressDeleteDialog"
       @delete-action="DeleteData"
     />
-    <div class="flex items-center justify-end mb-5" v-if="!create_mode">
-      <button
-        @click="create_mode = true"
-        class="px-5 py-2 text-white rounded-full bg-primary"
-      >
-        新增收件地址
-      </button>
-    </div>
-    <ol class="w-full">
-      <li
-        v-if="create_mode"
-        class="w-full px-5 py-5 mb-5 border rounded-md border-zinc-300"
-      >
+
+    <ol class="w-full mb-10">
+      <li v-if="create_mode" class="w-full px-5 py-5 mb-5 bg-black rounded-md">
         <AddressCreateCard
           @create-action="CreateResiverData"
           @cancel-action="create_mode = false"
         />
       </li>
       <li
-        class="flex flex-wrap items-center justify-between px-5 py-5 mb-5 border rounded-md border-zinc-300"
+        class="flex flex-wrap items-center justify-between px-5 py-5 mb-5 rounded-md bg-basic_black"
         v-for="(item, item_index) in address_list"
         :key="`address_${item_index}`"
       >
         <div class="mb-5 md:mb-0">
           <div class="flex items-center mb-2">
-            <p class="w-20 text-sm text-secondary">收件人</p>
-            <p class="text-sm">{{ item.Name }}</p>
+            <p class="w-20 text-sm text-primary">收件人</p>
+            <p class="text-sm text-white">{{ item.Name }}</p>
           </div>
           <div class="flex items-center mb-2">
-            <p class="w-20 text-sm text-secondary">聯絡電話</p>
-            <p class="text-sm">{{ item.Phone }}</p>
+            <p class="w-20 text-sm text-primary">聯絡電話</p>
+            <p class="text-sm text-white">{{ item.Phone }}</p>
           </div>
           <div class="flex items-center">
-            <p class="w-20 text-sm text-secondary">收件地址</p>
-            <p class="text-sm">
+            <p class="w-20 text-sm text-primary">收件地址</p>
+            <p class="text-sm text-white">
               {{ GetZipData(item.Zip).City }} {{ GetZipData(item.Zip).Area }}
               {{ item.Address }}
             </p>
@@ -49,13 +39,21 @@
         >
           <button
             @click="OpenDeleteDialog(item.ReceiverID)"
-            class="px-4 py-2 text-xs transition-colors duration-200 border rounded-lg border-secondary text-secondary md:text-sm hover:bg-secondary hover:text-white"
+            class="px-4 py-2 text-xs transition-colors duration-200 border rounded-lg border-primary text-primary md:text-sm hover:bg-primary hover:text-white"
           >
             刪除
           </button>
         </div>
       </li>
     </ol>
+    <div class="flex items-center justify-center" v-if="!create_mode">
+      <button
+        @click="create_mode = true"
+        class="px-5 py-2 font-bold text-white rounded-md bg-primary"
+      >
+        新增收件地址
+      </button>
+    </div>
   </div>
 </template>
 

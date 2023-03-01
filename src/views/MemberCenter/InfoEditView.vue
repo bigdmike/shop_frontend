@@ -2,68 +2,68 @@
   <div class="relative z-10 w-full pb-32">
     <div>
       <div class="mb-4">
-        <p class="mb-1">姓名</p>
+        <p class="mb-1 text-white">姓名</p>
         <input
           readonly
           v-model="form_data.name"
           type="text"
           name="name"
           placeholder="請輸入中文姓名"
-          class="w-full px-3 py-2 border rounded-md border-zinc-200"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
         />
         <p v-if="GetError('name')" class="text-xs text-red-600">
           請輸入正確的中文姓名
         </p>
       </div>
       <div class="mb-4">
-        <p class="mb-1">手機號碼</p>
+        <p class="mb-1 text-white">手機號碼</p>
         <input
           v-model="form_data.phone"
           type="tel"
           name="phone"
           placeholder="請輸入手機號碼"
-          class="w-full px-3 py-2 border rounded-md border-zinc-200"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
         />
         <p v-if="GetError('phone')" class="text-xs text-red-600">
           請輸入正確的手機號碼
         </p>
       </div>
       <div class="mb-4">
-        <p class="mb-1">電子郵件</p>
+        <p class="mb-1 text-white">電子郵件</p>
         <input
           v-model="form_data.account"
           type="email"
           name="email"
           readonly
           placeholder="請輸入電子郵件"
-          class="w-full px-3 py-2 border rounded-md border-zinc-200"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
         />
         <p v-if="GetError('account')" class="text-xs text-red-600">
           請輸入正確的電子郵件
         </p>
       </div>
       <div class="mb-4">
-        <p class="mb-1">出生日期</p>
+        <p class="mb-1 text-white">出生日期</p>
         <input
           v-model="form_data.birthday"
           type="date"
           name="birthday"
           placeholder="請選擇出生日期"
-          class="w-full px-3 py-2 border rounded-md border-zinc-200"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
         />
         <p v-if="GetError('birthday')" class="text-xs text-red-600">
           請選擇出生日期
         </p>
       </div>
       <div class="mb-10">
-        <p class="mb-1">性別</p>
+        <p class="mb-1 text-white">性別</p>
         <div class="relative">
-          <SelectArrowIcon
-            class="absolute z-10 w-5 text-black transform -translate-y-1/2 pointer-events-none top-1/2 right-5"
-          />
+          <span
+            class="absolute z-10 text-white transform rotate-90 -translate-y-1/2 pointer-events-none right-5 icon-chevron_right top-1/2"
+          ></span>
           <select
             v-model="form_data.sex"
-            class="relative z-0 w-full px-3 py-2 border rounded-md appearance-none border-zinc-200"
+            class="relative z-0 w-full px-4 py-3 pr-10 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           >
             <option value="M">男</option>
             <option value="F">女</option>
@@ -72,10 +72,10 @@
         <p v-if="GetError('sex')" class="text-xs text-red-600">請選擇性別</p>
       </div>
 
-      <div>
+      <div class="flex justify-end">
         <button
           @click="ValidateForm"
-          class="px-16 py-3 font-bold text-white transition-colors duration-200 border rounded-full bg-primary border-primary hover:bg-transparent hover:text-primary"
+          class="px-16 py-3 font-bold text-white transition-colors duration-200 border rounded-md bg-primary border-primary hover:bg-transparent hover:text-primary"
         >
           更新資料
         </button>
@@ -85,15 +85,12 @@
 </template>
 
 <script>
-import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import { getAccountInfo, updateAccountInfo } from '@/api/member';
 import { validEmail, validPhone } from '@/common/validate';
 import { delLocalStorage } from '@/common/cookie';
 export default {
   name: 'InfoEditView',
-  components: {
-    SelectArrowIcon,
-  },
+  components: {},
   data() {
     return {
       form_data: {

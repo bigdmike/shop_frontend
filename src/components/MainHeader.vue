@@ -70,6 +70,7 @@
             </li>
           </ol>
           <button
+            @click="$router.push('/account/login')"
             class="pl-4 pr-3 transition-colors duration-300 hover:text-secondary"
           >
             <span class="text-2xl text-white icon-user"></span>

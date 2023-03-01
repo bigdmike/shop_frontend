@@ -1,22 +1,22 @@
 <template>
-  <div class="w-full relative z-10 pb-32">
+  <div class="relative z-10 w-full pb-32">
     <div>
       <div class="mb-4">
-        <p class="mb-1">目前密碼</p>
+        <p class="mb-1 text-white">目前密碼</p>
         <input
           v-model="old_password"
           type="password"
           name="password"
           placeholder="請輸入目前使用中的密碼"
-          class="w-full border border-zinc-200 rounded-md px-3 py-2"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
         />
-        <p v-if="GetError('old_password')" class="text-red-600 text-xs">
+        <p v-if="GetError('old_password')" class="text-xs text-red-600">
           請輸入目前使用中的密碼
         </p>
       </div>
       <div class="mb-4">
-        <p class="mb-1">
-          新密碼<span class="text-xs md:inline-block block md:ml-2 text-primary"
+        <p class="mb-1 text-white">
+          新密碼<span class="block text-xs md:inline-block md:ml-2 text-primary"
             >*請輸入6個字元以上的英文字母及數字，不可使用特殊符號</span
           >
         </p>
@@ -25,30 +25,30 @@
           type="password"
           name="new_password"
           placeholder="請輸入新的密碼"
-          class="w-full border border-zinc-200 rounded-md px-3 py-2"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
         />
-        <p v-if="GetError('new_password')" class="text-red-600 text-xs">
+        <p v-if="GetError('new_password')" class="text-xs text-red-600">
           請輸入6個字元以上的英文字母及數字密碼
         </p>
       </div>
       <div class="mb-4">
-        <p class="mb-1">再次輸入新密碼</p>
+        <p class="mb-1 text-white">再次輸入新密碼</p>
         <input
           v-model="re_password"
           type="password"
           name="re_password"
           placeholder="請再次輸入新密碼"
-          class="w-full border border-zinc-200 rounded-md px-3 py-2"
+          class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
         />
-        <p v-if="GetError('re_password')" class="text-red-600 text-xs">
+        <p v-if="GetError('re_password')" class="text-xs text-red-600">
           兩次密碼輸入不一致
         </p>
       </div>
 
-      <div>
+      <div class="flex justify-end">
         <button
           @click="ValidateForm"
-          class="px-16 py-3 font-bold text-white bg-primary rounded-full border border-primary transition-colors duration-200 hover:bg-transparent hover:text-primary"
+          class="px-16 py-3 font-bold text-white transition-colors duration-200 border rounded-md bg-primary border-primary hover:bg-transparent hover:text-primary"
         >
           更新資料
         </button>

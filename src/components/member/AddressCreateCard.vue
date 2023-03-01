@@ -1,47 +1,47 @@
 <template>
   <div class="w-full">
-    <div class="mb-5 w-full">
+    <div class="w-full mb-5">
       <div class="flex items-start mb-2">
-        <p class="w-20 flex-shrink-0 text-secondary text-sm">收件人</p>
+        <p class="flex-shrink-0 w-20 text-sm text-primary">收件人</p>
         <div class="w-full">
           <input
             v-model="form_data.name"
             type="text"
             name="name"
             placeholder="請輸入收件人姓名"
-            class="w-full border border-zinc-200 rounded-md px-3 py-2"
+            class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           />
-          <p v-if="GetError('name')" class="text-red-600 text-xs">
+          <p v-if="GetError('name')" class="text-xs text-red-600">
             請輸入正確的中文姓名
           </p>
         </div>
       </div>
       <div class="flex items-start mb-2">
-        <p class="w-20 flex-shrink-0 text-secondary text-sm">聯絡電話</p>
+        <p class="flex-shrink-0 w-20 text-sm text-primary">聯絡電話</p>
         <div class="w-full">
           <input
             v-model="form_data.phone"
             type="tel"
             name="phone"
             placeholder="請輸入聯絡電話"
-            class="w-full border border-zinc-200 rounded-md px-3 py-2"
+            class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           />
-          <p v-if="GetError('phone')" class="text-red-600 text-xs">
+          <p v-if="GetError('phone')" class="text-xs text-red-600">
             請輸入正確的手機號碼
           </p>
         </div>
       </div>
       <div class="flex items-start">
-        <p class="w-20 flex-shrink-0 text-secondary text-sm">收件地址</p>
+        <p class="flex-shrink-0 w-20 text-sm text-primary">收件地址</p>
         <div class="flex flex-wrap w-full">
           <div class="w-1/3 mb-2">
             <div class="relative">
-              <SelectArrowIcon
-                class="absolute top-1/2 right-5 w-5 pointer-events-none text-black z-10 transform -translate-y-1/2"
-              />
+              <span
+                class="absolute z-10 text-white transform rotate-90 -translate-y-1/2 pointer-events-none right-5 icon-chevron_right top-1/2"
+              ></span>
               <select
                 v-model="form_data.city"
-                class="w-full focus:outline-none appearance-none relative z-0 py-2 border border-zinc-200 rounded-md px-2"
+                class="relative z-0 w-full px-4 py-3 pr-10 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
               >
                 <option value="">選擇縣市</option>
                 <option v-for="item in city_list" :key="item">
@@ -49,19 +49,18 @@
                 </option>
               </select>
             </div>
-            <p v-if="GetError('city')" class="text-red-600 text-xs">
+            <p v-if="GetError('city')" class="text-xs text-red-600">
               請選擇縣市
             </p>
           </div>
-          <div class="w-1/3 mb-2 px-2">
+          <div class="w-1/3 px-2 mb-2">
             <div class="relative">
-              <SelectArrowIcon
-                class="absolute top-1/2 right-5 w-5 pointer-events-none text-black z-10 transform -translate-y-1/2"
-              />
-
+              <span
+                class="absolute z-10 text-white transform rotate-90 -translate-y-1/2 pointer-events-none right-5 icon-chevron_right top-1/2"
+              ></span>
               <select
                 v-model="form_data.area"
-                class="w-full focus:outline-none appearance-none relative z-0 py-2 border border-zinc-200 rounded-md px-2"
+                class="relative z-0 w-full px-4 py-3 pr-10 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
               >
                 <option value="">選擇區域</option>
                 <option v-for="item in area_list" :key="item">
@@ -69,7 +68,7 @@
                 </option>
               </select>
             </div>
-            <p v-if="GetError('area')" class="text-red-600 text-xs">
+            <p v-if="GetError('area')" class="text-xs text-red-600">
               請選擇區域
             </p>
           </div>
@@ -79,9 +78,9 @@
               v-model="form_data.zip_code"
               placeholder="郵遞區號"
               readonly
-              class="w-full border border-zinc-200 rounded-md px-3 py-2"
+              class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
             />
-            <p v-if="GetError('area')" class="text-red-600 text-xs">
+            <p v-if="GetError('area')" class="text-xs text-red-600">
               請選擇區域
             </p>
           </div>
@@ -89,9 +88,9 @@
             v-model="form_data.address"
             type="text"
             placeholder="請輸入詳細地址"
-            class="w-full border border-zinc-200 rounded-md px-3 py-2"
+            class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
           />
-          <p v-if="GetError('address')" class="text-red-600 text-xs">
+          <p v-if="GetError('address')" class="text-xs text-red-600">
             請輸入詳細地址
           </p>
         </div>
@@ -100,12 +99,13 @@
     <div class="flex items-center justify-end w-full">
       <button
         @click="ValidateForm"
-        class="px-4 py-2 mr-2 bg-primary text-white border border-primary md:text-sm text-xs rounded-lg transition-colors duration-200 hover:bg-transparent hover:text-primary"
+        class="px-4 py-2 mr-2 text-xs text-white transition-colors duration-200 border rounded-lg bg-primary border-primary md:text-sm hover:bg-transparent hover:text-primary"
       >
         新增
       </button>
       <button
-        class="px-4 py-2 border border-secondary text-secondary md:text-sm text-xs rounded-lg transition-colors duration-200 hover:bg-secondary hover:text-white"
+        @click="Cancel"
+        class="px-4 py-2 text-xs transition-colors duration-200 border rounded-lg border-primary text-primary md:text-sm hover:bg-primary hover:text-white"
       >
         取消
       </button>
@@ -114,13 +114,10 @@
 </template>
 
 <script>
-import SelectArrowIcon from '@/components/svg/SelectArrowIcon';
 import { validName, validPhone } from '@/common/validate';
 export default {
   name: 'AddressCreateCard',
-  components: {
-    SelectArrowIcon,
-  },
+  components: {},
   data() {
     return {
       errors: [],

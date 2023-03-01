@@ -7,7 +7,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'https://api.yaowenfruit.com',
+        target: 'https://api.krace.com.tw',
         secure: false,
         pathRewrite: {
           '^/api': '/',

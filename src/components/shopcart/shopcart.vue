@@ -1,5 +1,5 @@
 <template>
-  <ol class="max-h-[60vh] overflow-y-auto">
+  <ol class="">
     <li
       class="flex flex-wrap items-start pb-5 mb-5 border-b border-zinc-300"
       v-for="(item, item_index) in shopcart"
@@ -9,7 +9,7 @@
         <img :src="$ImageUrl(item.product_data.Image1)" class="w-full" />
       </div>
       <div class="w-3/4 pl-3">
-        <p class="mb-2 text-sm font-bold">
+        <p class="mb-2 text-sm font-bold text-primary">
           {{ item.product_data.Title }}
         </p>
         <p class="text-sm text-basic_gray">
@@ -50,7 +50,7 @@
             NT$
             {{ $MoneyFormat(parseInt(GetDiscountAndPrice(item).sell_price)) }}
           </p>
-          <p class="text-sm font-bold">
+          <p class="text-sm font-bold text-white">
             NT$
             {{
               $MoneyFormat(parseInt(GetDiscountAndPrice(item).discount_price))

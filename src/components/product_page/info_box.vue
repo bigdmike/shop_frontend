@@ -191,17 +191,17 @@
       </div>
       <button
         @click="$emit('add-cart')"
+        v-if="
+          active_stock.Stock > 0 &&
+          time_status != 'end' &&
+          time_status != 'prepare'
+        "
         class="flex items-center justify-center w-full h-12 font-bold text-center text-white transition-colors duration-200 rounded-md bg-primary hover:bg-opacity-80"
       >
         加入購物車
         <span class="ml-3 text-xl icon-arrow_right"></span>
       </button>
-      <!--      v-if="
-          active_stock.Stock > 0 &&
-          time_status != 'end' &&
-          time_status != 'prepare'
-        " -->
-      <!-- <button
+      <button
         v-else
         class="block w-full h-12 font-bold text-center text-white transition-colors duration-200 rounded-md cursor-not-allowed bg-zinc-600 hover:bg-opacity-80"
       >
@@ -212,7 +212,7 @@
             ? '尚未開賣'
             : '商品已售完'
         }}
-      </button> -->
+      </button>
     </div>
   </section>
 </template>

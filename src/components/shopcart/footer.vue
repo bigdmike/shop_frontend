@@ -2,24 +2,29 @@
   <Teleport to="#app">
     <div class="block md:hidden">
       <div
+        @click="open = !open"
         :class="open ? 'block' : 'hidden'"
-        class="fixed top-0 bottom-0 left-0 right-0 z-10 bg-white bg-opacity-70"
+        class="fixed top-0 bottom-0 left-0 right-0 z-30 bg-basic_black bg-opacity-70"
       ></div>
-      <div class="fixed bottom-0 left-0 right-0 z-20">
+      <div class="fixed bottom-0 left-0 right-0 z-[31]">
         <div
-          class="flex items-center justify-between w-full px-5 py-4 text-primary bg-basic_white"
+          class="flex items-center justify-between w-full px-5 py-4 text-primary bg-basic_black"
         >
-          <button @click="open = !open" class="flex items-center font-bold">
-            顯示訂單資訊<SelectArrowIcon
-              :class="open ? '-scale-y-100' : ''"
-              class="w-4 ml-2 transform"
-            />
+          <button
+            @click="open = !open"
+            class="relative flex items-center pr-2 font-bold"
+          >
+            顯示訂單資訊
+            <span
+              :class="open ? 'rotate-90' : '-rotate-90'"
+              class="absolute right-0 z-10 text-sm transform translate-x-full -translate-y-1/2 pointer-events-none icon-chevron_right top-1/2"
+            ></span>
           </button>
           <p class="font-bold">NT${{ total_price }}</p>
         </div>
         <div
           :class="open ? 'max-h-screen pb-5' : 'max-h-0'"
-          class="w-full overflow-hidden bg-basic_white"
+          class="w-full overflow-hidden bg-basic_black"
         >
           <ol class="max-h-[300px] overflow-y-auto px-5 mb-5">
             <li
@@ -39,7 +44,7 @@
                 />
               </div>
               <div class="w-3/4 pl-3">
-                <p class="mb-2 text-sm font-bold">
+                <p class="mb-2 text-sm font-bold text-primary">
                   {{ item.product_data.Title }}
                 </p>
                 <p class="text-sm text-basic_gray">
@@ -84,7 +89,7 @@
                     )
                   }}
                 </p>
-                <p class="text-sm font-bold">
+                <p class="text-sm font-bold text-white">
                   NT$
                   {{
                     $MoneyFormat(
@@ -99,7 +104,7 @@
 
           <div class="px-5">
             <div
-              class="flex flex-wrap items-start pt-5 mb-5 border-t border-zinc-300"
+              class="flex flex-wrap items-start pt-5 mb-5 border-t border-zinc-600 border-opacity-20"
               v-if="give_info.length > 0"
             >
               <div class="w-full">
@@ -117,20 +122,26 @@
                 </p>
               </div>
             </div>
-            <ol class="px-5 pt-5 pb-5 mb-5 border-t border-b border-zinc-300">
-              <li class="flex items-center justify-between w-full mb-3 text-sm">
+            <ol
+              class="px-0 pt-5 pb-5 mb-5 border-t border-b border-zinc-600 border-opacity-20"
+            >
+              <li
+                class="flex items-center justify-between w-full mb-3 text-sm text-white"
+              >
                 <p class="font-medium">合計</p>
                 <p class="font-semibold">
                   NT$ {{ $MoneyFormat(product_total_price) }}
                 </p>
               </li>
-              <li class="flex items-center justify-between w-full text-sm">
+              <li
+                class="flex items-center justify-between w-full text-sm text-white"
+              >
                 <p class="font-medium">運費</p>
                 <p class="font-semibold">NT$ {{ $MoneyFormat(ship_price) }}</p>
               </li>
               <li
                 v-if="payment_price != 0"
-                class="flex items-center justify-between w-full mt-3 text-sm"
+                class="flex items-center justify-between w-full mt-3 text-sm text-white"
               >
                 <p class="font-medium">金流手續費</p>
                 <p class="font-semibold">
@@ -139,7 +150,7 @@
               </li>
               <li
                 v-if="coupon_discount != 0"
-                class="flex items-center justify-between w-full mt-3 text-sm"
+                class="flex items-center justify-between w-full mt-3 text-sm text-white"
               >
                 <p class="font-medium">優惠代碼折抵</p>
                 <p class="font-semibold">
@@ -148,7 +159,7 @@
               </li>
             </ol>
             <div
-              class="flex items-center justify-between w-full px-5 pb-5 text-sm"
+              class="flex items-center justify-between w-full pb-5 text-sm text-white"
             >
               <p class="font-medium">總金額</p>
               <p class="font-semibold">
@@ -165,7 +176,6 @@
 
 <script>
 import Teleport from 'vue2-teleport';
-import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 export default {
   name: 'ShopCartFooter',
   props: {
@@ -207,7 +217,6 @@ export default {
     };
   },
   components: {
-    SelectArrowIcon,
     Teleport,
   },
   watch: {

@@ -1,29 +1,32 @@
 <template>
-  <main class="relative z-10 w-full">
+  <main
+    data-scroll-section
+    class="relative z-10 w-full py-24 md:py-60 bg-bg_black"
+  >
     <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10">
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
 
       <div class="flex items-center justify-between">
-        <h2 class="mb-5 text-4xl font-bold text-primary">{{ $route.name }}</h2>
+        <h2 class="mb-5 text-4xl font-bold text-white">{{ $route.name }}</h2>
         <button
           @click="Logout"
-          class="px-6 py-2 text-sm text-white transition-colors duration-200 rounded-full bg-secondary hover:bg-opacity-70"
+          class="px-6 py-2 text-sm text-white transition-colors duration-200 rounded-md bg-primary hover:bg-opacity-70"
         >
           登出
         </button>
       </div>
-      <div class="flex flex-wrap items-start pt-5 border-t border-zinc-300">
-        <div class="w-full mb-10 md:w-1/4 md:mb-0">
+      <div class="flex flex-wrap items-start pt-5">
+        <div class="w-full pr-10 mb-10 md:w-1/4 md:mb-0">
           <ol class="flex flex-row flex-wrap md:flex-col">
             <li v-for="item in menu_list" :key="item.title">
               <router-link
                 :to="item.link"
                 :class="
                   item.title == $route.name
-                    ? 'md:text-secondary md:bg-transparent bg-secondary text-white rounded-xl'
-                    : ''
+                    ? 'bg-primary  text-white rounded-md'
+                    : 'bg-basic_black'
                 "
-                class="block p-3 text-sm md:link_color md:text-base"
+                class="block px-5 py-3 mb-2 mr-2 text-sm text-white transition-all duration-500 rounded-md md:mr-0 hover:bg-white hover:text-primary md:text-base"
               >
                 {{ item.title }}
               </router-link>

@@ -3,35 +3,35 @@
     <div>
       <ol>
         <li
-          class="w-full p-3 mb-5 border rounded-md border-zinc-300"
+          class="w-full p-3 mb-5 rounded-md bg-basic_black"
           v-for="(item, item_index) in page_count"
           :key="`order_${item_index}`"
         >
           <div
-            class="flex items-center justify-between pb-3 mb-3 border-b border-zinc-300"
+            class="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800"
           >
             <p class="text-sm text-basic_gray">
-              訂單編號：<span class="text-secondary">{{ item.TradeID }}</span>
+              訂單編號：<span class="text-primary">{{ item.TradeID }}</span>
             </p>
             <p class="text-sm text-basic_gray">
-              訂購日期：<span class="text-black">{{
+              訂購日期：<span class="text-white">{{
                 item.created_at.slice(0, 10)
               }}</span>
             </p>
           </div>
           <div class="">
             <p class="mb-3 text-sm text-basic_gray">
-              訂單狀態 <span class="text-secondary">{{ item.StatusTxt }}</span>
+              訂單狀態 <span class="text-primary">{{ item.StatusTxt }}</span>
             </p>
             <p class="mb-3 text-sm text-basic_gray">
               付款方式
-              <span class="text-secondary">{{
+              <span class="text-primary">{{
                 GetPayment(item.PaymentID).Title
               }}</span>
             </p>
             <p class="text-sm text-basic_gray">
               訂單金額
-              <span class="text-secondary">NT${{ item.Price }}</span>
+              <span class="text-primary">NT${{ item.Price }}</span>
             </p>
           </div>
           <div class="flex items-center justify-end">
