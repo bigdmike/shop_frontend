@@ -37,6 +37,15 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
+    path: '/product/custom/:id',
+    name: '客製化商品介紹',
+    component: () =>
+      import(
+        /* webpackChunkName: "product_page" */ '../views/CustomProductPageView.vue'
+      ),
+    meta: { requiresAuth: false },
+  },
+  {
     path: '/shopcart',
     name: '購物車結帳',
     component: () =>

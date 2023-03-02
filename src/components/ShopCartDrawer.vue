@@ -49,66 +49,20 @@
           v-for="(item, item_index) in shopcart"
           :key="`shopcart_${item_index}`"
         >
-          <div class="w-1/4 overflow-hidden rounded-lg aspect-square">
-            <img
-              :src="$ImageUrl(item.product_data.Image1)"
-              class="object-cover w-full h-full"
-            />
-          </div>
-          <div class="w-3/4 pl-3 mb-4" v-if="GetActiveOption(item) != 'error'">
-            <div class="flex items-center justify-between mb-2">
-              <p class="text-sm font-bold truncate xs:text-base">
-                {{ item.product_data.Title }}
-              </p>
-              <button
-                @click="Remove(item_index, item.amount)"
-                class="text-sm text-primary"
-              >
-                <span class="text-xl icon-trash"></span>
-              </button>
-            </div>
-            <p class="text-sm font-medium text-opacity-60 text-basic_black">
-              <span class="block mr-2 text-xs font-medium">選項一</span>
-              {{ GetActiveOption(item).ColorTitle }}
-            </p>
-            <p
-              v-if="GetActiveOption(item).SizeTitle != '無'"
-              class="text-sm font-medium text-opacity-60 text-basic_black"
-            >
-              <span class="block mr-2 text-xs font-medium">選項二</span
-              >{{ GetActiveOption(item).SizeTitle }}
-            </p>
-          </div>
-          <div class="flex justify-end w-full mt-2">
-            <div class="flex items-center justify-between w-full">
-              <div class="flex items-center">
-                <div
-                  class="inline-flex items-stretch mr-5 bg-white border rounded-sm"
-                >
-                  <button @click="Remove(item_index, 1)" class="px-2">
-                    <MinusIcon class="w-3 text-black" />
-                  </button>
-                  <input
-                    :value="item.amount"
-                    type="text"
-                    readonly
-                    class="w-10 text-center"
-                  />
-                  <button @click="Add(item_index)" class="px-2">
-                    <PlusIcon class="w-3 text-black" />
-                  </button>
-                </div>
-              </div>
-              <p class="text-sm font-bold font-anybody xs:text-base">
-                <!-- NT$9999 -->
-                NT${{
-                  $MoneyFormat(
-                    parseInt(GetActiveOption(item).SellPrice) * item.amount
-                  )
-                }}
-              </p>
-            </div>
-          </div>
+          <ProductCard
+            v-if="item.is_custom == 'N'"
+            :shopcart_index="item_index"
+            :shopcart_item="item"
+            @remove-action="Remove"
+            @add-action="Add"
+          />
+          <CustomProductCard
+            v-else
+            :shopcart_index="item_index"
+            :shopcart_item="item"
+            @remove-action="Remove"
+            @add-action="Add"
+          />
         </li>
       </ol>
 
@@ -138,17 +92,17 @@
 
 <script>
 import CloseIcon from '@/components/svg/CloseIcon.vue';
-import PlusIcon from '@/components/svg/PlusIcon.vue';
-import MinusIcon from '@/components/svg/MinusIcon.vue';
 import { shopcart_drawer_animation } from '@/gsap/shopcart_drawer.js';
 import { getLocalStorage } from '@/common/cookie';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
+import ProductCard from '@/components/shopcart/product_card.vue';
+import CustomProductCard from '@/components/shopcart/custom_product_card.vue';
 export default {
   name: 'ShopCartDrawer',
   components: {
     CloseIcon,
-    PlusIcon,
-    MinusIcon,
+    ProductCard,
+    CustomProductCard,
   },
   data() {
     return {
@@ -156,14 +110,18 @@ export default {
     };
   },
   methods: {
-    GetActiveOption(shopcart_item) {
-      const stock = shopcart_item.product_data.Stock.filter((item) => {
-        return (
-          item.ColorID == shopcart_item.active_option[0] &&
-          item.SizeID == shopcart_item.active_option[1]
-        );
-      });
-      return stock.length > 0 ? stock[0] : 'error';
+    GetPrice(shopcart_item) {
+      if (shopcart_item.is_custom == 'Y') {
+        return this.$GetCustomPrice(shopcart_item);
+      } else {
+        const stock = shopcart_item.product_data.Stock.filter((item) => {
+          return (
+            item.ColorID == shopcart_item.active_option[0] &&
+            item.SizeID == shopcart_item.active_option[1]
+          );
+        });
+        return [stock[0].Price, stock[0].SellPrice, stock[0].MemberSellPrice];
+      }
     },
     Close() {
       this.$store.commit('SetShopcartDrawer', false);
@@ -171,18 +129,18 @@ export default {
       this.$store.commit('SetBodyLock', -1);
     },
     Add(index) {
-      window.dataLayer.push({
-        event: 'add_to_cart',
-        items: [
-          ConvertAddShopCartData(
-            this.shopcart[index].product_data,
-            this.shopcart[index].active_option,
-            1
-          ),
-        ],
-        value: 0,
-        currency: 'TWD',
-      });
+      // window.dataLayer.push({
+      //   event: 'add_to_cart',
+      //   items: [
+      //     ConvertAddShopCartData(
+      //       this.shopcart[index].product_data,
+      //       this.shopcart[index].active_option,
+      //       1
+      //     ),
+      //   ],
+      //   value: 0,
+      //   currency: 'TWD',
+      // });
       const shop_cart_item = {
         product: this.shopcart[index].product_data,
         options: this.shopcart[index].active_option,
@@ -261,7 +219,7 @@ export default {
     total_price() {
       let price = 0;
       this.shopcart.forEach((item) => {
-        price += parseInt(this.GetActiveOption(item).SellPrice) * item.amount;
+        price += parseInt(this.GetPrice(item)[1]) * item.amount;
       });
       return price;
     },

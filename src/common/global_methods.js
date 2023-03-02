@@ -50,3 +50,34 @@ Vue.prototype.$LoadScript = (src) => {
 Vue.prototype.$AddZeroPad = (val) => {
   return parseInt(val) < 10 ? '0' + val : val;
 };
+
+Vue.prototype.$GetCustomPrice = (shopcart_item) => {
+  let change_price = 0;
+  shopcart_item.product_data.CustomGoodsChangePrice.forEach((change_item) => {
+    let match_count = 0;
+    if (typeof change_item.CustomSpecID === 'string') {
+      change_item.CustomSpecID.split(',').forEach((id) => {
+        shopcart_item.active_option.indexOf(id) != -1 ? (match_count += 1) : '';
+      });
+    } else if (
+      typeof change_item.CustomSpecID === 'object' &&
+      Array.isArray(change_item.CustomSpecID)
+    ) {
+      change_item.CustomSpecID.forEach((id) => {
+        shopcart_item.active_option.indexOf(id) != -1 ? (match_count += 1) : '';
+      });
+    }
+
+    if (match_count == change_item.CustomSpecID.length) {
+      change_price += parseInt(change_item.ChangePrice);
+    }
+  });
+  return [
+    parseInt(shopcart_item.product_data.CustomGoodsStock[0].Price) +
+      change_price,
+    parseInt(shopcart_item.product_data.CustomGoodsStock[0].SellPrice) +
+      change_price,
+    parseInt(shopcart_item.product_data.CustomGoodsStock[0].MemberSellPrice) +
+      change_price,
+  ];
+};

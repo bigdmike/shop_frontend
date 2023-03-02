@@ -77,3 +77,4 @@ export function GetVariant(stocks) {
     ? `${stocks[0].ColorTitle},${stocks[0].SizeTitle}`
     : '';
 }
+

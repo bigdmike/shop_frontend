@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="$route.name == '商品介紹'"
+    v-if="$route.name == '商品介紹' || $route.name == '客製化商品介紹'"
     class="fixed z-20 block w-11/12 max-w-lg overflow-hidden transform -translate-x-1/2 rounded-lg bottom-5 left-1/2 md:hidden bg-basic_black"
   >
     <div class="relative flex w-full pointer-events-auto">

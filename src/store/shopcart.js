@@ -28,20 +28,52 @@ const GetProductIndex = (state, product_id) => {
   return index;
 };
 
-const CheckActiveOption = ({ product, options }) => {
-  const stock = product.Stock.filter((item) => {
-    return item.ColorID == options[0] && item.SizeID == options[1];
-  });
-  return stock.length > 0 ? stock[0] : 'error';
+const CheckActiveOption = ({ product, options }, is_custom) => {
+  console.log({ product, options }, is_custom);
+  if (is_custom == 'Y') {
+    let error = false;
+    options.forEach((option) => {
+      const spec = product.CustomSpecList.filter(
+        (item) => item.CustomSpecID == option
+      );
+      // console.log(spec.length <= 0, spec[0].SpecStatus == 'N');
+      if (spec.length <= 0) {
+        error = true;
+      } else if (spec[0].SpecStatus == 'N') {
+        error = true;
+      }
+    });
+
+    return error ? 'error' : '';
+  } else {
+    const stock = product.Stock.filter((item) => {
+      return item.ColorID == options[0] && item.SizeID == options[1];
+    });
+
+    return stock.length > 0 ? stock[0] : 'error';
+  }
 };
 
 const SetLocalShopCart = (shopcart) => {
   let tmp_list = '';
+  console.log(shopcart);
 
   shopcart.forEach((item, item_index) => {
     item_index != 0 ? (tmp_list += ';') : '';
-    tmp_list += `${item.product_data.GoodsID},${item.active_option[0]},${item.active_option[1]},${item.amount}`;
+    if (item.is_custom == 'Y') {
+      // 客製化商品
+      let spec_list_text = '';
+      item.active_option.forEach((spec, spec_index) => {
+        spec_index != 0 ? (spec_list_text += '-') : '';
+        spec_list_text += spec;
+      });
+      tmp_list += `${item.product_data.GoodsID},Y,${spec_list_text},${item.amount}`;
+    } else {
+      // 一般商品
+      tmp_list += `${item.product_data.GoodsID},N,${item.active_option[0]}-${item.active_option[1]},${item.amount}`;
+    }
   });
+  console.log(tmp_list);
   tmp_list == ''
     ? delLocalStorage('shopcart')
     : setLocalStorage('shopcart', tmp_list);
@@ -133,13 +165,16 @@ const shopcart_module = {
             // 檢查庫存是否存在
             const stock_data = {
               product: product_data[0],
-              options: [shopcart_item[1], shopcart_item[2]],
+              options: shopcart_item[2].split('-'),
             };
-            const option_status = CheckActiveOption(stock_data);
+
+            let option_status = CheckActiveOption(stock_data, shopcart_item[1]);
+
             if (option_status != 'error') {
               tmp_list.push({
                 product_data: product_data[0],
-                active_option: [shopcart_item[1], shopcart_item[2]],
+                is_custom: shopcart_item[1],
+                active_option: shopcart_item[2].split('-'),
                 amount: parseInt(shopcart_item[3]),
                 shopcart_id: [],
               });
@@ -204,7 +239,10 @@ const shopcart_module = {
     },
   },
   mutations: {
-    AddShopCart(state, { product, options, amount, show_message = false }) {
+    AddShopCart(
+      state,
+      { product, options, amount, is_custom, show_message = false }
+    ) {
       // 搜尋購物車中相同商品的位置，若無相同商品則返回-1
       const product_index = GetShopCartItemIndex(state, {
         product: product,
@@ -216,6 +254,7 @@ const shopcart_module = {
         const shopcart_item = {
           product_data: product,
           active_option: options,
+          is_custom: is_custom,
           amount: amount,
           shopcart_id: [],
         };

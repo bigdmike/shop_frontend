@@ -147,7 +147,7 @@
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import ImageGallery from '@/components/product_page/image_gallery.vue';
-import InfoBox from '@/components/product_page/info_box.vue';
+import InfoBox from '@/components/product_page/custom_info_box.vue';
 import ProductList from '@/components/product_list/product_list.vue';
 import MoreLinkButton from '@/components/ui/MoreLinkButton.vue';
 import { getLocalStorage } from '@/common/cookie';
@@ -155,7 +155,7 @@ import { getSingleProductData } from '@/api/page_data';
 import { GetMetaData } from '@/common/meta';
 import {
   ConvertProductData,
-  ConvertAddShopCartData,
+  // ConvertAddShopCartData,
 } from '@/common/gtm_methods';
 // import product_list from '@/assets/data/goods.json';
 // import product_data from '@/assets/data/single_good.json';
@@ -191,9 +191,6 @@ export default {
       active_tab: '商品介紹',
       product_data: null,
       meta_data: null,
-      // product_list: product_list.data,
-      // category_data: category_data.data,
-      // product_data:product_data
     };
   },
   methods: {
@@ -219,31 +216,44 @@ export default {
       this.bread_crumb_path[2].link = `/product/${this.product_data.GoodsID}`;
     },
     AddShopCart() {
-      window.dataLayer.push({
-        event: 'add_to_cart',
-        items: [
-          ConvertAddShopCartData(
-            this.product_data,
-            this.active_option,
-            this.amount
-          ),
-        ],
-        value: 0,
-        currency: 'TWD',
-      });
-      const shop_cart_item = {
-        product: this.product_data,
-        options: this.active_option,
-        is_custom: 'N',
-        amount: this.amount,
-        show_message: true,
-      };
-      console.log(shop_cart_item);
-      if (getLocalStorage('account_token')) {
-        this.$store.dispatch('shopcart_module/AddShopCart', shop_cart_item);
+      if (this.CheckActiveOption()) {
+        // window.dataLayer.push({
+        //   event: 'add_to_cart',
+        //   items: [
+        //     ConvertAddShopCartData(
+        //       this.product_data,
+        //       this.active_option,
+        //       this.amount
+        //     ),
+        //   ],
+        //   value: 0,
+        //   currency: 'TWD',
+        // });
+        const shop_cart_item = {
+          product: this.product_data,
+          is_custom: "Y",
+          options: this.active_option,
+          amount: this.amount,
+          show_message: true,
+        };
+        if (getLocalStorage('account_token')) {
+          this.$store.dispatch('shopcart_module/AddShopCart', shop_cart_item);
+        } else {
+          this.$store.commit('shopcart_module/AddShopCart', shop_cart_item);
+        }
       } else {
-        this.$store.commit('shopcart_module/AddShopCart', shop_cart_item);
+        this.$store.commit('SetDialog', {
+          status: true,
+          content: '請確認所有選項都有選取',
+        });
       }
+    },
+    CheckActiveOption() {
+      let empty_count = 0;
+      this.active_option.forEach((item) => {
+        item == '' ? (empty_count += 1) : '';
+      });
+      return empty_count > 0 ? false : true;
     },
     ChangeAmount(val) {
       this.amount + val <= 1 ? (this.amount = 1) : (this.amount += val);
@@ -282,32 +292,28 @@ export default {
       });
     },
     ChangeOption(index, val) {
+      // this.active_option.forEach((item, item_index) => {
+      //   item_index > index ? this.$set(this.active_option, item_index, '') : '';
+      // });
       this.$set(this.active_option, index, val);
-      if (index == 0) {
-        let default_option = this.product_data.Stock.filter(
-          (item) => item.ColorID == val
-        )[0];
-        setTimeout(() => {
-          this.$set(this.active_option, 1, default_option.SizeID);
-        }, 100);
-      }
     },
     GetProductData() {
       getSingleProductData(this.$route.params.id).then((res) => {
         if (res.code == 200) {
+          // 圖片排序，若無圖片則放入預設圖片
           res.data.Picture.sort((a, b) => {
             return a.Seq - b.Seq;
           });
-          res.data.Stock = res.data.Stock.filter((item) => item.Status == 'Y');
-          res.data.Discount = res.data.Discount.filter(
-            (item) => new Date(item.EndTime) > new Date()
-          );
           if (res.data.Picture.length <= 0) {
             res.data.Picture.push({
               Image: '/image/product_default.webp',
             });
           }
-          this.product_data = res.data;
+          // 過濾優惠資訊
+          res.data.Discount = res.data.Discount.filter(
+            (item) => new Date(item.EndTime) > new Date()
+          );
+          this.product_data = this.InitActiveOption(res.data);
 
           window.dataLayer.push({
             event: 'viewProduct',
@@ -333,6 +339,38 @@ export default {
           this.$RedirectError();
         }
       });
+    },
+    InitActiveOption(data) {
+      let category = [];
+      // 取出所有選項ID
+      data.CustomSpecList.forEach((item) => {
+        const exist_category = category.filter(
+          (category) => category.SpecCategoryID == item.SpecCategoryID
+        );
+        if (exist_category.length <= 0) {
+          category.push({
+            SpecCategoryID: item.SpecCategoryID,
+            SpecCategoryTitle: item.SpecCategoryTitle,
+            SpecCategoryStatus: item.SpecCategoryStatus,
+            SpecCategorySeq: item.SpecCategorySeq,
+          });
+        }
+      });
+      data.SpecCategoryList = category;
+      // 黑名單id list 轉換成array
+      data.CustomGoodsSpecBlacklist.forEach((item) => {
+        item.CustomSpecID = item.CustomSpecID.split(',');
+      });
+      // 價格變動id list 轉為array
+      data.CustomGoodsChangePrice.forEach((item) => {
+        item.CustomSpecID = item.CustomSpecID.split(',');
+      });
+      // 設定所有選項預設規格
+      this.active_option = [];
+      category.forEach(() => {
+        this.active_option.push('');
+      });
+      return data;
     },
     GetCategoryProduct() {
       return this.product_list.filter((item) => {

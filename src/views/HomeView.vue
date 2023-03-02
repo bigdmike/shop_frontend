@@ -1,6 +1,10 @@
 <template>
   <main id="Home" data-scroll-section class="relative w-full">
-    <CarouselSection ref="CarouselSection" :carousel_data="carousel_data" />
+    <CarouselSection
+      v-if="carousel_data != null"
+      ref="CarouselSection"
+      :carousel_data="carousel_data"
+    />
     <MainProductSection ref="MainProductSection" />
     <AboutSection
       ref="AboutSection"
@@ -18,7 +22,8 @@ import AboutSection from '@/components/home/AboutSection.vue';
 import VideoSection from '@/components/home/VideoSection.vue';
 import NewsListSection from '@/components/home/NewsListSection.vue';
 import { GetMetaData } from '@/common/meta';
-// import { mapGetters, mapState } from 'vuex';
+// mapGetters,
+import { mapState } from 'vuex';
 export default {
   name: 'HomeView',
   components: {
@@ -31,16 +36,16 @@ export default {
   data() {
     return {
       meta_data: null,
-      carousel_data: [
-        {
-          Image1: '/img/home/carousel/banner_1.webp',
-          Image2: '/img/home/carousel/banner_1@sm.webp',
-        },
-        {
-          Image1: '/img/home/carousel/banner_2.webp',
-          Image2: '/img/home/carousel/banner_2@sm.webp',
-        },
-      ],
+      // carousel_data: [
+      //   {
+      //     Image1: '/img/home/carousel/banner_1.webp',
+      //     Image2: '/img/home/carousel/banner_1@sm.webp',
+      //   },
+      //   {
+      //     Image1: '/img/home/carousel/banner_2.webp',
+      //     Image2: '/img/home/carousel/banner_2@sm.webp',
+      //   },
+      // ],
     };
   },
   methods: {
@@ -54,12 +59,12 @@ export default {
   },
   computed: {
     // ...mapGetters(['promote_product_data', 'new_product_data', 'home_ad_data']),
-    // ...mapState([
-    //   'carousel_data',
-    //   'product_data',
-    //   'category_data',
-    //   'promotes_data',
-    // ]),
+    ...mapState([
+      'carousel_data',
+      // 'product_data',
+      // 'category_data',
+      // 'promotes_data',
+    ]),
     image_loaded() {
       return this.$store.state.image_loaded;
     },

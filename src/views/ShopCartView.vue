@@ -230,14 +230,6 @@ export default {
     };
   },
   methods: {
-    GetActiveOption(shopcart_item) {
-      return shopcart_item.product_data.Stock.filter((item) => {
-        return (
-          item.ColorID == shopcart_item.active_option[0] &&
-          item.SizeID == shopcart_item.active_option[1]
-        );
-      })[0];
-    },
     SetSameBuyer() {
       this.form_data.consignee_first_name = this.form_data.buyer_first_name;
       this.form_data.consignee_last_name = this.form_data.buyer_last_name;

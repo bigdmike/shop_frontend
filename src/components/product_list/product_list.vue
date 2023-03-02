@@ -8,7 +8,11 @@
         :class="promote ? 'md:w-1/2' : ' lg:w-1/4 md:w-1/3 sm:w-1/2'"
       >
         <router-link
-          :to="`/product/${item.GoodsID}`"
+          :to="
+            item.IsCustom == 'N'
+              ? `/product/${item.GoodsID}`
+              : `/product/custom/${item.GoodsID}`
+          "
           class="relative block mb-2 overflow-hidden section_corner bg-gradient-to-b from-basic_black to-transparent"
           :class="promote ? 'aspect-video' : 'aspect-square'"
         >
@@ -61,11 +65,19 @@ export default {
   },
   methods: {
     GetPrice(item) {
-      let tmp_data = JSON.parse(JSON.stringify(item.Stock));
-      tmp_data = tmp_data.sort((a, b) => {
-        return a.SellPrice < b.SellPrice;
-      });
-      return tmp_data[0];
+      if (item.IsCustom == 'N') {
+        // 一般商品，讀取Stock資料
+        let tmp_data = JSON.parse(JSON.stringify(item.Stock));
+        tmp_data = tmp_data.sort((a, b) => {
+          return a.SellPrice < b.SellPrice;
+        });
+        console.log(tmp_data[0]);
+        return tmp_data[0];
+      } else {
+        // 客製化商品，讀取CustomGoodsStock資料
+        console.log(item.CustomGoodsStock);
+        return item.CustomGoodsStock[0];
+      }
     },
   },
   filters: {
