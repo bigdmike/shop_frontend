@@ -1,5 +1,5 @@
 import Vue from 'vue';
-// import store from '@/store';
+import store from '@/store';
 import router from '@/router';
 
 Vue.prototype.$ImageUrl = (item) => {
@@ -8,11 +8,16 @@ Vue.prototype.$ImageUrl = (item) => {
 };
 
 Vue.prototype.$GetCloumn = (key) => {
-  return key;
-  // const column = store.state.common_column_data.filter(
-  //   (column) => column.Title == key
-  // );
-  // return column.length <= 0 ? '' : column[0].Content;
+  // return key;
+  // console.log(store.state.common_column_data);
+  if (store.state.common_column_data != null) {
+    const column = store.state.common_column_data.filter(
+      (column) => column.Title == key
+    );
+    return column.length <= 0 ? '' : column[0].Content;
+  } else {
+    return '';
+  }
 };
 
 Vue.prototype.$MoneyFormat = (price) => {

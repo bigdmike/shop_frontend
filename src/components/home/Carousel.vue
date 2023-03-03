@@ -37,12 +37,12 @@
           <img
             class="w-full select-none pc_image"
             :src="$ImageUrl(item.Image1)"
-            :alt="$GetCloumn('company_name')"
+            alt="Krace凱鋭斯"
           />
           <img
             class="w-full select-none mb_image"
             :src="$ImageUrl(item.Image2)"
-            :alt="$GetCloumn('company_name')"
+            alt="Krace凱鋭斯"
           />
         </div>
       </VueSlickCarousel>

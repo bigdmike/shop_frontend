@@ -36,9 +36,10 @@
         data-section-content
         class="relative z-10 text-center md:flex md:items-center md:text-left md:justify-between"
       >
-        <p class="mb-20 font-semibold md:mr-10 md:mb-0">
-          KRACE創立於2016年，著重於CNC、車銑製品開發，展現加工工藝於機車部品上，豐富您的視覺。
-        </p>
+        <p
+          class="mb-20 font-semibold md:mr-10 md:mb-0"
+          v-html="$GetCloumn('about_slogan')"
+        ></p>
         <router-link
           @mouseenter.native="button_hover = true"
           @mouseleave.native="button_hover = false"

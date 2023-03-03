@@ -180,6 +180,7 @@ export default {
     data_load_finish() {
       if (this.data_load_finish) {
         this.$store.dispatch('shopcart_module/GetShopCart');
+        this.LoadImage('App');
       }
       if (this.data_load_finish && this.first_time_load) {
         this.first_time_load = false;
@@ -198,11 +199,9 @@ export default {
     // h_full_el.forEach((item) => {
     //   item.style.height = `${window.innerHeight}px`;
     // });
-    // this.pageLoad();
     console.log('app mounted');
     this.image_loader = new ImageLoader();
     this.image_loader.SetScroller();
-    // this.LoadImage('app');
     this.marquee_animation = new marquee();
   },
 };

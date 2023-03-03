@@ -11,7 +11,7 @@
       :content="$GetCloumn('about_section_1_content')"
     />
     <VideoSection ref="VideoSection" />
-    <NewsListSection ref="NewsListSection" />
+    <NewsListSection ref="NewsListSection" :news_list="news_data" />
   </main>
 </template>
 
@@ -36,16 +36,6 @@ export default {
   data() {
     return {
       meta_data: null,
-      // carousel_data: [
-      //   {
-      //     Image1: '/img/home/carousel/banner_1.webp',
-      //     Image2: '/img/home/carousel/banner_1@sm.webp',
-      //   },
-      //   {
-      //     Image1: '/img/home/carousel/banner_2.webp',
-      //     Image2: '/img/home/carousel/banner_2@sm.webp',
-      //   },
-      // ],
     };
   },
   methods: {
@@ -61,6 +51,7 @@ export default {
     // ...mapGetters(['promote_product_data', 'new_product_data', 'home_ad_data']),
     ...mapState([
       'carousel_data',
+      'news_data',
       // 'product_data',
       // 'category_data',
       // 'promotes_data',
@@ -75,17 +66,8 @@ export default {
       this.image_loaded ? this.SetGsap() : '';
     },
   },
-  mounted() {
-    // this.SetGsap();
-    this.$nextTick(() => {
-      this.$emit('load-image', 'home');
-    });
-  },
   created() {
     this.meta_data = GetMetaData('home', '', '');
-    // this.$nextTick(() => {
-    //   this.$PageReady(this.meta_data.title);
-    // });
   },
   metaInfo() {
     return this.meta_data;

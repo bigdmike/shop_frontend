@@ -54,7 +54,11 @@
               data-carousel-cover
               class="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gradient-to-r from-basic_black to-transparent"
             ></div>
-            <img :src="item.Image1" class="relative z-0 block w-full" />
+            <img
+              :src="$ImageUrl(item.Image1)"
+              :alt="item.Title"
+              class="relative z-0 block w-full"
+            />
           </router-link>
 
           <div
@@ -80,11 +84,14 @@
               <p
                 data-carousel-content
                 class="mb-10 text-sm font-semibold tracking-wider text-white sm:text-base"
-                v-html="item.Content"
+                v-html="item.Content.slice(0, 50) + '...'"
               ></p>
             </div>
             <div class="overflow-hidden">
-              <MoreLinkButton link="/" data-carousel-link />
+              <MoreLinkButton
+                :link="`/news/page/${item.NewsID}`"
+                data-carousel-link
+              />
             </div>
           </div>
         </div>
@@ -119,41 +126,46 @@ import { news_list_gsap } from '@/gsap/home/news_list';
 import { section_animation } from '@/gsap/section.js';
 export default {
   name: 'NewsListSection',
+  props: {
+    news_list: {
+      type: Array,
+    },
+  },
   components: {
     MoreLinkButton,
   },
   data() {
     return {
-      news_list: [
-        {
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
-          Image1: '/img/news/1.webp',
-          created_at: '2022/10/26 10:00:00',
-        },
-        {
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
-          Image1: '/img/news/1.webp',
-          created_at: '2022/10/26 10:00:00',
-        },
-        {
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
-          Image1: '/img/news/1.webp',
-          created_at: '2022/10/26 10:00:00',
-        },
-        {
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
-          Image1: '/img/news/1.webp',
-          created_at: '2022/10/26 10:00:00',
-        },
-      ],
+      // news_list: [
+      //   {
+      //     Title: 'SYM Maxsym TL Krace CNC 後牌架',
+      //     Content:
+      //       '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
+      //     Image1: '/img/news/1.webp',
+      //     created_at: '2022/10/26 10:00:00',
+      //   },
+      //   {
+      //     Title: 'SYM Maxsym TL Krace CNC 後牌架',
+      //     Content:
+      //       '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
+      //     Image1: '/img/news/1.webp',
+      //     created_at: '2022/10/26 10:00:00',
+      //   },
+      //   {
+      //     Title: 'SYM Maxsym TL Krace CNC 後牌架',
+      //     Content:
+      //       '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
+      //     Image1: '/img/news/1.webp',
+      //     created_at: '2022/10/26 10:00:00',
+      //   },
+      //   {
+      //     Title: 'SYM Maxsym TL Krace CNC 後牌架',
+      //     Content:
+      //       '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
+      //     Image1: '/img/news/1.webp',
+      //     created_at: '2022/10/26 10:00:00',
+      //   },
+      // ],
       active_index: 0,
       timer: null,
       news_list_gsap: null,
@@ -162,6 +174,7 @@ export default {
   },
   methods: {
     SetGsap() {
+      console.log(this.news_list);
       this.news_list_gsap = new news_list_gsap(
         this.$refs.MainContent,
         this.news_list

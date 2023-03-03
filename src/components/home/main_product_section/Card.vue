@@ -42,8 +42,8 @@
           <img
             :class="hover ? 'scale-125' : 'scale-100'"
             class="relative z-0 block transition-all duration-700"
-            :src="image"
-            :alt="$GetCloumn('company_name')"
+            :src="$ImageUrl(image)"
+            :alt="`Krace凱銳斯 ${title}`"
           />
         </div>
       </div>
