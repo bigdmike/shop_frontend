@@ -369,10 +369,6 @@ export default {
       require: true,
       type: Object,
     },
-    shopcart: {
-      require: true,
-      type: Array,
-    },
     errors: {
       require: true,
       type: Array,
@@ -540,8 +536,8 @@ export default {
     },
     has_forzen_product() {
       let forzen = false;
-      this.shopcart.forEach((item) => {
-        if (item.product_data.DeliveryFrozen == 'Y') {
+      this.checkout_data.CheckoutList.forEach((item) => {
+        if (item.DeliveryFrozen == 'Y') {
           forzen = true;
         }
       });

@@ -229,7 +229,8 @@
 </template>
 
 <script>
-import { getLocalStorage, delLocalStorage } from '@/common/cookie';
+// delLocalStorage
+import { getLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
 export default {
@@ -377,16 +378,16 @@ export default {
       this.form_data = JSON.parse(trade_data);
       this.shopcart = JSON.parse(shopcart_data);
       this.checkout_data = JSON.parse(checkout_data);
-      delLocalStorage('trade_data');
-      delLocalStorage('trade_shopcart');
-      delLocalStorage('trade_checkout_data');
+      // delLocalStorage('trade_data');
+      // delLocalStorage('trade_shopcart');
+      // delLocalStorage('trade_checkout_data');
       this.$store.commit('shopcart_module/SetShopCart', []);
       this.meta_data = GetMetaData('訂單完成', '', '');
       this.$nextTick(() => {
         this.$PageReady(this.meta_data.title);
       });
     } else {
-      this.$router.push('/');
+      // this.$router.push('/');
     }
   },
   metaInfo() {

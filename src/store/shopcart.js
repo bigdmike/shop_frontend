@@ -92,11 +92,17 @@ const shopcart_module = {
       { dispatch, commit },
       { product, options, amount, show_message = false }
     ) {
-      const shop_cart_item = {
+      let shop_cart_item = {
         GoodsID: product.GoodsID,
-        ColorID: options[0],
-        SizeID: options[1],
       };
+      if (product.IsCustom == 'N') {
+        shop_cart_item.ColorID = options[0];
+        shop_cart_item.SizeID = options[1];
+      } else {
+        // shop_cart_item.ColorID = -1;
+        // shop_cart_item.SizeID = -1;
+        shop_cart_item.CustomSpecID = options.join();
+      }
       const add_result = await AddShopCart(shop_cart_item, amount);
       if (add_result.code == 302) {
         // token 過期，先清空購物車再新增至本地購物車
@@ -190,35 +196,52 @@ const shopcart_module = {
       // 不存在的商品
       let delete_list = [];
 
+      console.log(shopcart);
+
       shopcart.forEach((item) => {
         const product_index = GetProductIndex(state, item.GoodsID);
 
         if (product_index != -1) {
           const product_data = state.product_data[product_index];
-          const shop_cart_item = {
+          let shop_cart_item = {
             product: product_data,
-            options: [item.ColorID, item.SizeID],
+            options: [],
           };
+          if (product_data.IsCustom == 'N') {
+            shop_cart_item.options = [item.ColorID, item.SizeID];
+          } else {
+            shop_cart_item.options = item.CustomSpecID.split(',');
+          }
 
           // 檢查選項是否存在
-          const option_status = CheckActiveOption(shop_cart_item);
-          // 檢查是否存在相同商品
-          const shop_cart_item_index = GetShopCartItemIndex(
-            { shopcart: tmp_list },
-            shop_cart_item
+          const option_status = CheckActiveOption(
+            shop_cart_item,
+            product_data.IsCustom
           );
+          // 檢查是否存在相同商品，客製化商品不疊加
+          const shop_cart_item_index =
+            product_data.IsCustom == 'N'
+              ? GetShopCartItemIndex({ shopcart: tmp_list }, shop_cart_item)
+              : -1;
 
           if (option_status == 'error') {
             // 若商品選項已不存在，則新增至待刪除清單
             delete_list.push(item);
           } else if (shop_cart_item_index == -1) {
             // 如果商品不存在，則新增進暫存購物車
-            tmp_list.push({
+            let tmp_shopcart_item = {
               product_data: product_data,
-              active_option: [item.ColorID, item.SizeID],
+              active_option: [],
+              is_custom: product_data.IsCustom,
               amount: 1,
               shopcart_id: [item.ShoppingCartID],
-            });
+            };
+            if (product_data.IsCustom == 'N') {
+              tmp_shopcart_item.active_option = [item.ColorID, item.SizeID];
+            } else {
+              tmp_shopcart_item.active_option = item.CustomSpecID.split(',');
+            }
+            tmp_list.push(tmp_shopcart_item);
           } else {
             // 如果商品存在，則增加數量
             tmp_list[shop_cart_item_index].amount += 1;

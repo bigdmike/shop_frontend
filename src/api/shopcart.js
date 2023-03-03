@@ -71,11 +71,23 @@ export function SendCheckout(user_data, shopcart) {
 
   shopcart.forEach((item) => {
     for (let i = 0; i < item.amount; i++) {
-      data.ShoppingCart.push({
-        GoodsID: item.product_data.GoodsID,
-        ColorID: item.active_option[0],
-        SizeID: item.active_option[1],
-      });
+      // data.ShoppingCart.push({
+      //   GoodsID: item.product_data.GoodsID,
+      //   ColorID: item.active_option[0],
+      //   SizeID: item.active_option[1],
+      // });
+      if (item.is_custom == 'Y') {
+        data.ShoppingCart.push({
+          GoodsID: item.product_data.GoodsID,
+          CustomSpecID: item.active_option.join(),
+        });
+      } else {
+        data.ShoppingCart.push({
+          GoodsID: item.product_data.GoodsID,
+          ColorID: item.active_option[0],
+          SizeID: item.active_option[1],
+        });
+      }
     }
   });
   // console.log(data);

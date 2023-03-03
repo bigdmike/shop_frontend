@@ -1,6 +1,6 @@
 <template>
   <Teleport to="#app">
-    <div class="block md:hidden">
+    <div id="ShopcartFooter" class="block md:hidden">
       <div
         @click="open = !open"
         :class="open ? 'block' : 'hidden'"
@@ -8,7 +8,7 @@
       ></div>
       <div class="fixed bottom-0 left-0 right-0 z-[31]">
         <div
-          class="flex items-center justify-between w-full px-5 py-4 text-primary bg-basic_black"
+          class="flex items-center justify-between w-full px-5 py-4 text-white bg-primary"
         >
           <button
             @click="open = !open"
@@ -20,85 +20,29 @@
               class="absolute right-0 z-10 text-sm transform translate-x-full -translate-y-1/2 pointer-events-none icon-chevron_right top-1/2"
             ></span>
           </button>
-          <p class="font-bold">NT${{ total_price }}</p>
+          <p class="font-bold font-anybody">
+            NT${{ $MoneyFormat(total_price) }}
+          </p>
         </div>
         <div
           :class="open ? 'max-h-screen pb-5' : 'max-h-0'"
           class="w-full overflow-hidden bg-basic_black"
         >
-          <ol class="max-h-[300px] overflow-y-auto px-5 mb-5">
+          <ol
+            class="max-h-[300px] overflow-y-auto custom_scroll px-5 pt-5 mb-5"
+          >
             <li
               :class="
                 item_index != shopcart.length - 1
-                  ? ' border-b border-zinc-300'
+                  ? ' border-b border-zinc-700'
                   : ''
               "
               class="flex flex-wrap items-start pb-5 mb-5"
               v-for="(item, item_index) in shopcart"
               :key="`shopcart_${item_index}`"
             >
-              <div class="w-1/4 overflow-hidden rounded-lg">
-                <img
-                  :src="$ImageUrl(item.product_data.Image1)"
-                  class="w-full"
-                />
-              </div>
-              <div class="w-3/4 pl-3">
-                <p class="mb-2 text-sm font-bold text-primary">
-                  {{ item.product_data.Title }}
-                </p>
-                <p class="text-sm text-basic_gray">
-                  {{ GetActiveOption(item).ColorTitle }}
-                </p>
-                <p
-                  v-if="GetActiveOption(item).SizeTitle != '無'"
-                  class="text-sm text-basic_gray"
-                >
-                  {{ GetActiveOption(item).SizeTitle }}
-                </p>
-                <div
-                  class="pt-2"
-                  v-if="GetDiscountAndPrice(item).discount_list.length > 0"
-                >
-                  <ol>
-                    <li
-                      class="mb-2 text-xs text-primary"
-                      v-for="(event, event_index) in GetDiscountAndPrice(item)
-                        .discount_list"
-                      :key="`event_${event_index}`"
-                    >
-                      {{ event.Title }}
-                    </li>
-                  </ol>
-                </div>
-              </div>
-
-              <div class="flex items-center justify-end w-full">
-                <p
-                  class="mr-2 text-xs line-through text-basic_gray"
-                  v-if="
-                    GetDiscountAndPrice(item).discount_price !=
-                    GetDiscountAndPrice(item).sell_price
-                  "
-                >
-                  NT$
-                  {{
-                    $MoneyFormat(
-                      parseInt(GetDiscountAndPrice(item).sell_price) *
-                        item.amount
-                    )
-                  }}
-                </p>
-                <p class="text-sm font-bold text-white">
-                  NT$
-                  {{
-                    $MoneyFormat(
-                      parseInt(GetDiscountAndPrice(item).discount_price) *
-                        item.amount
-                    )
-                  }}
-                </p>
-              </div>
+              <ProductCard v-if="item.IsCustom == 'N'" :shopcart_item="item" />
+              <CustomProductCard v-else :shopcart_item="item" />
             </li>
           </ol>
 
@@ -129,7 +73,7 @@
                 class="flex items-center justify-between w-full mb-3 text-sm text-white"
               >
                 <p class="font-medium">合計</p>
-                <p class="font-semibold">
+                <p class="font-semibold font-anybody">
                   NT$ {{ $MoneyFormat(product_total_price) }}
                 </p>
               </li>
@@ -137,14 +81,16 @@
                 class="flex items-center justify-between w-full text-sm text-white"
               >
                 <p class="font-medium">運費</p>
-                <p class="font-semibold">NT$ {{ $MoneyFormat(ship_price) }}</p>
+                <p class="font-semibold font-anybody">
+                  NT$ {{ $MoneyFormat(ship_price) }}
+                </p>
               </li>
               <li
                 v-if="payment_price != 0"
                 class="flex items-center justify-between w-full mt-3 text-sm text-white"
               >
                 <p class="font-medium">金流手續費</p>
-                <p class="font-semibold">
+                <p class="font-semibold font-anybody">
                   NT$ {{ $MoneyFormat(payment_price) }}
                 </p>
               </li>
@@ -153,7 +99,7 @@
                 class="flex items-center justify-between w-full mt-3 text-sm text-white"
               >
                 <p class="font-medium">優惠代碼折抵</p>
-                <p class="font-semibold">
+                <p class="font-semibold font-anybody">
                   - NT$ {{ $MoneyFormat(coupon_discount) }}
                 </p>
               </li>
@@ -162,7 +108,7 @@
               class="flex items-center justify-between w-full pb-5 text-sm text-white"
             >
               <p class="font-medium">總金額</p>
-              <p class="font-semibold">
+              <p class="font-semibold font-anybody">
                 NT$
                 {{ $MoneyFormat(total_price) }}
               </p>
@@ -170,19 +116,21 @@
           </div>
         </div>
       </div>
-    </div></Teleport
-  >
+    </div>
+  </Teleport>
 </template>
 
 <script>
 import Teleport from 'vue2-teleport';
+import ProductCard from '@/components/checkout/product_card.vue';
+import CustomProductCard from '@/components/checkout/custom_product_card.vue';
 export default {
   name: 'ShopCartFooter',
   props: {
-    shopcart: {
-      require: true,
-      type: Array,
-    },
+    // shopcart: {
+    //   require: true,
+    //   type: Array,
+    // },
     product_total_price: {
       require: true,
       type: Number,
@@ -218,13 +166,15 @@ export default {
   },
   components: {
     Teleport,
+    ProductCard,
+    CustomProductCard,
   },
   watch: {
     open() {
       if (this.open) {
-        this.$store.commit('SetBodyLock', 1);
+        this.$emit('stop-scroll');
       } else {
-        this.$store.commit('SetBodyLock', -1);
+        this.$emit('start-scroll');
       }
     },
   },
@@ -257,6 +207,32 @@ export default {
         discount_price: product.DiscountPrice,
         sell_price: product.SellPrice,
       };
+    },
+  },
+  computed: {
+    shopcart() {
+      let shopcart = [];
+      this.checkout_data.forEach((item) => {
+        let is_exist = -1;
+        shopcart.forEach((shopcart_item, shopcart_index) => {
+          if (
+            shopcart_item.GoodsID == item.GoodsID &&
+            shopcart_item.ColorID == item.ColorID &&
+            shopcart_item.SizeID == item.SizeID &&
+            item.IsCustom == 'N'
+          ) {
+            is_exist = shopcart_index;
+          }
+        });
+        if (is_exist != -1) {
+          shopcart[is_exist].Amount += 1;
+        } else {
+          let tmp_shopcart_item = Object.assign({}, item);
+          tmp_shopcart_item.Amount = 1;
+          shopcart.push(tmp_shopcart_item);
+        }
+      });
+      return shopcart;
     },
   },
 };

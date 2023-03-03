@@ -38,8 +38,8 @@ export class ImageLoader {
     this.locoScroll = new LocomotiveScroll({
       el: document.querySelector('#app'),
       smooth: true,
-      // smoothMobile: true,
-      // getDirection: true,
+      smoothMobile: true,
+      getDirection: true,
       mobile: {
         smooth: true,
         breakpoint: 0,

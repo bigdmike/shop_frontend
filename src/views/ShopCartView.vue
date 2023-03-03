@@ -43,7 +43,6 @@
         <ShopCartForm
           :errors="errors"
           :form_data="form_data"
-          :shopcart="shopcart"
           :checkout_data="checkout_data"
           :coupon_info="checkout_data.CouponInfo"
           @set-samebuyer="SetSameBuyer"
@@ -59,63 +58,75 @@
       data-scroll
       data-scroll-sticky
       data-scroll-target="#ShopcartContainer"
-      class="absolute top-0 right-0 z-0 hidden w-1/3 h-screen p-12 pt-40 bg-basic_black sm:pt-44 md:block"
+      class="absolute top-0 right-0 z-0 hidden w-1/3 h-screen pt-40 bg-basic_black sm:pt-44 md:block"
+      @mouseover="$emit('stop-scroll')"
+      @mouseleave="$emit('start-scroll')"
     >
-      <ShopCart
-        :shopcart="shopcart"
-        :checkout_data="checkout_data.CheckoutList"
-      />
-      <div
-        class="flex flex-wrap items-start pb-5 mb-5 border-b border-zinc-300"
-        v-if="checkout_data.GiveInfo.legnth > 0"
-      >
-        <div class="w-full">
-          <h4 class="mb-5 font-bold text-primary">活動贈品</h4>
-        </div>
-        <div class="w-1/4 overflow-hidden rounded-lg">
-          <img :src="$ImageUrl(checkout_data.GiveInfo.Image1)" class="w-full" />
-        </div>
-        <div class="w-3/4 pl-3">
-          <p class="mb-2 text-sm font-bold text-white">
-            {{ checkout_data.GiveInfo.GiveName }}
-          </p>
-          <p class="text-sm text-basic_gray">
-            {{ checkout_data.GiveInfo.Title }}
-          </p>
-        </div>
-      </div>
-      <ol class="pb-5 mb-5 text-white border-b border-zinc-300">
-        <li class="flex items-center justify-between w-full mb-3 text-sm">
-          <p class="font-medium">合計</p>
-          <p class="font-semibold">
-            NT$ {{ $MoneyFormat(product_total_price) }}
-          </p>
-        </li>
-        <li class="flex items-center justify-between text-sm w-ful">
-          <p class="font-medium">運費</p>
-          <p class="font-semibold">NT$ {{ $MoneyFormat(ship_price) }}</p>
-        </li>
-        <li
-          v-if="payment_price != 0"
-          class="flex items-center justify-between w-full mt-3 text-sm"
+      <ShopCart :checkout_data="checkout_data.CheckoutList" />
+      <div class="px-10 pt-10">
+        <div
+          class="flex flex-wrap items-start pb-5 mb-5 border-b border-zinc-300"
+          v-if="checkout_data.GiveInfo.legnth > 0"
         >
-          <p class="font-medium">金流手續費</p>
-          <p class="font-semibold">NT$ {{ $MoneyFormat(payment_price) }}</p>
-        </li>
-        <li
-          v-if="coupon_discount != 0"
-          class="flex items-center justify-between w-full mt-3 text-sm"
+          <div class="w-full">
+            <h4 class="mb-5 font-bold text-primary">活動贈品</h4>
+          </div>
+          <div class="w-1/4 overflow-hidden rounded-lg">
+            <img
+              :src="$ImageUrl(checkout_data.GiveInfo.Image1)"
+              class="w-full"
+            />
+          </div>
+          <div class="w-3/4 pl-3">
+            <p class="mb-2 text-sm font-bold text-white">
+              {{ checkout_data.GiveInfo.GiveName }}
+            </p>
+            <p class="text-sm text-basic_gray">
+              {{ checkout_data.GiveInfo.Title }}
+            </p>
+          </div>
+        </div>
+        <ol class="py-5 mb-5 text-white border-t border-b border-zinc-700">
+          <li class="flex items-center justify-between w-full mb-3 text-sm">
+            <p class="font-medium">合計</p>
+            <p class="font-semibold font-anybody">
+              NT$ {{ $MoneyFormat(product_total_price) }}
+            </p>
+          </li>
+          <li class="flex items-center justify-between text-sm w-ful">
+            <p class="font-medium">運費</p>
+            <p class="font-semibold font-anybody">
+              NT$ {{ $MoneyFormat(ship_price) }}
+            </p>
+          </li>
+          <li
+            v-if="payment_price != 0"
+            class="flex items-center justify-between w-full mt-3 text-sm"
+          >
+            <p class="font-medium">金流手續費</p>
+            <p class="font-semibold font-anybody">
+              NT$ {{ $MoneyFormat(payment_price) }}
+            </p>
+          </li>
+          <li
+            v-if="coupon_discount != 0"
+            class="flex items-center justify-between w-full mt-3 text-sm"
+          >
+            <p class="font-medium">優惠代碼折抵</p>
+            <p class="font-semibold font-anybody">
+              - NT$ {{ $MoneyFormat(coupon_discount) }}
+            </p>
+          </li>
+        </ol>
+        <div
+          class="flex items-center justify-between w-full text-sm text-white"
         >
-          <p class="font-medium">優惠代碼折抵</p>
-          <p class="font-semibold">- NT$ {{ $MoneyFormat(coupon_discount) }}</p>
-        </li>
-      </ol>
-      <div class="flex items-center justify-between w-full text-sm text-white">
-        <p class="font-medium">總金額</p>
-        <p class="font-semibold">
-          NT$
-          {{ $MoneyFormat(total_price) }}
-        </p>
+          <p class="font-medium">總金額</p>
+          <p class="font-semibold font-anybody">
+            NT$
+            {{ $MoneyFormat(total_price) }}
+          </p>
+        </div>
       </div>
     </div>
 
@@ -148,7 +159,6 @@
     <ShopCartFooter
       v-if="checkout_data != null"
       class="block md:hidden"
-      :shopcart="shopcart"
       :product_total_price="parseInt(product_total_price)"
       :ship_price="parseInt(ship_price)"
       :payment_price="parseInt(payment_price)"
@@ -156,6 +166,8 @@
       :checkout_data="checkout_data.CheckoutList"
       :coupon_discount="parseInt(coupon_discount)"
       :give_info="checkout_data.GiveInfo"
+      @stop-scroll="$emit('stop-scroll')"
+      @start-scroll="$emit('start-scroll')"
     />
   </main>
 </template>
@@ -278,21 +290,21 @@ export default {
             if (this.first_enter) {
               this.first_enter = false;
               // GTM事件
-              let products = [];
-              this.shopcart.forEach((item) => {
-                const product = ConvertAddShopCartData(
-                  item.product_data,
-                  item.active_option,
-                  1
-                );
-                products.push(product);
-              });
-              window.dataLayer.push({
-                event: 'beginCheckout',
-                items: products,
-                value: 0,
-                currency: 'TWD',
-              });
+              // let products = [];
+              // this.shopcart.forEach((item) => {
+              //   const product = ConvertAddShopCartData(
+              //     item.product_data,
+              //     item.active_option,
+              //     1
+              //   );
+              //   products.push(product);
+              // });
+              // window.dataLayer.push({
+              //   event: 'beginCheckout',
+              //   items: products,
+              //   value: 0,
+              //   currency: 'TWD',
+              // });
             }
           } else if (res.msg.indexOf('超過物流限制') != -1) {
             this.$store.commit('SetDialog', {
@@ -391,25 +403,12 @@ export default {
             'trade_checkout_data',
             JSON.stringify(this.checkout_data)
           );
-          this.$store.commit('shopcart_module/SetShopCart', []);
+          // this.$store.commit('shopcart_module/SetShopCart', []);
           if (
             this.checkout_data.PaymentInfo.PaymentType == 'PCHomeCredit' ||
             this.checkout_data.PaymentInfo.PaymentType == 'PCHomeATM'
           ) {
             window.location.replace(res.data.PaymentHTML);
-          } else if (
-            this.checkout_data.PaymentInfo.PaymentType == 'NormalATM'
-          ) {
-            //
-            let atm_info = this.$GetCloumn('ATMInfo');
-            atm_info = atm_info.split(',');
-            const msg = `感謝您的訂購，請在三天內完成匯款：<br/>${atm_info[0]}-${atm_info[1]}<br/>${atm_info[2]}<br/>${atm_info[3]}<br/>${atm_info[4]}`;
-            this.$store.commit('SetDialog', {
-              status: true,
-              content: msg,
-            });
-
-            this.$router.push(`/order_create/${res.data.TradeData.TradeID}`);
           } else {
             document
               .querySelector('body')

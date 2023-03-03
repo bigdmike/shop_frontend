@@ -16,6 +16,8 @@
         @load-image="LoadImage"
         @scroll-top="ScrollToTop"
         @update-scroll="UpdateScroller"
+        @stop-scroll="StopScroller"
+        @start-scroll="StartScroller"
       />
       <ContactFooter />
       <!--  v-if="data_load_finish" -->
@@ -99,6 +101,12 @@ export default {
     },
     UpdateScroller() {
       this.image_loader.locoScroll.update();
+    },
+    StartScroller() {
+      this.image_loader.locoScroll.start();
+    },
+    StopScroller() {
+      this.image_loader.locoScroll.stop();
     },
     ScrollToTop() {
       this.image_loader.locoScroll.scrollTo('top', { duration: 100 });
