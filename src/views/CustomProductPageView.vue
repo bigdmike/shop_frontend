@@ -231,7 +231,7 @@ export default {
         // });
         const shop_cart_item = {
           product: this.product_data,
-          is_custom: "Y",
+          is_custom: 'Y',
           options: this.active_option,
           amount: this.amount,
           show_message: true,
@@ -292,9 +292,9 @@ export default {
       });
     },
     ChangeOption(index, val) {
-      // this.active_option.forEach((item, item_index) => {
-      //   item_index > index ? this.$set(this.active_option, item_index, '') : '';
-      // });
+      this.active_option.forEach((item, item_index) => {
+        item_index > index ? this.$set(this.active_option, item_index, '') : '';
+      });
       this.$set(this.active_option, index, val);
     },
     GetProductData() {

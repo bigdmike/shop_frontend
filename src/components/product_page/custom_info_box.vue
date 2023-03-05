@@ -21,9 +21,15 @@
       itemtype="https://schema.org/AggregateOffer"
       itemscope
     >
-      <meta itemprop="lowPrice" :content="low_price" />
-      <meta itemprop="highPrice" :content="high_price" />
-      <meta itemprop="offerCount" :content="offer_count" />
+      <meta
+        itemprop="lowPrice"
+        :content="product_data.CustomGoodsStock[0].SellPrice"
+      />
+      <meta
+        itemprop="highPrice"
+        :content="product_data.CustomGoodsStock[0].SellPrice"
+      />
+      <meta itemprop="offerCount" content="99" />
       <meta itemprop="priceCurrency" content="TWD" />
     </div>
     <div
@@ -40,11 +46,6 @@
     </div>
     <div class="mb-5 text-right">
       <p class="font-semibold sm:text-2xl text-primary font-anybody">
-        <!-- <span
-          v-if="active_stock.Price != active_stock.SellPrice"
-          class="text-sm line-through text-basic_gray font-anybody"
-          >NT$ {{ product_data.CustomGoodsStock.Price }}</span
-        > -->
         NT$ {{ $MoneyFormat(GetPrice()[0]) }}
       </p>
     </div>
@@ -96,7 +97,8 @@
             <option value="">請選擇</option>
             <option
               v-for="(option, option_index) in GetCategorySpec(
-                item.SpecCategoryID
+                item.SpecCategoryID,
+                item_index
               )"
               :value="option.CustomSpecID"
               :key="`option_${item_index}_${option_index}`"
@@ -108,16 +110,6 @@
       </div>
 
       <div>
-        <p
-          class="mb-2 font-semibold text-white"
-          v-if="second_options.length > 0"
-        >
-          數量
-
-          <span class="ml-3 text-sm text-center text-primary">
-            目前庫存數量：{{ active_stock.Stock }}
-          </span>
-        </p>
         <div
           v-if="product_data.Stock.length > 0"
           class="relative flex items-stretch w-full overflow-hidden rounded-md bg-basic_black"
@@ -135,9 +127,7 @@
             readonly
           />
           <button
-            @click="
-              amount >= active_stock.Stock ? '' : $emit('change-amount', 1)
-            "
+            @click="$emit('change-amount', 1)"
             class="px-5 py-3 duration-200 text-primary transition-color hover:bg-primary hover:text-white"
           >
             <span class="text-sm icon-plus"></span>
@@ -215,9 +205,20 @@ export default {
     },
   },
   methods: {
-    GetCategorySpec(id) {
-      const spec_list = this.GetAvailableSpec();
-      return spec_list.filter((item) => item.SpecCategoryID == id);
+    GetCategorySpec(id, index) {
+      let first_empty_option = this.active_option.indexOf('');
+      if (index == 0) {
+        //第一個選項
+        return this.product_data.CustomSpecList.filter(
+          (item) => item.SpecCategoryID == id
+        );
+      } else if (first_empty_option < index && first_empty_option != -1) {
+        // 前面的選項還沒選
+        return [];
+      } else {
+        const spec_list = this.GetAvailableSpec();
+        return spec_list.filter((item) => item.SpecCategoryID == id);
+      }
     },
     GetAvailableSpec() {
       let disable_id = [];
@@ -305,70 +306,6 @@ export default {
     }
   },
   computed: {
-    first_options() {
-      let tmp_options = [];
-      this.product_data.Stock.forEach((item) => {
-        let option = tmp_options.filter(
-          (option_item) => option_item.ColorID == item.ColorID
-        );
-        if (option.length <= 0) {
-          tmp_options.push({
-            ColorID: item.ColorID,
-            Title: item.ColorTitle,
-          });
-        }
-      });
-      return tmp_options;
-    },
-    second_options() {
-      let tmp_options = [];
-      let options = this.product_data.Stock.filter(
-        (option_item) => option_item.ColorID == this.active_option[0]
-      );
-      options.forEach((item) => {
-        let option = tmp_options.filter(
-          (option_item) => option_item.SizeID == item.SizeID
-        );
-        if (option.length <= 0) {
-          tmp_options.push({
-            SizeID: item.SizeID,
-            Title: item.SizeTitle,
-          });
-        }
-      });
-      return tmp_options;
-    },
-    active_stock() {
-      let stock = this.product_data.Stock.filter(
-        (item) =>
-          item.ColorID == this.active_option[0] &&
-          item.SizeID == this.active_option[1]
-      );
-      return stock.length > 0
-        ? stock[0]
-        : { Status: 'N', Price: 0, SellPrice: 0 };
-    },
-    low_price() {
-      let price = 99999999;
-      this.product_data.Stock.forEach((item) => {
-        parseInt(item.SellPrice) < price ? (price = item.Price) : '';
-      });
-      return price == 99999999 ? 0 : price;
-    },
-    high_price() {
-      let price = 0;
-      this.product_data.Stock.forEach((item) => {
-        parseInt(item.SellPrice) > price ? (price = item.Price) : '';
-      });
-      return price;
-    },
-    offer_count() {
-      let count = 0;
-      this.product_data.Stock.forEach((item) => {
-        count += parseInt(item.Stock);
-      });
-      return count;
-    },
     time_status() {
       if (this.start_time == null || this.end_time == null) {
         return 'none';
