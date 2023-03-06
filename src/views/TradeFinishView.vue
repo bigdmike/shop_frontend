@@ -1,83 +1,102 @@
 <template>
-  <main class="relative z-10 w-full">
+  <main
+    data-scroll-section
+    class="relative z-10 w-full py-40 text-white bg-bg_black sm:py-40"
+  >
     <div
-      v-if="form_data != null"
-      class="relative flex items-center justify-center w-full max-w-screen-xl px-5 mx-auto md:px-10 pb-14 pt-14 xl:px-0"
+      v-if="form_data != null && data_load_finish"
+      class="relative flex items-center justify-center w-full max-w-screen-xl px-5 mx-auto md:px-10 xl:px-0"
     >
       <div class="w-full">
-        <div class="mb-10 text-center">
-          <img src="@/assets/img/check.svg" class="mx-auto mb-5" />
-          <h2 class="mb-1 text-2xl font-bold text-primary">感謝您的訂購</h2>
-          <p class="mb-4 text-primary">訂單編號 #{{ trade_no }}</p>
-          <p class="mb-10 text-basic_gray">
-            以下是您的購物明細，也可至
-            <router-link
-              :to="order_search_link"
-              class="underline text-secondary"
-              >訂單查詢</router-link
+        <div class="flex flex-col-reverse items-center mb-5 text-center">
+          <h2 class="relative inline-block px-8">
+            <span
+              data-section-subtitle-arrow
+              class="absolute top-0 left-0 block text-lg leading-none transform icon-triangle text-primary -scale-100"
+            ></span>
+            <span
+              data-section-subtitle
+              class="block text-xl font-bold leading-none text-white"
+              >訂單編號 {{ $route.params.id }}</span
             >
-            追蹤您的訂單。
+            <span
+              data-section-subtitle-arrow
+              class="absolute bottom-0 right-0 block text-lg leading-none icon-triangle text-primary"
+            ></span>
+          </h2>
+          <h3 class="mb-5 overflow-hidden">
+            <span
+              data-section-title
+              data-text="About Us"
+              class="block text-4xl font-black text-basic_gray text-opacity-20 font-anybody"
+            >
+              Thank You
+            </span>
+          </h3>
+          <img src="@/assets/img/check.svg" class="mx-auto mb-5" />
+        </div>
+        <div class="mb-10">
+          <p class="font-medium text-center text-white">
+            感謝您的訂購！已收到訂單，待付款金額確認入帳後客服人員將會與您聯絡核對訂單內容訂單確認後我們將盡快安排商品製作
           </p>
         </div>
-        <div class="mb-5">
-          <p class="px-2 py-2 font-bold text-primary bg-primary bg-opacity-20">
+        <div class="mb-3">
+          <p class="px-2 py-2 font-bold text-white bg-primary bg-opacity-30">
             訂單資訊
           </p>
         </div>
-        <ol class="w-full">
+        <ol class="w-full px-2 mb-10">
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">訂單編號</p>
-            <p class="text-sm font-bold sm:text-base">
-              #{{ $route.params.id }}
-            </p>
+            <p class="text-sm font-medium">#{{ $route.params.id }}</p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">付款方式</p>
-            <p class="text-sm font-bold sm:text-base">
+            <p class="text-sm font-medium">
               {{ active_payment }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">配送方式</p>
-            <p class="text-sm font-bold sm:text-base">
+            <p class="text-sm font-medium">
               {{ active_shipway }}
             </p>
           </li>
         </ol>
-        <div class="mb-5">
-          <p class="px-2 py-2 font-bold text-primary bg-primary bg-opacity-20">
+        <div class="mb-3">
+          <p class="px-2 py-2 font-bold text-white bg-primary bg-opacity-30">
             購買人資訊
           </p>
         </div>
-        <ol class="w-full">
+        <ol class="w-full px-2 mb-10">
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">購買人姓名</p>
-            <p class="text-sm font-bold sm:text-base">
+            <p class="text-sm font-medium">
               {{ form_data.buyer_last_name + form_data.buyer_first_name }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">購買人電話</p>
-            <p class="text-sm font-bold sm:text-base">
+            <p class="text-sm font-medium">
               {{ form_data.buyer_phone }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">購買人信箱</p>
-            <p class="text-sm font-bold sm:text-base">
+            <p class="text-sm font-medium">
               {{ form_data.consignee_email }}
             </p>
           </li>
         </ol>
-        <div class="mb-5">
-          <p class="px-2 py-2 font-bold text-primary bg-primary bg-opacity-20">
+        <div class="mb-3">
+          <p class="px-2 py-2 font-bold text-white bg-primary bg-opacity-30">
             收件資訊
           </p>
         </div>
-        <ol class="w-full">
+        <ol class="w-full px-2 mb-10">
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人姓名</p>
-            <p class="text-sm font-bold sm:text-base">
+            <p class="text-sm font-medium">
               {{
                 form_data.consignee_last_name + form_data.consignee_first_name
               }}
@@ -85,13 +104,13 @@
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人電話</p>
-            <p class="text-sm font-bold sm:text-base">
+            <p class="text-sm font-medium">
               {{ form_data.consignee_phone }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人地址</p>
-            <p class="text-sm font-bold sm:text-base">
+            <p class="text-sm font-medium">
               {{
                 form_data.consignee_city +
                 form_data.consignee_area +
@@ -100,86 +119,30 @@
             </p>
           </li>
         </ol>
-        <div class="mb-5">
-          <p class="px-2 py-2 font-bold text-primary bg-primary bg-opacity-20">
+        <div class="mb-3">
+          <p class="px-2 py-2 font-bold text-white bg-primary bg-opacity-30">
             訂單明細
           </p>
         </div>
         <ol
-          class="w-full mb-10 border-b border-zinc-300"
+          class="w-full mb-10 border-b border-zinc-700"
           v-if="shopcart != null"
         >
           <li
             :class="
               item_index != shopcart.length - 1
-                ? ' border-b border-zinc-300 mb-3'
+                ? ' border-b border-zinc-700 mb-3'
                 : ''
             "
-            class="flex w-full pb-3"
+            class="flex w-full pt-2 pb-3"
             v-for="(item, item_index) in shopcart"
             :key="`shopcart_${item_index}`"
           >
-            <div class="w-[100px] overflow-hidden rounded-lg">
-              <img :src="$ImageUrl(item.product_data.Image1)" class="w-full" />
-            </div>
-            <div class="flex-1 w-full pl-3">
-              <p class="mb-2 text-sm font-bold">
-                {{ item.product_data.Title }}
-              </p>
-              <p class="text-sm text-basic_gray">
-                {{ GetActiveOption(item).ColorTitle }}
-              </p>
-              <p
-                v-if="GetActiveOption(item).SizeTitle != '無'"
-                class="text-sm text-basic_gray"
-              >
-                {{ GetActiveOption(item).SizeTitle }}
-              </p>
-              <div
-                class="pt-2"
-                v-if="GetDiscountAndPrice(item).discount_list.length > 0"
-              >
-                <ol>
-                  <li
-                    class="mb-2 text-xs text-primary"
-                    v-for="(event, event_index) in GetDiscountAndPrice(item)
-                      .discount_list"
-                    :key="`event_${event_index}`"
-                  >
-                    {{ event.Title }}
-                  </li>
-                </ol>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-end">
-              <div class="flex items-center">
-                <p
-                  class="mr-2 text-xs line-through text-basic_gray"
-                  v-if="
-                    GetDiscountAndPrice(item).discount_price !=
-                    GetDiscountAndPrice(item).sell_price
-                  "
-                >
-                  NT$
-                  {{
-                    $MoneyFormat(parseInt(GetDiscountAndPrice(item).sell_price))
-                  }}
-                </p>
-                <p class="text-sm font-bold">
-                  NT$
-                  {{
-                    $MoneyFormat(
-                      parseInt(GetDiscountAndPrice(item).discount_price)
-                    )
-                  }}
-                  x {{ item.amount }}
-                </p>
-              </div>
-            </div>
+            <ProductCard v-if="item.IsCustom == 'N'" :shopcart_item="item" />
+            <CustomProductCard v-else :shopcart_item="item" />
           </li>
         </ol>
-        <ol class="pb-5 mb-5 border-b border-zinc-300">
+        <ol class="pb-5 mb-5 border-b border-zinc-700">
           <li class="flex items-center justify-between w-full mb-3 text-sm">
             <p class="font-medium">合計</p>
             <p class="font-semibold">
@@ -188,28 +151,32 @@
           </li>
           <li class="flex items-center justify-between text-sm w-ful">
             <p class="font-medium">運費</p>
-            <p class="font-semibold">NT$ {{ $MoneyFormat(ship_price) }}</p>
+            <p class="font-semibold font-anybody">
+              NT$ {{ $MoneyFormat(ship_price) }}
+            </p>
           </li>
           <li
             v-if="payment_price != 0"
             class="flex items-center justify-between w-full mt-3 text-sm"
           >
             <p class="font-medium">金流手續費</p>
-            <p class="font-semibold">NT$ {{ $MoneyFormat(payment_price) }}</p>
+            <p class="font-semibold font-anybody">
+              NT$ {{ $MoneyFormat(payment_price) }}
+            </p>
           </li>
           <li
             v-if="coupon_discount != 0"
             class="flex items-center justify-between w-full mt-3 text-sm"
           >
             <p class="font-medium">優惠代碼折抵</p>
-            <p class="font-semibold">
+            <p class="font-semibold font-anybody">
               - NT$ {{ $MoneyFormat(coupon_discount) }}
             </p>
           </li>
         </ol>
         <div class="flex items-center justify-between w-full mb-10 text-sm">
           <p class="font-medium">總金額</p>
-          <p class="font-semibold">
+          <p class="font-semibold font-anybody">
             NT$
             {{ $MoneyFormat(total_price) }}
           </p>
@@ -218,7 +185,7 @@
         <div class="w-full text-center">
           <router-link
             to="/"
-            class="inline-block py-3 text-white transition-colors duration-200 rounded-lg px-14 bg-primary hover:bg-opacity-70"
+            class="inline-block py-3 font-bold text-white transition-colors duration-200 rounded-lg px-14 bg-primary hover:bg-opacity-70"
           >
             回到首頁
           </router-link>
@@ -229,6 +196,8 @@
 </template>
 
 <script>
+import ProductCard from '@/components/trade_finish/product_card.vue';
+import CustomProductCard from '@/components/trade_finish/custom_product_card.vue';
 // delLocalStorage
 import { getLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
@@ -238,10 +207,13 @@ export default {
   data() {
     return {
       form_data: null,
-      shopcart: null,
       checkout_data: null,
       meta_data: null,
     };
+  },
+  components: {
+    ProductCard,
+    CustomProductCard,
   },
   methods: {
     GetActiveOption(shopcart_item) {
@@ -296,7 +268,39 @@ export default {
       });
     },
   },
+  watch: {
+    data_load_finish() {
+      this.data_load_finish ? this.$emit('load-image') : '';
+    },
+  },
   computed: {
+    data_load_finish() {
+      return this.$store.getters.data_load_finish;
+    },
+    shopcart() {
+      let shopcart = [];
+      this.checkout_data.CheckoutList.forEach((item) => {
+        let is_exist = -1;
+        shopcart.forEach((shopcart_item, shopcart_index) => {
+          if (
+            shopcart_item.GoodsID == item.GoodsID &&
+            shopcart_item.ColorID == item.ColorID &&
+            shopcart_item.SizeID == item.SizeID &&
+            item.IsCustom == 'N'
+          ) {
+            is_exist = shopcart_index;
+          }
+        });
+        if (is_exist != -1) {
+          shopcart[is_exist].Amount += 1;
+        } else {
+          let tmp_shopcart_item = Object.assign({}, item);
+          tmp_shopcart_item.Amount = 1;
+          shopcart.push(tmp_shopcart_item);
+        }
+      });
+      return shopcart;
+    },
     trade_no() {
       return this.$route.params.id;
     },
@@ -334,8 +338,6 @@ export default {
       } else {
         return this.checkout_data.FinalTotal;
       }
-      // AfterCouponTotal
-      // return parseInt(this.product_total_price) + parseInt(this.ship_price);
     },
     coupon_discount() {
       if (this.checkout_data == null) {
@@ -362,21 +364,14 @@ export default {
         (item) => item.PaymentID == this.form_data.pay_way
       )[0].Title;
     },
-    order_search_link() {
-      if (getLocalStorage('account_token')) {
-        return '/account/orders';
-      } else {
-        return '/order_search/search';
-      }
-    },
   },
   created() {
     const trade_data = getLocalStorage('trade_data');
-    const shopcart_data = getLocalStorage('trade_shopcart');
+    // const shopcart_data = getLocalStorage('trade_shopcart');
     const checkout_data = getLocalStorage('trade_checkout_data');
-    if (this.$route.params.id && trade_data && shopcart_data && checkout_data) {
+    if (this.$route.params.id && trade_data && checkout_data) {
       this.form_data = JSON.parse(trade_data);
-      this.shopcart = JSON.parse(shopcart_data);
+      // this.shopcart = JSON.parse(shopcart_data);
       this.checkout_data = JSON.parse(checkout_data);
       // delLocalStorage('trade_data');
       // delLocalStorage('trade_shopcart');
@@ -388,6 +383,9 @@ export default {
       });
     } else {
       // this.$router.push('/');
+    }
+    if (this.data_load_finish) {
+      this.$emit('load-image');
     }
   },
   metaInfo() {
