@@ -1,20 +1,17 @@
 <template>
   <div class="flex flex-wrap items-center justify-between">
-    <div class="relative sm:w-auto w-full text-center sm:mb-0 mb-10">
+    <div class="relative w-full mb-10 text-center sm:w-auto sm:mb-0">
       <p>
         搜尋『{{ $route.params.key_word }}』，總共有{{
           product_data.length
         }}項搜尋結果
       </p>
     </div>
-    <div class="relative md:w-1/4 sm:w-1/3 w-full md:pl-2">
-      <SelectArrowIcon
-        class="w-5 absolute top-1/2 right-0 transform -translate-y-1/2 text-zinc-400 z-10 pointer-events-none"
-      />
+    <div class="relative w-full md:w-1/4 sm:w-1/3 md:pl-2">
       <select
         :value="sort_type"
         @input="$emit('change-type', $event.target.value)"
-        class="relative pr-5 appearance-none pb-2 border-b border-zinc-300 w-full focus:outline-none"
+        class="relative w-full pb-2 pr-5 border-b appearance-none border-zinc-300 focus:outline-none"
       >
         <option>推薦排序</option>
         <option>價錢由低到高</option>
@@ -27,7 +24,6 @@
 </template>
 
 <script>
-import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 export default {
   name: 'ProductListFilterBar',
   props: {
@@ -46,8 +42,6 @@ export default {
       default: '推薦排序',
     },
   },
-  components: {
-    SelectArrowIcon,
-  },
+  components: {},
 };
 </script>

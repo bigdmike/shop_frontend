@@ -16,7 +16,7 @@
               @click="Close"
               class="absolute z-10 flex items-center justify-center w-8 h-8 bg-white border border-black rounded-full top-4 right-4"
             >
-              <PlusIcon class="w-6 transform rotate-45" />
+              <span class="w-6 icon-close"></span>
             </button>
             <img
               :src="$ImageUrl(product_data.Image1)"
@@ -36,9 +36,6 @@
                 選項一
               </p>
               <div class="relative w-full mb-2" v-if="first_options.length > 0">
-                <SelectArrowIcon
-                  class="absolute z-10 w-4 transform -translate-y-1/2 pointer-events-none top-1/2 right-5"
-                />
                 <select
                   @input="$emit('change-option', 0, $event.target.value)"
                   :value="active_option[0]"
@@ -98,7 +95,7 @@
                   @click="ChangeAmount(-1)"
                   class="px-5 py-4 text-black duration-200 transition-color hover:bg-secondary hover:text-white"
                 >
-                  <MinusIcon class="w-3" />
+                  <span class="w-3 icon-minus"></span>
                 </button>
                 <input
                   class="flex-1 text-center focus:outline-none"
@@ -142,9 +139,6 @@
 
 <script>
 import Teleport from 'vue2-teleport';
-import PlusIcon from '@/components/svg/PlusIcon.vue';
-import MinusIcon from '@/components/svg/MinusIcon.vue';
-import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import { getLocalStorage } from '@/common/cookie';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
 
@@ -153,9 +147,6 @@ export default {
   name: 'ProductDialog',
   components: {
     Teleport,
-    PlusIcon,
-    MinusIcon,
-    SelectArrowIcon,
   },
   data() {
     return {

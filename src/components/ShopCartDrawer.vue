@@ -5,7 +5,7 @@
       class="absolute top-0 flex flex-col bottom-0 left-full sm:w-[432px] xs:w-5/6 w-full bg-basic_gray z-10 pt-12 pb-5"
     >
       <button @click="Close" class="absolute xs:top-7 xs:right-7 top-5 right-5">
-        <CloseIcon class="w-5 text-black" />
+        <span class="w-5 text-black icon-close"></span>
       </button>
 
       <header
@@ -91,7 +91,6 @@
 </template>
 
 <script>
-import CloseIcon from '@/components/svg/CloseIcon.vue';
 import { shopcart_drawer_animation } from '@/gsap/shopcart_drawer.js';
 import { getLocalStorage } from '@/common/cookie';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
@@ -100,7 +99,6 @@ import CustomProductCard from '@/components/shopcart/custom_product_card.vue';
 export default {
   name: 'ShopCartDrawer',
   components: {
-    CloseIcon,
     ProductCard,
     CustomProductCard,
   },
