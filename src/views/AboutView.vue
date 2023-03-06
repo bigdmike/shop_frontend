@@ -4,7 +4,11 @@
     data-scroll-section
     class="relative z-10 w-full py-40 bg-basic_gray sm:py-60"
   >
-    <div id="AboutContainer" class="relative z-10 w-full">
+    <div
+      id="AboutContainer"
+      class="relative z-10 w-full"
+      v-if="data_load_finish"
+    >
       <div
         class="relative z-10 w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10"
       >
@@ -44,29 +48,16 @@
           </header>
           <div data-section-content>
             <h3
-              class="mb-10 text-2xl font-bold text-black md:text-3xl font-anybody"
-            >
-              KRACE創立於2016年，著重於CNC、車銑製品開發，展現加工工藝於機車部品上，豐富您的視覺。
-            </h3>
-            <div class="mb-20 font-medium">
-              <p>
-                KRace是汽機車及單車開發CNC零配件的品牌，繼上回的CNC輕量化三角台後，經過車友們的千呼萬喚，
-                KRace終於推出了專為FORCE所打造的CNC後搖臂，客製制化選色，讓車友們享受改裝視覺質感，創造獨家改裝特色。
-              </p>
-              <br />
-              <p>
-                KRace是汽機車及單車開發CNC零配件的品牌，繼上回的CNC輕量化三角台後，經過車友們的千呼萬喚，
-                KRace終於推出了專為FORCE所打造的CNC後搖臂，客製制化選色，讓車友們享受改裝視覺質感，創造獨家改裝特色。
-              </p>
-              <br />
-              <p>
-                KRace是汽機車及單車開發CNC零配件的品牌，繼上回的CNC輕量化三角台後，經過車友們的千呼萬喚，
-                KRace終於推出了專為FORCE所打造的CNC後搖臂，客製制化選色，讓車友們享受改裝視覺質感，創造獨家改裝特色。
-              </p>
-            </div>
+              class="mb-10 text-2xl font-bold leading-relaxed text-black md:text-3xl font-anybody md:leading-relaxed"
+              v-html="$GetCloumn('about_slogan')"
+            ></h3>
+            <div
+              class="mb-20 font-medium"
+              v-html="$GetCloumn('about_content')"
+            ></div>
             <div class="w-full overflow-hidden section_corner">
               <img
-                src="/img/home/main_product/main_product_1.webp"
+                :src="$ImageUrl($GetCloumn('about_image'))"
                 class="block w-full"
               />
             </div>
@@ -110,7 +101,7 @@
               <p
                 class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
               >
-                宥原有限公司
+                {{ $GetCloumn('company_name') }}
               </p>
             </li>
             <li
@@ -120,7 +111,7 @@
               <p
                 class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
               >
-                2018
+                {{ $GetCloumn('company_date') }}
               </p>
             </li>
             <li
@@ -130,7 +121,7 @@
               <p
                 class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
               >
-                Nelson1-3-6@hotmail.com
+                {{ $GetCloumn('company_email') }}
               </p>
             </li>
             <li
@@ -140,7 +131,7 @@
               <p
                 class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
               >
-                04-2271-6109
+                {{ $GetCloumn('company_phone') }}
               </p>
             </li>
             <li
@@ -150,7 +141,7 @@
               <p
                 class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
               >
-                台中市太平區工業15路13號
+                {{ $GetCloumn('company_address') }}
               </p>
             </li>
             <li
@@ -160,7 +151,7 @@
               <p
                 class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
               >
-                08:00 ~ 20:00
+                {{ $GetCloumn('company_time') }}
               </p>
             </li>
           </ol>
@@ -227,11 +218,22 @@ export default {
   },
   methods: {
     SetGsap() {
+      console.log('gsap set');
       this.story_secton_gsap = new section_animation(this.$refs.StoryContent);
       this.info_secton_gsap = new section_animation(this.$refs.InfoContent);
     },
+    PageInit() {
+      console.log('page load');
+      this.$nextTick(() => {
+        console.log('image load');
+        this.$emit('load-image', 'home');
+      });
+    },
   },
   computed: {
+    data_load_finish() {
+      return this.$store.getters.data_load_finish;
+    },
     image_loaded() {
       return this.$store.state.image_loaded;
     },
@@ -240,11 +242,12 @@ export default {
     image_loaded() {
       this.image_loaded ? this.SetGsap() : '';
     },
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
+    },
   },
   mounted() {
-    this.$nextTick(() => {
-      this.$emit('load-image', 'home');
-    });
+    // this.data_load_finish ? this.PageInit() : '';
   },
   created() {
     this.meta_data = GetMetaData('about', '', '');
