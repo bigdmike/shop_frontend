@@ -1,9 +1,9 @@
 <template>
   <nav
-    class="fixed z-20 block w-11/12 max-w-lg transform -translate-x-1/2 rounded-lg bottom-5 left-1/2 md:hidden bg-basic_black"
+    class="fixed z-20 flex items-center w-full max-w-[90%] md:max-w-lg transform -translate-x-1/2 bottom-5 left-1/2 md:hidden"
     v-if="show"
   >
-    <ol class="flex items-stretch w-full">
+    <ol class="flex items-stretch w-full rounded-lg bg-basic_black">
       <li class="w-1/4 text-center border-r border-white border-opacity-10">
         <button
           @click="$router.push('/')"
@@ -37,12 +37,20 @@
           </div>
         </button>
       </li>
-      <li class="w-1/4 text-center">
+      <li class="w-1/4 text-center border-r border-white border-opacity-10">
         <button
           @click="OpenSearchDialog"
           class="flex items-center justify-center w-full h-full py-3 text-white sm:py-4"
         >
           <span class="text-xl text-white icon-search"></span>
+        </button>
+      </li>
+      <li class="w-1/4 text-center">
+        <button
+          @click="$emit('open-message')"
+          class="flex items-center justify-center w-full h-full py-3 text-white sm:py-4"
+        >
+          <span class="text-3xl text-white icon-message"></span>
         </button>
       </li>
     </ol>
