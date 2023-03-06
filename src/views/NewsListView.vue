@@ -6,6 +6,7 @@
     class="relative z-10 w-full py-40 bg-basic_black md:py-60"
   >
     <div
+      v-if="news_list != null"
       class="flex flex-wrap items-stretch w-full max-w-screen-xl px-5 mx-auto xl:px-0"
     >
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
@@ -51,7 +52,7 @@
           >
             <option class="text-white bg-basic_black" value="">全部文章</option>
             <option
-              v-for="(item, item_index) in news_category"
+              v-for="(item, item_index) in category_data"
               :value="item.NewsCategoryID"
               :key="`category_${item_index}`"
               class="text-white bg-basic_black"
@@ -74,7 +75,10 @@
             <div
               class="relative w-full mb-5 sm:w-1/2 sm:px-5 lg:px-10 lg:w-1/3 sm:mb-0"
             >
-              <div class="relative w-full overflow-hidden">
+              <router-link
+                :to="`/news/page/${item.NewsID}`"
+                class="relative block w-full overflow-hidden"
+              >
                 <span
                   :class="
                     hover_index == item_index
@@ -84,11 +88,11 @@
                   class="absolute bottom-0 right-0 z-10 text-5xl transition-all duration-500 transform icon-triangle text-basic_black"
                 ></span>
                 <img
-                  :src="item.Image1"
+                  :src="$ImageUrl(item.Image1)"
                   :class="hover_index == item_index ? 'scale-110' : 'scale-100'"
                   class="relative z-0 block w-full transition-all duration-700 transform"
                 />
-              </div>
+              </router-link>
             </div>
             <div class="w-full sm:w-1/2 sm:px-5 lg:px-10 lg:w-2/3">
               <p class="mb-2 text-basic_white text-opacity-60 font-anybody">
@@ -170,406 +174,6 @@ export default {
           link: '/news?category=all',
         },
       ],
-      news_list: [
-        {
-          NewsID: 1,
-          NewsCategoryID: 2,
-          Title: '水冷車必改 Krace JET SL 水箱護罩',
-          Content:
-            '<p>JET SL 車身線條刻劃的非常流線，搭配上Krace水箱護罩，那迷人的線條感，真的是會讓人垂涎三尺，全CNC製成設計，玩車人絕對必備的改裝品，切削的凹凸紋路，在光影下呈現最佳對比，滿足自己玩車的夢就從KRACE開始。</p>',
-          Image1: '/img/news/1.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '重要公告',
-        },
-        {
-          NewsID: 1,
-          NewsCategoryID: 2,
-          Title: '水冷車必改 Krace JET SL 水箱護罩',
-          Content:
-            '<p>JET SL 車身線條刻劃的非常流線，搭配上Krace水箱護罩，那迷人的線條感，真的是會讓人垂涎三尺，全CNC製成設計，玩車人絕對必備的改裝品，切削的凹凸紋路，在光影下呈現最佳對比，滿足自己玩車的夢就從KRACE開始。</p>',
-          Image1: '/img/news/1.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '重要公告',
-        },
-        {
-          NewsID: 2,
-          NewsCategoryID: 3,
-          Title: '地表戰鬥機 讓KRACE實現你的戰鬥慾望',
-          Content:
-            '<p>KRACE水冷BWS戰鬥分離式把手，最銳利的線條設計，搭配上自由選擇的色澤，讓你猶如地表噴射機般的耀眼以及視覺張力，那全CNC製成銑痕，是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。</p>',
-          Image1: '/img/news/2.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '最新消息',
-        },
-        {
-          NewsID: 3,
-          NewsCategoryID: 3,
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '<p>將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。</p>',
-          Image1: '/img/news/3.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '活動消息',
-        },
-        {
-          NewsID: 1,
-          NewsCategoryID: 2,
-          Title: '水冷車必改 Krace JET SL 水箱護罩',
-          Content:
-            '<p>JET SL 車身線條刻劃的非常流線，搭配上Krace水箱護罩，那迷人的線條感，真的是會讓人垂涎三尺，全CNC製成設計，玩車人絕對必備的改裝品，切削的凹凸紋路，在光影下呈現最佳對比，滿足自己玩車的夢就從KRACE開始。</p>',
-          Image1: '/img/news/1.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '重要公告',
-        },
-        {
-          NewsID: 2,
-          NewsCategoryID: 3,
-          Title: '地表戰鬥機 讓KRACE實現你的戰鬥慾望',
-          Content:
-            '<p>KRACE水冷BWS戰鬥分離式把手，最銳利的線條設計，搭配上自由選擇的色澤，讓你猶如地表噴射機般的耀眼以及視覺張力，那全CNC製成銑痕，是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。</p>',
-          Image1: '/img/news/2.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '最新消息',
-        },
-        {
-          NewsID: 3,
-          NewsCategoryID: 3,
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '<p>將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。</p>',
-          Image1: '/img/news/3.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '活動消息',
-        },
-        {
-          NewsID: 1,
-          NewsCategoryID: 2,
-          Title: '水冷車必改 Krace JET SL 水箱護罩',
-          Content:
-            '<p>JET SL 車身線條刻劃的非常流線，搭配上Krace水箱護罩，那迷人的線條感，真的是會讓人垂涎三尺，全CNC製成設計，玩車人絕對必備的改裝品，切削的凹凸紋路，在光影下呈現最佳對比，滿足自己玩車的夢就從KRACE開始。</p>',
-          Image1: '/img/news/1.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '重要公告',
-        },
-        {
-          NewsID: 2,
-          NewsCategoryID: 3,
-          Title: '地表戰鬥機 讓KRACE實現你的戰鬥慾望',
-          Content:
-            '<p>KRACE水冷BWS戰鬥分離式把手，最銳利的線條設計，搭配上自由選擇的色澤，讓你猶如地表噴射機般的耀眼以及視覺張力，那全CNC製成銑痕，是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。</p>',
-          Image1: '/img/news/2.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '最新消息',
-        },
-        {
-          NewsID: 3,
-          NewsCategoryID: 3,
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '<p>將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。</p>',
-          Image1: '/img/news/3.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '活動消息',
-        },
-        {
-          NewsID: 1,
-          NewsCategoryID: 2,
-          Title: '水冷車必改 Krace JET SL 水箱護罩',
-          Content:
-            '<p>JET SL 車身線條刻劃的非常流線，搭配上Krace水箱護罩，那迷人的線條感，真的是會讓人垂涎三尺，全CNC製成設計，玩車人絕對必備的改裝品，切削的凹凸紋路，在光影下呈現最佳對比，滿足自己玩車的夢就從KRACE開始。</p>',
-          Image1: '/img/news/1.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '重要公告',
-        },
-        {
-          NewsID: 2,
-          NewsCategoryID: 3,
-          Title: '地表戰鬥機 讓KRACE實現你的戰鬥慾望',
-          Content:
-            '<p>KRACE水冷BWS戰鬥分離式把手，最銳利的線條設計，搭配上自由選擇的色澤，讓你猶如地表噴射機般的耀眼以及視覺張力，那全CNC製成銑痕，是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。</p>',
-          Image1: '/img/news/2.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '最新消息',
-        },
-        {
-          NewsID: 3,
-          NewsCategoryID: 3,
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '<p>將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。</p>',
-          Image1: '/img/news/3.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '活動消息',
-        },
-        {
-          NewsID: 1,
-          NewsCategoryID: 2,
-          Title: '水冷車必改 Krace JET SL 水箱護罩',
-          Content:
-            '<p>JET SL 車身線條刻劃的非常流線，搭配上Krace水箱護罩，那迷人的線條感，真的是會讓人垂涎三尺，全CNC製成設計，玩車人絕對必備的改裝品，切削的凹凸紋路，在光影下呈現最佳對比，滿足自己玩車的夢就從KRACE開始。</p>',
-          Image1: '/img/news/1.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '重要公告',
-        },
-        {
-          NewsID: 2,
-          NewsCategoryID: 3,
-          Title: '地表戰鬥機 讓KRACE實現你的戰鬥慾望',
-          Content:
-            '<p>KRACE水冷BWS戰鬥分離式把手，最銳利的線條設計，搭配上自由選擇的色澤，讓你猶如地表噴射機般的耀眼以及視覺張力，那全CNC製成銑痕，是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。</p>',
-          Image1: '/img/news/2.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '最新消息',
-        },
-        {
-          NewsID: 3,
-          NewsCategoryID: 3,
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '<p>將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。</p>',
-          Image1: '/img/news/3.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '活動消息',
-        },
-        {
-          NewsID: 1,
-          NewsCategoryID: 2,
-          Title: '水冷車必改 Krace JET SL 水箱護罩',
-          Content:
-            '<p>JET SL 車身線條刻劃的非常流線，搭配上Krace水箱護罩，那迷人的線條感，真的是會讓人垂涎三尺，全CNC製成設計，玩車人絕對必備的改裝品，切削的凹凸紋路，在光影下呈現最佳對比，滿足自己玩車的夢就從KRACE開始。</p>',
-          Image1: '/img/news/1.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '重要公告',
-        },
-        {
-          NewsID: 1,
-          NewsCategoryID: 2,
-          Title: '水冷車必改 Krace JET SL 水箱護罩',
-          Content:
-            '<p>JET SL 車身線條刻劃的非常流線，搭配上Krace水箱護罩，那迷人的線條感，真的是會讓人垂涎三尺，全CNC製成設計，玩車人絕對必備的改裝品，切削的凹凸紋路，在光影下呈現最佳對比，滿足自己玩車的夢就從KRACE開始。</p>',
-          Image1: '/img/news/1.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '重要公告',
-        },
-        {
-          NewsID: 2,
-          NewsCategoryID: 3,
-          Title: '地表戰鬥機 讓KRACE實現你的戰鬥慾望',
-          Content:
-            '<p>KRACE水冷BWS戰鬥分離式把手，最銳利的線條設計，搭配上自由選擇的色澤，讓你猶如地表噴射機般的耀眼以及視覺張力，那全CNC製成銑痕，是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。</p>',
-          Image1: '/img/news/2.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '最新消息',
-        },
-        {
-          NewsID: 3,
-          NewsCategoryID: 3,
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '<p>將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。</p>',
-          Image1: '/img/news/3.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '活動消息',
-        },
-        {
-          NewsID: 1,
-          NewsCategoryID: 2,
-          Title: '水冷車必改 Krace JET SL 水箱護罩',
-          Content:
-            '<p>JET SL 車身線條刻劃的非常流線，搭配上Krace水箱護罩，那迷人的線條感，真的是會讓人垂涎三尺，全CNC製成設計，玩車人絕對必備的改裝品，切削的凹凸紋路，在光影下呈現最佳對比，滿足自己玩車的夢就從KRACE開始。</p>',
-          Image1: '/img/news/1.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '重要公告',
-        },
-        {
-          NewsID: 2,
-          NewsCategoryID: 3,
-          Title: '地表戰鬥機 讓KRACE實現你的戰鬥慾望',
-          Content:
-            '<p>KRACE水冷BWS戰鬥分離式把手，最銳利的線條設計，搭配上自由選擇的色澤，讓你猶如地表噴射機般的耀眼以及視覺張力，那全CNC製成銑痕，是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。</p>',
-          Image1: '/img/news/2.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '最新消息',
-        },
-        {
-          NewsID: 3,
-          NewsCategoryID: 3,
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '<p>將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。</p>',
-          Image1: '/img/news/3.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '活動消息',
-        },
-        {
-          NewsID: 1,
-          NewsCategoryID: 2,
-          Title: '水冷車必改 Krace JET SL 水箱護罩',
-          Content:
-            '<p>JET SL 車身線條刻劃的非常流線，搭配上Krace水箱護罩，那迷人的線條感，真的是會讓人垂涎三尺，全CNC製成設計，玩車人絕對必備的改裝品，切削的凹凸紋路，在光影下呈現最佳對比，滿足自己玩車的夢就從KRACE開始。</p>',
-          Image1: '/img/news/1.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '重要公告',
-        },
-        {
-          NewsID: 2,
-          NewsCategoryID: 3,
-          Title: '地表戰鬥機 讓KRACE實現你的戰鬥慾望',
-          Content:
-            '<p>KRACE水冷BWS戰鬥分離式把手，最銳利的線條設計，搭配上自由選擇的色澤，讓你猶如地表噴射機般的耀眼以及視覺張力，那全CNC製成銑痕，是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。</p>',
-          Image1: '/img/news/2.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '最新消息',
-        },
-        {
-          NewsID: 3,
-          NewsCategoryID: 3,
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '<p>將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。</p>',
-          Image1: '/img/news/3.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '活動消息',
-        },
-        {
-          NewsID: 1,
-          NewsCategoryID: 2,
-          Title: '水冷車必改 Krace JET SL 水箱護罩',
-          Content:
-            '<p>JET SL 車身線條刻劃的非常流線，搭配上Krace水箱護罩，那迷人的線條感，真的是會讓人垂涎三尺，全CNC製成設計，玩車人絕對必備的改裝品，切削的凹凸紋路，在光影下呈現最佳對比，滿足自己玩車的夢就從KRACE開始。</p>',
-          Image1: '/img/news/1.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '重要公告',
-        },
-        {
-          NewsID: 2,
-          NewsCategoryID: 3,
-          Title: '地表戰鬥機 讓KRACE實現你的戰鬥慾望',
-          Content:
-            '<p>KRACE水冷BWS戰鬥分離式把手，最銳利的線條設計，搭配上自由選擇的色澤，讓你猶如地表噴射機般的耀眼以及視覺張力，那全CNC製成銑痕，是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。</p>',
-          Image1: '/img/news/2.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '最新消息',
-        },
-        {
-          NewsID: 3,
-          NewsCategoryID: 3,
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '<p>將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。</p>',
-          Image1: '/img/news/3.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '活動消息',
-        },
-        {
-          NewsID: 1,
-          NewsCategoryID: 2,
-          Title: '水冷車必改 Krace JET SL 水箱護罩',
-          Content:
-            '<p>JET SL 車身線條刻劃的非常流線，搭配上Krace水箱護罩，那迷人的線條感，真的是會讓人垂涎三尺，全CNC製成設計，玩車人絕對必備的改裝品，切削的凹凸紋路，在光影下呈現最佳對比，滿足自己玩車的夢就從KRACE開始。</p>',
-          Image1: '/img/news/1.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '重要公告',
-        },
-        {
-          NewsID: 2,
-          NewsCategoryID: 3,
-          Title: '地表戰鬥機 讓KRACE實現你的戰鬥慾望',
-          Content:
-            '<p>KRACE水冷BWS戰鬥分離式把手，最銳利的線條設計，搭配上自由選擇的色澤，讓你猶如地表噴射機般的耀眼以及視覺張力，那全CNC製成銑痕，是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。是車界緊繃的必備條件絕對帶給你全新的視覺饗宴以及騎乘體驗。</p>',
-          Image1: '/img/news/2.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '最新消息',
-        },
-        {
-          NewsID: 3,
-          NewsCategoryID: 3,
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '<p>將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。</p>',
-          Image1: '/img/news/3.webp',
-          Seq: '1',
-          updated_at: '2023-02-16 11:36:06',
-          created_at: '2023-01-30 15:29:30',
-          CategoryTitle: '活動消息',
-        },
-      ],
-      news_category: [
-        {
-          NewsCategoryID: 1,
-          Title: '最新消息',
-        },
-        {
-          NewsCategoryID: 2,
-          Title: '活動消息',
-        },
-        {
-          NewsCategoryID: 2,
-          Title: '重要公告',
-        },
-      ],
       section_animation: null,
     };
   },
@@ -614,6 +218,16 @@ export default {
       const text = val.replace(/(<([^>]+)>)/gi, '');
       return text.length > 100 ? text.slice(0, 100) : text;
     },
+    PageInit() {
+      this.pagination_option.total = this.filter_news_data.length;
+      this.pagination_option.total_pages = Math.ceil(
+        this.filter_news_data.length / this.pagination_option.per_page
+      );
+
+      this.$nextTick(() => {
+        this.$emit('load-image', 'home');
+      });
+    },
     SetGsap() {
       this.section_animation = new section_animation(this.$refs.MainContent);
     },
@@ -627,18 +241,6 @@ export default {
         }, 0);
       });
     },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.$emit('load-image', 'home');
-    });
-  },
-  created() {
-    // this.SetActiveCategory();
-    this.pagination_option.total = this.filter_news_data.length;
-    this.pagination_option.total_pages = Math.ceil(
-      this.filter_news_data.length / this.pagination_option.per_page
-    );
   },
   metaInfo() {
     return this.meta_data;
@@ -661,8 +263,14 @@ export default {
         )
       );
     },
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
+    },
   },
   computed: {
+    data_load_finish() {
+      return this.$store.getters.data_load_finish;
+    },
     image_loaded() {
       return this.$store.state.image_loaded;
     },
@@ -679,6 +287,12 @@ export default {
           this.pagination_option.per_page,
         this.page * this.pagination_option.per_page
       );
+    },
+    news_list() {
+      return this.$store.state.news_data;
+    },
+    category_data() {
+      return this.$store.state.news_category_data;
     },
   },
   filters: {
