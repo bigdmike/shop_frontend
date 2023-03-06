@@ -33,6 +33,9 @@
 .icon-user:before {
   content: '\e912';
 }
+.icon-message:before {
+  content: '\e913';
+}
 .icon-instagram:before {
   content: '\e900';
 }
