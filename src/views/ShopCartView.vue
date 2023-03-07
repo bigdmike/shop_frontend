@@ -2,173 +2,175 @@
   <main
     id="ShopcartContainer"
     data-scroll-section
-    class="relative z-10 w-full bg-bg_black"
+    class="relative z-10 w-full min-h-screen bg-bg_black"
   >
-    <div
-      v-if="checkout_data != null"
-      class="relative flex w-full max-w-screen-xl pt-24 pb-20 mx-auto md:pt-40"
-    >
+    <div v-if="data_load_finish" class="relative z-10 w-full">
       <div
-        class="w-full px-5 pt-5 pb-32 md:w-2/3 xl:pl-0 sm:pl-10 sm:pr-10 xs:pt-0"
+        v-if="checkout_data != null"
+        class="relative flex w-full max-w-screen-xl pt-24 pb-20 mx-auto md:pt-40"
       >
-        <BreadCrumb :path="bread_crumb_path" class="mb-10 sm:mb-20" />
-        <header
-          class="relative z-10 flex flex-col-reverse items-start w-full mb-10"
-        >
-          <h2 class="relative inline-block px-8">
-            <span
-              data-section-subtitle-arrow
-              class="absolute top-0 left-0 block text-lg leading-none transform icon-triangle text-primary -scale-100"
-            ></span>
-            <span
-              data-section-subtitle
-              class="block font-bold leading-none text-white md:leading-none"
-              >結帳</span
-            >
-            <span
-              data-section-subtitle-arrow
-              class="absolute bottom-0 right-0 block text-lg leading-none icon-triangle text-primary"
-            ></span>
-          </h2>
-          <h3 class="mb-2 overflow-hidden">
-            <span
-              data-section-title
-              data-text="About Us"
-              class="block text-4xl font-black text-basic_gray text-opacity-20 font-anybody"
-            >
-              Check Out
-            </span>
-          </h3>
-        </header>
-        <ShopCartForm
-          :errors="errors"
-          :form_data="form_data"
-          :checkout_data="checkout_data"
-          :coupon_info="checkout_data.CouponInfo"
-          @set-samebuyer="SetSameBuyer"
-          @update-action="UpdateForm"
-          @validate="ValidateForm"
-          @update-coupon="GetCashier"
-        />
-      </div>
-    </div>
-
-    <div
-      v-if="checkout_data != null"
-      data-scroll
-      data-scroll-sticky
-      data-scroll-target="#ShopcartContainer"
-      class="absolute top-0 right-0 z-0 hidden w-1/3 h-screen pt-40 bg-basic_black sm:pt-44 md:block"
-      @mouseover="$emit('stop-scroll')"
-      @mouseleave="$emit('start-scroll')"
-    >
-      <ShopCart :checkout_data="checkout_data.CheckoutList" />
-      <div class="px-10 pt-10">
         <div
-          class="flex flex-wrap items-start pb-5 mb-5 border-b border-zinc-300"
-          v-if="checkout_data.GiveInfo.legnth > 0"
+          class="w-full px-5 pt-5 pb-32 md:w-2/3 xl:pl-0 sm:pl-10 sm:pr-10 xs:pt-0"
         >
-          <div class="w-full">
-            <h4 class="mb-5 font-bold text-primary">活動贈品</h4>
+          <BreadCrumb :path="bread_crumb_path" class="mb-10 sm:mb-20" />
+          <header
+            class="relative z-10 flex flex-col-reverse items-start w-full mb-10"
+          >
+            <h2 class="relative inline-block px-8">
+              <span
+                data-section-subtitle-arrow
+                class="absolute top-0 left-0 block text-lg leading-none transform icon-triangle text-primary -scale-100"
+              ></span>
+              <span
+                data-section-subtitle
+                class="block font-bold leading-none text-white md:leading-none"
+                >結帳</span
+              >
+              <span
+                data-section-subtitle-arrow
+                class="absolute bottom-0 right-0 block text-lg leading-none icon-triangle text-primary"
+              ></span>
+            </h2>
+            <h3 class="mb-2 overflow-hidden">
+              <span
+                data-section-title
+                data-text="About Us"
+                class="block text-4xl font-black text-basic_gray text-opacity-20 font-anybody"
+              >
+                Check Out
+              </span>
+            </h3>
+          </header>
+          <ShopCartForm
+            :errors="errors"
+            :form_data="form_data"
+            :checkout_data="checkout_data"
+            :coupon_info="checkout_data.CouponInfo"
+            @set-samebuyer="SetSameBuyer"
+            @update-action="UpdateForm"
+            @validate="ValidateForm"
+            @update-coupon="GetCashier"
+          />
+        </div>
+      </div>
+
+      <div
+        v-if="checkout_data != null"
+        data-scroll
+        data-scroll-sticky
+        data-scroll-target="#ShopcartContainer"
+        class="absolute top-0 right-0 z-0 hidden w-1/3 h-screen pt-40 bg-basic_black sm:pt-44 md:block"
+        @mouseover="$emit('stop-scroll')"
+        @mouseleave="$emit('start-scroll')"
+      >
+        <ShopCart :checkout_data="checkout_data.CheckoutList" />
+        <div class="px-10 pt-10">
+          <div
+            class="flex flex-wrap items-start pb-5 mb-5 border-b border-zinc-300"
+            v-if="checkout_data.GiveInfo.legnth > 0"
+          >
+            <div class="w-full">
+              <h4 class="mb-5 font-bold text-primary">活動贈品</h4>
+            </div>
+            <div class="w-1/4 overflow-hidden rounded-lg">
+              <img
+                :src="$ImageUrl(checkout_data.GiveInfo.Image1)"
+                class="w-full"
+              />
+            </div>
+            <div class="w-3/4 pl-3">
+              <p class="mb-2 text-sm font-bold text-white">
+                {{ checkout_data.GiveInfo.GiveName }}
+              </p>
+              <p class="text-sm text-basic_gray">
+                {{ checkout_data.GiveInfo.Title }}
+              </p>
+            </div>
           </div>
-          <div class="w-1/4 overflow-hidden rounded-lg">
-            <img
-              :src="$ImageUrl(checkout_data.GiveInfo.Image1)"
-              class="w-full"
-            />
-          </div>
-          <div class="w-3/4 pl-3">
-            <p class="mb-2 text-sm font-bold text-white">
-              {{ checkout_data.GiveInfo.GiveName }}
-            </p>
-            <p class="text-sm text-basic_gray">
-              {{ checkout_data.GiveInfo.Title }}
+          <ol class="py-5 mb-5 text-white border-t border-b border-zinc-700">
+            <li class="flex items-center justify-between w-full mb-3 text-sm">
+              <p class="font-medium">合計</p>
+              <p class="font-semibold font-anybody">
+                NT$ {{ $MoneyFormat(product_total_price) }}
+              </p>
+            </li>
+            <li class="flex items-center justify-between text-sm w-ful">
+              <p class="font-medium">運費</p>
+              <p class="font-semibold font-anybody">
+                NT$ {{ $MoneyFormat(ship_price) }}
+              </p>
+            </li>
+            <li
+              v-if="payment_price != 0"
+              class="flex items-center justify-between w-full mt-3 text-sm"
+            >
+              <p class="font-medium">金流手續費</p>
+              <p class="font-semibold font-anybody">
+                NT$ {{ $MoneyFormat(payment_price) }}
+              </p>
+            </li>
+            <li
+              v-if="coupon_discount != 0"
+              class="flex items-center justify-between w-full mt-3 text-sm"
+            >
+              <p class="font-medium">優惠代碼折抵</p>
+              <p class="font-semibold font-anybody">
+                - NT$ {{ $MoneyFormat(coupon_discount) }}
+              </p>
+            </li>
+          </ol>
+          <div
+            class="flex items-center justify-between w-full text-sm text-white"
+          >
+            <p class="font-medium">總金額</p>
+            <p class="font-semibold font-anybody">
+              NT$
+              {{ $MoneyFormat(total_price) }}
             </p>
           </div>
         </div>
-        <ol class="py-5 mb-5 text-white border-t border-b border-zinc-700">
-          <li class="flex items-center justify-between w-full mb-3 text-sm">
-            <p class="font-medium">合計</p>
-            <p class="font-semibold font-anybody">
-              NT$ {{ $MoneyFormat(product_total_price) }}
-            </p>
-          </li>
-          <li class="flex items-center justify-between text-sm w-ful">
-            <p class="font-medium">運費</p>
-            <p class="font-semibold font-anybody">
-              NT$ {{ $MoneyFormat(ship_price) }}
-            </p>
-          </li>
-          <li
-            v-if="payment_price != 0"
-            class="flex items-center justify-between w-full mt-3 text-sm"
+      </div>
+
+      <div
+        v-if="checkout_data == null"
+        class="w-full max-w-screen-xl px-5 py-64 mx-auto text-center xl:px-0"
+      >
+        <h4 class="mb-4 text-2xl font-bold text-white">購物車內目前沒有商品</h4>
+        <p class="mb-10 text-white">
+          您可以前往<a href="/collections?category=all" class="text-primary"
+            >瀏覽商品</a
+          >，選購您想要得商品
+        </p>
+        <div class="flex items-center justify-center">
+          <router-link
+            to="/"
+            class="px-4 py-2 mr-2 transition-all duration-300 rounded-lg text-primary hover:text-primary hover:bg-primary hover:bg-opacity-30"
           >
-            <p class="font-medium">金流手續費</p>
-            <p class="font-semibold font-anybody">
-              NT$ {{ $MoneyFormat(payment_price) }}
-            </p>
-          </li>
-          <li
-            v-if="coupon_discount != 0"
-            class="flex items-center justify-between w-full mt-3 text-sm"
+            回到首頁
+          </router-link>
+          <router-link
+            to="/collections?category=all"
+            class="px-4 py-2 text-white transition-all duration-300 rounded-lg bg-primary hover:bg-opacity-70"
           >
-            <p class="font-medium">優惠代碼折抵</p>
-            <p class="font-semibold font-anybody">
-              - NT$ {{ $MoneyFormat(coupon_discount) }}
-            </p>
-          </li>
-        </ol>
-        <div
-          class="flex items-center justify-between w-full text-sm text-white"
-        >
-          <p class="font-medium">總金額</p>
-          <p class="font-semibold font-anybody">
-            NT$
-            {{ $MoneyFormat(total_price) }}
-          </p>
+            瀏覽商品
+          </router-link>
         </div>
       </div>
-    </div>
 
-    <div
-      v-if="checkout_data == null"
-      class="w-full max-w-screen-xl px-5 py-64 mx-auto text-center xl:px-0"
-    >
-      <h4 class="mb-4 text-2xl font-bold text-white">購物車內目前沒有商品</h4>
-      <p class="mb-10 text-white">
-        您可以前往<a href="/collections?category=all" class="text-primary"
-          >瀏覽商品</a
-        >，選購您想要得商品
-      </p>
-      <div class="flex items-center justify-center">
-        <router-link
-          to="/"
-          class="px-4 py-2 mr-2 transition-all duration-300 rounded-lg text-primary hover:text-primary hover:bg-primary hover:bg-opacity-30"
-        >
-          回到首頁
-        </router-link>
-        <router-link
-          to="/collections?category=all"
-          class="px-4 py-2 text-white transition-all duration-300 rounded-lg bg-primary hover:bg-opacity-70"
-        >
-          瀏覽商品
-        </router-link>
-      </div>
+      <ShopCartFooter
+        v-if="checkout_data != null"
+        class="block md:hidden"
+        :product_total_price="parseInt(product_total_price)"
+        :ship_price="parseInt(ship_price)"
+        :payment_price="parseInt(payment_price)"
+        :total_price="parseInt(total_price)"
+        :checkout_data="checkout_data.CheckoutList"
+        :coupon_discount="parseInt(coupon_discount)"
+        :give_info="checkout_data.GiveInfo"
+        @stop-scroll="$emit('stop-scroll')"
+        @start-scroll="$emit('start-scroll')"
+      />
     </div>
-
-    <ShopCartFooter
-      v-if="checkout_data != null"
-      class="block md:hidden"
-      :product_total_price="parseInt(product_total_price)"
-      :ship_price="parseInt(ship_price)"
-      :payment_price="parseInt(payment_price)"
-      :total_price="parseInt(total_price)"
-      :checkout_data="checkout_data.CheckoutList"
-      :coupon_discount="parseInt(coupon_discount)"
-      :give_info="checkout_data.GiveInfo"
-      @stop-scroll="$emit('stop-scroll')"
-      @start-scroll="$emit('start-scroll')"
-    />
   </main>
 </template>
 
@@ -192,6 +194,7 @@ import {
 } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
+import { mapGetters, mapState } from 'vuex';
 export default {
   name: 'ShopCartView',
   components: {
@@ -309,7 +312,7 @@ export default {
           } else if (res.msg.indexOf('超過物流限制') != -1) {
             this.$store.commit('SetDialog', {
               status: true,
-              content: `很抱歉！<br/>購物車商品超出可運送範圍，您可以分次下單<br/>如需訂購大量商品請<a class="text-primary" href="${this.$GetCloumn(
+              content: `很抱歉！<br/>購物車商品超出可運送範圍，您可以分次下單<br/>如需訂購大量商品請<a class="text-primary" href="${this.$GetColumn(
                 'company_messenger'
               )}" target="_blank">聯絡我們</a>`,
             });
@@ -463,43 +466,45 @@ export default {
         payment_type: payment_type.Title,
       });
     },
-  },
-  beforeRouteLeave(to, from, next) {
-    setLocalStorage('check_out_form', JSON.stringify(this.form_data));
-    next();
-  },
-  created() {
-    if (getLocalStorage('account_token')) {
-      getAccountInfo().then((res) => {
-        if (res.code == 302) {
-          // token過期
-          this.$router.push('/account/login');
-        } else {
-          this.form_data.consignee_email = res.data.Account;
-          this.form_data.buyer_first_name = res.data.Name.slice(1);
-          this.form_data.buyer_last_name = res.data.Name[0];
-          this.form_data.buyer_phone = res.data.Phone;
-        }
+    GetAccountData() {
+      if (getLocalStorage('account_token')) {
+        getAccountInfo().then((res) => {
+          if (res.code == 302) {
+            // token過期
+            this.$router.push('/account/login');
+          } else {
+            this.form_data.consignee_email = res.data.Account;
+            this.form_data.buyer_first_name = res.data.Name.slice(1);
+            this.form_data.buyer_last_name = res.data.Name[0];
+            this.form_data.buyer_phone = res.data.Phone;
+          }
+        });
+      }
+    },
+    SetCVSData() {
+      if (getLocalStorage('check_out_form')) {
+        this.form_data = JSON.parse(getLocalStorage('check_out_form'));
+        this.form_data.shop_id = this.$route.query.CVSStoreID;
+        this.form_data.shop_name = this.$route.query.CVSStoreName;
+        this.form_data.shop_address = this.$route.query.CVSAddress;
+        delLocalStorage('check_out_form');
+      }
+    },
+    PageInit() {
+      this.GetAccountData();
+      this.SetCVSData();
+
+      if (this.shopcart.length > 0) {
+        this.GetCashier();
+      }
+
+      this.meta_data = GetMetaData('結帳', '', '');
+      this.$nextTick(() => {
+        this.$PageReady(this.meta_data.title);
       });
-    }
-    if (this.shopcart.length > 0) {
-      this.GetCashier();
-    }
-    if (getLocalStorage('check_out_form')) {
-      this.form_data = JSON.parse(getLocalStorage('check_out_form'));
-      this.form_data.shop_id = this.$route.query.CVSStoreID;
-      this.form_data.shop_name = this.$route.query.CVSStoreName;
-      this.form_data.shop_address = this.$route.query.CVSAddress;
-      delLocalStorage('check_out_form');
-    }
-    this.meta_data = GetMetaData('結帳', '', '');
-    this.$nextTick(() => {
-      this.$PageReady(this.meta_data.title);
-    });
+    },
   },
-  metaInfo() {
-    return this.meta_data;
-  },
+
   watch: {
     shopcart() {
       if (!this.shop_cart_first_load) {
@@ -515,25 +520,23 @@ export default {
         this.GetCashier();
       }
     },
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
+    },
   },
   computed: {
-    shopcart_drawer() {
-      return this.$store.state.shopcart_drawer;
-    },
-    shopcart() {
-      return this.$store.state.shopcart_module.shopcart;
-    },
+    ...mapGetters(['data_load_finish']),
+    ...mapState({
+      shopcart_drawer: 'shopcart_drawer',
+      shopcart: (state) => state.shopcart_module.shopcart,
+      payment_data: 'payment_data',
+      shipway_data: 'shipway_data',
+    }),
     product_total_price() {
       if (this.checkout_data == null) {
         return 0;
       }
       return this.checkout_data.DiscountFullTotal;
-    },
-    payment_data() {
-      return this.$store.state.payment_data;
-    },
-    shipway_data() {
-      return this.$store.state.shipway_data;
     },
     ship_price() {
       if (this.checkout_data == null) {
@@ -569,6 +572,16 @@ export default {
             this.checkout_data.AfterCouponTotal
         : 0;
     },
+  },
+  beforeRouteLeave(to, from, next) {
+    setLocalStorage('check_out_form', JSON.stringify(this.form_data));
+    next();
+  },
+  created() {
+    this.data_load_finish ? this.PageInit() : '';
+  },
+  metaInfo() {
+    return this.meta_data;
   },
 };
 </script>

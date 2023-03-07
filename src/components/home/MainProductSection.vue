@@ -36,21 +36,21 @@
       <ol data-content class="w-full">
         <li class="relative w-full mb-24 sm:mb-32 md:mb-60">
           <ProductCard
-            :title="$GetCloumn('home_product_1_subtitle')"
-            :sub_title="$GetCloumn('home_product_1_title')"
+            :title="$GetColumn('home_product_1_subtitle')"
+            :sub_title="$GetColumn('home_product_1_title')"
             brand_title="Krace"
-            :image="$GetCloumn('home_product_1_image')"
-            :link="$GetCloumn('home_product_1_link')"
+            :image="$GetColumn('home_product_1_image')"
+            :link="$GetColumn('home_product_1_link')"
             number="01"
           />
         </li>
         <li class="relative w-full">
           <ProductCard
-            :title="$GetCloumn('home_product_2_subtitle')"
-            :sub_title="$GetCloumn('home_product_2_title')"
+            :title="$GetColumn('home_product_2_subtitle')"
+            :sub_title="$GetColumn('home_product_2_title')"
             brand_title="Krace"
-            :image="$GetCloumn('home_product_2_image')"
-            :link="$GetCloumn('home_product_2_link')"
+            :image="$GetColumn('home_product_2_image')"
+            :link="$GetColumn('home_product_2_link')"
             :reverse="true"
             number="02"
           />

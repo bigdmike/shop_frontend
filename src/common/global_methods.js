@@ -7,7 +7,7 @@ Vue.prototype.$ImageUrl = (item) => {
   return item == '' ? '' : process.env.VUE_APP_BASE_API + item;
 };
 
-Vue.prototype.$GetCloumn = (key) => {
+Vue.prototype.$GetColumn = (key) => {
   // return key;
   // console.log(store.state.common_column_data);
   if (store.state.common_column_data != null) {

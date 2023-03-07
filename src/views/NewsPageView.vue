@@ -31,7 +31,7 @@
         itemscope
         itemtype="https://schema.org/Person"
       >
-        <span itemprop="name">{{ $GetCloumn('company_name') }}</span>
+        <span itemprop="name">{{ $GetColumn('company_name') }}</span>
       </span>
       <div
         data-section-content
@@ -110,6 +110,7 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import RelatedList from '@/components/news_page/RelatedSection.vue';
 import { GetMetaData } from '@/common/meta';
 import { section_animation } from '@/gsap/section';
+import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'NewsPageView',
   components: {
@@ -152,31 +153,30 @@ export default {
       this.$refs.RelatedList.SetGsap();
       this.section_animation = new section_animation(this.$refs.MainContent);
     },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.$emit('load-image', 'home');
-    });
+    PageInit() {
+      if (this.news_data != 'error') {
+        this.bread_crumb_path[1].title = this.active_category.Title;
+        this.bread_crumb_path[1].link = `/news?category=${this.active_category.NewsCategoryID}`;
+
+        let description = this.news_data.Content.replaceAll(/<[^>]+>/g, '');
+        this.meta_data = GetMetaData(
+          this.news_data.Title,
+          description.slice(0, 150),
+          this.news_data.Image1
+        );
+
+        this.$nextTick(() => {
+          this.$refs.clone.value = window.location.href;
+          this.$PageReady(this.meta_data.title);
+          this.$emit('load-image', 'home');
+        });
+      } else {
+        this.$RedirectError();
+      }
+    },
   },
   created() {
-    if (this.news_data != 'error') {
-      this.bread_crumb_path[1].title = this.active_caregory.Title;
-      this.bread_crumb_path[1].link = `/news?category=${this.active_caregory.NewsCategoryID}`;
-
-      let description = this.news_data.Content.replaceAll(/<[^>]+>/g, '');
-      this.meta_data = GetMetaData(
-        this.news_data.Title,
-        description.slice(0, 150),
-        this.news_data.Image1
-      );
-
-      this.$nextTick(() => {
-        this.$refs.clone.value = window.location.href;
-        this.$PageReady(this.meta_data.title);
-      });
-    } else {
-      this.$RedirectError();
-    }
+    this.data_load_finish ? this.PageInit() : '';
   },
   metaInfo() {
     return this.meta_data;
@@ -188,40 +188,26 @@ export default {
     image_loaded() {
       this.image_loaded ? this.SetGsap() : '';
     },
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
+    },
   },
   computed: {
-    image_loaded() {
-      return this.$store.state.image_loaded;
-    },
-    news_category_data() {
-      return this.$store.state.news_category_data;
-    },
-    active_caregory() {
-      const active_caregory = this.news_category_data.filter(
-        (item) => item.NewsCategoryID == this.news_data.NewsCategoryID
-      );
-      return active_caregory.length > 0 ? active_caregory[0] : 'error';
-    },
-    news_list() {
-      return this.$store.state.news_data;
+    ...mapState({
+      image_loaded: 'image_loaded',
+      news_category_data: 'news_category_data',
+      news_list: 'news_data',
+    }),
+    ...mapGetters([
+      'data_load_finish',
+      'active_news_data',
+      'active_news_category_data',
+    ]),
+    active_category() {
+      return this.active_news_category_data(this.news_data.NewsCategoryID);
     },
     news_data() {
-      const news_data = this.news_list.filter(
-        (item) => item.NewsID == this.$route.params.id
-      );
-      return news_data.length > 0 ? news_data[0] : 'error';
-    },
-    next_news_data() {
-      if (this.news_data == 'error') {
-        return 'error';
-      } else {
-        let index = -1;
-        this.news_list.forEach((item, item_index) => {
-          item.NewsID == this.news_data.NewsID ? (index = item_index) : '';
-        });
-        index == this.news_list.length - 1 ? (index = 0) : (index += 1);
-        return this.news_list[index];
-      }
+      return this.active_news_data(this.$route.params.id);
     },
   },
 };

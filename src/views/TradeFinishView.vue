@@ -145,7 +145,7 @@
         <ol class="pb-5 mb-5 border-b border-zinc-700">
           <li class="flex items-center justify-between w-full mb-3 text-sm">
             <p class="font-medium">合計</p>
-            <p class="font-semibold">
+            <p class="font-semibold font-anybody">
               NT$ {{ $MoneyFormat(product_total_price) }}
             </p>
           </li>
@@ -202,6 +202,7 @@ import CustomProductCard from '@/components/trade_finish/custom_product_card.vue
 import { getLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
+import { mapGetters, mapState } from 'vuex';
 export default {
   name: 'TradeFinishView',
   data() {
@@ -267,16 +268,38 @@ export default {
         coupon: this.form_data.coupon,
       });
     },
+    PageInit() {
+      const trade_data = getLocalStorage('trade_data');
+      // const shopcart_data = getLocalStorage('trade_shopcart');
+      const checkout_data = getLocalStorage('trade_checkout_data');
+      if (this.$route.params.id && trade_data && checkout_data) {
+        this.form_data = JSON.parse(trade_data);
+        // this.shopcart = JSON.parse(shopcart_data);
+        this.checkout_data = JSON.parse(checkout_data);
+        // delLocalStorage('trade_data');
+        // delLocalStorage('trade_shopcart');
+        // delLocalStorage('trade_checkout_data');
+        this.$store.commit('shopcart_module/SetShopCart', []);
+        this.meta_data = GetMetaData('訂單完成', '', '');
+        this.$nextTick(() => {
+          this.$PageReady(this.meta_data.title);
+        });
+      } else {
+        // this.$router.push('/');
+      }
+    },
   },
   watch: {
     data_load_finish() {
       this.data_load_finish ? this.$emit('load-image') : '';
     },
+    image_loaded() {
+      this.image_loaded ? this.PageInit() : '';
+    },
   },
   computed: {
-    data_load_finish() {
-      return this.$store.getters.data_load_finish;
-    },
+    ...mapState(['shipway_data', 'payment_data', 'image_loaded']),
+    ...mapGetters(['data_load_finish']),
     shopcart() {
       let shopcart = [];
       this.checkout_data.CheckoutList.forEach((item) => {
@@ -309,12 +332,6 @@ export default {
         return 0;
       }
       return this.checkout_data.DiscountFullTotal;
-    },
-    shipway_data() {
-      return this.$store.state.shipway_data;
-    },
-    payment_data() {
-      return this.$store.state.payment_data;
     },
     ship_price() {
       if (this.checkout_data == null) {
@@ -366,27 +383,8 @@ export default {
     },
   },
   created() {
-    const trade_data = getLocalStorage('trade_data');
-    // const shopcart_data = getLocalStorage('trade_shopcart');
-    const checkout_data = getLocalStorage('trade_checkout_data');
-    if (this.$route.params.id && trade_data && checkout_data) {
-      this.form_data = JSON.parse(trade_data);
-      // this.shopcart = JSON.parse(shopcart_data);
-      this.checkout_data = JSON.parse(checkout_data);
-      // delLocalStorage('trade_data');
-      // delLocalStorage('trade_shopcart');
-      // delLocalStorage('trade_checkout_data');
-      this.$store.commit('shopcart_module/SetShopCart', []);
-      this.meta_data = GetMetaData('訂單完成', '', '');
-      this.$nextTick(() => {
-        this.$PageReady(this.meta_data.title);
-      });
-    } else {
-      // this.$router.push('/');
-    }
-    if (this.data_load_finish) {
-      this.$emit('load-image');
-    }
+    this.image_loaded ? this.PageInit() : '';
+    this.data_load_finish ? this.$emit('load-image') : '';
   },
   metaInfo() {
     return this.meta_data;

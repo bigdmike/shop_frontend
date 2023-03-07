@@ -40,7 +40,10 @@
           v-for="(item, item_index) in news_list"
           :key="`news_list_${item_index}`"
         >
-          <router-link to="/" class="relative w-full md:w-1/2 lg:w-2/3">
+          <router-link
+            :to="`/news/page/${item.NewsID}`"
+            class="relative w-full md:w-1/2 lg:w-2/3"
+          >
             <span
               class="absolute bottom-0 right-0 z-20 transition-all duration-700 transform translate-x-0 translate-y-0 image_corner -scale-100"
             ></span>
@@ -48,7 +51,10 @@
               data-carousel-cover
               class="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gradient-to-r from-basic_black to-transparent"
             ></div>
-            <img :src="item.Image1" class="relative z-0 block w-full" />
+            <img
+              :src="$ImageUrl(item.Image1)"
+              class="relative z-0 block w-full"
+            />
           </router-link>
 
           <div
@@ -78,7 +84,10 @@
               ></p>
             </div>
             <div class="overflow-hidden">
-              <MoreLinkButton link="/" data-carousel-link />
+              <MoreLinkButton
+                :link="`/news/page/${item.NewsID}`"
+                data-carousel-link
+              />
             </div>
           </div>
         </div>
@@ -111,6 +120,7 @@
 import MoreLinkButton from '@/components/ui/MoreLinkButton';
 import { related_section_gsap } from '@/gsap/news/related_section';
 import { section_animation } from '@/gsap/section.js';
+import { mapState } from 'vuex';
 export default {
   name: 'NewsListSection',
   components: {
@@ -118,36 +128,6 @@ export default {
   },
   data() {
     return {
-      news_list: [
-        {
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
-          Image1: '/img/news/1.webp',
-          created_at: '2022/10/26 10:00:00',
-        },
-        {
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
-          Image1: '/img/news/1.webp',
-          created_at: '2022/10/26 10:00:00',
-        },
-        {
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
-          Image1: '/img/news/1.webp',
-          created_at: '2022/10/26 10:00:00',
-        },
-        {
-          Title: 'SYM Maxsym TL Krace CNC 後牌架',
-          Content:
-            '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
-          Image1: '/img/news/1.webp',
-          created_at: '2022/10/26 10:00:00',
-        },
-      ],
       active_index: 0,
       timer: null,
       news_list_gsap: null,
@@ -168,6 +148,11 @@ export default {
     Prev() {
       this.news_list_gsap.prev();
     },
+  },
+  computed: {
+    ...mapState({
+      news_list: 'news_data',
+    }),
   },
 };
 </script>

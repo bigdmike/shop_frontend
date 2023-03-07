@@ -24,13 +24,19 @@
             Search Product
           </h3>
         </header>
-        <input
-          type="text"
-          class="w-full p-2 px-4 mb-4 rounded-md font-anybody bg-basic_white bg-opacity-40 focus:outline-primary"
-        />
+        <div class="mb-4">
+          <input
+            v-model="key_word"
+            type="text"
+            class="w-full p-2 px-4 rounded-md font-anybody bg-basic_white bg-opacity-40 focus:outline-primary"
+          />
+          <p v-show="GetError('key_word')" class="text-sm text-primary">
+            請輸入查詢關鍵字
+          </p>
+        </div>
         <div class="flex justify-end">
           <button
-            @click="Close"
+            @click="Validate"
             class="px-5 py-2 text-sm font-bold text-white transition-colors duration-200 border rounded-md bg-primary border-primary hover:bg-transparent hover:text-primary"
           >
             搜尋
@@ -52,11 +58,26 @@ export default {
   data() {
     return {
       dialog_animation: null,
+      key_word: '',
+      errors: [],
     };
   },
   methods: {
     Close() {
       this.$store.commit('SetSearchDialog', false);
+    },
+    GetError(key) {
+      return this.errors.indexOf(key) != -1;
+    },
+    Validate() {
+      this.errors = [];
+      this.key_word == '' ? this.errors.push('key_word') : '';
+      this.errors.length <= 0 ? this.Search() : '';
+    },
+    Search() {
+      this.$router.push(`/search/${this.key_word}`);
+      this.Close();
+      this.key_word = '';
     },
   },
   watch: {

@@ -1,67 +1,64 @@
 <template>
   <main
     id="ProductPage"
-    v-if="event_data != null && event_data != 'error'"
-    class="relative z-10 w-full"
+    class="relative z-10 w-full min-h-screen pt-24 pb-20 md:pt-40 bg-bg_black"
+    data-scroll-section
   >
-    <BreadCrumb class="hidden mb-20" :path="bread_crumb_path" />
-    <ProductDialog ref="ProductDialog" :product_data="product_data[0]" />
-    <section class="relative w-full max-w-screen-xl mx-auto">
-      <img
-        :alt="'耀聞水果世界 ' + event_data.Title"
-        :src="$ImageUrl(event_data.Image1)"
-        class="block w-full"
-      />
-    </section>
-    <EventTimer ref="EventTimer" :event_data="event_data" />
-    <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0">
-      <section class="relative block w-full max-w-screen-xl py-10 mx-auto">
-        <h2 class="mb-2 text-3xl font-bold text-secondary">
-          {{ event_data.Title }}
-        </h2>
-        <h4 class="mb-5 text-xl font-bold">{{ event_data.Subtitle }}</h4>
-        <div v-html="event_data.Content" class="text-basic_gray"></div>
-      </section>
-      <section class="relative block w-full max-w-screen-xl py-10 mx-auto">
-        <h2 class="mb-2 text-3xl font-bold text-secondary">團購商品</h2>
-        <ol class="flex flex-wrap -mx-4">
-          <li
-            class="w-full px-4 mb-8 lg:w-1/3 md:w-1/2"
-            v-for="(item, item_index) in product_data"
-            :key="`product_card_${item_index}`"
-          >
-            <ProductCard
-              :product_data="item"
-              @open-dialog="OpenProductDialog"
-            />
-          </li>
-        </ol>
-      </section>
-
-      <section>
-        <FixedProductTabList
-          :active_tab="active_tab"
-          :tabs="tabs"
-          @change-tab="ChangeTab"
+    <div
+      class="relative z-10 w-full"
+      v-if="data_load_finish && event_data != null && event_data != 'error'"
+    >
+      <BreadCrumb class="hidden mb-20" :path="bread_crumb_path" />
+      <ProductDialog ref="ProductDialog" :product_data="product_data[0]" />
+      <section class="relative w-full max-w-screen-xl mx-auto">
+        <img
+          :alt="'Krace 凱鋭斯 ' + event_data.Title"
+          :src="$ImageUrl(event_data.Image1)"
+          class="block w-full"
         />
-
-        <ProductTabList
-          :active_tab="active_tab"
-          :tabs="tabs"
-          @change-tab="ChangeTab"
-        />
-        <div id="Description" class="mb-10" v-html="event_data.Content2"></div>
-        <div
-          id="Workflow"
-          class="pt-10 mb-10 border-t border-zinc-300"
-          v-html="event_data.Content3"
-        ></div>
-        <div
-          id="Precautions"
-          class="pt-10 mb-10 border-t border-zinc-300"
-          v-html="event_data.Content4"
-        ></div>
       </section>
+      <EventTimer ref="EventTimer" :event_data="event_data" />
+      <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0">
+        <section class="relative block w-full max-w-screen-xl py-10 mx-auto">
+          <h2 class="mb-2 text-3xl font-bold text-primary">
+            {{ event_data.Title }}
+          </h2>
+          <h4 class="mb-5 text-xl font-bold text-white">
+            {{ event_data.Subtitle }}
+          </h4>
+          <div v-html="event_data.Content" class="text-white"></div>
+        </section>
+        <section class="relative block w-full max-w-screen-xl py-10 mx-auto">
+          <h2 class="mb-2 text-3xl font-bold text-primary">團購商品</h2>
+          <ol class="flex flex-wrap -mx-4">
+            <li
+              class="w-full px-4 mb-8 lg:w-1/3 md:w-1/2"
+              v-for="(item, item_index) in product_data"
+              :key="`product_card_${item_index}`"
+            >
+              <ProductCard
+                :product_data="item"
+                @open-dialog="OpenProductDialog"
+              />
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <FixedProductTabList
+            :active_tab="active_tab"
+            :tabs="tabs"
+            @change-tab="ChangeTab"
+          />
+
+          <ProductTabList
+            :active_tab="active_tab"
+            :tabs="tabs"
+            @change-tab="ChangeTab"
+          />
+          event_data
+        </section>
+      </div>
     </div>
   </main>
 </template>
@@ -74,6 +71,7 @@ import ProductTabList from '@/components/product_page/tab_list.vue';
 import FixedProductTabList from '@/components/product_page/fixed_tab_list.vue';
 import ProductDialog from '@/components/event_page/ProductDialog.vue';
 import { GetMetaData } from '@/common/meta';
+import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'EventPageView',
   components: {
@@ -152,27 +150,48 @@ export default {
         behavior: 'smooth',
       });
     },
-    InitPage() {
+    InitPage() {},
+    OpenProductDialog(item) {
+      this.$refs.ProductDialog.Open(item);
+    },
+    PageInit() {
       this.bread_crumb_path[1].title = this.event_data.Title;
       this.bread_crumb_path[1].link += this.event_data.MenuID;
+
       this.meta_data = GetMetaData(
         this.event_data.Title,
         this.event_data.Content.replaceAll(/<[^>]+>/g, '').slice(0, 150),
         this.$ImageUrl(this.event_data.Image1)
       );
+      this.$emit('load-image');
+    },
+    SetGsap() {
       this.$nextTick(() => {
         this.SetNavTrigger();
         this.$refs.EventTimer.SetTimer();
         this.$PageReady(this.meta_data.title);
       });
     },
-    OpenProductDialog(item) {
-      this.$refs.ProductDialog.Open(item);
+  },
+  watch: {
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
+    },
+    image_loaded() {
+      this.image_loaded ? this.SetGsap() : '';
+    },
+    event_data() {
+      this.event_data == 'error' ? this.$RedirectError() : '';
     },
   },
   computed: {
+    ...mapState(['image_loaded']),
+    ...mapGetters({
+      data_load_finish: 'data_load_finish',
+      get_event_data: 'event_data',
+    }),
     event_data() {
-      return this.$store.getters.event_data(this.$route.params.id);
+      return this.get_event_data(this.$route.params.id);
     },
     product_data() {
       return this.$store.state.product_data.filter((item) => {
@@ -180,9 +199,7 @@ export default {
         const category = item.Menu.filter(
           (menu) => menu.MenuID == this.$route.params.id
         );
-
         category.length <= 0 ? (enable = false) : '';
-        // item.Status == 'N' ? (enable = false) : '';
         if (item.GoodsTimeEnd != null) {
           new Date() > new Date(item.GoodsTimeEnd) ? (enable = false) : '';
         }
@@ -192,11 +209,8 @@ export default {
     },
   },
   created() {
-    if (this.event_data != 'error') {
-      this.InitPage();
-    } else {
-      this.$RedirectError();
-    }
+    this.image_loaded ? this.SetGsap() : '';
+    this.data_load_finish ? this.PageInit() : '';
   },
   metaInfo() {
     return this.meta_data;

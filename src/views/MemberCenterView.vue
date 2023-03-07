@@ -1,9 +1,12 @@
 <template>
   <main
     data-scroll-section
-    class="relative z-10 w-full py-24 md:py-60 bg-bg_black"
+    class="relative z-10 flex items-center justify-center w-full min-h-screen py-24 md:py-60 bg-bg_black"
   >
-    <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10">
+    <div
+      v-if="data_load_finish"
+      class="w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10"
+    >
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
 
       <div class="flex items-center justify-between">
@@ -43,6 +46,7 @@
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import { delLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
+import { mapGetters } from 'vuex';
 export default {
   name: 'MemberCenterView',
   components: {
@@ -91,17 +95,17 @@ export default {
   },
   watch: {
     $route() {
-      this.bread_crumb_path[2].title = this.$route.name;
-      this.bread_crumb_path[2].link = this.$route.path;
+      this.SetBreadCrumb();
+    },
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
     },
   },
+  computed: {
+    ...mapGetters(['data_load_finish']),
+  },
   created() {
-    this.bread_crumb_path[2].title = this.$route.name;
-    this.bread_crumb_path[2].link = this.$route.path;
-    this.meta_data = GetMetaData('會員中心', '', '');
-    this.$nextTick(() => {
-      this.$PageReady(this.meta_data.title);
-    });
+    this.data_load_finish ? this.PageInit() : '';
   },
   metaInfo() {
     return this.meta_data;
@@ -111,6 +115,17 @@ export default {
       delLocalStorage('account_token');
       this.$store.commit('shopcart_module/SetShopCart', []);
       this.$router.push('/account/login');
+    },
+    SetBreadCrumb() {
+      this.bread_crumb_path[2].title = this.$route.name;
+      this.bread_crumb_path[2].link = this.$route.path;
+    },
+    PageInit() {
+      this.SetBreadCrumb();
+      this.meta_data = GetMetaData('會員中心', '', '');
+      this.$nextTick(() => {
+        this.$PageReady(this.meta_data.title);
+      });
     },
   },
 };

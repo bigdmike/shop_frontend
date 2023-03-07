@@ -136,7 +136,7 @@ export default {
       window.dataLayer.push({
         event: 'open_messenger',
       });
-      window.open(this.$GetCloumn('company_messenger'), '_blank');
+      window.open(this.$GetColumn('company_messenger'), '_blank');
     },
     GetOrderMemo() {
       // 取得分潤標籤

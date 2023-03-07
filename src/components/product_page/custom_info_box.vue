@@ -42,7 +42,7 @@
     </div>
     <meta itemprop="sku" :content="`yaowen_${product_data.GoodsID}`" />
     <div itemprop="brand" itemtype="https://schema.org/Brand" itemscope>
-      <meta itemprop="name" :content="$GetCloumn('company_name')" />
+      <meta itemprop="name" :content="$GetColumn('company_name')" />
     </div>
     <div class="mb-5 text-right">
       <p class="font-semibold sm:text-2xl text-primary font-anybody">

@@ -7,7 +7,11 @@
         class="w-full px-2 mb-8 md:mb-10 md:w-1/4 sm:w-1/2"
       >
         <router-link
-          :to="`/product/${item.GoodsID}`"
+          :to="
+            item.IsCustom == 'N'
+              ? `/product/${item.GoodsID}`
+              : `/product/custom/${item.GoodsID}`
+          "
           class="relative block mb-2 overflow-hidden aspect-square section_corner bg-gradient-to-b from-basic_black to-transparent"
         >
           <img
@@ -58,17 +62,17 @@ export default {
   },
   methods: {
     GetPrice(item) {
-      let tmp_data = JSON.parse(JSON.stringify(item.Stock));
-      tmp_data = tmp_data.sort((a, b) => {
-        return a.SellPrice < b.SellPrice;
-      });
-      return tmp_data[0];
-    },
-  },
-  filters: {
-    currency(price) {
-      let val = (price / 1).toFixed(0).replace('.', ',');
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      if (item.IsCustom == 'N') {
+        // 一般商品，讀取Stock資料
+        let tmp_data = JSON.parse(JSON.stringify(item.Stock));
+        tmp_data = tmp_data.sort((a, b) => {
+          return a.SellPrice < b.SellPrice;
+        });
+        return tmp_data[0];
+      } else {
+        // 客製化商品，讀取CustomGoodsStock資料
+        return item.CustomGoodsStock[0];
+      }
     },
   },
 };

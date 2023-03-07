@@ -8,7 +8,7 @@
     <MainProductSection ref="MainProductSection" />
     <AboutSection
       ref="AboutSection"
-      :content="$GetCloumn('about_section_1_content')"
+      :content="$GetColumn('about_section_1_content')"
     />
     <VideoSection ref="VideoSection" />
     <NewsListSection ref="NewsListSection" :news_list="news_data" />
@@ -22,8 +22,7 @@ import AboutSection from '@/components/home/AboutSection.vue';
 import VideoSection from '@/components/home/VideoSection.vue';
 import NewsListSection from '@/components/home/NewsListSection.vue';
 import { GetMetaData } from '@/common/meta';
-// mapGetters,
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'HomeView',
   components: {
@@ -40,31 +39,31 @@ export default {
   },
   methods: {
     SetGsap() {
-      console.log('load gsap');
       this.$refs.CarouselSection.SetGsap();
       this.$refs.NewsListSection.SetGsap();
       this.$refs.MainProductSection.SetGsap();
       this.$refs.AboutSection.SetGsap();
     },
+    PageInit() {
+      this.$nextTick(() => {
+        this.$emit('load-image', 'home');
+      });
+    },
   },
   computed: {
-    // ...mapGetters(['promote_product_data', 'new_product_data', 'home_ad_data']),
-    ...mapState([
-      'carousel_data',
-      'news_data',
-      // 'product_data',
-      // 'category_data',
-      // 'promotes_data',
-    ]),
-    image_loaded() {
-      return this.$store.state.image_loaded;
-    },
+    ...mapState(['carousel_data', 'news_data', 'image_loaded']),
+    ...mapGetters(['data_load_finish']),
   },
   watch: {
     image_loaded() {
-      console.log(this.image_loaded);
       this.image_loaded ? this.SetGsap() : '';
     },
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
+    },
+  },
+  mounted() {
+    this.data_load_finish ? this.PageInit() : '';
   },
   created() {
     this.meta_data = GetMetaData('home', '', '');

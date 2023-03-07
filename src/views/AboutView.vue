@@ -49,15 +49,15 @@
           <div data-section-content>
             <h3
               class="mb-10 text-2xl font-bold leading-relaxed text-black md:text-3xl font-anybody md:leading-relaxed"
-              v-html="$GetCloumn('about_slogan')"
+              v-html="$GetColumn('about_slogan')"
             ></h3>
             <div
               class="mb-20 font-medium"
-              v-html="$GetCloumn('about_content')"
+              v-html="$GetColumn('about_content')"
             ></div>
             <div class="w-full overflow-hidden section_corner">
               <img
-                :src="$ImageUrl($GetCloumn('about_image'))"
+                :src="$ImageUrl($GetColumn('about_image'))"
                 class="block w-full"
               />
             </div>
@@ -101,7 +101,7 @@
               <p
                 class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
               >
-                {{ $GetCloumn('company_name') }}
+                {{ $GetColumn('company_name') }}
               </p>
             </li>
             <li
@@ -111,7 +111,7 @@
               <p
                 class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
               >
-                {{ $GetCloumn('company_date') }}
+                {{ $GetColumn('company_date') }}
               </p>
             </li>
             <li
@@ -121,7 +121,7 @@
               <p
                 class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
               >
-                {{ $GetCloumn('company_email') }}
+                {{ $GetColumn('company_email') }}
               </p>
             </li>
             <li
@@ -131,7 +131,7 @@
               <p
                 class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
               >
-                {{ $GetCloumn('company_phone') }}
+                {{ $GetColumn('company_phone') }}
               </p>
             </li>
             <li
@@ -141,7 +141,7 @@
               <p
                 class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
               >
-                {{ $GetCloumn('company_address') }}
+                {{ $GetColumn('company_address') }}
               </p>
             </li>
             <li
@@ -151,7 +151,7 @@
               <p
                 class="text-sm font-semibold leading-none font-anybody md:text-base md:leading-none"
               >
-                {{ $GetCloumn('company_time') }}
+                {{ $GetColumn('company_time') }}
               </p>
             </li>
           </ol>
@@ -194,6 +194,7 @@
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import { GetMetaData } from '@/common/meta';
 import { section_animation } from '@/gsap/section.js';
+import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'AboutView',
   components: {
@@ -218,25 +219,18 @@ export default {
   },
   methods: {
     SetGsap() {
-      console.log('gsap set');
       this.story_secton_gsap = new section_animation(this.$refs.StoryContent);
       this.info_secton_gsap = new section_animation(this.$refs.InfoContent);
     },
     PageInit() {
-      console.log('page load');
       this.$nextTick(() => {
-        console.log('image load');
         this.$emit('load-image', 'home');
       });
     },
   },
   computed: {
-    data_load_finish() {
-      return this.$store.getters.data_load_finish;
-    },
-    image_loaded() {
-      return this.$store.state.image_loaded;
-    },
+    ...mapState(['carousel_data', 'news_data', 'image_loaded']),
+    ...mapGetters(['data_load_finish']),
   },
   watch: {
     image_loaded() {
@@ -247,7 +241,7 @@ export default {
     },
   },
   mounted() {
-    // this.data_load_finish ? this.PageInit() : '';
+    this.data_load_finish ? this.PageInit() : '';
   },
   created() {
     this.meta_data = GetMetaData('about', '', '');

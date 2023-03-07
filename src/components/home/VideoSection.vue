@@ -24,7 +24,7 @@ export default {
   name: 'HomeVideoSection',
   computed: {
     video_id() {
-      let video_link = this.$GetCloumn('home_video');
+      let video_link = this.$GetColumn('home_video');
       if (video_link != '') {
         let id = video_link.split('/');
         id = id[id.length - 1].split('?')[0];

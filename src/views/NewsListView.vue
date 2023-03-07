@@ -6,7 +6,7 @@
     class="relative z-10 w-full py-40 bg-basic_black md:py-60"
   >
     <div
-      v-if="news_list != null"
+      v-if="news_data != null"
       class="flex flex-wrap items-stretch w-full max-w-screen-xl px-5 mx-auto xl:px-0"
     >
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
@@ -52,7 +52,7 @@
           >
             <option class="text-white bg-basic_black" value="">全部文章</option>
             <option
-              v-for="(item, item_index) in category_data"
+              v-for="(item, item_index) in news_category_data"
               :value="item.NewsCategoryID"
               :key="`category_${item_index}`"
               class="text-white bg-basic_black"
@@ -146,6 +146,7 @@ import { GetMetaData } from '@/common/meta';
 import MoreLinkButton from '@/components/ui/MoreLinkButton.vue';
 import Pagination from '@/components/Pagination.vue';
 import { section_animation } from '@/gsap/section.js';
+import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'NewsListView',
   components: {
@@ -179,10 +180,7 @@ export default {
   },
   methods: {
     SetActiveCategory() {
-      this.active_category = this.$route.query.category
-        ? this.$route.query.category
-        : 'all';
-      if (this.active_category == 'all') {
+      if (this.active_category == '' || this.active_category == 'all') {
         this.bread_crumb_path[1].title = '最新消息';
         this.bread_crumb_path[1].link = '/news?category=all';
         this.$nextTick(() => {
@@ -190,10 +188,9 @@ export default {
           this.$PageReady(this.meta_data.title);
         });
       } else {
-        let category = this.category_data.filter(
+        let category = this.news_category_data.filter(
           (item) => item.NewsCategoryID == this.active_category
         );
-
         if (category.length > 0) {
           category = category[0];
           this.bread_crumb_path[1].title = category.Title;
@@ -219,10 +216,15 @@ export default {
       return text.length > 100 ? text.slice(0, 100) : text;
     },
     PageInit() {
-      this.pagination_option.total = this.filter_news_data.length;
+      this.pagination_option.total = this.filter_news_data(
+        this.active_category
+      ).length;
       this.pagination_option.total_pages = Math.ceil(
-        this.filter_news_data.length / this.pagination_option.per_page
+        this.filter_news_data(this.active_category).length /
+          this.pagination_option.per_page
       );
+
+      this.SetActiveCategory();
 
       this.$nextTick(() => {
         this.$emit('load-image', 'home');
@@ -242,24 +244,26 @@ export default {
       });
     },
   },
-  metaInfo() {
-    return this.meta_data;
-  },
   watch: {
     $route() {
-      // this.SetActiveCategory();
+      this.SetActiveCategory();
     },
     image_loaded() {
       this.image_loaded ? this.SetGsap() : '';
     },
     filter_news_data() {
       this.page = 1;
-      this.$set(this.pagination_option, 'total', this.filter_news_data.length);
+      this.$set(
+        this.pagination_option,
+        'total',
+        this.filter_news_data(this.active_category).length
+      );
       this.$set(
         this.pagination_option,
         'total_pages',
         Math.ceil(
-          this.filter_news_data.length / this.pagination_option.per_page
+          this.filter_news_data(this.active_category).length /
+            this.pagination_option.per_page
         )
       );
     },
@@ -268,38 +272,30 @@ export default {
     },
   },
   computed: {
-    data_load_finish() {
-      return this.$store.getters.data_load_finish;
-    },
-    image_loaded() {
-      return this.$store.state.image_loaded;
-    },
-    filter_news_data() {
-      return this.active_category == ''
-        ? this.news_list
-        : this.news_list.filter(
-            (item) => item.NewsCategoryID == this.active_category
-          );
-    },
+    ...mapState(['news_category_data', 'news_data', 'image_loaded']),
+    ...mapGetters({
+      data_load_finish: 'data_load_finish',
+      filter_news_data: 'filter_news_data',
+    }),
     page_news_data() {
-      return this.filter_news_data.slice(
+      return this.filter_news_data(this.active_category).slice(
         this.page * this.pagination_option.per_page -
           this.pagination_option.per_page,
         this.page * this.pagination_option.per_page
       );
     },
-    news_list() {
-      return this.$store.state.news_data;
-    },
-    category_data() {
-      return this.$store.state.news_category_data;
-    },
+  },
+  mounted() {
+    this.data_load_finish ? this.PageInit() : '';
   },
   filters: {
     content(val) {
       const text = val.replace(/(<([^>]+)>)/gi, '');
       return text.length > 100 ? text.slice(0, 100) : text;
     },
+  },
+  metaInfo() {
+    return this.meta_data;
   },
 };
 </script>

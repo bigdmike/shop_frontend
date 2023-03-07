@@ -1,7 +1,7 @@
 <template>
   <main
     data-scroll-section
-    class="relative z-10 w-full py-24 md:py-60 bg-bg_black"
+    class="relative z-10 flex items-center justify-center w-full min-h-screen py-24 md:py-60 bg-bg_black"
   >
     <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10">
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
@@ -67,6 +67,7 @@ import { validEmail } from '@/common/validate';
 import { sendLoginData } from '@/api/member';
 import { setLocalStorage, getLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
+import { mapGetters } from 'vuex';
 export default {
   name: 'LoginView',
   components: {
@@ -89,12 +90,13 @@ export default {
       ],
     };
   },
-  computed: {
-    shopcart() {
-      return this.$store.state.shopcart_module.shopcart;
-    },
-  },
   methods: {
+    PageInit() {
+      this.meta_data = GetMetaData('會員登入', '', '');
+      this.$nextTick(() => {
+        this.$PageReady(this.meta_data.title);
+      });
+    },
     GetError(key) {
       return this.errors.indexOf(key) != -1;
     },
@@ -148,14 +150,23 @@ export default {
       this.$store.dispatch('shopcart_module/GetShopCart');
     },
   },
+  watch: {
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
+    },
+  },
+  computed: {
+    ...mapGetters(['data_load_finish']),
+    shopcart() {
+      return this.$store.state.shopcart_module.shopcart;
+    },
+  },
   created() {
     if (getLocalStorage('account_token')) {
       this.$router.push('/account/account_edit');
+    } else {
+      this.data_load_finish ? this.PageInit() : '';
     }
-    this.meta_data = GetMetaData('會員登入', '', '');
-    this.$nextTick(() => {
-      this.$PageReady(this.meta_data.title);
-    });
   },
   metaInfo() {
     return this.meta_data;

@@ -66,49 +66,6 @@ export default new Vuex.Store({
         return false;
       }
     },
-    promote_product_data(state) {
-      if (state.product_data == null) {
-        return null;
-      }
-      return state.product_data.filter((item) => {
-        return (
-          item.Menu.filter((menu) => {
-            return menu.MenuID == 7;
-          }).length > 0
-        );
-      });
-    },
-    new_product_data(state) {
-      if (state.product_data == null) {
-        return null;
-      }
-      const menu_id = state.category_data.filter(
-        (item) => item.Title == '最新商品'
-      )[0].MenuID;
-      return state.product_data.filter((item) => {
-        return (
-          item.Menu.filter((menu) => {
-            return menu.MenuID == menu_id;
-          }).length > 0
-        );
-      });
-    },
-    home_ad_data(state, getters) {
-      let images = [];
-      images.push({
-        Image1: getters.getCommonColumn('home_promote_1_image'),
-        Link: getters.getCommonColumn('home_promote_1_link'),
-      });
-      images.push({
-        Image1: getters.getCommonColumn('home_promote_2_image'),
-        Link: getters.getCommonColumn('home_promote_2_link'),
-      });
-      images.push({
-        Image1: getters.getCommonColumn('home_promote_3_image'),
-        Link: getters.getCommonColumn('home_promote_3_link'),
-      });
-      return images;
-    },
     getCommonColumn: (state) => (key) => {
       if (state.common_column_data == null) {
         return null;
@@ -126,12 +83,47 @@ export default new Vuex.Store({
       if (event_data.length <= 0) {
         return 'error';
       }
-      console.log(new Date(), new Date(event_data[0].MenuTimeEnd));
-      console.log(new Date() > new Date(event_data[0].MenuTimeEnd));
       if (new Date() > new Date(event_data[0].MenuTimeEnd)) {
         return 'error';
       }
       return event_data.length > 0 ? event_data[0] : 'error';
+    },
+    // news
+    filter_news_data: (state) => (category_id) => {
+      return category_id == ''
+        ? state.news_data
+        : state.news_data.filter((item) => item.NewsCategoryID == category_id);
+    },
+    active_news_data: (state) => (news_id) => {
+      const active_news_data = state.news_data.filter(
+        (item) => item.NewsID == news_id
+      );
+      return active_news_data.length > 0 ? active_news_data[0] : 'error';
+    },
+    active_news_category_data: (state) => (category_id) => {
+      const active_category = state.news_category_data.filter(
+        (item) => item.NewsCategoryID == category_id
+      );
+      return active_category.length > 0 ? active_category[0] : 'error';
+    },
+    // product
+    filter_category_data: (state) => (category_id) => {
+      const category = state.category_data.filter(
+        (item) => item.MenuID == category_id
+      );
+
+      return category.length > 0 ? category[0] : null;
+    },
+    filter_product_data: (state) => (category_id) => {
+      if (category_id == 'all' || category_id == '') {
+        return state.product_data;
+      } else {
+        return state.product_data.filter((item) => {
+          return (
+            item.Menu.filter((menu) => menu.MenuID == category_id).length > 0
+          );
+        });
+      }
     },
   },
   mutations: {
@@ -260,7 +252,7 @@ export default new Vuex.Store({
         // 篩選沒有庫存選項的商品
         // tmp_data = tmp_data.filter((item) => item.Stock.length > 0);
         // 篩選停用的商品
-        // tmp_data = tmp_data.filter((item) => item.Status == 'Y');
+        tmp_data = tmp_data.filter((item) => item.Status == 'Y');
         // 排序
         tmp_data = tmp_data.sort((a, b) => {
           return parseInt(a.Seq) - parseInt(b.Seq);

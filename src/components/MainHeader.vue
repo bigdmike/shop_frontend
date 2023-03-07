@@ -13,7 +13,7 @@
             class="relative block transform"
           >
             <img
-              :alt="$GetCloumn('company_name')"
+              :alt="$GetColumn('company_name')"
               src="/img/logo.svg"
               class="relative block md:w-[180px] sm:w-[140px] w-[120px]"
             />

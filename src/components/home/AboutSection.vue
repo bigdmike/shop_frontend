@@ -38,7 +38,7 @@
       >
         <p
           class="mb-20 font-semibold md:mr-10 md:mb-0"
-          v-html="$GetCloumn('about_slogan')"
+          v-html="$GetColumn('about_slogan')"
         ></p>
         <router-link
           @mouseenter.native="button_hover = true"

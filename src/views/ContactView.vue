@@ -3,7 +3,7 @@
     id="ContactPage"
     ref="MainContent"
     data-scroll-section
-    class="relative z-10 w-full pt-40 pb-20 bg-basic_gray"
+    class="relative z-10 w-full min-h-screen pt-40 pb-20 bg-basic_gray"
   >
     <div
       class="relative z-10 w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10"
@@ -129,6 +129,7 @@ import { GetMetaData } from '@/common/meta';
 import { validEmail } from '@/common/validate';
 import { section_animation } from '@/gsap/section';
 import MoreButton from '@/components/ui/MoreButton.vue';
+import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'ContactView',
   components: {
@@ -148,6 +149,11 @@ export default {
     };
   },
   methods: {
+    PageInit() {
+      this.$nextTick(() => {
+        this.$emit('load-image', 'home');
+      });
+    },
     SetGsap() {
       console.log('load gsap');
       this.section_animation = new section_animation(this.$refs.MainContent);
@@ -173,23 +179,20 @@ export default {
     },
   },
   computed: {
-    image_loaded() {
-      return this.$store.state.image_loaded;
-    },
+    ...mapState(['image_loaded']),
+    ...mapGetters(['data_load_finish']),
   },
   watch: {
     image_loaded() {
-      console.log(this.image_loaded);
       this.image_loaded ? this.SetGsap() : '';
     },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.$emit('load-image', 'home');
-    });
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
+    },
   },
   created() {
     this.meta_data = GetMetaData('contact', '', '');
+    this.data_load_finish ? this.PageInit() : '';
   },
   metaInfo() {
     return this.meta_data;

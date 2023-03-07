@@ -1,13 +1,15 @@
 <template>
   <main
     id="ProductPage"
-    class="relative z-10 w-full pt-24 pb-20 md:pt-40 bg-bg_black"
+    class="relative z-10 w-full min-h-screen pt-24 pb-20 md:pt-40 bg-bg_black"
     data-scroll-section
-    v-if="product_data != null && product_list != null"
     itemtype="https://schema.org/Product"
     itemscope
   >
-    <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0">
+    <div
+      v-if="product_data != null && product_list != null"
+      class="w-full max-w-screen-xl px-5 mx-auto xl:px-0"
+    >
       <BreadCrumb class="my-5 md:mb-20 md:pt-0" :path="bread_crumb_path" />
       <div class="flex flex-wrap items-start mb-20 -mx-10">
         <div class="w-full px-10 mb-10 md:w-1/2 md:mb-0">
@@ -100,7 +102,7 @@
       </div>
       <div
         class="w-full py-5 border-t border-basic_gray border-opacity-10"
-        v-if="recommend_category_data != null"
+        v-if="recommend_product_list != null"
       >
         <div class="flex flex-col-reverse items-start mb-16">
           <h2 class="relative inline-block px-8">
@@ -130,13 +132,13 @@
         </div>
         <ProductList
           class="w-full"
-          :page_product_data="GetCategoryProduct()"
-          :category_data="recommend_category_data"
+          :page_product_data="recommend_product_list"
+          :category_data="filter_category_data(product_data.RecommendMenuID)"
         />
         <div class="flex justify-end">
           <MoreLinkButton
             text="SEE MORE"
-            :link="`/collections?category=${recommend_category_data.MenuID}`"
+            :link="`/collections?category=${product_data.RecommendMenuID}`"
           />
         </div>
       </div>
@@ -157,9 +159,7 @@ import {
   ConvertProductData,
   ConvertAddShopCartData,
 } from '@/common/gtm_methods';
-// import product_list from '@/assets/data/goods.json';
-// import product_data from '@/assets/data/single_good.json';
-// import category_data from '@/assets/data/menu.json';
+import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'ProductPage',
   components: {
@@ -191,9 +191,6 @@ export default {
       active_tab: '商品介紹',
       product_data: null,
       meta_data: null,
-      // product_list: product_list.data,
-      // category_data: category_data.data,
-      // product_data:product_data
     };
   },
   methods: {
@@ -214,7 +211,7 @@ export default {
         }
       });
     },
-    SetActiveProduct() {
+    SetBreadCrumb() {
       this.bread_crumb_path[2].title = this.product_data.Title;
       this.bread_crumb_path[2].link = `/product/${this.product_data.GoodsID}`;
     },
@@ -247,39 +244,6 @@ export default {
     },
     ChangeAmount(val) {
       this.amount + val <= 1 ? (this.amount = 1) : (this.amount += val);
-    },
-    ChangeTab(val) {
-      const description = document.querySelector('#Description');
-      const workflow = document.querySelector('#Workflow');
-      const precautions = document.querySelector('#Precautions');
-      const offset_top = window.innerWidth <= 640 ? 112 : 128;
-      let offsetPosition = 0;
-
-      this.active_tab = val;
-      if (this.active_tab == '注意事項') {
-        offsetPosition =
-          precautions.getBoundingClientRect().top +
-          window.pageYOffset -
-          offset_top -
-          38;
-      } else if (this.active_tab == '下單流程') {
-        offsetPosition =
-          workflow.getBoundingClientRect().top +
-          window.pageYOffset -
-          offset_top -
-          38;
-      } else if (this.active_tab == '商品介紹') {
-        offsetPosition =
-          description.getBoundingClientRect().top +
-          window.pageYOffset -
-          offset_top -
-          38;
-      }
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
     },
     ChangeOption(index, val) {
       this.$set(this.active_option, index, val);
@@ -328,6 +292,7 @@ export default {
           );
           this.$nextTick(() => {
             this.$PageReady(this.meta_data.title);
+            this.$emit('load-image');
           });
         } else if (res.code == 500) {
           this.$RedirectError();
@@ -353,7 +318,7 @@ export default {
   watch: {
     product_data() {
       if (this.product_data != null) {
-        this.SetActiveProduct();
+        this.SetBreadCrumb();
         if (this.product_data.Stock.length > 0) {
           this.active_option[0] = this.product_data.Stock[0].ColorID;
           this.active_option[1] = this.product_data.Stock[0].SizeID;
@@ -365,23 +330,20 @@ export default {
     },
   },
   computed: {
-    product_list() {
-      return this.$store.state.product_data;
-    },
-    category_data() {
-      return this.$store.state.category_data;
-    },
-    recommend_category_data() {
-      if (this.product_data.RecommendMenuID == '') {
+    ...mapState({
+      product_list: 'product_data',
+      category_data: 'category_data',
+    }),
+    ...mapGetters(['filter_product_data', 'filter_category_data']),
+    recommend_product_list() {
+      if (
+        this.product_data.RecommendMenuID == '' ||
+        this.product_data.RecommendMenuID == '0'
+      ) {
         return null;
       } else {
-        return this.category_data.filter(
-          (item) => item.MenuID == this.product_data.RecommendMenuID
-        )[0];
+        return this.filter_product_data(this.product_data.RecommendMenuID);
       }
-    },
-    shopcart() {
-      return this.$store.state.shopcart_module.shopcart;
     },
   },
 };

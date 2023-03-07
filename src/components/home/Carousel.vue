@@ -51,12 +51,12 @@
     <!-- <img
       class="hidden w-full opacity-0 select-none md:block"
       :src="$ImageUrl(carousel_data[0].Image1)"
-      :alt="$GetCloumn('company_name')"
+      :alt="$GetColumn('company_name')"
     />
     <img
       class="block w-full opacity-0 select-none md:hidden"
       :src="$ImageUrl(carousel_data[1].Image2)"
-      :alt="$GetCloumn('company_name')"
+      :alt="$GetColumn('company_name')"
     /> -->
   </section>
 </template>

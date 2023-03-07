@@ -1,21 +1,50 @@
 <template>
-  <main id="ProductList" class="relative z-10 w-full pb-40">
+  <main
+    id="ProductList"
+    data-scroll-section
+    class="relative z-10 w-full pt-40 pb-20 bg-bg_black"
+  >
     <div
+      v-if="data_load_finish"
       class="flex flex-wrap items-stretch w-full max-w-screen-xl px-5 mx-auto xl:px-0"
     >
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
+
+      <header
+        class="relative z-10 flex flex-col-reverse items-start w-full mb-20 md:mb-10"
+      >
+        <h2 class="relative inline-block px-8">
+          <span
+            data-section-subtitle-arrow
+            class="absolute top-0 left-0 block text-lg leading-none transform icon-triangle text-primary -scale-100"
+          ></span>
+          <span
+            data-section-subtitle
+            class="block font-bold leading-none sm:text-xl md:text-2xl md:leading-none text-basic_white"
+            >搜尋結果</span
+          >
+          <span
+            data-section-subtitle-arrow
+            class="absolute bottom-0 right-0 block text-lg leading-none icon-triangle text-primary"
+          ></span>
+        </h2>
+        <h3 class="overflow-hidden">
+          <span
+            data-section-title
+            data-text="News"
+            class="block text-5xl font-black md:text-8xl sm:text-7xl text-basic_white text-opacity-20 font-anybody"
+          >
+            Result
+          </span>
+        </h3>
+      </header>
       <FilterBar
         class="flex items-center justify-end w-full mb-10"
         :sort_type="sort_type"
-        :product_data="product_data"
+        :product_data="sort_product_data"
         @change-type="ChangeSortType"
       />
-      <ProductList
-        class="w-full"
-        :page_product_data="page_product_data"
-        :product_data="product_data"
-        @next-page="page += 1"
-      />
+      <ProductList class="w-full" :product_data="product_data" />
     </div>
   </main>
 </template>
@@ -25,6 +54,7 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import ProductList from '@/components/search_result/product_list.vue';
 import FilterBar from '@/components/search_result/filter_bar.vue';
 import { GetMetaData } from '@/common/meta';
+import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'ProductListView',
   components: {
@@ -55,20 +85,42 @@ export default {
       this.sort_type = val;
     },
     GetPrice(item) {
-      let tmp_data = JSON.parse(JSON.stringify(item.Stock));
-      tmp_data = tmp_data.sort((a, b) => {
-        return a.SellPrice < b.SellPrice;
+      if (item.IsCustom == 'N') {
+        // 一般商品，讀取Stock資料
+        let tmp_data = JSON.parse(JSON.stringify(item.Stock));
+        tmp_data = tmp_data.sort((a, b) => {
+          return a.SellPrice < b.SellPrice;
+        });
+        return tmp_data[0];
+      } else {
+        // 客製化商品，讀取CustomGoodsStock資料
+        return item.CustomGoodsStock[0];
+      }
+    },
+    PageInit() {
+      this.$emit('load-image');
+      this.meta_data = GetMetaData('商品搜尋', '', '');
+      this.$nextTick(() => {
+        this.$PageReady(this.meta_data.title);
       });
-      return tmp_data[0];
+    },
+    SetGsap() {},
+  },
+  watch: {
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
+    },
+    image_loaded() {
+      this.image_loaded ? this.SetGsap() : '';
     },
   },
   computed: {
-    category_data() {
-      return this.$store.state.category_data;
-    },
-    product_list() {
-      return this.$store.state.product_data;
-    },
+    ...mapState({
+      category_data: 'category_data',
+      product_list: 'product_data',
+      image_loaded: 'image_loaded',
+    }),
+    ...mapGetters(['data_load_finish']),
     product_data() {
       return this.product_list.filter(
         (item) => item.Title.indexOf(this.$route.params.key_word) != -1
@@ -102,18 +154,10 @@ export default {
         return tmp_product_data;
       }
     },
-    page_product_data() {
-      return this.sort_product_data.slice(
-        0,
-        this.page * this.count_per_page + this.count_per_page
-      );
-    },
   },
   created() {
-    this.meta_data = GetMetaData('商品搜尋', '', '');
-    this.$nextTick(() => {
-      this.$PageReady(this.meta_data.title);
-    });
+    this.image_loaded ? this.SetGsap() : '';
+    this.data_load_finish ? this.PageInit() : '';
   },
   metaInfo() {
     return this.meta_data;
