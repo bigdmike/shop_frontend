@@ -1,7 +1,7 @@
 <template>
   <footer
     data-scroll-section
-    class="relative z-20 pb-24 overflow-hidden pt-14 md:pb-14 bg-basic_gray"
+    class="relative z-20 overflow-hidden pt-14 bg-basic_gray"
   >
     <div
       data-marquee-box
@@ -17,7 +17,9 @@
         >Krace</span
       >
     </div>
-    <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10">
+    <div
+      class="w-full max-w-screen-xl px-5 pb-24 mx-auto md:pb-14 xl:px-0 sm:px-10"
+    >
       <div class="flex justify-end">
         <button
           @click="ScrollToTop"
@@ -76,6 +78,49 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="w-full pt-4 pb-32 bg-black md:pb-4">
+      <div
+        class="flex flex-wrap items-center justify-center w-full max-w-screen-xl px-5 mx-auto md:justify-between xl:px-0 sm:px-10"
+      >
+        <ol
+          class="flex items-center justify-center mb-5 text-sm md:mb-0 md:justify-start"
+        >
+          <li class="mr-5">
+            <router-link
+              class="text-white transition-colors duration-500 hover:text-primary"
+              to="/terms/privacy"
+              >隱私權政策</router-link
+            >
+          </li>
+          <li class="mr-5">
+            <router-link
+              class="text-white transition-colors duration-500 hover:text-primary"
+              to="/terms/terms_of_customer"
+              >會員條款</router-link
+            >
+          </li>
+          <li>
+            <router-link
+              class="text-white transition-colors duration-500 hover:text-primary"
+              to="/order_search/search"
+              >訂單查詢</router-link
+            >
+          </li>
+        </ol>
+        <p
+          class="w-full text-xs text-center md:w-auto font-anybody text-basic_gray md:text-right"
+        >
+          Copyright ©Krace All Rights Reserved.<br class="block md:hidden" />
+          網頁設計：<a
+            href="https://www.yongxin-design.com"
+            target="_blank"
+            class="text-primary"
+            >泳欣事業有限公司</a
+          >
+        </p>
       </div>
     </div>
   </footer>

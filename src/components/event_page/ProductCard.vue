@@ -10,6 +10,9 @@
         已售完
       </div>
       <img
+        @click="
+          $emit('open-dialog', product_data, product_data.IsCustom == 'Y')
+        "
         :src="$ImageUrl(product_data.Image1)"
         :alt="product_data.Title"
         class="relative z-10 block object-contain w-full h-full transition-all duration-200 transform hover:scale-110"
@@ -34,7 +37,9 @@
     </p>
     <div>
       <button
-        @click="$emit('open-dialog', product_data)"
+        @click="
+          $emit('open-dialog', product_data, product_data.IsCustom == 'Y')
+        "
         v-if="stock_status"
         class="block w-full py-3 font-bold text-center text-white rounded-md bg-primary"
       >
@@ -85,7 +90,7 @@ export default {
           }
         });
       } else {
-        // stock_count = this.product_data.CustomGoodsStock[0].Stock;
+        stock_count = this.product_data.CustomGoodsStock[0].Stock;
       }
 
       return stock_count > 0;

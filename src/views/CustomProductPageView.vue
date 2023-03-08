@@ -349,10 +349,9 @@ export default {
     product_data() {
       if (this.product_data != null) {
         this.SetBreadCrumb();
-        if (this.product_data.Stock.length > 0) {
-          this.active_option[0] = this.product_data.Stock[0].ColorID;
-          this.active_option[1] = this.product_data.Stock[0].SizeID;
-        }
+        // if (this.product_data.Stock.length > 0) {
+        //   this.InitActiveOption()
+        // }
         this.$nextTick(() => {
           this.SetNavTrigger();
         });

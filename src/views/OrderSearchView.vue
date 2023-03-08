@@ -1,22 +1,27 @@
 <template>
-  <main class="relative z-10 w-full">
+  <main
+    data-scroll-section
+    class="relative z-10 flex items-center justify-center w-full min-h-screen py-24 md:py-60 bg-bg_black"
+  >
     <div class="w-full max-w-screen-xl px-5 pb-32 mx-auto xl:px-0 sm:px-10">
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
-      <div class="w-full max-w-screen-sm p-10 mx-auto bg-zinc-50 rounded-2xl">
+      <div
+        class="w-full max-w-screen-sm p-10 mx-auto text-white bg-basic_black section_corner"
+      >
         <h4 class="mb-2 text-xl font-bold text-center sm:text-2xl">
           請輸入訂購人的電話號碼與訂單號碼
         </h4>
-        <p class="mb-8 text-sm text-center text-secondary sm:text-base">
+        <p class="mb-8 text-sm text-center text-primary sm:text-base">
           訂單相關資訊可以在訂購人的email中查看
         </p>
-        <div class="w-full pt-10 border-t border-zinc-200 md:px-20">
+        <div class="w-full md:px-20">
           <div class="mb-4">
             <input
               v-model="phone"
               type="tel"
               name="phone"
               placeholder="請輸入訂購人電話"
-              class="w-full px-3 py-2 border rounded-md border-zinc-200"
+              class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
             />
             <p v-if="GetError('phone')" class="text-xs text-red-600">
               請輸入訂購人電話
@@ -29,7 +34,7 @@
               type="text"
               name="trade_no"
               placeholder="請輸入訂單編號"
-              class="w-full px-3 py-2 border rounded-md border-zinc-200"
+              class="relative z-0 w-full px-4 py-3 text-white rounded-md appearance-none bg-basic_gray bg-opacity-20 focus:outline-primary"
             />
             <p v-if="GetError('trade_no')" class="text-xs text-red-600">
               請輸入訂單編號
@@ -112,3 +117,26 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.section_corner {
+  -webkit-clip-path: polygon(
+    0 40px,
+    40px 0,
+    100% 0,
+    100% calc(100% - 40px),
+    calc(100% - 40px) 100%,
+    0 100%,
+    0 40px
+  );
+  clip-path: polygon(
+    0 40px,
+    40px 0,
+    100% 0,
+    100% calc(100% - 40px),
+    calc(100% - 40px) 100%,
+    0 100%,
+    0 40px
+  );
+}
+</style>

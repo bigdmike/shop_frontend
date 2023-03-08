@@ -1,7 +1,7 @@
 <template>
   <div
     ref="MainContent"
-    class="fixed top-0 bottom-0 z-30 flex items-center justify-center w-screen left-full"
+    class="fixed top-0 bottom-0 z-[31] flex items-center justify-center w-screen left-full"
   >
     <div
       data-dialog-box

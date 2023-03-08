@@ -2,11 +2,11 @@
   <Teleport to="#app">
     <div
       ref="MainContent"
-      class="fixed top-0 bottom-0 z-30 flex items-center justify-center w-screen left-full"
+      class="fixed top-0 bottom-0 z-30 flex items-center justify-center w-screen text-white left-full"
     >
       <div
         data-dialog-box
-        class="sm:w-[500px] w-full sm:max-h-[90%] sm:h-auto h-full overflow-y-auto max-w-full bg-white relative z-10 rounded-2xl"
+        class="sm:w-[500px] w-full sm:max-h-[90%] sm:h-auto h-full overflow-y-auto max-w-full bg-bg_black relative z-10 rounded-2xl custom_scroll"
       >
         <template v-if="product_data != null">
           <div
@@ -14,7 +14,7 @@
           >
             <button
               @click="Close"
-              class="absolute z-10 flex items-center justify-center w-8 h-8 bg-white border border-black rounded-full top-4 right-4"
+              class="absolute z-10 flex items-center justify-center w-8 h-8 border border-black rounded-full bg-primary top-4 right-4"
             >
               <span class="w-6 icon-close"></span>
             </button>
@@ -25,90 +25,100 @@
             />
           </div>
           <div class="w-full p-5">
-            <h2 class="text-xl font-bold text-secondary">
+            <h2 class="text-xl font-bold text-primary">
               {{ product_data.Title }}
             </h2>
             <div class="w-full mt-5 mb-10">
-              <p
-                class="mb-2 text-xs font-semibold"
-                v-if="first_options.length > 0"
-              >
-                選項一
-              </p>
-              <div class="relative w-full mb-2" v-if="first_options.length > 0">
-                <select
-                  @input="$emit('change-option', 0, $event.target.value)"
-                  :value="active_option[0]"
-                  class="relative z-0 w-full px-5 py-3 border rounded-lg appearance-none border-zinc-300 focus:outline-none"
+              <div class="mb-5">
+                <p
+                  class="flex-shrink-0 mb-2 mr-10 font-medium text-white font-anybody"
+                  v-if="first_options.length > 0"
                 >
-                  <option
-                    v-for="(item, item_index) in first_options"
-                    :value="item.ColorID"
-                    :key="`option_${item_index}`"
+                  選項一
+                </p>
+                <div class="relative w-full" v-if="first_options.length > 0">
+                  <span
+                    class="absolute z-10 text-white transform rotate-90 -translate-y-1/2 pointer-events-none right-5 icon-chevron_right top-1/2"
+                  ></span>
+                  <select
+                    @input="$emit('change-option', 0, $event.target.value)"
+                    :value="active_option[0]"
+                    class="relative z-0 w-full py-3 pl-5 pr-12 font-bold text-white rounded-md appearance-none bg-basic_black focus:outline-none"
                   >
-                    {{ item.Title }}
-                  </option>
-                </select>
+                    <option
+                      v-for="(item, item_index) in first_options"
+                      :value="item.ColorID"
+                      :key="`option_${item_index}`"
+                    >
+                      {{ item.Title }}
+                    </option>
+                  </select>
+                </div>
               </div>
-              <p
-                class="mb-2 text-xs font-semibold"
-                v-if="second_options.length > 0"
-              >
-                選項二
-              </p>
-              <div
-                class="relative w-full mb-2"
-                v-if="second_options.length > 0"
-              >
-                <SelectArrowIcon
-                  class="absolute z-10 w-4 transform -translate-y-1/2 pointer-events-none top-1/2 right-5"
-                />
-                <select
-                  @input="$emit('change-option', 1, $event.target.value)"
-                  :value="active_option[1]"
-                  class="relative z-0 w-full px-5 py-3 border rounded-lg appearance-none border-zinc-300 focus:outline-none"
-                >
-                  <option
-                    v-for="(item, item_index) in second_options"
-                    :value="item.SizeID"
-                    :key="`option_${item_index}`"
-                  >
-                    {{ item.Title }}
-                  </option>
-                </select>
-              </div>
-              <p
-                class="flex items-center justify-between mb-2 text-xs font-semibold"
-                v-if="second_options.length > 0"
-              >
-                數量
 
-                <span class="ml-3 text-sm text-center text-primary">
-                  目前庫存數量：{{ active_stock.Stock }}
-                </span>
-              </p>
-              <div
-                v-if="product_data.Stock.length > 0"
-                class="relative flex items-stretch w-full overflow-hidden border rounded-lg border-zinc-300"
-              >
-                <button
-                  @click="ChangeAmount(-1)"
-                  class="px-5 py-4 text-black duration-200 transition-color hover:bg-secondary hover:text-white"
+              <div class="mb-5">
+                <p
+                  class="flex-shrink-0 mb-2 mr-10 font-medium text-white font-anybody"
+                  v-if="second_options.length > 0"
                 >
-                  <span class="w-3 icon-minus"></span>
-                </button>
-                <input
-                  class="flex-1 text-center focus:outline-none"
-                  type="text"
-                  :value="amount"
-                  readonly
-                />
-                <button
-                  @click="amount >= active_stock.Stock ? '' : ChangeAmount(1)"
-                  class="px-5 py-4 text-black duration-200 transition-color hover:bg-secondary hover:text-white"
+                  選項二
+                </p>
+                <div
+                  class="relative w-full mb-5"
+                  v-if="second_options.length > 0"
                 >
-                  <PlusIcon class="w-3" />
-                </button>
+                  <span
+                    class="absolute z-10 text-white transform rotate-90 -translate-y-1/2 pointer-events-none right-5 icon-chevron_right top-1/2"
+                  ></span>
+                  <select
+                    @input="$emit('change-option', 1, $event.target.value)"
+                    :value="active_option[1]"
+                    class="relative z-0 w-full py-3 pl-5 pr-12 font-bold text-white rounded-md appearance-none bg-basic_black focus:outline-none"
+                  >
+                    <option
+                      v-for="(item, item_index) in second_options"
+                      :value="item.SizeID"
+                      :key="`option_${item_index}`"
+                    >
+                      {{ item.Title }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <p
+                  class="mb-2 font-semibold text-white"
+                  v-if="second_options.length > 0"
+                >
+                  數量
+
+                  <span class="ml-3 text-sm text-center text-primary">
+                    目前庫存數量：{{ active_stock.Stock }}
+                  </span>
+                </p>
+                <div
+                  v-if="product_data.Stock.length > 0"
+                  class="relative flex items-stretch w-full overflow-hidden rounded-md bg-basic_black"
+                >
+                  <button
+                    @click="ChangeAmount(-1)"
+                    class="px-5 py-3 duration-200 text-primary transition-color hover:bg-primary hover:text-white"
+                  >
+                    <span class="text-sm icon-minus"></span>
+                  </button>
+                  <input
+                    class="flex-1 text-center text-white focus:outline-none bg-basic_black"
+                    type="text"
+                    :value="amount"
+                    readonly
+                  />
+                  <button
+                    @click="amount >= active_stock.Stock ? '' : ChangeAmount(1)"
+                    class="px-5 py-3 duration-200 text-primary transition-color hover:bg-primary hover:text-white"
+                  >
+                    <span class="text-sm icon-plus"></span>
+                  </button>
+                </div>
               </div>
             </div>
             <div>
@@ -132,7 +142,7 @@
       <div
         data-dialog-bg
         @click="Close"
-        class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-basic_white bg-opacity-80"
+        class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-black bg-opacity-80"
       ></div></div
   ></Teleport>
 </template>
@@ -140,7 +150,7 @@
 <script>
 import Teleport from 'vue2-teleport';
 import { getLocalStorage } from '@/common/cookie';
-import { ConvertAddShopCartData } from '@/common/gtm_methods';
+// import { ConvertAddShopCartData } from '@/common/gtm_methods';
 
 import { dialog_animation } from '@/gsap/dialog';
 export default {
@@ -163,9 +173,11 @@ export default {
       this.$set(this.active_option, 1, this.product_data.Stock[0].SizeID);
       this.amount = 1;
       this.dialog_animation.open();
+      this.$emit('stop-scroll');
     },
     Close() {
       this.dialog_animation.close();
+      this.$emit('start-scroll');
       setTimeout(() => {
         this.product_data = null;
         this.active_option = [];
@@ -176,18 +188,18 @@ export default {
       this.amount + val <= 1 ? (this.amount = 1) : (this.amount += val);
     },
     AddShopCart() {
-      window.dataLayer.push({
-        event: 'add_to_cart',
-        items: [
-          ConvertAddShopCartData(
-            this.product_data,
-            this.active_option,
-            this.amount
-          ),
-        ],
-        value: 0,
-        currency: 'TWD',
-      });
+      // window.dataLayer.push({
+      //   event: 'add_to_cart',
+      //   items: [
+      //     ConvertAddShopCartData(
+      //       this.product_data,
+      //       this.active_option,
+      //       this.amount
+      //     ),
+      //   ],
+      //   value: 0,
+      //   currency: 'TWD',
+      // });
       const shop_cart_item = {
         product: this.product_data,
         options: this.active_option,

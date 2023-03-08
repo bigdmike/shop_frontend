@@ -9,7 +9,16 @@
       v-if="data_load_finish && event_data != null && event_data != 'error'"
     >
       <BreadCrumb class="hidden mb-20" :path="bread_crumb_path" />
-      <ProductDialog ref="ProductDialog" :product_data="product_data[0]" />
+      <ProductDialog
+        ref="ProductDialog"
+        @stop-scroll="$emit('stop-scroll')"
+        @start-scroll="$emit('start-scroll')"
+      />
+      <CustomProductDialog
+        ref="CustomProductDialog"
+        @stop-scroll="$emit('stop-scroll')"
+        @start-scroll="$emit('start-scroll')"
+      />
       <section class="relative w-full max-w-screen-xl mx-auto">
         <img
           :alt="'Krace 凱鋭斯 ' + event_data.Title"
@@ -45,18 +54,79 @@
         </section>
 
         <section>
-          <FixedProductTabList
-            :active_tab="active_tab"
-            :tabs="tabs"
-            @change-tab="ChangeTab"
-          />
+          <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
+            <div class="mb-10">
+              <h2 class="relative inline-block px-8">
+                <span
+                  data-section-subtitle-arrow
+                  class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
+                ></span>
+                <span
+                  data-section-subtitle
+                  class="block text-base font-medium leading-none md:leading-none text-basic_white"
+                  >商品描述</span
+                >
+                <span
+                  data-section-subtitle-arrow
+                  class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
+                ></span>
+              </h2>
+            </div>
+            <div
+              id="Description"
+              class="text-white"
+              v-html="event_data.Content2"
+            ></div>
+          </div>
+          <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
+            <div class="mb-10">
+              <h2 class="relative inline-block px-8">
+                <span
+                  data-section-subtitle-arrow
+                  class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
+                ></span>
+                <span
+                  data-section-subtitle
+                  class="block text-base font-medium leading-none md:leading-none text-basic_white"
+                  >運送說明</span
+                >
+                <span
+                  data-section-subtitle-arrow
+                  class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
+                ></span>
+              </h2>
+            </div>
+            <div
+              id="Workflow"
+              class="text-white"
+              v-html="event_data.Content3"
+            ></div>
+          </div>
+          <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
+            <div class="mb-10">
+              <h2 class="relative inline-block px-8">
+                <span
+                  data-section-subtitle-arrow
+                  class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
+                ></span>
+                <span
+                  data-section-subtitle
+                  class="block text-base font-medium leading-none md:leading-none text-basic_white"
+                  >注意事項</span
+                >
+                <span
+                  data-section-subtitle-arrow
+                  class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
+                ></span>
+              </h2>
+            </div>
 
-          <ProductTabList
-            :active_tab="active_tab"
-            :tabs="tabs"
-            @change-tab="ChangeTab"
-          />
-          event_data
+            <div
+              id="Precautions"
+              class="text-white"
+              v-html="event_data.Content4"
+            ></div>
+          </div>
         </section>
       </div>
     </div>
@@ -67,9 +137,8 @@
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import EventTimer from '@/components/event_page/EventTimer.vue';
 import ProductCard from '@/components/event_page/ProductCard.vue';
-import ProductTabList from '@/components/product_page/tab_list.vue';
-import FixedProductTabList from '@/components/product_page/fixed_tab_list.vue';
 import ProductDialog from '@/components/event_page/ProductDialog.vue';
+import CustomProductDialog from '@/components/event_page/CustomProductDialog.vue';
 import { GetMetaData } from '@/common/meta';
 import { mapState, mapGetters } from 'vuex';
 export default {
@@ -78,9 +147,8 @@ export default {
     BreadCrumb,
     EventTimer,
     ProductCard,
-    ProductTabList,
-    FixedProductTabList,
     ProductDialog,
+    CustomProductDialog,
   },
   data() {
     return {
@@ -151,8 +219,10 @@ export default {
       });
     },
     InitPage() {},
-    OpenProductDialog(item) {
-      this.$refs.ProductDialog.Open(item);
+    OpenProductDialog(item, custom) {
+      custom
+        ? this.$refs.CustomProductDialog.Open(item)
+        : this.$refs.ProductDialog.Open(item);
     },
     PageInit() {
       this.bread_crumb_path[1].title = this.event_data.Title;

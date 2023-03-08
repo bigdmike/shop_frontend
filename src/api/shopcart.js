@@ -118,7 +118,7 @@ export function GetFamilyMap() {
 export function GetOrder(trade_id, phone) {
   let data = {
     TradeID: trade_id,
-    ReceiverPhone: phone,
+    BuyerPhone: phone,
   };
   return post('nonMember/trade', data);
 }

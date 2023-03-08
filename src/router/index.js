@@ -218,6 +218,13 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
+    path: '/dealer',
+    name: '經銷據點',
+    component: () =>
+      import(/* webpackChunkName: "dealer_page" */ '../views/DealerView.vue'),
+    meta: { requiresAuth: false },
+  },
+  {
     path: '*',
     redirect: '/error_page',
   },
