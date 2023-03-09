@@ -31,7 +31,7 @@
         itemscope
         itemtype="https://schema.org/Person"
       >
-        <span itemprop="name">{{ $GetColumn('company_name') }}</span>
+        <span itemprop="name">{{ $GetColumn('brand_name') }}</span>
       </span>
       <div
         data-section-content
