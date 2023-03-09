@@ -60,6 +60,7 @@ import { mapState } from 'vuex';
 import { setLocalStorage, delLocalStorage } from '@/common/cookie';
 import { marquee } from '@/gsap/marquee';
 import { ImageLoader } from '@/gsap/image_loaded';
+import { ScrollTrigger } from '@/gsap/gsap_loader';
 
 export default {
   name: 'App',
@@ -108,6 +109,9 @@ export default {
     },
     ScrollToTop() {
       this.image_loader.locoScroll.scrollTo('top', { duration: 100 });
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 150);
     },
     CheckPageData() {
       this.common_column_data == null

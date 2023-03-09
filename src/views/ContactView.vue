@@ -159,6 +159,7 @@ export default {
     SetGsap() {
       console.log('load gsap');
       this.section_animation = new section_animation(this.$refs.MainContent);
+      this.section_animation.setup();
     },
     Validate() {
       this.errors = [];
@@ -196,7 +197,10 @@ export default {
     },
   },
   created() {
-    this.data_load_finish ? this.PageInit() : '';
+    // this.image_loaded ? this.$nextTick(()=>{this.SetGsap()}) : '';
+    setTimeout(() => {
+      this.data_load_finish ? this.PageInit() : '';
+    }, 100);
   },
   metaInfo() {
     return this.meta_data;

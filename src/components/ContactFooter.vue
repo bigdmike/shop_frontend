@@ -8,24 +8,10 @@
     <div
       class="relative flex items-center justify-center w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10"
     >
-      <button class="relative z-10 inline-block py-5 sm:px-14">
-        <!-- <div class="relative z-10">
-          <h3
-            :class="
-              hover ? 'text-basic_black' : 'text-basic_white text-opacity-20'
-            "
-            class="md:text-[100px] text-[70px] sm:text-center text-left transition-colors duration-500 leading-none font-black font-anybody"
-          >
-            Contact Us
-          </h3>
-          <h4
-            :class="hover ? 'text-basic_black' : 'text-basic_white'"
-            class="text-2xl font-bold leading-none text-left transition-colors duration-500 sm:text-center md:text-3xl"
-          >
-            聯絡我們
-          </h4>
-        </div> -->
-
+      <router-link
+        to="/contact"
+        class="relative z-10 inline-block py-5 sm:px-14"
+      >
         <div class="relative w-full max-w-screen-md">
           <img
             src="/img/ContactButtonBg.webp"
@@ -56,7 +42,7 @@
             class="absolute -scale-100 top-0 left-0 transform md:text-[180px] text-[180px] z-[-1] transition-all duration-700 icon-triangle text-primary"
           ></span>
         </div>
-      </button>
+      </router-link>
     </div>
 
     <div

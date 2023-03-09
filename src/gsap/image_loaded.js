@@ -24,9 +24,11 @@ export class ImageLoader {
     //設定讀取完成
     store.commit('SetImageLoaded', true);
     console.log('all images have been loaded!');
-    console.log(document.querySelector('#app').clientHeight);
-    console.log(this.locoScroll);
-    // this.locoScroll == null ? this.SetScroller() : this.locoScroll.update();
+
+    this.locoScroll == null ? this.SetScroller() : this.locoScroll.update();
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 150);
     // this.SetScroller();
     // this.locoScroll.update();
     store.commit('SetLoading', -1);

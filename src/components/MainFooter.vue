@@ -69,10 +69,14 @@
               >
                 Follow Us
               </p>
-              <a class="mr-2">
+              <a
+                :href="$GetColumn('company_facebook')"
+                target="_blank"
+                class="mr-2"
+              >
                 <span class="text-2xl icon-facebook"></span>
               </a>
-              <a>
+              <a :href="$GetColumn('company_instagram')" target="_blank">
                 <span class="text-2xl icon-instagram"></span>
               </a>
             </div>
@@ -138,7 +142,7 @@ export default {
         },
         {
           title: 'Products',
-          link: '/products',
+          link: '/collections',
         },
         {
           title: 'News',
@@ -161,16 +165,9 @@ export default {
   },
   methods: {
     ScrollToTop() {
-      // window.scrollTo({
-      //   top: 0,
-      //   left: 0,
-      //   behavior: 'smooth',
-      // });
       this.$emit('scroll-top');
     },
   },
-  mounted() {
-    console.log('footer mounted');
-  },
+  mounted() {},
 };
 </script>

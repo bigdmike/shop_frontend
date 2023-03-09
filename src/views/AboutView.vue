@@ -221,8 +221,12 @@ export default {
     SetGsap() {
       this.story_secton_gsap = new section_animation(this.$refs.StoryContent);
       this.info_secton_gsap = new section_animation(this.$refs.InfoContent);
+      this.$nextTick(() => {
+        this.$PageReady(this.meta_data.title);
+      });
     },
     PageInit() {
+      this.meta_data = GetMetaData('about', '', '');
       this.$nextTick(() => {
         this.$emit('load-image', 'home');
       });
@@ -242,12 +246,6 @@ export default {
   },
   mounted() {
     this.data_load_finish ? this.PageInit() : '';
-  },
-  created() {
-    this.meta_data = GetMetaData('about', '', '');
-    this.$nextTick(() => {
-      this.$PageReady(this.meta_data.title);
-    });
   },
   metaInfo() {
     return this.meta_data;
