@@ -33,6 +33,12 @@
 .icon-user:before {
   content: '\e912';
 }
+.icon-location:before {
+  content: '\e914';
+}
+.icon-phone:before {
+  content: '\e915';
+}
 .icon-message:before {
   content: '\e913';
 }
