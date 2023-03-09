@@ -36,7 +36,7 @@
     </div>
     <meta itemprop="sku" :content="`yaowen_${product_data.GoodsID}`" />
     <div itemprop="brand" itemtype="https://schema.org/Brand" itemscope>
-      <meta itemprop="name" :content="$GetColumn('company_name')" />
+      <meta itemprop="name" :content="$GetColumn('brand_name')" />
     </div>
     <div class="mb-5 text-right">
       <p class="font-semibold sm:text-2xl text-primary font-anybody">
@@ -45,7 +45,8 @@
           class="text-sm line-through text-basic_gray font-anybody"
           >NT$ {{ active_stock.Price }}</span
         >
-        NT$ {{ active_stock.SellPrice }}
+        NT$
+        {{ is_member ? active_stock.MemberSellPrice : active_stock.SellPrice }}
       </p>
     </div>
 
@@ -220,6 +221,7 @@
 <script>
 import EventImageDialog from '@/components/product_page/EventImageDialog.vue';
 import EventTimer from '@/components/product_page/EventTimer.vue';
+import { getLocalStorage } from '@/common/cookie';
 export default {
   name: 'ProductInfoBox',
   components: {
@@ -267,6 +269,9 @@ export default {
     }
   },
   computed: {
+    is_member() {
+      return getLocalStorage('account_token');
+    },
     first_options() {
       let tmp_options = [];
       this.product_data.Stock.forEach((item) => {

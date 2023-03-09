@@ -56,10 +56,21 @@
             </button>
           </div>
         </div>
-        <p class="text-sm font-bold font-anybody xs:text-base">
+        <p
+          v-if="!is_member"
+          class="text-sm font-bold font-anybody xs:text-base"
+        >
           NT${{
             $MoneyFormat(
               parseInt(GetActiveOption(shopcart_item).SellPrice) *
+                shopcart_item.amount
+            )
+          }}
+        </p>
+        <p v-else class="text-sm font-bold font-anybody xs:text-base">
+          NT${{
+            $MoneyFormat(
+              parseInt(GetActiveOption(shopcart_item).MemberSellPrice) *
                 shopcart_item.amount
             )
           }}
@@ -70,6 +81,7 @@
 </template>
 
 <script>
+import { getLocalStorage } from '@/common/cookie';
 export default {
   name: 'ShopcartProductCard',
   props: {
@@ -89,6 +101,11 @@ export default {
         );
       });
       return stock.length > 0 ? stock[0] : 'error';
+    },
+  },
+  computed: {
+    is_member() {
+      return getLocalStorage('account_token');
     },
   },
 };

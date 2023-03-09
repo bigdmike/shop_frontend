@@ -42,11 +42,17 @@
     </div>
     <meta itemprop="sku" :content="`yaowen_${product_data.GoodsID}`" />
     <div itemprop="brand" itemtype="https://schema.org/Brand" itemscope>
-      <meta itemprop="name" :content="$GetColumn('company_name')" />
+      <meta itemprop="name" :content="$GetColumn('brand_name')" />
     </div>
     <div class="mb-5 text-right">
-      <p class="font-semibold sm:text-2xl text-primary font-anybody">
+      <p
+        v-if="!is_member"
+        class="font-semibold sm:text-2xl text-primary font-anybody"
+      >
         NT$ {{ $MoneyFormat(GetPrice()[0]) }}
+      </p>
+      <p v-else class="font-semibold sm:text-2xl text-primary font-anybody">
+        NT$ {{ $MoneyFormat(GetPrice()[1]) }}
       </p>
     </div>
 
@@ -184,6 +190,7 @@
 <script>
 import EventImageDialog from '@/components/product_page/EventImageDialog.vue';
 import EventTimer from '@/components/product_page/EventTimer.vue';
+import { getLocalStorage } from '@/common/cookie';
 export default {
   name: 'ProductInfoBox',
   components: {
@@ -353,6 +360,9 @@ export default {
       time.setMinutes(parseInt(this.product_data.GoodsTimeEnd.slice(14, 16))); //   獲取結束 分
       time.setSeconds(parseInt(this.product_data.GoodsTimeEnd.slice(17, 19)));
       return time.getTime();
+    },
+    is_member() {
+      return getLocalStorage('account_token');
     },
   },
 };
