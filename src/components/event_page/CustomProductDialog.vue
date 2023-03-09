@@ -137,7 +137,7 @@
 <script>
 import Teleport from 'vue2-teleport';
 import { getLocalStorage } from '@/common/cookie';
-// import { ConvertAddShopCartData } from '@/common/gtm_methods';
+import { ConvertAddShopCartData } from '@/common/gtm_methods';
 
 import { dialog_animation } from '@/gsap/dialog';
 export default {
@@ -181,18 +181,19 @@ export default {
     },
     AddShopCart() {
       if (this.CheckActiveOption()) {
-        // window.dataLayer.push({
-        //   event: 'add_to_cart',
-        //   items: [
-        //     ConvertAddShopCartData(
-        //       this.product_data,
-        //       this.active_option,
-        //       this.amount
-        //     ),
-        //   ],
-        //   value: 0,
-        //   currency: 'TWD',
-        // });
+        window.dataLayer.push({
+          event: 'add_to_cart',
+          items: [
+            ConvertAddShopCartData(
+              this.product_data,
+              this.active_option,
+              this.amount,
+              this.GetPrice()[0]
+            ),
+          ],
+          value: 0,
+          currency: 'TWD',
+        });
         const shop_cart_item = {
           product: this.product_data,
           is_custom: 'Y',

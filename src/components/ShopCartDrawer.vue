@@ -127,18 +127,19 @@ export default {
       this.$store.commit('SetBodyLock', -1);
     },
     Add(index) {
-      // window.dataLayer.push({
-      //   event: 'add_to_cart',
-      //   items: [
-      //     ConvertAddShopCartData(
-      //       this.shopcart[index].product_data,
-      //       this.shopcart[index].active_option,
-      //       1
-      //     ),
-      //   ],
-      //   value: 0,
-      //   currency: 'TWD',
-      // });
+      window.dataLayer.push({
+        event: 'add_to_cart',
+        items: [
+          ConvertAddShopCartData(
+            this.shopcart[index].product_data,
+            this.shopcart[index].active_option,
+            1,
+            this.GetPrice(this.shopcart[index])[1]
+          ),
+        ],
+        value: 0,
+        currency: 'TWD',
+      });
       const shop_cart_item = {
         product: this.shopcart[index].product_data,
         options: this.shopcart[index].active_option,
@@ -157,22 +158,20 @@ export default {
           ConvertAddShopCartData(
             this.shopcart[index].product_data,
             this.shopcart[index].active_option,
-            1
+            1,
+            this.GetPrice(this.shopcart[index])[1]
           ),
         ],
         value: 0,
         currency: 'TWD',
       });
 
-      // RemoveShopCart({ index:index, amount:count })
       if (getLocalStorage('account_token')) {
-        // this.RemoveOnline(index, count);
         this.$store.dispatch('shopcart_module/RemoveShopCart', {
           index: index,
           amount: count,
         });
       } else {
-        // this.RemoveOffline(index, count);
         this.$store.commit('shopcart_module/RemoveShopCart', {
           index: index,
           amount: count,
@@ -186,7 +185,8 @@ export default {
         const product = ConvertAddShopCartData(
           item.product_data,
           item.active_option,
-          1
+          1,
+          this.GetPrice(item)[1]
         );
         products.push(product);
       });
@@ -208,6 +208,9 @@ export default {
     },
   },
   computed: {
+    is_member() {
+      return getLocalStorage('account_token');
+    },
     shopcart() {
       return this.$store.state.shopcart_module.shopcart;
     },
@@ -216,9 +219,15 @@ export default {
     },
     total_price() {
       let price = 0;
-      this.shopcart.forEach((item) => {
-        price += parseInt(this.GetPrice(item)[1]) * item.amount;
-      });
+      if (this.is_member) {
+        this.shopcart.forEach((item) => {
+          price += parseInt(this.GetPrice(item)[2]) * item.amount;
+        });
+      } else {
+        this.shopcart.forEach((item) => {
+          price += parseInt(this.GetPrice(item)[1]) * item.amount;
+        });
+      }
       return price;
     },
   },

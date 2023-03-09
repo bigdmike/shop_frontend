@@ -34,10 +34,15 @@
           <span
             v-if="GetPrice(item).Price != GetPrice(item).SellPrice"
             class="mr-1 text-xs text-gray-500 line-through font-anybody"
-            >NT${{ GetPrice(item).Price | currency }}</span
+            >NT${{ $MoneyFormat(GetPrice(item).Price) }}</span
           >
-          <span class="font-bold text-green font-anybody text-primary"
-            >NT${{ GetPrice(item).SellPrice | currency }}</span
+          <span
+            v-if="!is_member"
+            class="font-bold text-green font-anybody text-primary"
+            >NT${{ $MoneyFormat(GetPrice(item).SellPrice) }}</span
+          >
+          <span v-else class="font-bold text-green font-anybody text-primary"
+            >NT${{ $MoneyFormat(GetPrice(item).MemberSellPrice) }}</span
           >
         </p>
       </li>
@@ -46,6 +51,7 @@
 </template>
 
 <script>
+import { getLocalStorage } from '@/common/cookie';
 export default {
   name: 'ProductList',
   props: {
@@ -68,22 +74,25 @@ export default {
       if (item.IsCustom == 'N') {
         // 一般商品，讀取Stock資料
         let tmp_data = JSON.parse(JSON.stringify(item.Stock));
-        tmp_data = tmp_data.sort((a, b) => {
-          return a.SellPrice < b.SellPrice;
-        });
-        console.log(tmp_data[0]);
+        if (this.is_member) {
+          tmp_data = tmp_data.sort((a, b) => {
+            return a.MemberSellPrice < b.MemberSellPrice;
+          });
+        } else {
+          tmp_data = tmp_data.sort((a, b) => {
+            return a.SellPrice < b.SellPrice;
+          });
+        }
         return tmp_data[0];
       } else {
         // 客製化商品，讀取CustomGoodsStock資料
-        console.log(item.CustomGoodsStock);
         return item.CustomGoodsStock[0];
       }
     },
   },
-  filters: {
-    currency(price) {
-      let val = (price / 1).toFixed(0).replace('.', ',');
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  computed: {
+    is_member() {
+      return getLocalStorage('account_token');
     },
   },
 };

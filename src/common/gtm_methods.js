@@ -5,8 +5,12 @@ export function ConvertProductData(product_data) {
     item_id: product_data.GoodsID,
     item_name: product_data.Title,
     item_brand: GetCompanyName(),
-    price: parseInt(GetLowPrice(product_data.Stock)),
-    item_variant: GetVariant(product_data.Stock),
+    price:
+      product_data.IsCustom == 'Y'
+        ? parseInt(product_data.CustomGoodsStock.SellPrice)
+        : parseInt(GetLowPrice(product_data.Stock)),
+    item_variant:
+      product_data.IsCustom == 'Y' ? '客製化' : GetVariant(product_data.Stock),
     item_list_id:
       product_data.Menu.length > 0 ? product_data.Menu[0].MenuID : '',
     index: product_data.Seq,
@@ -23,24 +27,37 @@ export function ConvertProductData(product_data) {
   return gtm_product;
 }
 
-export function ConvertAddShopCartData(product_data, active_options, amount) {
-  const ColorTitle = product_data.Stock.filter(
-    (item) => item.ColorID == active_options[0]
-  )[0].ColorTitle;
-  const SizeTitle = product_data.Stock.filter(
-    (item) => item.SizeID == active_options[1]
-  )[0].SizeTitle;
-  const Price = product_data.Stock.filter(
-    (item) =>
-      item.SizeID == active_options[1] && item.ColorID == active_options[0]
-  )[0].SellPrice;
+export function ConvertAddShopCartData(
+  product_data,
+  active_options,
+  amount,
+  price
+) {
+  let variant_text = '';
+  if (product_data.IsCustom == 'N') {
+    const ColorTitle = product_data.Stock.filter(
+      (item) => item.ColorID == active_options[0]
+    )[0].ColorTitle;
+    const SizeTitle = product_data.Stock.filter(
+      (item) => item.SizeID == active_options[1]
+    )[0].SizeTitle;
+    variant_text = `${ColorTitle},${SizeTitle}`;
+  } else {
+    active_options.forEach((option, option_index) => {
+      option_index != 0 ? (variant_text += ',') : '';
+      product_data.CustomSpecList.forEach((item) => {
+        item.CustomSpecID == option ? (variant_text += item.SpecTitle) : '';
+      });
+    });
+  }
+
   let gtm_product = {
     item_id: product_data.GoodsID,
     item_name: product_data.Title,
     quantity: amount,
     item_brand: GetCompanyName(),
-    price: parseInt(Price),
-    item_variant: `${ColorTitle},${SizeTitle}`,
+    price: parseInt(price),
+    item_variant: variant_text,
     item_list_id:
       product_data.Menu.length > 0 ? product_data.Menu[0].MenuID : '',
     index: product_data.Seq,
@@ -59,7 +76,7 @@ export function ConvertAddShopCartData(product_data, active_options, amount) {
 
 export function GetCompanyName() {
   const column = store.state.common_column_data.filter(
-    (column) => column.Title == 'company_name'
+    (column) => column.Title == 'brand_name'
   );
   return column.length <= 0 ? '' : column[0].Content;
 }
@@ -77,4 +94,3 @@ export function GetVariant(stocks) {
     ? `${stocks[0].ColorTitle},${stocks[0].SizeTitle}`
     : '';
 }
-

@@ -20,6 +20,7 @@
         </div>
         <div class="w-full px-10 md:w-1/2">
           <InfoBox
+            ref="Info"
             :product_data="product_data"
             :active_option="active_option"
             :amount="amount"
@@ -222,7 +223,8 @@ export default {
           ConvertAddShopCartData(
             this.product_data,
             this.active_option,
-            this.amount
+            this.amount,
+            this.$refs.Info.active_stock.SellPrice
           ),
         ],
         value: 0,

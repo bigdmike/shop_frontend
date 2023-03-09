@@ -293,21 +293,22 @@ export default {
             if (this.first_enter) {
               this.first_enter = false;
               // GTM事件
-              // let products = [];
-              // this.shopcart.forEach((item) => {
-              //   const product = ConvertAddShopCartData(
-              //     item.product_data,
-              //     item.active_option,
-              //     1
-              //   );
-              //   products.push(product);
-              // });
-              // window.dataLayer.push({
-              //   event: 'beginCheckout',
-              //   items: products,
-              //   value: 0,
-              //   currency: 'TWD',
-              // });
+              let products = [];
+              this.shopcart.forEach((item) => {
+                const product = ConvertAddShopCartData(
+                  item.product_data,
+                  item.active_option,
+                  1,
+                  this.GetPrice(item.product_data, item.active_option)
+                );
+                products.push(product);
+              });
+              window.dataLayer.push({
+                event: 'beginCheckout',
+                items: products,
+                value: 0,
+                currency: 'TWD',
+              });
             }
           } else if (res.msg.indexOf('超過物流限制') != -1) {
             this.$store.commit('SetDialog', {
@@ -488,6 +489,29 @@ export default {
         this.form_data.shop_name = this.$route.query.CVSStoreName;
         this.form_data.shop_address = this.$route.query.CVSAddress;
         delLocalStorage('check_out_form');
+      }
+    },
+    GetPrice(shop_cart_item, active_option) {
+      if (shop_cart_item.IsCustom == 'N') {
+        // 一般商品，讀取Stock資料 DiscountPrice
+        const checkout_item = this.checkout_data.CheckoutList.filter((item) => {
+          return (
+            item.GoodsID == shop_cart_item.GoodsID &&
+            item.ColorID == active_option[0] &&
+            item.SizeID == active_option[1]
+          );
+        });
+        return checkout_item[0].DiscountPrice;
+      } else {
+        // 客製化商品，讀取CustomGoodsStock資料
+        const spec_text = active_option.split(',');
+        const checkout_item = this.checkout_data.CheckoutList.filter((item) => {
+          return (
+            item.GoodsID == shop_cart_item.GoodsID &&
+            item.CustomSpecID == spec_text
+          );
+        });
+        return checkout_item[0].DiscountPrice;
       }
     },
     PageInit() {

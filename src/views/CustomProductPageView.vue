@@ -14,12 +14,21 @@
       <div class="flex flex-wrap items-start mb-20 -mx-10">
         <div class="w-full px-10 mb-10 md:w-1/2 md:mb-0">
           <ImageGallery
+            v-if="product_data.CustomImagePath == ''"
             :images="product_data.Picture"
             :title="product_data.Title"
+          />
+          <CustomImageBox
+            v-else
+            :active_option="active_option"
+            :category_list="product_data.SpecCategoryList"
+            :spec_list="product_data.CustomSpecList"
+            :image_path="product_data.CustomImagePath"
           />
         </div>
         <div class="w-full px-10 md:w-1/2">
           <InfoBox
+            ref="Info"
             :product_data="product_data"
             :active_option="active_option"
             :amount="amount"
@@ -55,6 +64,11 @@
           v-html="product_data.Memo1"
         ></div>
       </div>
+      <CustomImageGallery
+        v-if="product_data.CustomImagePath != ''"
+        :image_list="product_data.Picture"
+        :title="product_data.Title"
+      />
       <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
         <div class="mb-10">
           <h2 class="relative inline-block px-8">
@@ -151,16 +165,19 @@
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import ImageGallery from '@/components/product_page/image_gallery.vue';
+import CustomImageBox from '@/components/product_page/custom_image_box.vue';
 import InfoBox from '@/components/product_page/custom_info_box.vue';
 import ProductList from '@/components/product_list/product_list.vue';
+import CustomImageGallery from '@/components/product_page/custom_image_gallery.vue';
 import MoreLinkButton from '@/components/ui/MoreLinkButton.vue';
 import { getLocalStorage } from '@/common/cookie';
 import { getSingleProductData } from '@/api/page_data';
 import { GetMetaData } from '@/common/meta';
 import {
   ConvertProductData,
-  // ConvertAddShopCartData,
+  ConvertAddShopCartData,
 } from '@/common/gtm_methods';
+import customize_image_data from '@/assets/data/customize.json';
 import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'ProductPage',
@@ -170,6 +187,8 @@ export default {
     InfoBox,
     ProductList,
     MoreLinkButton,
+    CustomImageBox,
+    CustomImageGallery,
   },
   data() {
     return {
@@ -193,6 +212,7 @@ export default {
       active_tab: '商品介紹',
       product_data: null,
       meta_data: null,
+      customize_image_data: customize_image_data,
     };
   },
   methods: {
@@ -219,18 +239,19 @@ export default {
     },
     AddShopCart() {
       if (this.CheckActiveOption()) {
-        // window.dataLayer.push({
-        //   event: 'add_to_cart',
-        //   items: [
-        //     ConvertAddShopCartData(
-        //       this.product_data,
-        //       this.active_option,
-        //       this.amount
-        //     ),
-        //   ],
-        //   value: 0,
-        //   currency: 'TWD',
-        // });
+        window.dataLayer.push({
+          event: 'add_to_cart',
+          items: [
+            ConvertAddShopCartData(
+              this.product_data,
+              this.active_option,
+              this.amount,
+              this.$refs.Info.GetPrice()[0]
+            ),
+          ],
+          value: 0,
+          currency: 'TWD',
+        });
         const shop_cart_item = {
           product: this.product_data,
           is_custom: 'Y',
@@ -339,6 +360,14 @@ export default {
       category.forEach(() => {
         this.active_option.push('');
       });
+
+      // 設定客製化圖片
+      const custom_image_data = this.customize_image_data.filter(
+        (item) => item.GoodsID == data.GoodsID
+      );
+      console.log(custom_image_data);
+      data.CustomImagePath =
+        custom_image_data.length > 0 ? custom_image_data[0].ImagePath : '';
       return data;
     },
   },
@@ -356,6 +385,9 @@ export default {
           this.SetNavTrigger();
         });
       }
+    },
+    $route() {
+      this.GetProductData();
     },
   },
   computed: {

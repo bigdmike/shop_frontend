@@ -25,9 +25,18 @@
             />
           </div>
           <div class="w-full p-5">
-            <h2 class="text-xl font-bold text-primary">
+            <h2 class="text-xl font-bold text-white">
               {{ product_data.Title }}
             </h2>
+            <p
+              v-if="!is_member"
+              class="mb-5 font-semibold text-primary font-anybody"
+            >
+              NT$ {{ $MoneyFormat(GetPrice().SellPrice) }}
+            </p>
+            <p v-else class="mb-5 font-semibold text-primary font-anybody">
+              NT$ {{ $MoneyFormat(GetPrice().MemberSellPrice) }}
+            </p>
             <div class="w-full mt-5 mb-10">
               <div class="mb-5">
                 <p
@@ -150,7 +159,7 @@
 <script>
 import Teleport from 'vue2-teleport';
 import { getLocalStorage } from '@/common/cookie';
-// import { ConvertAddShopCartData } from '@/common/gtm_methods';
+import { ConvertAddShopCartData } from '@/common/gtm_methods';
 
 import { dialog_animation } from '@/gsap/dialog';
 export default {
@@ -188,18 +197,19 @@ export default {
       this.amount + val <= 1 ? (this.amount = 1) : (this.amount += val);
     },
     AddShopCart() {
-      // window.dataLayer.push({
-      //   event: 'add_to_cart',
-      //   items: [
-      //     ConvertAddShopCartData(
-      //       this.product_data,
-      //       this.active_option,
-      //       this.amount
-      //     ),
-      //   ],
-      //   value: 0,
-      //   currency: 'TWD',
-      // });
+      window.dataLayer.push({
+        event: 'add_to_cart',
+        items: [
+          ConvertAddShopCartData(
+            this.product_data,
+            this.active_option,
+            this.amount,
+            this.GetPrice().SellPrice
+          ),
+        ],
+        value: 0,
+        currency: 'TWD',
+      });
       const shop_cart_item = {
         product: this.product_data,
         options: this.active_option,
@@ -213,11 +223,28 @@ export default {
         this.$store.commit('shopcart_module/AddShopCart', shop_cart_item);
       }
     },
+    GetPrice() {
+      if (this.product_data.IsCustom == 'N') {
+        // 一般商品，讀取Stock資料
+        let tmp_data = JSON.parse(JSON.stringify(this.product_data.Stock));
+        tmp_data = tmp_data.sort((a, b) => {
+          return a.SellPrice < b.SellPrice;
+        });
+        console.log(tmp_data);
+        return tmp_data[0];
+      } else {
+        // 客製化商品，讀取CustomGoodsStock資料
+        return this.product_data.CustomGoodsStock[0];
+      }
+    },
   },
   mounted() {
     this.dialog_animation = new dialog_animation(this.$refs.MainContent);
   },
   computed: {
+    is_member() {
+      return getLocalStorage('account_token');
+    },
     first_options() {
       let tmp_options = [];
       this.product_data.Stock.forEach((item) => {

@@ -72,19 +72,19 @@
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">購買人姓名</p>
             <p class="text-sm font-medium">
-              {{ form_data.buyer_last_name + form_data.buyer_first_name }}
+              {{ form_data.BuyerName }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">購買人電話</p>
             <p class="text-sm font-medium">
-              {{ form_data.buyer_phone }}
+              {{ form_data.BuyerPhone }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">購買人信箱</p>
             <p class="text-sm font-medium">
-              {{ form_data.consignee_email }}
+              {{ form_data.ReceiverEmail }}
             </p>
           </li>
         </ol>
@@ -97,24 +97,22 @@
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人姓名</p>
             <p class="text-sm font-medium">
-              {{
-                form_data.consignee_last_name + form_data.consignee_first_name
-              }}
+              {{ form_data.ReceiverName }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人電話</p>
             <p class="text-sm font-medium">
-              {{ form_data.consignee_phone }}
+              {{ form_data.ReceiverPhone }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人地址</p>
             <p class="text-sm font-medium">
               {{
-                form_data.consignee_city +
-                form_data.consignee_area +
-                form_data.consignee_address
+                get_city_area.City +
+                get_city_area.Area +
+                form_data.ReceiverAddress
               }}
             </p>
           </li>
@@ -250,10 +248,14 @@ export default {
       // GTM事件
       let products = [];
       this.shopcart.forEach((item) => {
+        console.log(item.CustomSpecID);
         const product = ConvertAddShopCartData(
-          item.product_data,
-          item.active_option,
-          item.amount
+          item.ProductData,
+          item.IsCustom == 'Y'
+            ? item.CustomSpecID.split(',')
+            : [item.ColorID, item.SizeID],
+          item.Amount,
+          item.DiscountPrice
         );
         products.push(product);
       });
@@ -273,12 +275,13 @@ export default {
       // const shopcart_data = getLocalStorage('trade_shopcart');
       const checkout_data = getLocalStorage('trade_checkout_data');
       if (this.$route.params.id && trade_data && checkout_data) {
-        this.form_data = JSON.parse(trade_data);
+        this.form_data = JSON.parse(trade_data)[0];
         // this.shopcart = JSON.parse(shopcart_data);
         this.checkout_data = JSON.parse(checkout_data);
         // delLocalStorage('trade_data');
         // delLocalStorage('trade_shopcart');
         // delLocalStorage('trade_checkout_data');
+        this.SendPurchase();
         this.$store.commit('shopcart_module/SetShopCart', []);
         this.meta_data = GetMetaData('訂單完成', '', '');
         this.$nextTick(() => {
@@ -298,7 +301,13 @@ export default {
     },
   },
   computed: {
-    ...mapState(['shipway_data', 'payment_data', 'image_loaded']),
+    ...mapState([
+      'shipway_data',
+      'payment_data',
+      'image_loaded',
+      'product_data',
+      'zipcode_data',
+    ]),
     ...mapGetters(['data_load_finish']),
     shopcart() {
       let shopcart = [];
@@ -319,6 +328,9 @@ export default {
         } else {
           let tmp_shopcart_item = Object.assign({}, item);
           tmp_shopcart_item.Amount = 1;
+          tmp_shopcart_item.ProductData = this.product_data.filter(
+            (product) => product.GoodsID == item.GoodsID
+          )[0];
           shopcart.push(tmp_shopcart_item);
         }
       });
@@ -370,16 +382,18 @@ export default {
         return '';
       }
       return this.shipway_data.filter(
-        (item) => item.ShippingID == this.form_data.ship_way
+        (item) => item.ShippingID == this.form_data.ShippingID
       )[0].Title;
     },
     active_payment() {
-      if (this.form_data == null) {
-        return '';
-      }
       return this.payment_data.filter(
-        (item) => item.PaymentID == this.form_data.pay_way
+        (item) => item.PaymentID == this.form_data.PaymentID
       )[0].Title;
+    },
+    get_city_area() {
+      return this.zipcode_data.filter(
+        (item) => item.ZipCode == this.form_data.ReceiverAddressCode
+      )[0];
     },
   },
   created() {
