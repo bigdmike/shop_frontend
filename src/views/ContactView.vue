@@ -40,7 +40,7 @@
       <div data-section-content class="flex justify-end w-full">
         <div>
           <p class="mb-10">
-            請告訴我們您的建議、需求或異業合作的想法，我們將在收到信件後勁快回覆您，謝謝！
+            請告訴我們您的建議、需求或異業合作的想法，我們將在收到信件後盡快回覆您，謝謝！
           </p>
           <div class="mb-5">
             <label for="NameInput" class="block mb-1 text-sm font-semibold"
@@ -130,6 +130,7 @@ import { validEmail } from '@/common/validate';
 import { section_animation } from '@/gsap/section';
 import MoreButton from '@/components/ui/MoreButton.vue';
 import { mapState, mapGetters } from 'vuex';
+import { postContact } from '@/api/page_data';
 export default {
   name: 'ContactView',
   components: {
@@ -150,6 +151,7 @@ export default {
   },
   methods: {
     PageInit() {
+      this.meta_data = GetMetaData('contact', '', '');
       this.$nextTick(() => {
         this.$emit('load-image', 'home');
       });
@@ -169,9 +171,12 @@ export default {
       }
     },
     SendData() {
-      this.$store.commit('SetDialog', {
-        status: true,
-        content: '訊息已送出，我們將會盡快與您聯絡',
+      postContact(this.form_data).then((res) => {
+        console.log(res);
+        this.$store.commit('SetDialog', {
+          status: true,
+          content: '訊息已送出，我們將會盡快與您聯絡',
+        });
       });
     },
     GetError(key) {
@@ -191,7 +196,6 @@ export default {
     },
   },
   created() {
-    this.meta_data = GetMetaData('contact', '', '');
     this.data_load_finish ? this.PageInit() : '';
   },
   metaInfo() {

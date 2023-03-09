@@ -1,4 +1,4 @@
-import { get } from '@/common/request';
+import { get, post } from '@/common/request';
 
 export function getCarouselData() {
   return get('/carousel');
@@ -61,4 +61,14 @@ export function getPaymentData() {
 
 export function getShipwayData() {
   return get('/shipping');
+}
+
+export function postContact(data) {
+  const form = {
+    Name: data.name,
+    Phone: data.phone,
+    Email: data.email,
+    Comment: data.comment,
+  };
+  return post('/contactUs', form);
 }
