@@ -232,6 +232,9 @@ export default {
     },
     SetGsap() {
       this.section_animation = new section_animation(this.$refs.MainContent);
+      this.$nextTick(() => {
+        this.$PageReady(this.meta_data.title);
+      });
     },
     ChangePage(val) {
       this.page = val;

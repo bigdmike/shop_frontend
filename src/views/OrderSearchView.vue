@@ -105,12 +105,25 @@ export default {
         }
       });
     },
+    PageInit() {
+      this.meta_data = GetMetaData('訂單查詢', '', '');
+      this.$nextTick(() => {
+        this.$PageReady(this.meta_data.title);
+      });
+    },
+  },
+  watch: {
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
+    },
+  },
+  computed: {
+    data_load_finish() {
+      return this.$store.getters.data_load_finish;
+    },
   },
   created() {
-    this.meta_data = GetMetaData('訂單查詢', '', '');
-    this.$nextTick(() => {
-      this.$PageReady(this.meta_data.title);
-    });
+    this.data_load_finish ? this.PageInit() : '';
   },
   metaInfo() {
     return this.meta_data;

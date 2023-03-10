@@ -43,6 +43,10 @@ export default {
       this.$refs.NewsListSection.SetGsap();
       this.$refs.MainProductSection.SetGsap();
       this.$refs.AboutSection.SetGsap();
+
+      this.$nextTick(() => {
+        this.$PageReady(this.meta_data.title);
+      });
     },
     PageInit() {
       this.$nextTick(() => {

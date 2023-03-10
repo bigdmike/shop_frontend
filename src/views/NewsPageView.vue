@@ -152,6 +152,9 @@ export default {
     SetGsap() {
       this.$refs.RelatedList.SetGsap();
       this.section_animation = new section_animation(this.$refs.MainContent);
+      this.$nextTick(() => {
+        this.$PageReady(this.meta_data.title);
+      });
     },
     PageInit() {
       if (this.news_data != 'error') {
@@ -167,7 +170,6 @@ export default {
 
         this.$nextTick(() => {
           this.$refs.clone.value = window.location.href;
-          this.$PageReady(this.meta_data.title);
           this.$emit('load-image', 'home');
         });
       } else {

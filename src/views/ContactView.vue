@@ -157,9 +157,11 @@ export default {
       });
     },
     SetGsap() {
-      console.log('load gsap');
       this.section_animation = new section_animation(this.$refs.MainContent);
       this.section_animation.setup();
+      this.$nextTick(() => {
+        this.$PageReady(this.meta_data.title);
+      });
     },
     Validate() {
       this.errors = [];

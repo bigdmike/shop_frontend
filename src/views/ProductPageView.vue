@@ -293,8 +293,8 @@ export default {
             this.$ImageUrl(image)
           );
           this.$nextTick(() => {
-            this.$PageReady(this.meta_data.title);
             this.$emit('load-image');
+            this.$PageReady(this.meta_data.title);
           });
         } else if (res.code == 500) {
           this.$RedirectError();

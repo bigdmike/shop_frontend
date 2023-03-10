@@ -397,6 +397,10 @@ export default {
             this.$refs.MainContent
           ))
         : '';
+
+      this.$nextTick(() => {
+        this.$PageReady(this.meta_data.title);
+      });
     },
     PageInit() {
       this.meta_data = GetMetaData('dealer', '', '');
