@@ -38,7 +38,7 @@
         class="relative mt-5"
       >
         <div class="w-full p-3 mb-3 rounded-xl bg-basic_gray bg-opacity-20">
-          <p class="text-sm">
+          <p class="text-sm text-white">
             您已選擇門市：<b class="text-base font-bold text-white">{{
               form_data.shop_name
             }}</b

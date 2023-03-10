@@ -485,10 +485,14 @@ export default {
     SetCVSData() {
       if (getLocalStorage('check_out_form')) {
         this.form_data = JSON.parse(getLocalStorage('check_out_form'));
-        this.form_data.shop_id = this.$route.query.CVSStoreID;
-        this.form_data.shop_name = this.$route.query.CVSStoreName;
-        this.form_data.shop_address = this.$route.query.CVSAddress;
-        delLocalStorage('check_out_form');
+
+        // ?MerchantID=2000933&MerchantTradeNo=miGQA1678428295&LogisticsSubType=UNIMARTC2C&CVSStoreID=131386&CVSStoreName=建盛門市&CVSAddress=新竹市東區建中一路52號1樓&CVSTelephone=&CVSOutSide=0&ExtraData=
+        if (this.$route.query.MerchantID) {
+          this.form_data.shop_id = this.$route.query.CVSStoreID;
+          this.form_data.shop_name = this.$route.query.CVSStoreName;
+          this.form_data.shop_address = this.$route.query.CVSAddress;
+        }
+        delLocalStorage('check_out_form_');
       }
     },
     GetPrice(shop_cart_item, active_option) {
