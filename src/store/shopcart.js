@@ -29,7 +29,6 @@ const GetProductIndex = (state, product_id) => {
 };
 
 const CheckActiveOption = ({ product, options }, is_custom) => {
-  console.log({ product, options }, is_custom);
   if (is_custom == 'Y') {
     let error = false;
     options.forEach((option) => {
@@ -43,6 +42,7 @@ const CheckActiveOption = ({ product, options }, is_custom) => {
         error = true;
       }
     });
+    console.log({ product, options }, is_custom, error);
 
     return error ? 'error' : '';
   } else {
@@ -128,13 +128,15 @@ const shopcart_module = {
         }
       }
 
-      const remove_result = await RemoveShopCart(remove_list);
-      if (remove_result.code == 302) {
-        // token 過期，清空購物車
-        commit('SetShopCart', []);
-      } else {
-        // 移除商品後，重新取得目前購物車
-        dispatch('GetShopCart');
+      if (remove_list.length > 0) {
+        const remove_result = await RemoveShopCart(remove_list);
+        if (remove_result.code == 302) {
+          // token 過期，清空購物車
+          commit('SetShopCart', []);
+        } else {
+          // 移除商品後，重新取得目前購物車
+          dispatch('GetShopCart');
+        }
       }
     },
     GetShopCart({ dispatch }) {
@@ -190,7 +192,7 @@ const shopcart_module = {
       }
       commit('SetShopCart', tmp_list);
     },
-    ConvertShopCart({ dispatch, commit, state }, shopcart) {
+    async ConvertShopCart({ dispatch, commit, state }, shopcart) {
       // 暫存購物車
       let tmp_list = [];
       // 不存在的商品
@@ -226,8 +228,9 @@ const shopcart_module = {
 
           if (option_status == 'error') {
             // 若商品選項已不存在，則新增至待刪除清單
-            delete_list.push(item);
+            delete_list.push(item.ShoppingCartID);
           } else if (shop_cart_item_index == -1) {
+            console.log(product_data);
             // 如果商品不存在，則新增進暫存購物車
             let tmp_shopcart_item = {
               product_data: product_data,
@@ -251,14 +254,29 @@ const shopcart_module = {
           }
         } else {
           // 若商品已不存在，則新增至待刪除清單
-          delete_list.push(item);
+          // delete_list.push(item);
+          delete_list.push(item.ShoppingCartID);
         }
       });
 
+      console.log(tmp_list, delete_list);
       // 移除不存在的商品後，設定購物車
-      delete_list.length > 0
-        ? dispatch('RemoveShopCart', delete_list)
-        : commit('SetShopCart', tmp_list);
+      if (delete_list.length > 0) {
+        const remove_result = await RemoveShopCart(delete_list);
+        if (remove_result.code == 302) {
+          // token 過期，清空購物車
+          commit('SetShopCart', []);
+        } else {
+          // 移除商品後，重新取得目前購物車
+          dispatch('GetShopCart');
+        }
+      } else {
+        commit('SetShopCart', tmp_list);
+      }
+
+      // delete_list.length > 0
+      //   ? dispatch('RemoveShopCart', tmp_list.length-1,delete_list.length)
+      //   : commit('SetShopCart', tmp_list);
     },
   },
   mutations: {
@@ -308,6 +326,7 @@ const shopcart_module = {
       SetLocalShopCart(state.shopcart);
     },
     SetShopCart(state, shopcart) {
+      console.log('SetShopCart', shopcart);
       state.shopcart = shopcart;
       SetLocalShopCart(shopcart);
     },

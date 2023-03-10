@@ -504,7 +504,8 @@ export default {
         return checkout_item[0].DiscountPrice;
       } else {
         // 客製化商品，讀取CustomGoodsStock資料
-        const spec_text = active_option.split(',');
+        console.log(active_option);
+        const spec_text = active_option.join();
         const checkout_item = this.checkout_data.CheckoutList.filter((item) => {
           return (
             item.GoodsID == shop_cart_item.GoodsID &&

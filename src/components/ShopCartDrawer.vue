@@ -1,5 +1,9 @@
 <template>
-  <nav ref="MainContent" class="fixed top-0 bottom-0 z-30 w-screen left-full">
+  <nav
+    ref="MainContent"
+    v-if="data_load_finish"
+    class="fixed top-0 bottom-0 z-30 w-screen left-full"
+  >
     <div
       data-menu
       class="absolute top-0 flex flex-col bottom-0 left-full sm:w-[432px] xs:w-5/6 w-full bg-basic_gray z-10 pt-12 pb-5"
@@ -96,6 +100,7 @@ import { getLocalStorage } from '@/common/cookie';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
 import ProductCard from '@/components/shopcart/product_card.vue';
 import CustomProductCard from '@/components/shopcart/custom_product_card.vue';
+import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'ShopCartDrawer',
   components: {
@@ -197,6 +202,13 @@ export default {
         currency: 'TWD',
       });
     },
+    PageInit() {
+      this.$nextTick(() => {
+        this.menu_gsap_animation = new shopcart_drawer_animation(
+          this.$refs.MainContent
+        );
+      });
+    },
   },
   watch: {
     dialog() {
@@ -206,17 +218,25 @@ export default {
         this.OpenShopCart();
       }
     },
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
+    },
   },
   computed: {
+    ...mapState({
+      shopcart: (state) => state.shopcart_module.shopcart,
+      dialog: 'shopcart_drawer',
+    }),
+    ...mapGetters(['data_load_finish']),
     is_member() {
       return getLocalStorage('account_token');
     },
-    shopcart() {
-      return this.$store.state.shopcart_module.shopcart;
-    },
-    dialog() {
-      return this.$store.state.shopcart_drawer;
-    },
+    // shopcart() {
+    //   return this.$store.state.shopcart_module.shopcart;
+    // },
+    // dialog() {
+    //   return this.$store.state.shopcart_drawer;
+    // },
     total_price() {
       let price = 0;
       if (this.is_member) {
@@ -230,11 +250,6 @@ export default {
       }
       return price;
     },
-  },
-  mounted() {
-    this.menu_gsap_animation = new shopcart_drawer_animation(
-      this.$refs.MainContent
-    );
   },
 };
 </script>

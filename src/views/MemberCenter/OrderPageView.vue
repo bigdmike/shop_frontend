@@ -28,62 +28,32 @@
       </div>
       <ol class="mb-5">
         <li
-          v-for="(item, item_index) in trade_data.SubTradeList"
+          v-for="(item, item_index) in trade_product_data"
           :key="`product_${item_index}`"
           class="p-3 mb-4 bg-black rounded-md"
         >
-          <p class="mb-5 font-bold text-primary">
-            {{ GetProduct(item) }}
-          </p>
-          <template v-if="GetProduct(item) != '商品已移除'">
-            <div
-              class="inline-block mb-2"
-              v-if="
-                item.DiscountID_PercentMenu_Info &&
-                item.DiscountID_PercentMenu_Info.length > 0
-              "
-            >
-              <p class="text-xs">套用優惠：</p>
-              <p class="px-5 py-1 text-sm text-white rounded-md bg-basic_black">
-                {{ item.DiscountID_PercentMenu_Info.Title }}
-              </p>
-            </div>
-            <div
-              class="flex flex-wrap items-center justify-between sm:flex-nowrap"
-            >
-              <div class="flex items-center text-sm">
-                <p class="mr-5">
-                  <span
-                    v-if="item.SellPrice != item.FinalPrice"
-                    class="text-xs line-through text-basic_gray"
-                    >NT${{ item.SellPrice }}</span
-                  >
-                  NT$ {{ item.FinalPrice }}
-                </p>
-                <p>數量：1</p>
-              </div>
-              <p class="w-full text-sm text-right sm:w-auto">
-                小計 NT${{ item.FinalPrice }}
-              </p>
-            </div>
-          </template>
+          <CustomShopcartProductCard
+            v-if="item.ProductData.IsCustom == 'Y'"
+            :shopcart_item="item"
+          />
+          <ShopcartProductCard v-else :shopcart_item="item" />
         </li>
         <li class="flex items-center justify-end p-3">
           <p class="text-sm">金流手續費</p>
-          <p class="w-32 text-sm font-bold text-right">
-            NT$ {{ trade_data.PaymentSubtotalFee }}
+          <p class="w-32 text-sm font-bold text-right font-anybody">
+            NT$ {{ $MoneyFormat(trade_data.PaymentSubtotalFee) }}
           </p>
         </li>
         <li class="flex items-center justify-end p-3">
           <p class="text-sm">運費</p>
-          <p class="w-32 text-sm font-bold text-right">
-            NT$ {{ trade_data.ShippingFee }}
+          <p class="w-32 text-sm font-bold text-right font-anybody">
+            NT$ {{ $MoneyFormat(trade_data.ShippingFee) }}
           </p>
         </li>
         <li class="flex items-center justify-end p-3">
           <p class="">總金額</p>
-          <p class="w-32 font-bold text-right text-primary">
-            NT$ {{ trade_data.Price }}
+          <p class="w-32 font-bold text-right text-primary font-anybody">
+            NT$ {{ $MoneyFormat(trade_data.Price) }}
           </p>
         </li>
       </ol>
@@ -160,10 +130,16 @@
   </div>
 </template>
 <script>
+import CustomShopcartProductCard from '@/components/member_order/custom_product_card.vue';
+import ShopcartProductCard from '@/components/member_order/product_card.vue';
 import { getOrderList } from '@/api/member';
 import { delLocalStorage } from '@/common/cookie';
 export default {
   name: 'OrderListView',
+  components: {
+    CustomShopcartProductCard,
+    ShopcartProductCard,
+  },
   data() {
     return {
       trade_list: [],
@@ -220,6 +196,50 @@ export default {
         (item) => item.TradeID == this.$route.params.id
       );
       return trade_data.length > 0 ? trade_data[0] : 'error';
+    },
+    trade_product_data() {
+      if (this.trade_data == null || this.trade_data == 'error') {
+        return [];
+      } else {
+        let tmp_product_list = JSON.parse(
+          JSON.stringify(this.trade_data.SubTradeList)
+        );
+        let product_list = [];
+
+        tmp_product_list.forEach((item) => {
+          const product_detail = this.product_list.filter(
+            (product) => product.GoodsID == item.GoodsID
+          )[0];
+          if (product_detail.IsCustom == 'N') {
+            // 一般商品
+            let match = -1;
+            product_list.forEach((product, product_inndex) => {
+              if (
+                product.GoodsID == item.GoodsID &&
+                product.ColorID == item.ColorID &&
+                product.SizeID == item.SizeID
+              ) {
+                match = product_inndex;
+              }
+            });
+            if (match != -1) {
+              product_list[match].Amount += 1;
+            } else {
+              let tmp_product = Object.assign({}, item);
+              tmp_product.Amount = 1;
+              tmp_product.ProductData = product_detail;
+              product_list.push(tmp_product);
+            }
+          } else {
+            let tmp_product = Object.assign({}, item);
+            tmp_product.Amount = 1;
+            tmp_product.ProductData = product_detail;
+            product_list.push(tmp_product);
+          }
+        });
+
+        return product_list;
+      }
     },
     zipcode_data() {
       return this.$store.state.zipcode_data;

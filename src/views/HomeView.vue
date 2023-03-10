@@ -49,6 +49,7 @@ export default {
       });
     },
     PageInit() {
+      this.meta_data = GetMetaData('home', '', '');
       this.$nextTick(() => {
         this.$emit('load-image', 'home');
       });
@@ -68,9 +69,6 @@ export default {
   },
   mounted() {
     this.data_load_finish ? this.PageInit() : '';
-  },
-  created() {
-    this.meta_data = GetMetaData('home', '', '');
   },
   metaInfo() {
     return this.meta_data;

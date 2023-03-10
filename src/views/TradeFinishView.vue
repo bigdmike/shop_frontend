@@ -72,19 +72,19 @@
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">購買人姓名</p>
             <p class="text-sm font-medium">
-              {{ form_data.BuyerName }}
+              {{ form_data.buyer_last_name + form_data.buyer_first_name }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">購買人電話</p>
             <p class="text-sm font-medium">
-              {{ form_data.BuyerPhone }}
+              {{ form_data.buyer_phone }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">購買人信箱</p>
             <p class="text-sm font-medium">
-              {{ form_data.ReceiverEmail }}
+              {{ form_data.consignee_email }}
             </p>
           </li>
         </ol>
@@ -97,22 +97,26 @@
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人姓名</p>
             <p class="text-sm font-medium">
-              {{ form_data.ReceiverName }}
+              {{
+                form_data.consignee_last_name + form_data.consignee_first_name
+              }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人電話</p>
             <p class="text-sm font-medium">
-              {{ form_data.ReceiverPhone }}
+              {{ form_data.consignee_phone }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人地址</p>
             <p class="text-sm font-medium">
+              <!-- get_city_area.City +
+                get_city_area.Area + -->
               {{
-                get_city_area.City +
-                get_city_area.Area +
-                form_data.ReceiverAddress
+                form_data.consignee_city +
+                form_data.consignee_area +
+                form_data.consignee_address
               }}
             </p>
           </li>
@@ -272,14 +276,14 @@ export default {
     },
     PageInit() {
       const trade_data = getLocalStorage('trade_data');
-      // const shopcart_data = getLocalStorage('trade_shopcart');
       const checkout_data = getLocalStorage('trade_checkout_data');
       if (this.$route.params.id && trade_data && checkout_data) {
-        this.form_data = JSON.parse(trade_data)[0];
-        // this.shopcart = JSON.parse(shopcart_data);
+        this.form_data =
+          JSON.parse(trade_data).length == 1
+            ? JSON.parse(trade_data)[0]
+            : JSON.parse(trade_data);
         this.checkout_data = JSON.parse(checkout_data);
         // delLocalStorage('trade_data');
-        // delLocalStorage('trade_shopcart');
         // delLocalStorage('trade_checkout_data');
         this.SendPurchase();
         this.$store.commit('shopcart_module/SetShopCart', []);
@@ -381,13 +385,14 @@ export default {
       if (this.form_data == null) {
         return '';
       }
+      console.log(this.shipway_data, this.form_data.ship_way);
       return this.shipway_data.filter(
-        (item) => item.ShippingID == this.form_data.ShippingID
+        (item) => item.ShippingID == this.form_data.ship_way
       )[0].Title;
     },
     active_payment() {
       return this.payment_data.filter(
-        (item) => item.PaymentID == this.form_data.PaymentID
+        (item) => item.PaymentID == this.form_data.pay_way
       )[0].Title;
     },
     get_city_area() {
