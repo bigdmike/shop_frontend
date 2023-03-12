@@ -92,9 +92,6 @@ export default {
     LoadImage(from) {
       this.$nextTick(() => {
         console.log('load from ' + from);
-        // this.image_loader != null
-        //   ? this.image_loader.Destroy()
-        //   : (this.image_loader = new ImageLoader());
         this.image_loader.LoadImage();
       });
     },
@@ -189,7 +186,7 @@ export default {
       }
     },
     $route() {
-      // this.GetOrderMemo();
+      this.GetOrderMemo();
       this.ScrollToTop();
     },
   },
@@ -197,11 +194,6 @@ export default {
     this.CheckPageData();
   },
   mounted() {
-    // const h_full_el = document.querySelectorAll('.h-screen');
-    // h_full_el.forEach((item) => {
-    //   item.style.height = `${window.innerHeight}px`;
-    // });
-    console.log('app mounted');
     this.image_loader = new ImageLoader();
     this.image_loader.SetScroller();
     this.marquee_animation = new marquee();

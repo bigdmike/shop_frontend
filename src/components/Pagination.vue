@@ -4,7 +4,6 @@
       <li
         class="flex items-center justify-center mr-4 sm:w-9 sm:h-9 w-7 h-7 md:mr-10"
       >
-        <!-- :class="{ 'bg-gray-200': isInFirstPage }" -->
         <button
           type="button "
           class="px-3 py-2 font-anybody"
@@ -12,30 +11,9 @@
           :disabled="isInFirstPage"
           @click="gotoPrevious"
         >
-          <!-- &lsaquo; -->
           <span class="icon-chevron_left"></span>
         </button>
       </li>
-
-      <!-- <template v-if="showDots('left')">
-        <li class="leading-tight">
-          <button
-            type="button"
-            class="px-3 py-2 font-anybody"
-            :class="{ 'cursor-not-allowed': isInFirstPage }"
-            :disabled="isInFirstPage"
-            @click="gotoPageNumber(1)"
-          >
-            1
-          </button>
-        </li>
-
-        <li class="leading-tight">
-          <button type="button" class="px-3 py-2 font-anybody" :disabled="true">
-            ...
-          </button>
-        </li>
-      </template> -->
 
       <li
         class="mx-1 leading-none rounded-full sm:w-9 sm:h-9 w-7 h-7"
@@ -43,8 +21,6 @@
         :key="`pages_${index}`"
         :class="page === currentPage ? 'bg-primary' : ''"
       >
-        <!-- :class="{ 'bg-gray-600': page === currentPage }" -->
-
         <button
           type="button"
           class="flex items-center justify-center text-sm sm:w-9 sm:h-9 w-7 h-7 font-anybody"
@@ -64,7 +40,6 @@
         </li>
 
         <li class="flex items-center justify-center sm:w-9 sm:h-9 w-7 h-7">
-          <!-- :class="{ 'bg-gray-600': isInLastPage }" -->
           <button
             type="button"
             class="px-3 py-2 font-anybody"
@@ -80,7 +55,6 @@
       <li
         class="flex items-center justify-center ml-4 sm:w-9 sm:h-9 w-7 h-7 md:ml-10"
       >
-        <!-- :class="{ 'bg-gray-200': isInLastPage }" -->
         <button
           type="button"
           class="px-3 py-2 font-anybody"
@@ -88,7 +62,6 @@
           :disabled="isInLastPage"
           @click="gotoNext"
         >
-          <!-- &rsaquo; -->
           <span class="icon-chevron_right"></span>
         </button>
       </li>
