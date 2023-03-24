@@ -62,26 +62,6 @@
       v-if="product_data.GoodsTimeEnd != null"
     />
 
-    <div v-if="product_data.Discount.length > 0" class="mb-5">
-      <p class="mb-2 text-sm text-primary">此商品參與的優惠活動</p>
-      <ol
-        class="py-2 border rounded-lg text-primary bg-primary bg-opacity-10 border-primary"
-      >
-        <li
-          class="flex items-center px-4 py-1 text-sm"
-          :key="`event_${item_index}`"
-          v-for="(item, item_index) in product_data.Discount"
-        >
-          {{ item.Title }}
-          <a
-            @click="OpenEventImageDialog(item)"
-            v-if="item.Image1 != ''"
-            class="block ml-2 text-xs font-bold underline cursor-pointer"
-            >查看贈品</a
-          >
-        </li>
-      </ol>
-    </div>
     <div class="w-full mt-5 mb-10">
       <div
         class="mb-5"
@@ -142,7 +122,7 @@
       </div>
     </div>
 
-    <div class="items-center hidden md:flex">
+    <div class="items-center hidden mb-10 md:flex">
       <div class="flex items-center mr-8">
         <button
           @click="CopyLink"
@@ -183,6 +163,27 @@
             : '商品已售完'
         }}
       </button>
+    </div>
+
+    <div v-if="product_data.Discount.length > 0">
+      <p class="mb-2 text-sm text-primary">此商品參與的優惠活動</p>
+      <ol
+        class="py-2 text-white bg-white border rounded-md bg-opacity-10 border-primary"
+      >
+        <li
+          class="flex items-center px-4 py-1 text-sm"
+          :key="`event_${item_index}`"
+          v-for="(item, item_index) in product_data.Discount"
+        >
+          {{ item.Title }}
+          <a
+            @click="OpenEventImageDialog(item)"
+            v-if="item.Image1 != ''"
+            class="block ml-2 text-xs font-bold underline cursor-pointer text-primary"
+            >查看贈品</a
+          >
+        </li>
+      </ol>
     </div>
   </section>
 </template>

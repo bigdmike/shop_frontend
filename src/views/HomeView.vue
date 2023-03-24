@@ -1,15 +1,8 @@
 <template>
   <main id="Home" data-scroll-section class="relative w-full">
-    <CarouselSection
-      v-if="carousel_data != null"
-      ref="CarouselSection"
-      :carousel_data="carousel_data"
-    />
+    <CarouselSection ref="CarouselSection" :carousel_data="carousel_data" />
     <MainProductSection ref="MainProductSection" />
-    <AboutSection
-      ref="AboutSection"
-      :content="$GetColumn('about_section_1_content')"
-    />
+    <AboutSection ref="AboutSection" />
     <VideoSection ref="VideoSection" />
     <NewsListSection ref="NewsListSection" :news_list="news_data" />
   </main>
@@ -56,7 +49,13 @@ export default {
     },
   },
   computed: {
-    ...mapState(['carousel_data', 'news_data', 'image_loaded']),
+    ...mapState({
+      carousel_data: (state) => {
+        return state.carousel_data != null ? state.carousel_data : [];
+      },
+      news_data: 'news_data',
+      image_loaded: 'image_loaded',
+    }),
     ...mapGetters(['data_load_finish']),
   },
   watch: {
@@ -68,6 +67,7 @@ export default {
     },
   },
   mounted() {
+    this.$emit('page-mounted');
     this.data_load_finish ? this.PageInit() : '';
   },
   metaInfo() {

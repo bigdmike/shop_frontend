@@ -16,7 +16,12 @@
           <div class="flex flex-col justify-center flex-1">
             <div class="flex items-end justify-between w-full mb-20">
               <router-link to="/" class="w-1/2 sm:w-1/3">
-                <img src="/img/logo.svg" class="block w-full" />
+                <img
+                  width="180"
+                  height="40"
+                  src="/img/logo.svg"
+                  class="block w-full"
+                />
               </router-link>
             </div>
             <ol class="flex flex-wrap items-stretch justify-start w-full">

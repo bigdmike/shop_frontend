@@ -14,21 +14,29 @@
       >
         <div class="relative w-full max-w-screen-md">
           <img
+            width="768"
+            height="154"
             src="/img/ContactButtonBg.webp"
             :class="hover ? 'opacity-0' : 'opacity-100'"
             class="relative z-0 hidden object-contain w-full transition-all duration-500 sm:block"
           />
           <img
+            width="768"
+            height="154"
             src="/img/ContactButtonBg_active.webp"
             :class="hover ? 'opacity-100' : 'opacity-0'"
             class="absolute top-0 bottom-0 left-0 z-0 hidden object-contain w-full h-full transition-all duration-500 sm:block"
           />
           <img
+            width="660"
+            height="286"
             src="/img/ContactButtonBg@sm.webp"
             :class="hover ? 'opacity-0' : 'opacity-100'"
             class="relative z-0 block object-contain w-full transition-all duration-500 sm:hidden"
           />
           <img
+            width="660"
+            height="286"
             src="/img/ContactButtonBg@sm_active.webp"
             :class="hover ? 'opacity-100' : 'opacity-0'"
             class="absolute top-0 bottom-0 left-0 z-0 block object-contain w-full h-full transition-all duration-500 sm:hidden"

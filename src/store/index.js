@@ -13,6 +13,7 @@ import {
   getQuestionCategoryData,
   getPaymentData,
   getShipwayData,
+  getDealerData,
 } from '@/api/page_data.js';
 
 import { shopcart_module } from './shopcart';
@@ -44,6 +45,7 @@ export default new Vuex.Store({
     zipcode_data: null,
     payment_data: null,
     shipway_data: null,
+    dealer_data: null,
   },
   getters: {
     data_load_finish(state) {
@@ -59,7 +61,8 @@ export default new Vuex.Store({
         state.question_data != null &&
         state.zipcode_data != null &&
         state.payment_data != null &&
-        state.shipway_data != null
+        state.shipway_data != null &&
+        state.dealer_data != null
       ) {
         return true;
       } else {
@@ -157,6 +160,14 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    getDealerData(state) {
+      getDealerData().then((res) => {
+        state.commit('SetStateData', {
+          key: 'dealer_data',
+          val: res.data,
+        });
+      });
+    },
     getColumnData(state) {
       getColumnData().then((res) => {
         state.commit('SetStateData', {
@@ -210,6 +221,7 @@ export default new Vuex.Store({
     },
     getCategoryData(state) {
       getCategoryData().then((res) => {
+        console.log(res.data);
         let tmp_data = res.data.sort((a, b) => {
           return parseInt(a.Seq) - parseInt(b.Seq);
         });
@@ -223,6 +235,7 @@ export default new Vuex.Store({
         const category = tmp_data.filter(
           (item) => item.Content5 != '獨立銷售頁'
         );
+        console.log(category);
         state.commit('SetStateData', {
           key: 'category_data',
           val: category,

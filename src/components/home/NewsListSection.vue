@@ -4,7 +4,10 @@
     class="relative w-full py-32 overflow-hidden sm:py-40 bg-basic_black"
   >
     <div class="relative w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10">
-      <header class="relative z-10 flex items-end justify-between mb-20">
+      <header
+        :class="block_ready ? '' : 'opacity-0'"
+        class="relative z-10 flex items-end justify-between mb-20"
+      >
         <div class="flex flex-col-reverse items-start">
           <h2 class="relative inline-block px-8">
             <span
@@ -39,7 +42,13 @@
         >
       </header>
 
-      <div data-section-content class="flex items-stretch mb-10 -mx-5 md:mx-0">
+      <Skeleton v-if="!block_ready" />
+
+      <div
+        v-else
+        data-section-content
+        class="flex items-stretch mb-10 -mx-5 md:mx-0"
+      >
         <div
           data-carousel-item
           class="flex flex-wrap items-center justify-between flex-shrink-0 w-full px-5 md:px-0 md:w-11/12"
@@ -55,6 +64,8 @@
               class="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gradient-to-r from-basic_black to-transparent"
             ></div>
             <img
+              width="782"
+              height="470"
               :src="$ImageUrl(item.Image1)"
               :alt="item.Title"
               class="relative z-0 block w-full"
@@ -99,6 +110,7 @@
 
       <div
         data-section-content
+        :class="block_ready ? '' : 'opacity-0'"
         class="flex items-center justify-between w-full"
       >
         <button
@@ -122,6 +134,7 @@
 
 <script>
 import MoreLinkButton from '@/components/ui/MoreLinkButton';
+import Skeleton from '@/components/home/Skeleton/News.vue';
 import { news_list_gsap } from '@/gsap/home/news_list';
 import { section_animation } from '@/gsap/section.js';
 export default {
@@ -133,53 +146,28 @@ export default {
   },
   components: {
     MoreLinkButton,
+    Skeleton,
   },
   data() {
     return {
-      // news_list: [
-      //   {
-      //     Title: 'SYM Maxsym TL Krace CNC 後牌架',
-      //     Content:
-      //       '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
-      //     Image1: '/img/news/1.webp',
-      //     created_at: '2022/10/26 10:00:00',
-      //   },
-      //   {
-      //     Title: 'SYM Maxsym TL Krace CNC 後牌架',
-      //     Content:
-      //       '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
-      //     Image1: '/img/news/1.webp',
-      //     created_at: '2022/10/26 10:00:00',
-      //   },
-      //   {
-      //     Title: 'SYM Maxsym TL Krace CNC 後牌架',
-      //     Content:
-      //       '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
-      //     Image1: '/img/news/1.webp',
-      //     created_at: '2022/10/26 10:00:00',
-      //   },
-      //   {
-      //     Title: 'SYM Maxsym TL Krace CNC 後牌架',
-      //     Content:
-      //       '將所有的技術融合於此，也計算過搭配Krace SYM TL後土除，絕無碰撞干涉問題 #打造更完美的視覺張力，獨家的凱銳斯美學就由你來享受。',
-      //     Image1: '/img/news/1.webp',
-      //     created_at: '2022/10/26 10:00:00',
-      //   },
-      // ],
       active_index: 0,
       timer: null,
       news_list_gsap: null,
       section_animation: null,
+      block_ready: false,
     };
   },
   methods: {
     SetGsap() {
-      console.log(this.news_list);
-      this.news_list_gsap = new news_list_gsap(
-        this.$refs.MainContent,
-        this.news_list
-      );
-      this.section_animation = new section_animation(this.$refs.MainContent);
+      this.block_ready = true;
+
+      this.$nextTick(() => {
+        this.news_list_gsap = new news_list_gsap(
+          this.$refs.MainContent,
+          this.news_list
+        );
+        this.section_animation = new section_animation(this.$refs.MainContent);
+      });
     },
     Next() {
       this.news_list_gsap.next();

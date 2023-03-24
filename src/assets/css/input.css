@@ -38,5 +38,17 @@ body {
 
 /* Handle on hover */
 .custom_scroll::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #0e0e0e;
+}
+
+.skeleton {
+  background: #070707;
+  background: linear-gradient(110deg, #cccccc 8%, #ffffff 18%, #cccccc 33%);
+  background-size: 200% 100%;
+  animation: 1.5s shine linear infinite;
+}
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
 }

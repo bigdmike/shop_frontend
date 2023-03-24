@@ -50,6 +50,12 @@
             id="MenuList"
             class="absolute left-0 z-10 hidden w-1/4 pr-20 md:block top-28"
           >
+            <button
+              @click="active_area = ''"
+              class="block w-full px-5 py-3 mb-5 text-sm text-left text-white transition-colors duration-500 rounded-md hover:bg-opacity-50 bg-primary"
+            >
+              顯示全部地區
+            </button>
             <div
               v-for="(group, group_index) in dealer_group_data"
               :key="`group_${group_index}`"
@@ -123,104 +129,123 @@
                 :key="`group_${group_index}_${item_index}`"
                 class="mb-20"
               >
-                <h2 class="relative inline-block px-8 mb-10">
-                  <span
-                    data-section-subtitle-arrow
-                    class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
-                  ></span>
-                  <span
-                    data-section-subtitle
-                    class="block font-semibold leading-none md:leading-none text-basic_white"
-                    >{{ item.AreaName }}</span
-                  >
-                  <span
-                    data-section-subtitle-arrow
-                    class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
-                  ></span>
-                </h2>
-                <ol class="w-full">
-                  <li
-                    v-for="(dealer, dealer_index) in GetAreaDealer(item.City)"
-                    :key="`dealer_${group_index}_${item_index}_${dealer_index}`"
-                    class="py-4 border-b border-zinc-700"
-                  >
-                    <button
-                      @click="OpenDealer(dealer.dealer_id)"
-                      class="flex items-center justify-between w-full"
+                <template v-if="GetAreaDealer(item.City).length > 0">
+                  <h2 class="relative inline-block px-8 mb-10">
+                    <span
+                      data-section-subtitle-arrow
+                      class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
+                    ></span>
+                    <span
+                      data-section-subtitle
+                      class="block font-semibold leading-none md:leading-none text-basic_white"
+                      >{{ item.AreaName }}</span
                     >
-                      <div
-                        class="flex flex-wrap items-center justify-start sm:flex-nowrap"
+                    <span
+                      data-section-subtitle-arrow
+                      class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
+                    ></span>
+                  </h2>
+                  <ol class="w-full">
+                    <li
+                      v-for="(dealer, dealer_index) in GetAreaDealer(item.City)"
+                      :key="`dealer_${group_index}_${item_index}_${dealer_index}`"
+                      class="py-4 border-b border-zinc-700"
+                    >
+                      <button
+                        @click="OpenDealer(dealer.AdvertisementID)"
+                        class="flex items-center justify-between w-full"
                       >
-                        <span
-                          class="w-full font-medium text-left text-white md:text-lg sm:w-60"
-                          >{{ dealer.name }}</span
+                        <div
+                          class="flex flex-wrap items-center justify-start sm:flex-nowrap"
                         >
+                          <span
+                            class="w-full font-medium text-left text-white md:text-lg sm:w-60"
+                            >{{ dealer.Title }}</span
+                          >
+                          <span
+                            v-show="!CheckDealerOpen(dealer.AdvertisementID)"
+                            class="inline-block text-sm text-left text-basic_gray text-opacity-40"
+                            >{{
+                              dealer.Content3 +
+                              dealer.Content1 +
+                              dealer.Content2 +
+                              dealer.Content4
+                            }}</span
+                          >
+                        </div>
                         <span
-                          v-show="!CheckDealerOpen(dealer.dealer_id)"
-                          class="inline-block text-sm text-left text-basic_gray text-opacity-40"
-                          >{{ dealer.address }}</span
-                        >
-                      </div>
-                      <span
-                        v-show="!CheckDealerOpen(dealer.dealer_id)"
-                        class="text-white icon-plus"
-                      ></span>
-                      <span
-                        v-show="CheckDealerOpen(dealer.dealer_id)"
-                        class="text-white icon-minus"
-                      ></span>
-                    </button>
+                          v-show="!CheckDealerOpen(dealer.AdvertisementID)"
+                          class="text-white icon-plus"
+                        ></span>
+                        <span
+                          v-show="CheckDealerOpen(dealer.AdvertisementID)"
+                          class="text-white icon-minus"
+                        ></span>
+                      </button>
 
-                    <div
-                      :class="
-                        CheckDealerOpen(dealer.dealer_id)
-                          ? ' pt-5 max-h-auto'
-                          : 'pt-0 max-h-0'
-                      "
-                      class="flex flex-wrap items-end justify-between w-full overflow-hidden transition-all duration-500 sm:flex-nowrap"
-                    >
-                      <ol class="mb-5 sm:mb-0">
-                        <li class="flex items-center mb-5">
-                          <span
-                            class="inline-block px-4 py-1 mr-10 text-sm font-medium text-white rounded-md bg-bg_black"
-                            >地址</span
-                          >
-                          <p class="text-sm font-medium text-white">
-                            {{ dealer.address }}
-                          </p>
-                        </li>
-                        <li class="flex items-center">
-                          <span
-                            class="inline-block px-4 py-1 mr-10 text-sm font-medium text-white rounded-md bg-bg_black"
-                            >電話</span
-                          >
-                          <p class="text-sm font-medium text-white">
-                            {{ dealer.phone }}
-                          </p>
-                        </li>
-                      </ol>
                       <div
-                        class="flex items-center justify-end w-full sm:w-auto"
+                        :class="
+                          CheckDealerOpen(dealer.AdvertisementID)
+                            ? ' pt-5 max-h-auto'
+                            : 'pt-0 max-h-0'
+                        "
+                        class="flex flex-wrap items-end justify-between w-full overflow-hidden transition-all duration-500 sm:flex-nowrap"
                       >
-                        <a
-                          :href="`tel://${dealer.phone}`"
-                          target="_blank"
-                          class="flex items-center justify-center w-8 h-8 mr-3 text-white transition-all duration-500 rounded-md md:w-10 md:h-10 bg-primary hover:bg-opacity-70"
+                        <ol class="mb-5 sm:mb-0">
+                          <li class="flex items-center mb-5">
+                            <span
+                              class="inline-block px-4 py-1 mr-10 text-sm font-medium text-white rounded-md bg-bg_black"
+                              >地址</span
+                            >
+                            <p class="text-sm font-medium text-white">
+                              {{
+                                dealer.Content3 +
+                                dealer.Content1 +
+                                dealer.Content2 +
+                                dealer.Content4
+                              }}
+                            </p>
+                          </li>
+                          <li class="flex items-center">
+                            <span
+                              class="inline-block px-4 py-1 mr-10 text-sm font-medium text-white rounded-md bg-bg_black"
+                              >電話</span
+                            >
+                            <p class="text-sm font-medium text-white">
+                              {{ dealer.Content5 }}
+                            </p>
+                          </li>
+                        </ol>
+                        <div
+                          class="flex items-center justify-end w-full sm:w-auto"
                         >
-                          <span class="text-lg md:text-xl icon-phone"></span>
-                        </a>
-                        <a
-                          :href="`https://www.google.com.tw/maps/dir//${dealer.address}`"
-                          target="_blank"
-                          class="flex items-center h-8 px-3 text-xs font-medium text-white transition-all duration-500 rounded-md md:px-4 md:h-10 md:test-sm bg-primary hover:bg-opacity-70"
-                        >
-                          立即前往
-                          <span class="block ml-2 text-lg icon-location"></span>
-                        </a>
+                          <a
+                            :href="`tel://${dealer.Content5}`"
+                            target="_blank"
+                            class="flex items-center justify-center w-8 h-8 mr-3 text-white transition-all duration-500 rounded-md md:w-10 md:h-10 bg-primary hover:bg-opacity-70"
+                          >
+                            <span class="text-lg md:text-xl icon-phone"></span>
+                          </a>
+                          <a
+                            :href="`https://www.google.com.tw/maps/dir//${
+                              dealer.Content3 +
+                              dealer.Content1 +
+                              dealer.Content2 +
+                              dealer.Content4
+                            }`"
+                            target="_blank"
+                            class="flex items-center h-8 px-3 text-xs font-medium text-white transition-all duration-500 rounded-md md:px-4 md:h-10 md:test-sm bg-primary hover:bg-opacity-70"
+                          >
+                            立即前往
+                            <span
+                              class="block ml-2 text-lg icon-location"
+                            ></span>
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                </ol>
+                    </li>
+                  </ol>
+                </template>
               </div>
             </template>
           </div>
@@ -247,33 +272,38 @@
                 class="py-4 border-b border-zinc-700"
               >
                 <button
-                  @click="OpenDealer(dealer.dealer_id)"
+                  @click="OpenDealer(dealer.AdvertisementID)"
                   class="flex items-center justify-between w-full"
                 >
                   <div class="flex items-center justify-start">
                     <span
                       class="text-lg font-medium text-left text-white w-60"
-                      >{{ dealer.name }}</span
+                      >{{ dealer.Title }}</span
                     >
                     <span
-                      v-show="!CheckDealerOpen(dealer.dealer_id)"
+                      v-show="!CheckDealerOpen(dealer.AdvertisementID)"
                       class="inline-block text-sm text-left text-basic_gray text-opacity-40"
-                      >{{ dealer.address }}</span
+                      >{{
+                        dealer.Content3 +
+                        dealer.Content1 +
+                        dealer.Content2 +
+                        dealer.Content4
+                      }}</span
                     >
                   </div>
                   <span
-                    v-show="!CheckDealerOpen(dealer.dealer_id)"
+                    v-show="!CheckDealerOpen(dealer.AdvertisementID)"
                     class="text-white icon-plus"
                   ></span>
                   <span
-                    v-show="CheckDealerOpen(dealer.dealer_id)"
+                    v-show="CheckDealerOpen(dealer.AdvertisementID)"
                     class="text-white icon-minus"
                   ></span>
                 </button>
 
                 <div
                   :class="
-                    CheckDealerOpen(dealer.dealer_id)
+                    CheckDealerOpen(dealer.AdvertisementID)
                       ? ' pt-5 max-h-auto'
                       : 'pt-0 max-h-0'
                   "
@@ -286,7 +316,12 @@
                         >地址</span
                       >
                       <p class="text-sm font-medium text-white">
-                        {{ dealer.address }}
+                        {{
+                          dealer.Content3 +
+                          dealer.Content1 +
+                          dealer.Content2 +
+                          dealer.Content4
+                        }}
                       </p>
                     </li>
                     <li class="flex items-center">
@@ -295,20 +330,25 @@
                         >電話</span
                       >
                       <p class="text-sm font-medium text-white">
-                        {{ dealer.phone }}
+                        {{ dealer.Content5 }}
                       </p>
                     </li>
                   </ol>
                   <div class="flex items-center">
                     <a
-                      :href="`tel://${dealer.phone}`"
+                      :href="`tel://${dealer.Content5}`"
                       target="_blank"
                       class="flex items-center justify-center w-8 h-8 mr-3 text-white transition-all duration-500 rounded-md md:w-10 md:h-10 bg-primary hover:bg-opacity-70"
                     >
                       <span class="text-lg md:text-xl icon-phone"></span>
                     </a>
                     <a
-                      :href="`https://www.google.com.tw/maps/dir//${dealer.address}`"
+                      :href="`https://www.google.com.tw/maps/dir//${
+                        dealer.Content3 +
+                        dealer.Content1 +
+                        dealer.Content2 +
+                        dealer.Content4
+                      }`"
                       target="_blank"
                       class="flex items-center h-8 px-3 text-xs font-medium text-white transition-all duration-500 rounded-md md:px-4 md:h-10 md:test-sm bg-primary hover:bg-opacity-70"
                     >
@@ -331,7 +371,7 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import { GetMetaData } from '@/common/meta';
 import { section_animation } from '@/gsap/section';
 import { mapState, mapGetters } from 'vuex';
-import dealer_data from '@/assets/data/dealer.json';
+// import dealer_data from '@/assets/data/dealer.json';
 import dealer_group_data from '@/assets/data/dealer_group.json';
 export default {
   name: 'ProductListView',
@@ -352,7 +392,7 @@ export default {
         },
       ],
       section_animation: null,
-      dealer_list: dealer_data,
+      // dealer_list: dealer_data,
       active_area: '',
       open_list: [],
       key_word: '',
@@ -372,10 +412,9 @@ export default {
     },
     GetAreaDealer(city_list) {
       return this.dealer_list.filter((item) => {
-        const address = item.address.replaceAll('台', '臺');
         let match = false;
         city_list.forEach((city) => {
-          address.indexOf(city) != -1 ? (match = true) : '';
+          item.Content1.replaceAll('台', '臺') == city ? (match = true) : '';
         });
 
         if (match) {
@@ -383,9 +422,12 @@ export default {
             return item;
           } else {
             return (
-              item.address.indexOf(this.key_word) != -1 ||
-              item.name.indexOf(this.key_word) != -1 ||
-              item.phone.indexOf(this.key_word) != -1
+              item.Title.indexOf(this.key_word) != -1 ||
+              item.Content1.indexOf(this.key_word) != -1 ||
+              item.Content2.indexOf(this.key_word) != -1 ||
+              item.Content3.indexOf(this.key_word) != -1 ||
+              item.Content4.indexOf(this.key_word) != -1 ||
+              item.Content5.indexOf(this.key_word) != -1
             );
           }
         }
@@ -431,6 +473,7 @@ export default {
   computed: {
     ...mapState({
       image_loaded: 'image_loaded',
+      dealer_list: 'dealer_data',
     }),
     ...mapGetters([
       'data_load_finish',
@@ -444,9 +487,8 @@ export default {
       dealer_group_data.forEach((group) => {
         let count = 0;
         this.dealer_list.forEach((item) => {
-          const address = item.address.replaceAll('台', '臺');
           group.City.forEach((city) => {
-            address.indexOf(city) != -1 ? (count += 1) : '';
+            item.Content1.replaceAll('台', '臺') == city ? (count += 1) : '';
           });
         });
         count > 0 ? dealer_group.push(group) : '';
@@ -475,9 +517,12 @@ export default {
       if (this.key_word != '') {
         tmp_dealer_list = tmp_dealer_list.filter((item) => {
           return (
-            item.address.indexOf(this.key_word) != -1 ||
-            item.name.indexOf(this.key_word) != -1 ||
-            item.phone.indexOf(this.key_word) != -1
+            item.Title.indexOf(this.key_word) != -1 ||
+            item.Content1.indexOf(this.key_word) != -1 ||
+            item.Content2.indexOf(this.key_word) != -1 ||
+            item.Content3.indexOf(this.key_word) != -1 ||
+            item.Content4.indexOf(this.key_word) != -1 ||
+            item.Content5.indexOf(this.key_word) != -1
           );
         });
       }
@@ -492,8 +537,9 @@ export default {
         tmp_dealer_list.forEach((item) => {
           let city_match = false;
           city_list.forEach((city) => {
-            const address = item.address.replaceAll('台', '臺');
-            address.indexOf(city) != -1 ? (city_match = true) : '';
+            item.Content1.replaceAll('台', '臺') == city
+              ? (city_match = true)
+              : '';
           });
           city_match ? dealer_data.push(item) : '';
         });
@@ -502,6 +548,7 @@ export default {
     },
   },
   mounted() {
+    this.$emit('page-mounted');
     this.data_load_finish ? this.PageInit() : '';
   },
   metaInfo() {

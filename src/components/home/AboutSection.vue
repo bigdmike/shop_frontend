@@ -5,6 +5,7 @@
   >
     <div class="w-full max-w-screen-xl px-5 mx-auto sm:px-10 xl:px-0">
       <header
+        :class="block_ready ? '' : 'opacity-0'"
         class="relative z-10 flex flex-col-reverse items-start w-full mb-10"
       >
         <h2 class="relative inline-block px-8">
@@ -32,7 +33,10 @@
           </span>
         </h3>
       </header>
+
+      <Skeleton v-if="!block_ready" />
       <div
+        v-else
         data-section-content
         class="relative z-10 text-center md:flex md:items-center md:text-left md:justify-between"
       >
@@ -70,28 +74,26 @@
 </template>
 
 <script>
+import Skeleton from '@/components/home/Skeleton/About.vue';
 import { section_animation } from '@/gsap/section.js';
 export default {
   name: 'ImageTextSection',
-  props: {
-    image: {
-      require: true,
-      type: String,
-    },
-    content: {
-      require: true,
-      type: String,
-    },
+  components: {
+    Skeleton,
   },
   data() {
     return {
       button_hover: false,
       section_animation: null,
+      block_ready: false,
     };
   },
   methods: {
     SetGsap() {
-      this.section_animation = new section_animation(this.$refs.MainContent);
+      this.block_ready = true;
+      this.$nextTick(() => {
+        this.section_animation = new section_animation(this.$refs.MainContent);
+      });
     },
   },
 };

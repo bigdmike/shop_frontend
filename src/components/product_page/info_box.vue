@@ -1,5 +1,10 @@
 <template>
   <section class="relative z-10 w-full">
+    <FixedFotoer
+      @add-cart="$emit('add-cart')"
+      :stock="parseInt(active_stock.Stock)"
+      :time_status="time_status"
+    />
     <EventImageDialog ref="EventImageDialog" />
     <div class="flex items-center mb-5">
       <router-link class="text-primary font-anybody" to="/collections"
@@ -56,26 +61,6 @@
       v-if="product_data.GoodsTimeEnd != null"
     />
 
-    <div v-if="product_data.Discount.length > 0" class="mb-5">
-      <p class="mb-2 text-sm text-primary">此商品參與的優惠活動</p>
-      <ol
-        class="py-2 border rounded-lg text-primary bg-primary bg-opacity-10 border-primary"
-      >
-        <li
-          class="flex items-center px-4 py-1 text-sm"
-          :key="`event_${item_index}`"
-          v-for="(item, item_index) in product_data.Discount"
-        >
-          {{ item.Title }}
-          <a
-            @click="OpenEventImageDialog(item)"
-            v-if="item.Image1 != ''"
-            class="block ml-2 text-xs font-bold underline cursor-pointer"
-            >查看贈品</a
-          >
-        </li>
-      </ol>
-    </div>
     <div class="w-full mt-5 mb-10">
       <div class="mb-5">
         <p
@@ -159,7 +144,9 @@
           />
           <button
             @click="
-              amount >= active_stock.Stock ? '' : $emit('change-amount', 1)
+              amount >= parseInt(active_stock.Stock)
+                ? ''
+                : $emit('change-amount', 1)
             "
             class="px-5 py-3 duration-200 text-primary transition-color hover:bg-primary hover:text-white"
           >
@@ -193,7 +180,7 @@
       <button
         @click="$emit('add-cart')"
         v-if="
-          active_stock.Stock > 0 &&
+          parseInt(active_stock.Stock) > 0 &&
           time_status != 'end' &&
           time_status != 'prepare'
         "
@@ -215,18 +202,41 @@
         }}
       </button>
     </div>
+
+    <div v-if="product_data.Discount.length > 0">
+      <p class="mb-2 text-sm text-primary">此商品參與的優惠活動</p>
+      <ol
+        class="py-2 text-white bg-white border rounded-md bg-opacity-10 border-primary"
+      >
+        <li
+          class="flex items-center px-4 py-1 text-sm"
+          :key="`event_${item_index}`"
+          v-for="(item, item_index) in product_data.Discount"
+        >
+          {{ item.Title }}
+          <a
+            @click="OpenEventImageDialog(item)"
+            v-if="item.Image1 != ''"
+            class="block ml-2 text-xs font-bold underline cursor-pointer text-primary"
+            >查看贈品</a
+          >
+        </li>
+      </ol>
+    </div>
   </section>
 </template>
 
 <script>
 import EventImageDialog from '@/components/product_page/EventImageDialog.vue';
 import EventTimer from '@/components/product_page/EventTimer.vue';
+import FixedFotoer from '@/components/ProductFooterNav.vue';
 import { getLocalStorage } from '@/common/cookie';
 export default {
   name: 'ProductInfoBox',
   components: {
     EventImageDialog,
     EventTimer,
+    FixedFotoer,
   },
   props: {
     product_data: {

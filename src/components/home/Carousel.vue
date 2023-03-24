@@ -1,6 +1,9 @@
 <template>
   <section ref="MainContent" class="relative z-0 w-full">
-    <div class="absolute top-0 left-0 right-0 z-10 bottom-20">
+    <div
+      v-if="block_ready"
+      class="absolute top-0 left-0 right-0 z-10 bottom-20"
+    >
       <div
         class="absolute z-10 flex items-center pointer-events-auto md:bottom-14 md:top-auto sm:top-32 top-20 md:right-14 sm:right-10 right-5"
       >
@@ -22,6 +25,7 @@
     </div>
     <div class="relative top-0 left-0 z-0 w-full">
       <VueSlickCarousel
+        v-if="block_ready"
         ref="swiper"
         v-bind="slick_option"
         @swipe="setCarouselSwiping(true)"
@@ -36,28 +40,25 @@
         >
           <img
             class="w-full select-none pc_image"
+            width="1400"
+            height="875"
             :src="$ImageUrl(item.Image1)"
             alt="Krace凱鋭斯"
           />
           <img
             class="w-full select-none mb_image"
+            width="768"
+            height="1662"
             :src="$ImageUrl(item.Image2)"
             alt="Krace凱鋭斯"
           />
         </div>
       </VueSlickCarousel>
+      <div
+        v-else
+        class="block w-full md:aspect-[1400/875] aspect-[768/1662] skeleton"
+      ></div>
     </div>
-
-    <!-- <img
-      class="hidden w-full opacity-0 select-none md:block"
-      :src="$ImageUrl(carousel_data[0].Image1)"
-      :alt="$GetColumn('brand_name')"
-    />
-    <img
-      class="block w-full opacity-0 select-none md:hidden"
-      :src="$ImageUrl(carousel_data[1].Image2)"
-      :alt="$GetColumn('brand_name')"
-    /> -->
   </section>
 </template>
 
@@ -86,14 +87,12 @@ export default {
         slidesToShow: 1,
         fade: true,
         speed: 500,
-        // autoplaySpeed: 5000,
-        // draggable: true,
         arrows: false,
-        // autoplay: true,
       },
       active_index: 0,
       timer: null,
       carousel_pin_scroll: null,
+      block_ready: false,
     };
   },
   methods: {
@@ -131,15 +130,16 @@ export default {
       this.$refs.CarouselTimeline.Next(this.active_index, next_index);
     },
     SetGsap() {
-      // this.SetActiveIndex(0);
-      this.carousel_pin_scroll = new carousel_pin_scroll(
-        this.$refs.MainContent
-      );
-      this.SetTimer();
+      this.block_ready = true;
+      this.$nextTick(() => {
+        this.carousel_pin_scroll = new carousel_pin_scroll(
+          this.$refs.MainContent
+        );
+        this.SetTimer();
+      });
     },
   },
   beforeDestroy() {
-    console.log('HOME Carousel DESTROY');
     this.timer != null ? clearTimeout(this.timer) : '';
   },
 };

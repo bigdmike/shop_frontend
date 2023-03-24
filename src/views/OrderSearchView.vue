@@ -122,6 +122,9 @@ export default {
       return this.$store.getters.data_load_finish;
     },
   },
+  mounted() {
+    this.$emit('page-mounted');
+  },
   created() {
     this.data_load_finish ? this.PageInit() : '';
   },

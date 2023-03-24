@@ -198,6 +198,9 @@ export default {
       this.data_load_finish ? this.PageInit() : '';
     },
   },
+  mounted() {
+    this.$emit('page-mounted');
+  },
   created() {
     // this.image_loaded ? this.$nextTick(()=>{this.SetGsap()}) : '';
     setTimeout(() => {

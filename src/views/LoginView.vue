@@ -161,6 +161,9 @@ export default {
       return this.$store.state.shopcart_module.shopcart;
     },
   },
+  mounted() {
+    this.$emit('page-mounted');
+  },
   created() {
     if (getLocalStorage('account_token')) {
       this.$router.push('/account/account_edit');

@@ -155,6 +155,9 @@ export default {
       }
     },
   },
+  mounted() {
+    this.$emit('page-mounted');
+  },
   created() {
     this.image_loaded ? this.SetGsap() : '';
     this.data_load_finish ? this.PageInit() : '';

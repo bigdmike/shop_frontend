@@ -1,27 +1,25 @@
 <template>
-  <div id="container" class="">
-    <!-- v-if="data_load_finish" -->
+  <div id="container" class="min-h-screen">
     <MainHeader ref="MainHeader" />
     <MainLoading />
     <ShopCartDialog />
     <ShopCartDrawer />
     <MainDialog />
     <SearchDialog />
-    <ProductFooterNav @add-cart="AddShopCart" />
 
-    <div id="app">
-      <!--  v-if="data_load_finish" -->
+    <div id="app" class="min-h-screen">
       <router-view
+        class="min-h-screen"
         ref="RouterView"
         @load-image="LoadImage"
         @scroll-top="ScrollToTop"
         @update-scroll="UpdateScroller"
         @stop-scroll="StopScroller"
         @start-scroll="StartScroller"
+        @page-mounted="page_mounted = true"
       />
-      <ContactFooter />
-      <!--  v-if="data_load_finish" -->
-      <MainFooter @scroll-top="ScrollToTop" />
+      <ContactFooter v-show="page_mounted" />
+      <MainFooter v-show="page_mounted" @scroll-top="ScrollToTop" />
     </div>
     <MainFooterNav @open-menu="OpenMenu" @open-message="OpenMessenger" />
     <button
@@ -54,8 +52,6 @@ import MainDialog from '@/components/MainDialog.vue';
 import MainFooterNav from '@/components/MainFooterNav.vue';
 import ContactFooter from '@/components/ContactFooter.vue';
 import SearchDialog from '@/components/ProductSearchDialog.vue';
-import ProductFooterNav from '@/components/ProductFooterNav.vue';
-// import SelectArrowIcon from '@/components/svg/SelectArrowIcon.vue';
 import { mapState } from 'vuex';
 import { setLocalStorage, delLocalStorage } from '@/common/cookie';
 import { marquee } from '@/gsap/marquee';
@@ -74,8 +70,6 @@ export default {
     MainFooterNav,
     ContactFooter,
     SearchDialog,
-    ProductFooterNav,
-    // SelectArrowIcon,
   },
   data() {
     return {
@@ -83,15 +77,15 @@ export default {
       first_time_load: true,
       marquee_animation: null,
       image_loader: null,
+      page_mounted: false,
     };
   },
   methods: {
     AddShopCart() {
       this.$refs.RouterView.AddShopCart();
     },
-    LoadImage(from) {
+    LoadImage() {
       this.$nextTick(() => {
-        console.log('load from ' + from);
         this.image_loader.LoadImage();
       });
     },
@@ -129,6 +123,7 @@ export default {
       this.zipcode_data == null ? this.$store.dispatch('getZipCode') : '';
       this.payment_data == null ? this.$store.dispatch('getPaymentData') : '';
       this.shipway_data == null ? this.$store.dispatch('getShipwayData') : '';
+      this.dealer_data == null ? this.$store.dispatch('getDealerData') : '';
     },
     OpenMenu() {
       this.$refs.MainHeader.OpenMenu();
@@ -163,19 +158,13 @@ export default {
       'zipcode_data',
       'payment_data',
       'shipway_data',
+      'dealer_data',
     ]),
     data_load_finish() {
       return this.$store.getters.data_load_finish;
     },
   },
   watch: {
-    body_lock() {
-      // if (this.body_lock != 0) {
-      //   document.querySelector('body').style.overflowY = 'hidden';
-      // } else {
-      //   document.querySelector('body').style.overflowY = 'auto';
-      // }
-    },
     data_load_finish() {
       if (this.data_load_finish) {
         this.$store.dispatch('shopcart_module/GetShopCart');
@@ -190,10 +179,12 @@ export default {
       this.ScrollToTop();
     },
   },
+
   created() {
     this.CheckPageData();
   },
   mounted() {
+    console.log('app mounted');
     this.image_loader = new ImageLoader();
     this.image_loader.SetScroller();
     this.marquee_animation = new marquee();

@@ -311,6 +311,9 @@ export default {
       });
     },
   },
+  mounted() {
+    this.$emit('page-mounted');
+  },
   created() {
     this.GetProductData();
   },

@@ -4,8 +4,8 @@ export function getCarouselData() {
   return get('/carousel');
 }
 
-export function getKolData() {
-  return get('/kol');
+export function getDealerData() {
+  return get('/advertisement');
 }
 
 export function getNewsData() {

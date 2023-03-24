@@ -5,6 +5,7 @@
   >
     <div class="relative w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10">
       <header
+        :class="block_ready ? '' : 'opacity-0'"
         class="relative z-10 flex flex-col-reverse items-start w-full mb-36 sm:mb-48"
       >
         <h2 class="relative inline-block px-8">
@@ -33,7 +34,16 @@
         </h3>
       </header>
 
-      <ol data-content class="w-full">
+      <ol v-if="!block_ready" data-content class="w-full">
+        <li class="relative w-full mb-24 sm:mb-32 md:mb-60">
+          <SkeletonCard />
+        </li>
+        <li class="relative w-full">
+          <SkeletonCard :reverse="true" />
+        </li>
+      </ol>
+
+      <ol v-else data-content class="w-full">
         <li class="relative w-full mb-24 sm:mb-32 md:mb-60">
           <ProductCard
             :title="$GetColumn('home_product_1_subtitle')"
@@ -62,12 +72,14 @@
 
 <script>
 import ProductCard from '@/components/home/main_product_section/Card.vue';
+import SkeletonCard from '@/components/home/Skeleton/ProductCard.vue';
 import { section_animation } from '@/gsap/section.js';
 import { product_card_parallax } from '@/gsap/home/main_product';
 export default {
   name: 'MainProductSection',
   components: {
     ProductCard,
+    SkeletonCard,
   },
   data() {
     return {
@@ -81,14 +93,18 @@ export default {
       ],
       section_animation: null,
       product_card_parallax: null,
+      block_ready: false,
     };
   },
   methods: {
     SetGsap() {
-      this.section_animation = new section_animation(this.$refs.MainContent);
-      this.product_card_parallax = new product_card_parallax(
-        this.$refs.MainContent
-      );
+      this.block_ready = true;
+      this.$nextTick(() => {
+        this.section_animation = new section_animation(this.$refs.MainContent);
+        this.product_card_parallax = new product_card_parallax(
+          this.$refs.MainContent
+        );
+      });
     },
   },
 };

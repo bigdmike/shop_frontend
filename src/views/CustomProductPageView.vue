@@ -371,6 +371,9 @@ export default {
       return data;
     },
   },
+  mounted() {
+    this.$emit('page-mounted');
+  },
   created() {
     this.GetProductData();
   },

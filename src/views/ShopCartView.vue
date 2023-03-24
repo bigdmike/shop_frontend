@@ -606,6 +606,9 @@ export default {
     setLocalStorage('check_out_form', JSON.stringify(this.form_data));
     next();
   },
+  mounted() {
+    this.$emit('page-mounted');
+  },
   created() {
     this.data_load_finish ? this.PageInit() : '';
   },

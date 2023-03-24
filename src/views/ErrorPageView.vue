@@ -89,6 +89,9 @@ export default {
     ...mapGetters(['data_load_finish']),
     ...mapState(['image_load']),
   },
+  mounted() {
+    this.$emit('page-mounted');
+  },
   created() {
     this.image_load ? this.PageInit() : '';
     this.data_load_finish ? this.$emit('load-image') : '';

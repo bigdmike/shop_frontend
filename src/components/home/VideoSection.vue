@@ -5,7 +5,7 @@
       class="absolute top-0 bottom-0 left-0 z-10 w-auto h-full"
     />
     <div class="absolute top-0 bottom-0 left-0 z-10 w-full h-full"></div>
-    <iframe
+    <!-- <iframe
       v-if="video_id != ''"
       class="absolute top-0 left-0 z-0 object-cover w-full h-full md:h-full"
       :src="`https://www.youtube.com/embed/${video_id}?controls=0&autoplay=1&mute=1&playlist=${video_id}&loop=1`"
@@ -15,7 +15,7 @@
       allowfullscreen
       autoplay
       muted
-    ></iframe>
+    ></iframe> -->
   </div>
 </template>
 

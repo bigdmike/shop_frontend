@@ -235,6 +235,9 @@ export default {
   computed: {
     ...mapGetters(['data_load_finish']),
   },
+  mounted() {
+    this.$emit('page-mounted');
+  },
   created() {
     if (getLocalStorage('account_token')) {
       this.$router.push('/account/account_edit');

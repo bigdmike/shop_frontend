@@ -1,16 +1,17 @@
 <template>
   <div
-    class="w-full max-w-screen-xl py-2 mx-auto text-center bg-secondary bg-opacity-20"
+    :class="event_status == 'end' ? 'bg-white' : 'bg-primary'"
+    class="w-full max-w-screen-xl py-2 mx-auto text-center bg-opacity-20"
   >
     <p class="mb-2 text-sm text-basic_gray">{{ event_title }}</p>
     <div class="flex items-end justify-center">
-      <h4 class="mr-1 text-3xl font-medium text-secondary">{{ day }}</h4>
+      <h4 class="mr-1 text-3xl font-medium text-primary">{{ day }}</h4>
       <p class="mr-5 text-sm text-basic_gray">天</p>
-      <h4 class="mr-1 text-3xl font-medium text-secondary">{{ hr }}</h4>
+      <h4 class="mr-1 text-3xl font-medium text-primary">{{ hr }}</h4>
       <p class="mr-5 text-sm text-basic_gray">時</p>
-      <h4 class="mr-1 text-3xl font-medium text-secondary">{{ min }}</h4>
+      <h4 class="mr-1 text-3xl font-medium text-primary">{{ min }}</h4>
       <p class="mr-5 text-sm text-basic_gray">分</p>
-      <h4 class="mr-1 text-3xl font-medium text-secondary">{{ sec }}</h4>
+      <h4 class="mr-1 text-3xl font-medium text-primary">{{ sec }}</h4>
       <p class="text-sm text-basic_gray">秒</p>
     </div>
   </div>

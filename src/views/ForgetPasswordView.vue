@@ -112,6 +112,9 @@ export default {
   computed: {
     ...mapGetters(['data_load_finish']),
   },
+  mounted() {
+    this.$emit('page-mounted');
+  },
   created() {
     this.data_load_finish ? this.PageInit() : '';
   },

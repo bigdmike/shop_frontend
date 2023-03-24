@@ -36,7 +36,7 @@
       </div>
       <div class="flex flex-wrap justify-between lg:flex-nowrap">
         <router-link to="/" class="block mb-10 mr-32 lg:mb-0">
-          <img src="/img/logo.svg" class="block w-64" />
+          <img width="180" height="40" src="/img/logo.svg" class="block w-64" />
         </router-link>
         <div class="w-full">
           <ol class="mb-10 lg:mb-14">

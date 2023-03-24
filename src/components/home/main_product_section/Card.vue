@@ -40,6 +40,8 @@
         ></div>
         <div class="relative z-0 overflow-hidden">
           <img
+            width="853"
+            height="480"
             :class="hover ? 'scale-125' : 'scale-100'"
             class="relative z-0 block transition-all duration-700"
             :src="$ImageUrl(image)"

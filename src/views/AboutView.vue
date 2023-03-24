@@ -245,6 +245,7 @@ export default {
     },
   },
   mounted() {
+    this.$emit('page-mounted');
     this.data_load_finish ? this.PageInit() : '';
   },
   metaInfo() {

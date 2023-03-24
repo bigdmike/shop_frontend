@@ -177,6 +177,9 @@ export default {
       }
     },
   },
+  mounted() {
+    this.$emit('page-mounted');
+  },
   created() {
     this.data_load_finish ? this.PageInit() : '';
   },
