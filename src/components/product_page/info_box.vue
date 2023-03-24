@@ -214,12 +214,13 @@
           v-for="(item, item_index) in product_data.Discount"
         >
           {{ item.Title }}
-          <a
+          <button
             @click="OpenEventImageDialog(item)"
             v-if="item.Image1 != ''"
             class="block ml-2 text-xs font-bold underline cursor-pointer text-primary"
-            >查看贈品</a
           >
+            查看贈品
+          </button>
         </li>
       </ol>
     </div>

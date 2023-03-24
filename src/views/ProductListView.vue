@@ -3,6 +3,7 @@
     id="ProductList"
     ref="MainContent"
     data-scroll-section
+    :class="page_ready ? '' : 'opacity-0'"
     class="relative z-10 w-full pt-40 pb-20 bg-bg_black"
   >
     <div
@@ -82,7 +83,7 @@
               />
               <div class="flex justify-end">
                 <MoreLinkButton
-                  text="SEE MORE"
+                  text="View All Products"
                   :link="`/collections?category=${item.MenuID}`"
                 />
               </div>
@@ -168,6 +169,7 @@ export default {
         },
       ],
       section_animation: null,
+      page_ready: false,
     };
   },
   methods: {
@@ -258,6 +260,8 @@ export default {
             this.$refs.MainContent
           ))
         : '';
+      this.page_ready = true;
+      this.$emit('page-mounted');
       this.$nextTick(() => {
         this.$PageReady(this.meta_data.title);
       });
@@ -324,7 +328,6 @@ export default {
     },
   },
   mounted() {
-    this.$emit('page-mounted');
     this.data_load_finish ? this.PageInit() : '';
   },
   metaInfo() {

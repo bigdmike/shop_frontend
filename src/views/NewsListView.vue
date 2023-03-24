@@ -3,6 +3,7 @@
     id="NewsList"
     ref="MainContent"
     data-scroll-section
+    :class="page_ready ? '' : 'opacity-0'"
     class="relative z-10 w-full py-40 bg-basic_black md:py-60"
   >
     <div
@@ -89,6 +90,9 @@
                 ></span>
                 <img
                   :src="$ImageUrl(item.Image1)"
+                  :alt="item.Title"
+                  width="373"
+                  height="224"
                   :class="hover_index == item_index ? 'scale-110' : 'scale-100'"
                   class="relative z-0 block w-full transition-all duration-700 transform"
                 />
@@ -124,7 +128,10 @@
                   }}<i class="hidden lg:inline">...</i>
                 </span>
               </p>
-              <MoreLinkButton :link="`/news/page/${item.NewsID}`" />
+              <MoreLinkButton
+                text="View Detail"
+                :link="`/news/page/${item.NewsID}`"
+              />
             </div>
           </li>
         </ol>
@@ -176,6 +183,7 @@ export default {
         },
       ],
       section_animation: null,
+      page_ready: false,
     };
   },
   methods: {
@@ -231,6 +239,8 @@ export default {
       });
     },
     SetGsap() {
+      this.$emit('page-mounted');
+      this.page_ready = true;
       this.section_animation = new section_animation(this.$refs.MainContent);
       this.$nextTick(() => {
         this.$PageReady(this.meta_data.title);
@@ -289,7 +299,6 @@ export default {
     },
   },
   mounted() {
-    this.$emit('page-mounted');
     this.data_load_finish ? this.PageInit() : '';
   },
   filters: {

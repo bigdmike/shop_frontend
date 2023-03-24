@@ -17,7 +17,7 @@
         <div
           class="inline-flex items-center justify-center font-bold tracking-wider opacity-0 font-anybody"
         >
-          Learn More <span class="ml-4 text-4xl icon-arrow_right"></span>
+          About us <span class="ml-4 text-4xl icon-arrow_right"></span>
         </div>
       </div>
     </span>

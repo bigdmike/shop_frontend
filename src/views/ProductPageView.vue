@@ -1,6 +1,7 @@
 <template>
   <main
     id="ProductPage"
+    :class="page_ready ? '' : 'opacity-0'"
     class="relative z-10 w-full min-h-screen pt-24 pb-20 md:pt-40 bg-bg_black"
     data-scroll-section
     itemtype="https://schema.org/Product"
@@ -138,7 +139,7 @@
         />
         <div class="flex justify-end">
           <MoreLinkButton
-            text="SEE MORE"
+            text="All Products"
             :link="`/collections?category=${product_data.RecommendMenuID}`"
           />
         </div>
@@ -192,6 +193,7 @@ export default {
       active_tab: '商品介紹',
       product_data: null,
       meta_data: null,
+      page_ready: false,
     };
   },
   methods: {
@@ -274,28 +276,7 @@ export default {
             });
           }
           this.product_data = res.data;
-
-          window.dataLayer.push({
-            event: 'viewProduct',
-            items: [ConvertProductData(res.data)],
-            value: 0,
-            currency: 'TWD',
-          });
-
-          let description = this.product_data.Memo1.replaceAll(/<[^>]+>/g, '');
-          let image =
-            this.product_data.Image2 != ''
-              ? this.product_data.Image2
-              : this.product_data.Image1;
-          this.meta_data = GetMetaData(
-            this.product_data.Title,
-            description.slice(0, 150),
-            this.$ImageUrl(image)
-          );
-          this.$nextTick(() => {
-            this.$emit('load-image');
-            this.$PageReady(this.meta_data.title);
-          });
+          this.PageInit();
         } else if (res.code == 500) {
           this.$RedirectError();
         }
@@ -310,9 +291,34 @@ export default {
         );
       });
     },
-  },
-  mounted() {
-    this.$emit('page-mounted');
+    PageInit() {
+      window.dataLayer.push({
+        event: 'viewProduct',
+        items: [ConvertProductData(this.product_data)],
+        value: 0,
+        currency: 'TWD',
+      });
+
+      let description = this.product_data.Memo1.replaceAll(/<[^>]+>/g, '');
+      let image =
+        this.product_data.Image2 != ''
+          ? this.product_data.Image2
+          : this.product_data.Image1;
+      this.meta_data = GetMetaData(
+        this.product_data.Title,
+        description.slice(0, 150),
+        this.$ImageUrl(image)
+      );
+
+      this.$nextTick(() => {
+        this.$emit('load-image');
+      });
+    },
+    SetGsap() {
+      this.page_ready = true;
+      this.$emit('page-mounted');
+      this.$PageReady(this.meta_data.title);
+    },
   },
   created() {
     this.GetProductData();

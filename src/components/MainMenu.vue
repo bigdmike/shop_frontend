@@ -19,6 +19,7 @@
                 <img
                   width="180"
                   height="40"
+                  :alt="$GetColumn('brand_name')"
                   src="/img/logo.svg"
                   class="block w-full"
                 />
@@ -51,11 +52,15 @@
             <h4 class="mb-3 text-xl font-bold font-anybody">Follow Us</h4>
             <div class="flex items-center">
               <a
+                :href="$GetColumn('company_facebook')"
+                target="_blank"
                 class="p-2 mr-2 text-white transition-all duration-500 border border-transparent rounded-lg cursor-pointer hover:text-primary bg-primary hover:bg-transparent hover:border-primary"
               >
                 <span class="block text-xl leading-none icon-facebook"></span>
               </a>
               <a
+                :href="$GetColumn('company_instagram')"
+                target="_blank"
                 class="p-2 text-white transition-all duration-500 border border-transparent rounded-lg cursor-pointer hover:text-primary bg-primary hover:bg-transparent hover:border-primary"
               >
                 <span class="block text-xl leading-none icon-instagram"></span>

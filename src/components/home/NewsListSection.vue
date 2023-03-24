@@ -38,7 +38,7 @@
           data-section-subtitle
           class="inline-block text-sm font-bold tracking-wider underline md:text-2xl sm:text-xl font-anybody text-primary"
           to="/news_list"
-          >View ALL</router-link
+          >View ALL News</router-link
         >
       </header>
 
@@ -55,7 +55,10 @@
           v-for="(item, item_index) in news_list"
           :key="`news_list_${item_index}`"
         >
-          <router-link to="/" class="relative w-full md:w-1/2 lg:w-2/3">
+          <router-link
+            :to="`/news/page/${item.NewsID}`"
+            class="relative w-full md:w-1/2 lg:w-2/3"
+          >
             <span
               class="absolute bottom-0 right-0 z-20 transition-all duration-700 transform translate-x-0 translate-y-0 image_corner -scale-100"
             ></span>
@@ -101,6 +104,7 @@
             <div class="overflow-hidden">
               <MoreLinkButton
                 :link="`/news/page/${item.NewsID}`"
+                text="News Detail"
                 data-carousel-link
               />
             </div>

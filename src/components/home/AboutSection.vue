@@ -55,7 +55,7 @@
             :class="button_hover ? 'text-basic_white' : 'text-basic_black'"
             class="relative z-10 inline-flex items-center justify-center font-bold tracking-wider transition-all duration-500 text-basic_black font-anybody"
           >
-            Learn More <span class="ml-4 text-4xl icon-arrow_right"></span>
+            About us <span class="ml-4 text-4xl icon-arrow_right"></span>
           </div>
           <span
             :class="button_hover ? 'scale-1' : 'scale-0'"
@@ -65,8 +65,8 @@
       </div>
 
       <img
+        :alt="$GetColumn('brand_name')"
         src="/img/logo.svg"
-        alt="Krace"
         class="absolute bottom-0 left-0 right-0 w-full opacity-5"
       />
     </div>

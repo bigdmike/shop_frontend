@@ -57,7 +57,7 @@
       class="z-10 min-w-[45%] transform md:absolute md:-translate-y-1/2 -translate-y-1/3 md:top-1/2"
     >
       <div class="flex flex-col-reverse items-start">
-        <MoreLinkButton :link="link" />
+        <MoreLinkButton :link="link" text="Product Detail" />
         <h3
           class="mb-5 text-lg font-bold md:mb-10 lg:text-2xl sm:text-xl text-primary"
         >

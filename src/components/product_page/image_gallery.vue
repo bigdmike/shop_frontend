@@ -1,18 +1,6 @@
 <template>
   <div>
     <div ref="BigSwiper" class="relative mb-5 swiper">
-      <!-- <button
-        @click="SlideSwiper(1)"
-        class="absolute right-0 z-10 py-6 pl-5 pr-2 transition-colors duration-200 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-tl-full rounded-bl-full top-1/2 sm:pr-3 sm:pl-8 sm:py-9 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
-      >
-        <NextIcon class="w-2 sm:w-4" />
-      </button>
-      <button
-        @click="SlideSwiper(-1)"
-        class="absolute left-0 z-10 py-6 pl-2 pr-5 transition-colors duration-200 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-tr-full rounded-br-full top-1/2 sm:pl-3 sm:pr-8 sm:py-9 hover:md:bg-secondary hover:md:bg-opacity-100 hover:md:text-white text-basic_black"
-      >
-        <PrevIcon class="w-2 sm:w-4" />
-      </button> -->
       <VueSlickCarousel
         ref="big_swiper"
         :asNavFor="$refs.small_swiper"
@@ -32,7 +20,10 @@
             class="relative z-10 object-cover w-full h-full"
           />
           <img
+            width="550"
+            height="122"
             src="/img/logo_white.svg"
+            :alt="$GetColumn('brand_name')"
             class="absolute z-0 w-11/12 transform -translate-x-1/2 -translate-y-1/2 opacity-20 top-1/2 left-1/2 mix-blend-overlay"
           />
         </div>

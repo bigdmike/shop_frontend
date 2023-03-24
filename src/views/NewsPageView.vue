@@ -3,6 +3,7 @@
     id="NewsPage"
     ref="MainContent"
     data-scroll-section
+    :class="page_ready ? '' : 'opacity-0'"
     class="relative z-10 w-full pt-40 pb-20 bg-basic_black"
   >
     <div
@@ -12,13 +13,13 @@
       <BreadCrumb class="mb-2" :path="bread_crumb_path" />
       <router-link
         to="/news"
-        data-section-subtitle
+        data-section-content
         class="inline-flex items-center mb-8 font-semibold text-primary"
         ><span class="mr-3 icon-chevron_left"></span>回到列表</router-link
       >
       <div class="overflow-hidden">
         <h1
-          data-section-title
+          data-section-content
           itemprop="headline"
           class="mb-5 text-2xl font-semibold text-white sm:text-4xl font-anybody"
         >
@@ -109,7 +110,7 @@
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import RelatedList from '@/components/news_page/RelatedSection.vue';
 import { GetMetaData } from '@/common/meta';
-import { section_animation } from '@/gsap/section';
+// import { section_animation } from '@/gsap/section';
 import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'NewsPageView',
@@ -129,7 +130,9 @@ export default {
           link: '/news?category=all',
         },
       ],
-      section_animation: null,
+      page_ready: false,
+      meta_data: null,
+      // section_animation: null,
     };
   },
   methods: {
@@ -150,8 +153,10 @@ export default {
       window.open(`line://msg/text/${window.location.href}`, '_blank').focus();
     },
     SetGsap() {
+      this.$emit('page-mounted');
+      this.page_ready = true;
       this.$refs.RelatedList.SetGsap();
-      this.section_animation = new section_animation(this.$refs.MainContent);
+      // this.section_animation = new section_animation(this.$refs.MainContent);
       this.$nextTick(() => {
         this.$PageReady(this.meta_data.title);
       });
@@ -176,9 +181,6 @@ export default {
         this.$RedirectError();
       }
     },
-  },
-  mounted() {
-    this.$emit('page-mounted');
   },
   created() {
     this.data_load_finish ? this.PageInit() : '';

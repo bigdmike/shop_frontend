@@ -52,6 +52,9 @@
               class="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gradient-to-r from-basic_black to-transparent"
             ></div>
             <img
+              width="782"
+              height="470"
+              :alt="item.Title"
               :src="$ImageUrl(item.Image1)"
               class="relative z-0 block w-full"
             />
@@ -85,6 +88,7 @@
             </div>
             <div class="overflow-hidden">
               <MoreLinkButton
+                text="View Detail"
                 :link="`/news/page/${item.NewsID}`"
                 data-carousel-link
               />

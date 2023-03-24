@@ -23,9 +23,22 @@
         :key="`image_${item_index}`"
         class="w-full px-2 mb-4 md:w-1/3 sm:w-1/2"
       >
-        <img :src="$ImageUrl(item.Image)" class="block w-full" />
+        <img
+          width="400"
+          height="400"
+          :src="$ImageUrl(item.Image)"
+          :alt="title"
+          class="block w-full"
+        />
       </div>
     </div>
+
+    <link
+      v-for="(image, image_index) in image_list"
+      :key="`seo_image_${image_index}`"
+      itemprop="image"
+      :href="$ImageUrl(image.Image)"
+    />
   </div>
 </template>
 

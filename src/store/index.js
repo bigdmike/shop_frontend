@@ -98,6 +98,9 @@ export default new Vuex.Store({
         : state.news_data.filter((item) => item.NewsCategoryID == category_id);
     },
     active_news_data: (state) => (news_id) => {
+      if (state.news_data == null) {
+        return null;
+      }
       const active_news_data = state.news_data.filter(
         (item) => item.NewsID == news_id
       );

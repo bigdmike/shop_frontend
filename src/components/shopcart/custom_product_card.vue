@@ -2,6 +2,7 @@
   <div class="relative flex flex-wrap items-start w-full">
     <div class="w-1/4 overflow-hidden rounded-lg aspect-square">
       <img
+        :alt="shopcart_item.product_data.Title"
         :src="$ImageUrl(shopcart_item.product_data.Image1)"
         class="object-cover w-full h-full"
       />

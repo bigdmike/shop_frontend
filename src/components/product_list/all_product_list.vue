@@ -21,6 +21,7 @@
           />
           <img
             src="/img/logo_white.svg"
+            :alt="$GetColumn('brand_name')"
             class="absolute z-0 w-1/3 top-3 right-3 mix-blend-overlay"
           />
         </router-link>

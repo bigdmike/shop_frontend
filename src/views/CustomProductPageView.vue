@@ -1,6 +1,7 @@
 <template>
   <main
     id="ProductPage"
+    :class="page_ready ? '' : 'opacity-0'"
     class="relative z-10 w-full min-h-screen pt-24 pb-20 md:pt-40 bg-bg_black"
     data-scroll-section
     itemtype="https://schema.org/Product"
@@ -20,10 +21,12 @@
           />
           <CustomImageBox
             v-else
+            ref="ImageBox"
             :active_option="active_option"
             :category_list="product_data.SpecCategoryList"
             :spec_list="product_data.CustomSpecList"
             :image_path="product_data.CustomImagePath"
+            :product_data="product_data"
           />
         </div>
         <div class="w-full px-10 md:w-1/2">
@@ -213,6 +216,7 @@ export default {
       product_data: null,
       meta_data: null,
       customize_image_data: customize_image_data,
+      page_ready: false,
     };
   },
   methods: {
@@ -304,27 +308,7 @@ export default {
             (item) => new Date(item.EndTime) > new Date()
           );
           this.product_data = this.InitActiveOption(res.data);
-
-          window.dataLayer.push({
-            event: 'viewProduct',
-            items: [ConvertProductData(res.data)],
-            value: 0,
-            currency: 'TWD',
-          });
-
-          let description = this.product_data.Memo1.replaceAll(/<[^>]+>/g, '');
-          let image =
-            this.product_data.Image2 != ''
-              ? this.product_data.Image2
-              : this.product_data.Image1;
-          this.meta_data = GetMetaData(
-            this.product_data.Title,
-            description.slice(0, 150),
-            this.$ImageUrl(image)
-          );
-          this.$nextTick(() => {
-            this.$PageReady(this.meta_data.title);
-          });
+          this.PageInit();
         } else if (res.code == 500) {
           this.$RedirectError();
         }
@@ -370,20 +354,47 @@ export default {
         custom_image_data.length > 0 ? custom_image_data[0].ImagePath : '';
       return data;
     },
-  },
-  mounted() {
-    this.$emit('page-mounted');
+    PageInit() {
+      window.dataLayer.push({
+        event: 'viewProduct',
+        items: [ConvertProductData(this.product_data)],
+        value: 0,
+        currency: 'TWD',
+      });
+
+      let description = this.product_data.Memo1.replaceAll(/<[^>]+>/g, '');
+      let image =
+        this.product_data.Image2 != ''
+          ? this.product_data.Image2
+          : this.product_data.Image1;
+      this.meta_data = GetMetaData(
+        this.product_data.Title,
+        description.slice(0, 150),
+        this.$ImageUrl(image)
+      );
+      this.$nextTick(() => {
+        this.$emit('load-image');
+      });
+    },
+    SetGsap() {
+      this.page_ready = true;
+      this.$PageReady(this.meta_data.title);
+      this.$refs.ImageBox.SetGsap();
+      this.$nextTick(() => {
+        this.$emit('page-mounted');
+      });
+    },
   },
   created() {
     this.GetProductData();
   },
   watch: {
+    image_loaded() {
+      this.image_loaded ? this.SetGsap() : '';
+    },
     product_data() {
       if (this.product_data != null) {
         this.SetBreadCrumb();
-        // if (this.product_data.Stock.length > 0) {
-        //   this.InitActiveOption()
-        // }
         this.$nextTick(() => {
           this.SetNavTrigger();
         });
@@ -397,6 +408,7 @@ export default {
     ...mapState({
       product_list: 'product_data',
       category_data: 'category_data',
+      image_loaded: 'image_loaded',
     }),
     ...mapGetters(['filter_category_data', 'filter_product_data']),
     recommend_product_list() {

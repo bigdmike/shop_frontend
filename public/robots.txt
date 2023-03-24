@@ -1,5 +1,3 @@
 User-agent: *
-Disallow:
-
-User-agent: *
-Disallow: /yaowen_admin/
+Disallow: /krace_admin/
+Disallow: /img/customize/
