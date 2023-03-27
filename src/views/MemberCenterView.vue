@@ -93,26 +93,7 @@ export default {
       ],
     };
   },
-  watch: {
-    $route() {
-      this.SetBreadCrumb();
-    },
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-  },
-  computed: {
-    ...mapGetters(['data_load_finish']),
-  },
-  mounted() {
-    this.$emit('page-mounted');
-  },
-  created() {
-    this.data_load_finish ? this.PageInit() : '';
-  },
-  metaInfo() {
-    return this.meta_data;
-  },
+
   methods: {
     Logout() {
       delLocalStorage('account_token');
@@ -127,9 +108,36 @@ export default {
       this.SetBreadCrumb();
       this.meta_data = GetMetaData('會員中心', '', '');
       this.$nextTick(() => {
-        this.$PageReady(this.meta_data.title);
+        this.$emit('load-image');
       });
     },
+    SetGsap() {
+      this.$emit('page-mounted');
+      this.$PageReady(this.meta_data.title);
+    },
+  },
+  watch: {
+    $route() {
+      this.SetBreadCrumb();
+    },
+    data_load_finish() {
+      this.data_load_finish ? this.PageInit() : '';
+    },
+    image_loaded() {
+      this.image_loaded ? this.SetGsap() : '';
+    },
+  },
+  computed: {
+    ...mapGetters(['data_load_finish']),
+    image_loaded() {
+      return this.$store.state.image_loaded;
+    },
+  },
+  created() {
+    this.data_load_finish ? this.PageInit() : '';
+  },
+  metaInfo() {
+    return this.meta_data;
   },
 };
 </script>

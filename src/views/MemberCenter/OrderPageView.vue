@@ -130,8 +130,8 @@
   </div>
 </template>
 <script>
-import CustomShopcartProductCard from '@/components/member_order/custom_product_card.vue';
-import ShopcartProductCard from '@/components/member_order/product_card.vue';
+import CustomShopcartProductCard from '@/components/member_order/CustomProductCard.vue';
+import ShopcartProductCard from '@/components/member_order/ProductCard.vue';
 import { getOrderList } from '@/api/member';
 import { delLocalStorage } from '@/common/cookie';
 export default {

@@ -18,14 +18,18 @@ foreach ($product_data as $index => $product) {
 // <!-- First example shows what attributes are required and recommended for items that are not in the apparel category -->
     echo '<entry>';
 // <!-- The following attributes are always required -->
-    echo '<g:id>yaowen_' . $product["GoodsID"] . '</g:id>';
+    echo '<g:id>krace_' . $product["GoodsID"] . '</g:id>';
     echo '<g:title>' . $product["Title"] . '</g:title>';
     echo '<g:description>' . strip_tags($product["Memo1"]) . '</g:description>';
-    echo '<g:link>https://www.yaowenfruit.com/product/' . $product["GoodsID"] . '</g:link>';
-    echo '<g:image_link>https://api.yaowenfruit.com/' . $product["Image1"] . '</g:image_link>';
+    echo '<g:link>https://www.krace.com.tw/product/' . $product["GoodsID"] . '</g:link>';
+    echo '<g:image_link>https://api.krace.com.tw/' . $product["Image1"] . '</g:image_link>';
     echo '<g:condition>new</g:condition>';
     echo '<g:availability>in stock</g:availability>';
-    echo '<g:price>' . GetLowPrice($product["Stock"]) . ' TWD</g:price>';
+    if ($product["IsCustom"] == "N") {
+        echo '<g:price>' . GetLowPrice($product["Stock"]) . ' TWD</g:price>';
+    } else {
+        echo '<g:price>' . $product["CustomGoodsStock"]["MemberPrice"] . ' TWD</g:price>';
+    }
     echo '<g:shipping>';
     echo '<g:country>TW</g:country>';
     echo '<g:service>Standard</g:service>';
@@ -34,7 +38,7 @@ foreach ($product_data as $index => $product) {
 
 // <!-- 2 of the following 3 attributes are required fot this item according to the Unique Product Identifier Rules -->
     // echo '<g:gtin>71919219405200</g:gtin>';
-    echo '<g:brand>耀聞水果世界</g:brand>';
+    echo '<g:brand>Krace 凱銳斯</g:brand>';
     // echo '<g:mpn></g:mpn>';
 
 // <!-- The following attributes are not required for this item, but supplying them is recommended -->

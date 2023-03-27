@@ -216,7 +216,6 @@ export default {
         amount: this.amount,
         show_message: true,
       };
-      console.log('add');
       if (getLocalStorage('account_token')) {
         this.$store.dispatch('shopcart_module/AddShopCart', shop_cart_item);
       } else {
@@ -230,7 +229,6 @@ export default {
         tmp_data = tmp_data.sort((a, b) => {
           return a.SellPrice < b.SellPrice;
         });
-        console.log(tmp_data);
         return tmp_data[0];
       } else {
         // 客製化商品，讀取CustomGoodsStock資料
@@ -280,12 +278,6 @@ export default {
     },
     active_stock() {
       let stock = this.product_data.Stock.filter((item) => {
-        console.log(
-          item.ColorID,
-          item.SizeID,
-          this.active_option[0],
-          this.active_option[1]
-        );
         return (
           item.ColorID == this.active_option[0] &&
           item.SizeID == this.active_option[1]

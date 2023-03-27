@@ -94,8 +94,12 @@ export default {
     PageInit() {
       this.meta_data = GetMetaData('會員登入', '', '');
       this.$nextTick(() => {
-        this.$PageReady(this.meta_data.title);
+        this.$emit('load-image');
       });
+    },
+    SetGsap() {
+      this.$emit('page-mounted');
+      this.$PageReady(this.meta_data.title);
     },
     GetError(key) {
       return this.errors.indexOf(key) != -1;
@@ -154,15 +158,18 @@ export default {
     data_load_finish() {
       this.data_load_finish ? this.PageInit() : '';
     },
+    image_loaded() {
+      this.image_loaded ? this.SetGsap() : '';
+    },
   },
   computed: {
     ...mapGetters(['data_load_finish']),
     shopcart() {
       return this.$store.state.shopcart_module.shopcart;
     },
-  },
-  mounted() {
-    this.$emit('page-mounted');
+    image_loaded() {
+      return this.$store.state.image_loaded;
+    },
   },
   created() {
     if (getLocalStorage('account_token')) {

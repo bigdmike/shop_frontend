@@ -157,7 +157,7 @@
         </div>
       </div>
 
-      <ShopCartFooter
+      <FixedFooter
         v-if="checkout_data != null"
         class="block md:hidden"
         :product_total_price="parseInt(product_total_price)"
@@ -176,9 +176,9 @@
 
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
-import ShopCartForm from '@/components/shopcart/form.vue';
-import ShopCartFooter from '@/components/shopcart/footer.vue';
-import ShopCart from '@/components/shopcart/shopcart.vue';
+import ShopCartForm from '@/components/shopcart/ShopCartForm.vue';
+import FixedFooter from '@/components/shopcart/FixedFooter.vue';
+import ShopCart from '@/components/shopcart/ShopCartList.vue';
 import {
   validName,
   validEmail,
@@ -200,7 +200,7 @@ export default {
   components: {
     BreadCrumb,
     ShopCartForm,
-    ShopCartFooter,
+    FixedFooter,
     ShopCart,
   },
   data() {
@@ -508,7 +508,6 @@ export default {
         return checkout_item[0].DiscountPrice;
       } else {
         // 客製化商品，讀取CustomGoodsStock資料
-        console.log(active_option);
         const spec_text = active_option.join();
         const checkout_item = this.checkout_data.CheckoutList.filter((item) => {
           return (

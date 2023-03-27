@@ -11,7 +11,6 @@ export class ImageLoader {
   LoadImage() {
     store.commit('SetImageLoaded', false);
     store.commit('SetLoading', 1);
-    console.log('set load image');
     const images = gsap.utils.toArray('img');
     window.removeEventListener('resize', this.refreshScroll, true);
     window.imagesLoaded(images).on('always', () => {
@@ -35,7 +34,6 @@ export class ImageLoader {
   }
 
   SetScroller() {
-    console.log('here');
     this.Destroy();
     this.locoScroll = new LocomotiveScroll({
       el: document.querySelector('#app'),
@@ -85,7 +83,6 @@ export class ImageLoader {
   }
 
   refreshScroll() {
-    console.log('ScrollTrigger refresh');
     this.resize_timer != null ? clearTimeout(this.resize_timer) : '';
     this.resize_timer = setTimeout(() => {
       ScrollTrigger.refresh();

@@ -3,13 +3,10 @@ import store from '@/store';
 import router from '@/router';
 
 Vue.prototype.$ImageUrl = (item) => {
-  // return item;
   return item == '' ? '' : process.env.VUE_APP_BASE_API + item;
 };
 
 Vue.prototype.$GetColumn = (key) => {
-  // return key;
-  // console.log(store.state.common_column_data);
   if (store.state.common_column_data != null) {
     const column = store.state.common_column_data.filter(
       (column) => column.Title == key

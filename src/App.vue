@@ -168,7 +168,7 @@ export default {
     data_load_finish() {
       if (this.data_load_finish) {
         this.$store.dispatch('shopcart_module/GetShopCart');
-        this.LoadImage('App');
+        // this.LoadImage('App');
       }
       if (this.data_load_finish && this.first_time_load) {
         this.first_time_load = false;
@@ -184,7 +184,6 @@ export default {
     this.CheckPageData();
   },
   mounted() {
-    console.log('app mounted');
     this.image_loader = new ImageLoader();
     this.image_loader.SetScroller();
     this.marquee_animation = new marquee();

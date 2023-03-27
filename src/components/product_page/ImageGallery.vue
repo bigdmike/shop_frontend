@@ -57,13 +57,6 @@
         </div>
       </div>
     </VueSlickCarousel>
-
-    <link
-      v-for="(image, image_index) in images"
-      :key="`image_${image_index}`"
-      itemprop="image"
-      :href="$ImageUrl(image.Image)"
-    />
   </div>
 </template>
 

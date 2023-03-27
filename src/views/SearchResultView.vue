@@ -51,8 +51,8 @@
 
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
-import ProductList from '@/components/search_result/product_list.vue';
-import FilterBar from '@/components/search_result/filter_bar.vue';
+import ProductList from '@/components/search_result/ProductList.vue';
+import FilterBar from '@/components/search_result/FilterBar.vue';
 import { GetMetaData } from '@/common/meta';
 import { mapState, mapGetters } from 'vuex';
 export default {

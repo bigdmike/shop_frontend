@@ -12,15 +12,11 @@
 </template>
 
 <script>
-import ProductCard from '@/components/checkout/product_card.vue';
-import CustomProductCard from '@/components/checkout/custom_product_card.vue';
+import ProductCard from '@/components/checkout/ProductCard.vue';
+import CustomProductCard from '@/components/checkout/CustomProductCard.vue';
 export default {
   name: 'ShopCart',
   props: {
-    // shopcart: {
-    //   require: true,
-    //   type: Array,
-    // },
     checkout_data: {
       require: true,
       type: Array,

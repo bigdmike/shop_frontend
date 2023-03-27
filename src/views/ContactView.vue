@@ -6,6 +6,7 @@
     class="relative z-10 w-full min-h-screen pt-40 pb-20 bg-basic_gray"
   >
     <div
+      :class="page_ready ? '' : 'opacity-0'"
       class="relative z-10 w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10"
     >
       <header
@@ -147,6 +148,7 @@ export default {
       },
       errors: [],
       section_animation: null,
+      page_ready: false,
     };
   },
   methods: {
@@ -157,6 +159,7 @@ export default {
       });
     },
     SetGsap() {
+      this.page_ready = true;
       this.section_animation = new section_animation(this.$refs.MainContent);
       this.section_animation.setup();
       this.$nextTick(() => {
@@ -174,8 +177,7 @@ export default {
       }
     },
     SendData() {
-      postContact(this.form_data).then((res) => {
-        console.log(res);
+      postContact(this.form_data).then(() => {
         this.$store.commit('SetDialog', {
           status: true,
           content: '訊息已送出，我們將會盡快與您聯絡',
@@ -202,7 +204,6 @@ export default {
     this.$emit('page-mounted');
   },
   created() {
-    // this.image_loaded ? this.$nextTick(()=>{this.SetGsap()}) : '';
     setTimeout(() => {
       this.data_load_finish ? this.PageInit() : '';
     }, 100);

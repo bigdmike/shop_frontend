@@ -133,12 +133,12 @@
 
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
-import ProductList from '@/components/product_list/product_list.vue';
-import FilterBar from '@/components/product_list/filter_bar.vue';
+import ProductList from '@/components/product_list/ProductList.vue';
+import FilterBar from '@/components/product_list/FilterBar.vue';
 import EventTimer from '@/components/product_list/EventTimer.vue';
 import { GetMetaData, ChangeTitle } from '@/common/meta';
 import MoreLinkButton from '@/components/ui/MoreLinkButton.vue';
-import AllProductList from '@/components/product_list/all_product_list.vue';
+import AllProductList from '@/components/product_list/AllProductList.vue';
 import { section_animation } from '@/gsap/section';
 import { mapState, mapGetters } from 'vuex';
 export default {

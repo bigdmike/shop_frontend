@@ -28,22 +28,18 @@ export class news_list_gsap {
         start: 'top 60%',
         toggleActions: 'restart play play reverse',
         onEnter: () => {
-          console.log('enter');
           this.focus = true;
           this.setCarouselTimer();
         },
         onLeave: () => {
-          console.log('leave');
           this.focus = false;
           this.carousel_timer != null ? clearTimeout(this.carousel_timer) : '';
         },
         onEnterBack: () => {
-          console.log('enter back');
           this.focus = true;
           this.setCarouselTimer();
         },
         onLeaveBack: () => {
-          console.log('leave back');
           this.focus = false;
           this.carousel_timer != null ? clearTimeout(this.carousel_timer) : '';
         },

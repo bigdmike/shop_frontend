@@ -32,13 +32,6 @@
         />
       </div>
     </div>
-
-    <link
-      v-for="(image, image_index) in image_list"
-      :key="`seo_image_${image_index}`"
-      itemprop="image"
-      :href="$ImageUrl(image.Image)"
-    />
   </div>
 </template>
 

@@ -98,8 +98,8 @@
 import { shopcart_drawer_animation } from '@/gsap/shopcart_drawer.js';
 import { getLocalStorage } from '@/common/cookie';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
-import ProductCard from '@/components/shopcart/product_card.vue';
-import CustomProductCard from '@/components/shopcart/custom_product_card.vue';
+import ProductCard from '@/components/shopcart/ProductCard.vue';
+import CustomProductCard from '@/components/shopcart/CustomProductCard.vue';
 import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'ShopCartDrawer',

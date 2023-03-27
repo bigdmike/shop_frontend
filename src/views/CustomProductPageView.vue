@@ -42,137 +42,72 @@
         </div>
       </div>
 
-      <meta itemprop="description" :content="product_data.Memo1" />
-      <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
-        <div class="mb-10">
-          <h2 class="relative inline-block px-8">
-            <span
-              data-section-subtitle-arrow
-              class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
-            ></span>
-            <span
-              data-section-subtitle
-              class="block text-base font-medium leading-none md:leading-none text-basic_white"
-              >商品描述</span
-            >
-            <span
-              data-section-subtitle-arrow
-              class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
-            ></span>
-          </h2>
-        </div>
-        <div
-          id="Description"
-          class="text-white"
-          v-html="product_data.Memo1"
-        ></div>
-      </div>
-      <CustomImageGallery
-        v-if="product_data.CustomImagePath != ''"
-        :image_list="product_data.Picture"
+      <IntroContent
+        :description="product_data.Memo1"
+        :shipping_info="product_data.Memo2"
+        :warning="product_data.Memo3"
+        :show_image_gallery="product_data.CustomImagePath != ''"
+        :images="product_data.Picture"
         :title="product_data.Title"
       />
-      <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
-        <div class="mb-10">
-          <h2 class="relative inline-block px-8">
-            <span
-              data-section-subtitle-arrow
-              class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
-            ></span>
-            <span
-              data-section-subtitle
-              class="block text-base font-medium leading-none md:leading-none text-basic_white"
-              >運送說明</span
-            >
-            <span
-              data-section-subtitle-arrow
-              class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
-            ></span>
-          </h2>
-        </div>
-        <div id="Workflow" class="text-white" v-html="product_data.Memo2"></div>
-      </div>
-      <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
-        <div class="mb-10">
-          <h2 class="relative inline-block px-8">
-            <span
-              data-section-subtitle-arrow
-              class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
-            ></span>
-            <span
-              data-section-subtitle
-              class="block text-base font-medium leading-none md:leading-none text-basic_white"
-              >注意事項</span
-            >
-            <span
-              data-section-subtitle-arrow
-              class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
-            ></span>
-          </h2>
-        </div>
 
-        <div
-          id="Precautions"
-          class="text-white"
-          v-html="product_data.Memo3"
-        ></div>
+      <RecommendProducts
+        v-if="recommend_product_list != null"
+        ref="RecommendProducts"
+        :category_data="filter_category_data(this.product_data.RecommendMenuID)"
+        :recommend_product_list="recommend_product_list"
+      />
+
+      <!-- json ld -->
+      <meta itemprop="name" :content="product_data.Title" />
+      <div
+        itemprop="offers"
+        itemtype="https://schema.org/AggregateOffer"
+        itemscope
+      >
+        <meta
+          itemprop="lowPrice"
+          :content="product_data.CustomGoodsStock[0].SellPrice"
+        />
+        <meta
+          itemprop="highPrice"
+          :content="product_data.CustomGoodsStock[0].SellPrice"
+        />
+        <meta itemprop="offerCount" content="99" />
+        <meta itemprop="priceCurrency" content="TWD" />
+      </div>
+      <meta itemprop="sku" :content="`yaowen_${product_data.GoodsID}`" />
+      <div itemprop="brand" itemtype="https://schema.org/Brand" itemscope>
+        <meta itemprop="name" :content="$GetColumn('brand_name')" />
       </div>
       <div
-        class="w-full py-5 border-t border-basic_gray border-opacity-10"
-        v-if="recommend_product_list != null"
+        itemprop="aggregateRating"
+        itemtype="https://schema.org/AggregateRating"
+        itemscope
       >
-        <div class="flex flex-col-reverse items-start mb-16">
-          <h2 class="relative inline-block px-8">
-            <span
-              data-section-subtitle-arrow
-              class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
-            ></span>
-            <span
-              data-section-subtitle
-              class="block text-lg font-bold leading-none md:leading-none text-basic_white"
-              >相關商品</span
-            >
-            <span
-              data-section-subtitle-arrow
-              class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
-            ></span>
-          </h2>
-          <h3 class="overflow-hidden">
-            <span
-              data-section-title
-              data-text="News"
-              class="block text-5xl font-black sm:text-7xl text-basic_white text-opacity-20 font-anybody"
-            >
-              Related
-            </span>
-          </h3>
-        </div>
-        <ProductList
-          class="w-full"
-          :page_product_data="recommend_product_list"
-          :category_data="filter_category_data(product_data.RecommendMenuID)"
-        />
-        <div class="flex justify-end">
-          <MoreLinkButton
-            text="SEE MORE"
-            :link="`/collections?category=${filter_category_data(
-              product_data.RecommendMenuID
-            )}`"
-          />
-        </div>
+        <meta itemprop="reviewCount" content="10" />
+        <meta itemprop="ratingValue" content="5" />
       </div>
+      <meta itemprop="description" :content="product_data.Memo1" />
+      <link itemprop="image" :href="$ImageUrl(product_data.Image1)" />
+      <link
+        v-for="(image, image_index) in product_data.Picture"
+        :key="`image_${image_index}`"
+        itemprop="image"
+        :href="$ImageUrl(image.Image)"
+      />
+      <!-- json ld -->
     </div>
   </main>
 </template>
 
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
-import ImageGallery from '@/components/product_page/image_gallery.vue';
-import CustomImageBox from '@/components/product_page/custom_image_box.vue';
-import InfoBox from '@/components/product_page/custom_info_box.vue';
-import ProductList from '@/components/product_list/product_list.vue';
-import CustomImageGallery from '@/components/product_page/custom_image_gallery.vue';
-import MoreLinkButton from '@/components/ui/MoreLinkButton.vue';
+import ImageGallery from '@/components/product_page/ImageGallery.vue';
+import CustomImageBox from '@/components/product_page/CustomImageBox.vue';
+import InfoBox from '@/components/product_page/CustomInfoBox.vue';
+import RecommendProducts from '@/components/product_page/RecommendProducts.vue';
+import IntroContent from '@/components/product_page/IntroContent.vue';
 import { getLocalStorage } from '@/common/cookie';
 import { getSingleProductData } from '@/api/page_data';
 import { GetMetaData } from '@/common/meta';
@@ -188,10 +123,9 @@ export default {
     BreadCrumb,
     ImageGallery,
     InfoBox,
-    ProductList,
-    MoreLinkButton,
     CustomImageBox,
-    CustomImageGallery,
+    IntroContent,
+    RecommendProducts,
   },
   data() {
     return {
@@ -210,9 +144,7 @@ export default {
         },
       ],
       amount: 1,
-      tabs: ['商品介紹', '下單流程', '注意事項'],
       active_option: [],
-      active_tab: '商品介紹',
       product_data: null,
       meta_data: null,
       customize_image_data: customize_image_data,
@@ -220,23 +152,6 @@ export default {
     };
   },
   methods: {
-    SetNavTrigger() {
-      const description = document.querySelector('#Description');
-      const workflow = document.querySelector('#Workflow');
-      const precautions = document.querySelector('#Precautions');
-
-      window.addEventListener('scroll', () => {
-        if (precautions.getBoundingClientRect().top < window.innerHeight) {
-          this.active_tab = '注意事項';
-        } else if (workflow.getBoundingClientRect().top < window.innerHeight) {
-          this.active_tab = '下單流程';
-        } else if (
-          description.getBoundingClientRect().top < window.innerHeight
-        ) {
-          this.active_tab = '商品介紹';
-        }
-      });
-    },
     SetBreadCrumb() {
       this.bread_crumb_path[2].title = this.product_data.Title;
       this.bread_crumb_path[2].link = `/product/${this.product_data.GoodsID}`;
@@ -349,7 +264,6 @@ export default {
       const custom_image_data = this.customize_image_data.filter(
         (item) => item.GoodsID == data.GoodsID
       );
-      console.log(custom_image_data);
       data.CustomImagePath =
         custom_image_data.length > 0 ? custom_image_data[0].ImagePath : '';
       return data;
@@ -379,7 +293,16 @@ export default {
     SetGsap() {
       this.page_ready = true;
       this.$PageReady(this.meta_data.title);
-      this.$refs.ImageBox.SetGsap();
+      if (this.product_data.CustomImagePath != '') {
+        this.$nextTick(() => {
+          this.$refs.ImageBox.SetGsap();
+        });
+      }
+      if (this.recommend_product_list != null) {
+        this.$nextTick(() => {
+          this.$refs.RecommendProducts.SetGsap();
+        });
+      }
       this.$nextTick(() => {
         this.$emit('page-mounted');
       });
@@ -395,9 +318,6 @@ export default {
     product_data() {
       if (this.product_data != null) {
         this.SetBreadCrumb();
-        this.$nextTick(() => {
-          this.SetNavTrigger();
-        });
       }
     },
     $route() {

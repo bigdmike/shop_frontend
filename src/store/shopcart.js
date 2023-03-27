@@ -6,7 +6,13 @@ import {
 } from '@/common/cookie';
 
 const GetShopCartItemIndex = (state, { product, options }) => {
+  // 確認商品是否存在購物車
   let index = -1;
+  // 客製化商品不堆疊
+  if (product.IsCustom == 'Y') {
+    return index;
+  }
+
   state.shopcart.forEach((item, item_index) => {
     if (item.product_data.GoodsID == product.GoodsID) {
       if (
@@ -21,6 +27,7 @@ const GetShopCartItemIndex = (state, { product, options }) => {
 };
 
 const GetProductIndex = (state, product_id) => {
+  // 確認商品是否存在
   let index = -1;
   state.product_data.forEach((item, item_index) => {
     item.GoodsID == product_id ? (index = item_index) : '';
@@ -32,20 +39,20 @@ const CheckActiveOption = ({ product, options }, is_custom) => {
   if (is_custom == 'Y') {
     let error = false;
     options.forEach((option) => {
+      // 檢查每個選項是否存在
       const spec = product.CustomSpecList.filter(
         (item) => item.CustomSpecID == option
       );
-      // console.log(spec.length <= 0, spec[0].SpecStatus == 'N');
       if (spec.length <= 0) {
         error = true;
       } else if (spec[0].SpecStatus == 'N') {
         error = true;
       }
     });
-    console.log({ product, options }, is_custom, error);
 
     return error ? 'error' : '';
   } else {
+    // 檢查是否存在符合的庫存
     const stock = product.Stock.filter((item) => {
       return item.ColorID == options[0] && item.SizeID == options[1];
     });
@@ -55,8 +62,9 @@ const CheckActiveOption = ({ product, options }, is_custom) => {
 };
 
 const SetLocalShopCart = (shopcart) => {
+  // LocalShopcart 格式
+  // GoodsID,IsCustom,option1-option2-option3....,Amount
   let tmp_list = '';
-  console.log(shopcart);
 
   shopcart.forEach((item, item_index) => {
     item_index != 0 ? (tmp_list += ';') : '';
@@ -73,7 +81,7 @@ const SetLocalShopCart = (shopcart) => {
       tmp_list += `${item.product_data.GoodsID},N,${item.active_option[0]}-${item.active_option[1]},${item.amount}`;
     }
   });
-  console.log(tmp_list);
+  // 若購物車為空則清除LocalStorage購物車，反之則存入
   tmp_list == ''
     ? delLocalStorage('shopcart')
     : setLocalStorage('shopcart', tmp_list);
@@ -99,8 +107,6 @@ const shopcart_module = {
         shop_cart_item.ColorID = options[0];
         shop_cart_item.SizeID = options[1];
       } else {
-        // shop_cart_item.ColorID = -1;
-        // shop_cart_item.SizeID = -1;
         shop_cart_item.CustomSpecID = options.join();
       }
       const add_result = await AddShopCart(shop_cart_item, amount);
@@ -198,8 +204,6 @@ const shopcart_module = {
       // 不存在的商品
       let delete_list = [];
 
-      console.log(shopcart);
-
       shopcart.forEach((item) => {
         const product_index = GetProductIndex(state, item.GoodsID);
 
@@ -230,7 +234,6 @@ const shopcart_module = {
             // 若商品選項已不存在，則新增至待刪除清單
             delete_list.push(item.ShoppingCartID);
           } else if (shop_cart_item_index == -1) {
-            console.log(product_data);
             // 如果商品不存在，則新增進暫存購物車
             let tmp_shopcart_item = {
               product_data: product_data,
@@ -254,12 +257,10 @@ const shopcart_module = {
           }
         } else {
           // 若商品已不存在，則新增至待刪除清單
-          // delete_list.push(item);
           delete_list.push(item.ShoppingCartID);
         }
       });
 
-      console.log(tmp_list, delete_list);
       // 移除不存在的商品後，設定購物車
       if (delete_list.length > 0) {
         const remove_result = await RemoveShopCart(delete_list);
@@ -273,17 +274,10 @@ const shopcart_module = {
       } else {
         commit('SetShopCart', tmp_list);
       }
-
-      // delete_list.length > 0
-      //   ? dispatch('RemoveShopCart', tmp_list.length-1,delete_list.length)
-      //   : commit('SetShopCart', tmp_list);
     },
   },
   mutations: {
-    AddShopCart(
-      state,
-      { product, options, amount, is_custom, show_message = false }
-    ) {
+    AddShopCart(state, { product, options, amount, show_message = false }) {
       // 搜尋購物車中相同商品的位置，若無相同商品則返回-1
       const product_index = GetShopCartItemIndex(state, {
         product: product,
@@ -295,7 +289,7 @@ const shopcart_module = {
         const shopcart_item = {
           product_data: product,
           active_option: options,
-          is_custom: is_custom,
+          is_custom: product.IsCustom,
           amount: amount,
           shopcart_id: [],
         };
@@ -326,7 +320,6 @@ const shopcart_module = {
       SetLocalShopCart(state.shopcart);
     },
     SetShopCart(state, shopcart) {
-      console.log('SetShopCart', shopcart);
       state.shopcart = shopcart;
       SetLocalShopCart(shopcart);
     },

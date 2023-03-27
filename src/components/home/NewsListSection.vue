@@ -180,9 +180,6 @@ export default {
       this.news_list_gsap.prev();
     },
   },
-  mounted() {
-    console.log('home news mounted');
-  },
 };
 </script>
 

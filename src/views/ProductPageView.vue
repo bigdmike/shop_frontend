@@ -32,128 +32,65 @@
         </div>
       </div>
 
-      <meta itemprop="description" :content="product_data.Memo1" />
-      <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
-        <div class="mb-10">
-          <h2 class="relative inline-block px-8">
-            <span
-              data-section-subtitle-arrow
-              class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
-            ></span>
-            <span
-              data-section-subtitle
-              class="block text-base font-medium leading-none md:leading-none text-basic_white"
-              >商品描述</span
-            >
-            <span
-              data-section-subtitle-arrow
-              class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
-            ></span>
-          </h2>
-        </div>
-        <div
-          id="Description"
-          class="text-white"
-          v-html="product_data.Memo1"
-        ></div>
-      </div>
-      <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
-        <div class="mb-10">
-          <h2 class="relative inline-block px-8">
-            <span
-              data-section-subtitle-arrow
-              class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
-            ></span>
-            <span
-              data-section-subtitle
-              class="block text-base font-medium leading-none md:leading-none text-basic_white"
-              >運送說明</span
-            >
-            <span
-              data-section-subtitle-arrow
-              class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
-            ></span>
-          </h2>
-        </div>
-        <div id="Workflow" class="text-white" v-html="product_data.Memo2"></div>
-      </div>
-      <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
-        <div class="mb-10">
-          <h2 class="relative inline-block px-8">
-            <span
-              data-section-subtitle-arrow
-              class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
-            ></span>
-            <span
-              data-section-subtitle
-              class="block text-base font-medium leading-none md:leading-none text-basic_white"
-              >注意事項</span
-            >
-            <span
-              data-section-subtitle-arrow
-              class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
-            ></span>
-          </h2>
-        </div>
+      <IntroContent
+        :description="product_data.Memo1"
+        :shipping_info="product_data.Memo2"
+        :warning="product_data.Memo3"
+        :show_image_gallery="false"
+        :images="product_data.Picture"
+        :title="product_data.Title"
+      />
 
-        <div
-          id="Precautions"
-          class="text-white"
-          v-html="product_data.Memo3"
-        ></div>
+      <RecommendProducts
+        v-if="recommend_product_list != null"
+        ref="RecommendProducts"
+        :category_data="filter_category_data(this.product_data.RecommendMenuID)"
+        :recommend_product_list="recommend_product_list"
+      />
+
+      <!-- json ld -->
+      <meta itemprop="name" :content="product_data.Title" />
+      <div
+        itemprop="offers"
+        itemtype="https://schema.org/AggregateOffer"
+        itemscope
+      >
+        <meta itemprop="lowPrice" :content="low_price" />
+        <meta itemprop="highPrice" :content="high_price" />
+        <meta itemprop="offerCount" content="99" />
+        <meta itemprop="priceCurrency" content="TWD" />
+      </div>
+      <meta itemprop="sku" :content="`yaowen_${product_data.GoodsID}`" />
+      <div itemprop="brand" itemtype="https://schema.org/Brand" itemscope>
+        <meta itemprop="name" :content="$GetColumn('brand_name')" />
       </div>
       <div
-        class="w-full py-5 border-t border-basic_gray border-opacity-10"
-        v-if="recommend_product_list != null"
+        itemprop="aggregateRating"
+        itemtype="https://schema.org/AggregateRating"
+        itemscope
       >
-        <div class="flex flex-col-reverse items-start mb-16">
-          <h2 class="relative inline-block px-8">
-            <span
-              data-section-subtitle-arrow
-              class="absolute top-0 left-0 block leading-none transform icon-triangle text-primary -scale-100"
-            ></span>
-            <span
-              data-section-subtitle
-              class="block text-lg font-bold leading-none md:leading-none text-basic_white"
-              >相關商品</span
-            >
-            <span
-              data-section-subtitle-arrow
-              class="absolute bottom-0 right-0 block leading-none icon-triangle text-primary"
-            ></span>
-          </h2>
-          <h3 class="overflow-hidden">
-            <span
-              data-section-title
-              data-text="News"
-              class="block text-5xl font-black sm:text-7xl text-basic_white text-opacity-20 font-anybody"
-            >
-              Related
-            </span>
-          </h3>
-        </div>
-        <ProductList
-          class="w-full"
-          :page_product_data="recommend_product_list"
-          :category_data="filter_category_data(product_data.RecommendMenuID)"
-        />
-        <div class="flex justify-end">
-          <MoreLinkButton
-            text="All Products"
-            :link="`/collections?category=${product_data.RecommendMenuID}`"
-          />
-        </div>
+        <meta itemprop="reviewCount" content="10" />
+        <meta itemprop="ratingValue" content="5" />
       </div>
+      <meta itemprop="description" :content="product_data.Memo1" />
+      <link itemprop="image" :href="$ImageUrl(product_data.Image1)" />
+      <link
+        v-for="(image, image_index) in product_data.Picture"
+        :key="`image_${image_index}`"
+        itemprop="image"
+        :href="$ImageUrl(image.Image)"
+      />
+      <!-- json ld -->
     </div>
   </main>
 </template>
 
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
-import ImageGallery from '@/components/product_page/image_gallery.vue';
-import InfoBox from '@/components/product_page/info_box.vue';
-import ProductList from '@/components/product_list/product_list.vue';
-import MoreLinkButton from '@/components/ui/MoreLinkButton.vue';
+import ImageGallery from '@/components/product_page/ImageGallery.vue';
+import RecommendProducts from '@/components/product_page/RecommendProducts.vue';
+import InfoBox from '@/components/product_page/InfoBox.vue';
+import IntroContent from '@/components/product_page/IntroContent.vue';
 import { getLocalStorage } from '@/common/cookie';
 import { getSingleProductData } from '@/api/page_data';
 import { GetMetaData } from '@/common/meta';
@@ -168,8 +105,8 @@ export default {
     BreadCrumb,
     ImageGallery,
     InfoBox,
-    ProductList,
-    MoreLinkButton,
+    RecommendProducts,
+    IntroContent,
   },
   data() {
     return {
@@ -197,28 +134,12 @@ export default {
     };
   },
   methods: {
-    SetNavTrigger() {
-      const description = document.querySelector('#Description');
-      const workflow = document.querySelector('#Workflow');
-      const precautions = document.querySelector('#Precautions');
-
-      window.addEventListener('scroll', () => {
-        if (precautions.getBoundingClientRect().top < window.innerHeight) {
-          this.active_tab = '注意事項';
-        } else if (workflow.getBoundingClientRect().top < window.innerHeight) {
-          this.active_tab = '下單流程';
-        } else if (
-          description.getBoundingClientRect().top < window.innerHeight
-        ) {
-          this.active_tab = '商品介紹';
-        }
-      });
-    },
     SetBreadCrumb() {
       this.bread_crumb_path[2].title = this.product_data.Title;
       this.bread_crumb_path[2].link = `/product/${this.product_data.GoodsID}`;
     },
     AddShopCart() {
+      // GTM事件
       window.dataLayer.push({
         event: 'add_to_cart',
         items: [
@@ -232,14 +153,16 @@ export default {
         value: 0,
         currency: 'TWD',
       });
+
+      // 加入購物車物件
       const shop_cart_item = {
-        product: this.product_data,
-        options: this.active_option,
-        is_custom: 'N',
-        amount: this.amount,
-        show_message: true,
+        product: this.product_data, //商品資料
+        options: this.active_option, //選用選項
+        amount: this.amount, //數量
+        show_message: true, //是否顯示加入購物車訊息
       };
-      console.log(shop_cart_item);
+
+      // 判斷是否登入會員決定呼叫線上購物車API或本地儲存
       if (getLocalStorage('account_token')) {
         this.$store.dispatch('shopcart_module/AddShopCart', shop_cart_item);
       } else {
@@ -316,6 +239,7 @@ export default {
     },
     SetGsap() {
       this.page_ready = true;
+      this.$refs.RecommendProducts.SetGsap();
       this.$emit('page-mounted');
       this.$PageReady(this.meta_data.title);
     },
@@ -334,16 +258,17 @@ export default {
           this.active_option[0] = this.product_data.Stock[0].ColorID;
           this.active_option[1] = this.product_data.Stock[0].SizeID;
         }
-        this.$nextTick(() => {
-          this.SetNavTrigger();
-        });
       }
+    },
+    image_loaded() {
+      this.image_loaded ? this.SetGsap() : '';
     },
   },
   computed: {
     ...mapState({
       product_list: 'product_data',
       category_data: 'category_data',
+      image_loaded: 'image_loaded',
     }),
     ...mapGetters(['filter_product_data', 'filter_category_data']),
     recommend_product_list() {
@@ -355,6 +280,20 @@ export default {
       } else {
         return this.filter_product_data(this.product_data.RecommendMenuID);
       }
+    },
+    low_price() {
+      let price = 99999999;
+      this.product_data.Stock.forEach((item) => {
+        parseInt(item.SellPrice) < price ? (price = item.Price) : '';
+      });
+      return price == 99999999 ? 0 : price;
+    },
+    high_price() {
+      let price = 0;
+      this.product_data.Stock.forEach((item) => {
+        parseInt(item.SellPrice) > price ? (price = item.Price) : '';
+      });
+      return price;
     },
   },
 };

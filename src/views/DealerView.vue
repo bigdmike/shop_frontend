@@ -371,7 +371,6 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import { GetMetaData } from '@/common/meta';
 import { section_animation } from '@/gsap/section';
 import { mapState, mapGetters } from 'vuex';
-// import dealer_data from '@/assets/data/dealer.json';
 import dealer_group_data from '@/assets/data/dealer_group.json';
 export default {
   name: 'ProductListView',
@@ -392,7 +391,6 @@ export default {
         },
       ],
       section_animation: null,
-      // dealer_list: dealer_data,
       active_area: '',
       open_list: [],
       key_word: '',

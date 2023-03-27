@@ -72,8 +72,5 @@ export default {
       hover: false,
     };
   },
-  mounted() {
-    console.log('Contact footer loaded');
-  },
 };
 </script>

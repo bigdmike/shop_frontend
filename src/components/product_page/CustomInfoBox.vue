@@ -15,35 +15,7 @@
     >
       {{ product_data.Title }}
     </h1>
-    <meta itemprop="name" :content="product_data.Title" />
-    <div
-      itemprop="offers"
-      itemtype="https://schema.org/AggregateOffer"
-      itemscope
-    >
-      <meta
-        itemprop="lowPrice"
-        :content="product_data.CustomGoodsStock[0].SellPrice"
-      />
-      <meta
-        itemprop="highPrice"
-        :content="product_data.CustomGoodsStock[0].SellPrice"
-      />
-      <meta itemprop="offerCount" content="99" />
-      <meta itemprop="priceCurrency" content="TWD" />
-    </div>
-    <div
-      itemprop="aggregateRating"
-      itemtype="https://schema.org/AggregateRating"
-      itemscope
-    >
-      <meta itemprop="reviewCount" content="10" />
-      <meta itemprop="ratingValue" content="5" />
-    </div>
-    <meta itemprop="sku" :content="`yaowen_${product_data.GoodsID}`" />
-    <div itemprop="brand" itemtype="https://schema.org/Brand" itemscope>
-      <meta itemprop="name" :content="$GetColumn('brand_name')" />
-    </div>
+
     <div class="mb-5 text-right">
       <p
         v-if="!is_member"

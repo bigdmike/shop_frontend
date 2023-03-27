@@ -416,12 +416,6 @@ export default {
     },
     active_stock() {
       let stock = this.product_data.Stock.filter((item) => {
-        console.log(
-          item.ColorID,
-          item.SizeID,
-          this.active_option[0],
-          this.active_option[1]
-        );
         return (
           item.ColorID == this.active_option[0] &&
           item.SizeID == this.active_option[1]

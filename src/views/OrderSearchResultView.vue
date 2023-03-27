@@ -194,8 +194,8 @@
 </template>
 
 <script>
-import ProductCard from '@/components/order_search/product_card.vue';
-import CustomProductCard from '@/components/order_search/custom_product_card.vue';
+import ProductCard from '@/components/order_search/ProductCard.vue';
+import CustomProductCard from '@/components/order_search/CustomProductCard.vue';
 // delLocalStorage
 import { getLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';

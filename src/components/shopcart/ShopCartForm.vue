@@ -359,7 +359,7 @@
 </template>
 
 <script>
-import AddressDialog from '@/components/shopcart/address_dialog.vue';
+import AddressDialog from '@/components/shopcart/AddressDialog.vue';
 import { getLocalStorage, setLocalStorage } from '@/common/cookie';
 import { Get711Map, GetFamilyMap } from '@/api/shopcart';
 export default {

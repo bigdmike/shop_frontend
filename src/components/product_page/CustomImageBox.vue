@@ -40,7 +40,6 @@
         />
       </div>
     </div>
-    <link itemprop="image" :href="$ImageUrl(product_data.Image1)" />
   </div>
 </template>
 

@@ -198,8 +198,8 @@
 </template>
 
 <script>
-import ProductCard from '@/components/trade_finish/product_card.vue';
-import CustomProductCard from '@/components/trade_finish/custom_product_card.vue';
+import ProductCard from '@/components/trade_finish/ProductCard.vue';
+import CustomProductCard from '@/components/trade_finish/CustomProductCard.vue';
 // delLocalStorage
 import { getLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
@@ -252,7 +252,6 @@ export default {
       // GTM事件
       let products = [];
       this.shopcart.forEach((item) => {
-        console.log(item.CustomSpecID);
         const product = ConvertAddShopCartData(
           item.ProductData,
           item.IsCustom == 'Y'
@@ -385,7 +384,6 @@ export default {
       if (this.form_data == null) {
         return '';
       }
-      console.log(this.shipway_data, this.form_data.ship_way);
       return this.shipway_data.filter(
         (item) => item.ShippingID == this.form_data.ship_way
       )[0].Title;

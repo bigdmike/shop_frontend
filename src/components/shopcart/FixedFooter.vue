@@ -122,8 +122,8 @@
 
 <script>
 import Teleport from 'vue2-teleport';
-import ProductCard from '@/components/checkout/product_card.vue';
-import CustomProductCard from '@/components/checkout/custom_product_card.vue';
+import ProductCard from '@/components/checkout/ProductCard.vue';
+import CustomProductCard from '@/components/checkout/CustomProductCard.vue';
 export default {
   name: 'ShopCartFooter',
   props: {
