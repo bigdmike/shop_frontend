@@ -6,7 +6,7 @@
     <div class="w-full max-w-screen-xl px-5 mx-auto xl:px-0 sm:px-10">
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
       <div
-        class="w-full max-w-screen-sm p-10 mx-auto bg-basic_black section_corner"
+        class="w-full max-w-screen-sm p-10 mx-auto bg-basic_black section_corner_y"
       >
         <h4 class="mb-8 text-2xl font-bold text-center text-white">會員登入</h4>
         <div class="w-full md:px-20">
@@ -67,7 +67,6 @@ import { validEmail } from '@/common/validate';
 import { sendLoginData } from '@/api/member';
 import { setLocalStorage, getLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
-import { mapGetters } from 'vuex';
 export default {
   name: 'LoginView',
   components: {
@@ -154,28 +153,16 @@ export default {
       this.$store.dispatch('shopcart_module/GetShopCart');
     },
   },
-  watch: {
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-    image_loaded() {
-      this.image_loaded ? this.SetGsap() : '';
-    },
-  },
   computed: {
-    ...mapGetters(['data_load_finish']),
     shopcart() {
       return this.$store.state.shopcart_module.shopcart;
-    },
-    image_loaded() {
-      return this.$store.state.image_loaded;
     },
   },
   created() {
     if (getLocalStorage('account_token')) {
       this.$router.push('/account/account_edit');
     } else {
-      this.data_load_finish ? this.PageInit() : '';
+      this.$LoadDataMixin(this);
     }
   },
   metaInfo() {
@@ -183,26 +170,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.section_corner {
-  -webkit-clip-path: polygon(
-    0 40px,
-    40px 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 40px
-  );
-  clip-path: polygon(
-    0 40px,
-    40px 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 40px
-  );
-}
-</style>

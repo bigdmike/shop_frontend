@@ -182,40 +182,29 @@ export default {
       }
     },
   },
-  created() {
-    this.data_load_finish ? this.PageInit() : '';
-  },
-  metaInfo() {
-    return this.meta_data;
-  },
   watch: {
     news_data() {
       this.news_data == 'error' ? this.$RedirectError() : '';
     },
-    image_loaded() {
-      this.image_loaded ? this.SetGsap() : '';
-    },
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
   },
   computed: {
     ...mapState({
-      image_loaded: 'image_loaded',
       news_category_data: 'news_category_data',
       news_list: 'news_data',
     }),
-    ...mapGetters([
-      'data_load_finish',
-      'active_news_data',
-      'active_news_category_data',
-    ]),
+    ...mapGetters(['active_news_data', 'active_news_category_data']),
     active_category() {
       return this.active_news_category_data(this.news_data.NewsCategoryID);
     },
     news_data() {
       return this.active_news_data(this.$route.params.id);
     },
+  },
+  created() {
+    this.$LoadDataMixin(this);
+  },
+  metaInfo() {
+    return this.meta_data;
   },
 };
 </script>

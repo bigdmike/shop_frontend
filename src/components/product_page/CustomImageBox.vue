@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="relative w-full overflow-hidden bg-gradient-to-b from-basic_black to-transparent section_corner aspect-square"
+      class="relative w-full overflow-hidden bg-gradient-to-b from-basic_black to-transparent section_corner_tl aspect-square"
     >
       <Skeleton v-if="!block_ready" />
       <div v-else class="relative w-full h-full">
@@ -93,30 +93,3 @@ export default {
   mounted() {},
 };
 </script>
-
-<style scoped>
-.section_corner {
-  -webkit-clip-path: polygon(
-    100% 0,
-    100% 100%,
-
-    100% 100%,
-    0 100%,
-
-    0 100%,
-    0 50px,
-
-    50px 0
-  );
-  clip-path: polygon(
-    100% 0,
-    100% 100%,
-
-    100% 100%,
-    0 100%,
-    0 100%,
-    0 50px,
-    50px 0
-  );
-}
-</style>

@@ -8,7 +8,7 @@
         @beforeChange="SetSlideIndex"
       >
         <div
-          class="relative w-full overflow-hidden bg-gradient-to-b from-basic_black to-transparent section_corner aspect-square"
+          class="relative w-full overflow-hidden bg-gradient-to-b from-basic_black to-transparent section_corner_tl aspect-square"
           v-for="(item, item_index) in images"
           :key="`big_carousel_${item_index}`"
         >
@@ -115,30 +115,3 @@ export default {
   mounted() {},
 };
 </script>
-
-<style scoped>
-.section_corner {
-  -webkit-clip-path: polygon(
-    100% 0,
-    100% 100%,
-
-    100% 100%,
-    0 100%,
-
-    0 100%,
-    0 50px,
-
-    50px 0
-  );
-  clip-path: polygon(
-    100% 0,
-    100% 100%,
-
-    100% 100%,
-    0 100%,
-    0 100%,
-    0 50px,
-    50px 0
-  );
-}
-</style>

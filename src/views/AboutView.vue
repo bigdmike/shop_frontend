@@ -82,6 +82,7 @@ export default {
   },
   methods: {
     SetGsap() {
+      this.$emit('page-mounted');
       this.$refs.MainContent.SetGsap();
       this.$refs.CompanyInfo.SetGsap();
       this.$nextTick(() => {
@@ -91,7 +92,7 @@ export default {
     PageInit() {
       this.meta_data = GetMetaData('about', '', '');
       this.$nextTick(() => {
-        this.$emit('load-image', 'home');
+        this.$emit('load-image');
       });
     },
   },
@@ -99,17 +100,8 @@ export default {
     ...mapState(['carousel_data', 'news_data', 'image_loaded']),
     ...mapGetters(['data_load_finish']),
   },
-  watch: {
-    image_loaded() {
-      this.image_loaded ? this.SetGsap() : '';
-    },
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-  },
-  mounted() {
-    this.$emit('page-mounted');
-    this.data_load_finish ? this.PageInit() : '';
+  created() {
+    this.$LoadDataMixin(this);
   },
   metaInfo() {
     return this.meta_data;

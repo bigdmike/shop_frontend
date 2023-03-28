@@ -140,7 +140,7 @@ import ProductCard from '@/components/event_page/ProductCard.vue';
 import ProductDialog from '@/components/event_page/ProductDialog.vue';
 import CustomProductDialog from '@/components/event_page/CustomProductDialog.vue';
 import { GetMetaData } from '@/common/meta';
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
   name: 'EventPageView',
   components: {
@@ -218,7 +218,6 @@ export default {
         behavior: 'smooth',
       });
     },
-    InitPage() {},
     OpenProductDialog(item, custom) {
       custom
         ? this.$refs.CustomProductDialog.Open(item)
@@ -236,6 +235,7 @@ export default {
       this.$emit('load-image');
     },
     SetGsap() {
+      this.$emit('page-mounted');
       this.$nextTick(() => {
         this.SetNavTrigger();
         this.$refs.EventTimer.SetTimer();
@@ -244,18 +244,11 @@ export default {
     },
   },
   watch: {
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-    image_loaded() {
-      this.image_loaded ? this.SetGsap() : '';
-    },
     event_data() {
       this.event_data == 'error' ? this.$RedirectError() : '';
     },
   },
   computed: {
-    ...mapState(['image_loaded']),
     ...mapGetters({
       data_load_finish: 'data_load_finish',
       get_event_data: 'event_data',
@@ -278,12 +271,8 @@ export default {
       });
     },
   },
-  mounted() {
-    this.$emit('page-mounted');
-  },
   created() {
-    this.image_loaded ? this.SetGsap() : '';
-    this.data_load_finish ? this.PageInit() : '';
+    this.$LoadDataMixin(this);
   },
   metaInfo() {
     return this.meta_data;

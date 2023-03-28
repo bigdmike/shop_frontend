@@ -1,7 +1,7 @@
 <template>
   <div class="py-2">
     <div
-      class="relative block mb-2 overflow-hidden aspect-square section_corner bg-gradient-to-b from-basic_black to-transparent"
+      class="relative block mb-2 overflow-hidden aspect-square section_corner_tl bg-gradient-to-b from-basic_black to-transparent"
     >
       <div
         v-if="!stock_status"
@@ -98,30 +98,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.section_corner {
-  -webkit-clip-path: polygon(
-    100% 0,
-    100% 100%,
-
-    100% 100%,
-    0 100%,
-
-    0 100%,
-    0 50px,
-
-    50px 0
-  );
-  clip-path: polygon(
-    100% 0,
-    100% 100%,
-
-    100% 100%,
-    0 100%,
-    0 100%,
-    0 50px,
-    50px 0
-  );
-}
-</style>

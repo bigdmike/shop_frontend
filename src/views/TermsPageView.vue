@@ -87,6 +87,7 @@ export default {
   },
   methods: {
     SetGsap() {
+      this.$emit('page-mounted');
       this.section_animation = new section_animation(this.$refs.MainContent);
     },
     PageInit() {
@@ -100,17 +101,9 @@ export default {
       });
     },
   },
-  watch: {
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-    image_loaded() {
-      this.image_loaded ? this.SetGsap() : '';
-    },
-  },
   computed: {
     ...mapGetters(['data_load_finish']),
-    ...mapState(['image_loaded', 'common_column_data']),
+    ...mapState(['common_column_data']),
     title() {
       return this.$route.params.type == 'site_privacy'
         ? '會員責任規範及個資聲明'
@@ -127,12 +120,8 @@ export default {
       )[0];
     },
   },
-  mounted() {
-    this.$emit('page-mounted');
-  },
   created() {
-    this.image_loaded ? this.SetGsap() : '';
-    this.data_load_finish ? this.PageInit() : '';
+    this.$LoadDataMixin(this);
   },
   metaInfo() {
     return this.meta_data;

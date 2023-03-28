@@ -73,6 +73,7 @@ export default {
       meta.content = '404';
       document.getElementsByTagName('head')[0].appendChild(meta);
       this.$nextTick(() => {
+        this.$emit('page-mounted');
         this.$PageReady(this.meta_data.title);
       });
     },
@@ -89,12 +90,8 @@ export default {
     ...mapGetters(['data_load_finish']),
     ...mapState(['image_load']),
   },
-  mounted() {
-    this.$emit('page-mounted');
-  },
   created() {
-    this.image_load ? this.PageInit() : '';
-    this.data_load_finish ? this.$emit('load-image') : '';
+    this.$LoadDataMixin(this);
   },
   metaInfo() {
     return this.meta_data;

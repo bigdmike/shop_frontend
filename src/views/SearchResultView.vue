@@ -101,24 +101,15 @@ export default {
       this.$emit('load-image');
       this.meta_data = GetMetaData('商品搜尋', '', '');
       this.$nextTick(() => {
+        this.$emit('page-mounted');
         this.$PageReady(this.meta_data.title);
       });
-    },
-    SetGsap() {},
-  },
-  watch: {
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-    image_loaded() {
-      this.image_loaded ? this.SetGsap() : '';
     },
   },
   computed: {
     ...mapState({
       category_data: 'category_data',
       product_list: 'product_data',
-      image_loaded: 'image_loaded',
     }),
     ...mapGetters(['data_load_finish']),
     product_data() {
@@ -155,12 +146,8 @@ export default {
       }
     },
   },
-  mounted() {
-    this.$emit('page-mounted');
-  },
   created() {
-    this.image_loaded ? this.SetGsap() : '';
-    this.data_load_finish ? this.PageInit() : '';
+    this.$LoadDataMixin(this);
   },
   metaInfo() {
     return this.meta_data;

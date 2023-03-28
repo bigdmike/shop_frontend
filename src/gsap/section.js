@@ -75,8 +75,9 @@ export class section_animation {
         },
         {
           opacity: 1,
+          delay: 0.3,
         },
-        'third'
+        'first'
       )
       .fromTo(
         this.content,
@@ -87,8 +88,9 @@ export class section_animation {
         {
           opacity: 1,
           y: '0px',
+          delay: 0.3,
         },
-        'third'
+        'first'
       );
   }
 }

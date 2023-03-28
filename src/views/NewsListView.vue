@@ -261,9 +261,6 @@ export default {
     $route() {
       this.SetActiveCategory();
     },
-    image_loaded() {
-      this.image_loaded ? this.SetGsap() : '';
-    },
     filter_news_data() {
       this.page = 1;
       this.$set(
@@ -280,14 +277,10 @@ export default {
         )
       );
     },
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
   },
   computed: {
-    ...mapState(['news_category_data', 'news_data', 'image_loaded']),
+    ...mapState(['news_category_data', 'news_data']),
     ...mapGetters({
-      data_load_finish: 'data_load_finish',
       filter_news_data: 'filter_news_data',
     }),
     page_news_data() {
@@ -298,8 +291,8 @@ export default {
       );
     },
   },
-  mounted() {
-    this.data_load_finish ? this.PageInit() : '';
+  created() {
+    this.$LoadDataMixin(this);
   },
   filters: {
     content(val) {

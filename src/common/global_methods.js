@@ -83,3 +83,19 @@ Vue.prototype.$GetCustomPrice = (shopcart_item) => {
       change_price,
   ];
 };
+
+Vue.prototype.$LoadDataMixin = (component) => {
+  if (component.$store.getters.data_load_finish) {
+    component.PageInit();
+  }
+  component.$watch('$store.getters.data_load_finish', (newVal) => {
+    if (newVal) {
+      component.PageInit();
+    }
+  });
+  component.$watch('$store.state.image_loaded', (newVal) => {
+    if (newVal) {
+      component.SetGsap();
+    }
+  });
+};

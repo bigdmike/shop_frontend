@@ -6,7 +6,7 @@
     >
       <div
         data-dialog-box
-        class="w-[400px] max-w-full bg-black text-white relative z-10 p-10 section_corner"
+        class="w-[400px] max-w-full bg-black text-white relative z-10 p-10 section_corner_y"
       >
         <div class="mb-5 text-center">此操作無法還原，確定要刪除嗎？</div>
         <div class="flex items-center justify-center">
@@ -74,26 +74,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.section_corner {
-  -webkit-clip-path: polygon(
-    0 40px,
-    40px 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 40px
-  );
-  clip-path: polygon(
-    0 40px,
-    40px 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 40px
-  );
-}
-</style>

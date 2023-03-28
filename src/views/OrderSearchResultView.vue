@@ -196,8 +196,8 @@
 <script>
 import ProductCard from '@/components/order_search/ProductCard.vue';
 import CustomProductCard from '@/components/order_search/CustomProductCard.vue';
-// delLocalStorage
-import { getLocalStorage } from '@/common/cookie';
+//
+import { getLocalStorage, delLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
 import { mapGetters, mapState } from 'vuex';
 export default {
@@ -219,32 +219,22 @@ export default {
       if (checkout_data) {
         this.form_data = JSON.parse(checkout_data)[0];
         this.checkout_data = JSON.parse(checkout_data)[0];
-        // delLocalStorage('trade_data');
-        // delLocalStorage('trade_shopcart');
-        // delLocalStorage('trade_checkout_data');
+        delLocalStorage('trade_data');
         this.$store.commit('shopcart_module/SetShopCart', []);
         this.meta_data = GetMetaData('訂單完成', '', '');
         this.$nextTick(() => {
+          this.$emit('page-mounted');
           this.$PageReady(this.meta_data.title);
         });
       } else {
-        // this.$router.push('/');
+        this.$router.push('/');
       }
-    },
-  },
-  watch: {
-    data_load_finish() {
-      this.data_load_finish ? this.$emit('load-image') : '';
-    },
-    image_loaded() {
-      this.image_loaded ? this.PageInit() : '';
     },
   },
   computed: {
     ...mapState([
       'shipway_data',
       'payment_data',
-      'image_loaded',
       'zipcode_data',
       'product_data',
     ]),
@@ -330,12 +320,8 @@ export default {
       )[0];
     },
   },
-  mounted() {
-    this.$emit('page-mounted');
-  },
   created() {
-    this.image_loaded ? this.PageInit() : '';
-    this.data_load_finish ? this.$emit('load-image') : '';
+    this.$LoadDataMixin(this);
   },
   metaInfo() {
     return this.meta_data;

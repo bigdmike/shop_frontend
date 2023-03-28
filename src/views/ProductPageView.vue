@@ -205,15 +205,6 @@ export default {
         }
       });
     },
-    GetCategoryProduct() {
-      return this.product_list.filter((item) => {
-        return (
-          item.Menu.filter(
-            (menu) => menu.MenuID == this.product_data.RecommendMenuID
-          ).length > 0
-        );
-      });
-    },
     PageInit() {
       window.dataLayer.push({
         event: 'viewProduct',

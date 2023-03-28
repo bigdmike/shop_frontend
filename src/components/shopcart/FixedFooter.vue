@@ -28,50 +28,7 @@
           :class="open ? 'max-h-screen pb-5' : 'max-h-0'"
           class="w-full overflow-hidden bg-basic_black"
         >
-          <!-- <ol
-            class="max-h-[300px] overflow-y-auto custom_scroll px-5 pt-5 mb-5"
-          >
-            <li
-              :class="
-                item_index != shopcart.length - 1
-                  ? ' border-b border-zinc-700'
-                  : ''
-              "
-              class="flex flex-wrap items-start pb-5 mb-5"
-              v-for="(item, item_index) in shopcart"
-              :key="`shopcart_${item_index}`"
-            >
-              <ProductCard v-if="item.IsCustom == 'N'" :shopcart_item="item" />
-              <CustomProductCard v-else :shopcart_item="item" />
-            </li>
-          </ol> -->
-
           <div class="px-5 pt-5">
-            <!-- <div class="w-full mb-5" v-if="give_info.length > 0">
-              <div class="w-full">
-                <h4 class="mb-2 font-bold text-white">活動贈品</h4>
-              </div>
-              <div
-                class="flex items-center justify-between w-full p-3 mb-2 bg-black rounded-md"
-                v-for="(item, item_index) in give_info"
-                :key="`give_info_${item_index}`"
-              >
-                <div class="">
-                  <p class="text-sm font-bold text-white">
-                    {{ item.Title }}
-                  </p>
-                  <p class="text-sm text-primary">
-                    {{ item.GiveName }}
-                  </p>
-                </div>
-                <button
-                  @click="$emit('open-image-dialg', item)"
-                  class="text-xs underline text-primary"
-                >
-                  查看圖片
-                </button>
-              </div>
-            </div> -->
             <ol
               class="px-0 pt-5 pb-5 mb-5 border-t border-b border-zinc-600 border-opacity-20"
             >
@@ -140,15 +97,9 @@
 
 <script>
 import Teleport from 'vue2-teleport';
-// import ProductCard from '@/components/checkout/ProductCard.vue';
-// import CustomProductCard from '@/components/checkout/CustomProductCard.vue';
 export default {
   name: 'ShopCartFooter',
   props: {
-    // shopcart: {
-    //   require: true,
-    //   type: Array,
-    // },
     shipping_free: {
       require: true,
       type: Boolean,
@@ -173,10 +124,6 @@ export default {
       require: true,
       type: Number,
     },
-    checkout_data: {
-      require: true,
-      type: Array,
-    },
     coupon_discount: {
       require: true,
       type: Number,
@@ -192,8 +139,6 @@ export default {
   },
   components: {
     Teleport,
-    // ProductCard,
-    // CustomProductCard,
   },
   watch: {
     open() {
@@ -202,63 +147,6 @@ export default {
       } else {
         this.$emit('start-scroll');
       }
-    },
-  },
-  methods: {
-    GetActiveOption(shopcart_item) {
-      return shopcart_item.product_data.Stock.filter((item) => {
-        return (
-          item.ColorID == shopcart_item.active_option[0] &&
-          item.SizeID == shopcart_item.active_option[1]
-        );
-      })[0];
-    },
-    GetDiscountAndPrice(item) {
-      let product = this.checkout_data.filter((checkout_item) => {
-        return (
-          checkout_item.GoodsID == item.product_data.GoodsID &&
-          checkout_item.ColorID == item.active_option[0] &&
-          checkout_item.SizeID == item.active_option[1]
-        );
-      })[0];
-      let discount_list = [];
-      Object.keys(product.DiscountPercentFullInfo).length > 0
-        ? discount_list.push(product.DiscountPercentFullInfo)
-        : '';
-      Object.keys(product.DiscountPercentMenuInfo).length > 0
-        ? discount_list.push(product.DiscountPercentMenuInfo)
-        : '';
-      return {
-        discount_list: discount_list,
-        discount_price: product.DiscountPrice,
-        sell_price: product.SellPrice,
-      };
-    },
-  },
-  computed: {
-    shopcart() {
-      let shopcart = [];
-      this.checkout_data.forEach((item) => {
-        let is_exist = -1;
-        shopcart.forEach((shopcart_item, shopcart_index) => {
-          if (
-            shopcart_item.GoodsID == item.GoodsID &&
-            shopcart_item.ColorID == item.ColorID &&
-            shopcart_item.SizeID == item.SizeID &&
-            item.IsCustom == 'N'
-          ) {
-            is_exist = shopcart_index;
-          }
-        });
-        if (is_exist != -1) {
-          shopcart[is_exist].Amount += 1;
-        } else {
-          let tmp_shopcart_item = Object.assign({}, item);
-          tmp_shopcart_item.Amount = 1;
-          shopcart.push(tmp_shopcart_item);
-        }
-      });
-      return shopcart;
     },
   },
 };

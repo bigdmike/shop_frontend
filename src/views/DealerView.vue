@@ -432,6 +432,7 @@ export default {
       });
     },
     SetGsap() {
+      this.$emit('page-mounted');
       this.section_animation == null
         ? (this.section_animation = new section_animation(
             this.$refs.MainContent
@@ -458,19 +459,12 @@ export default {
         this.$emit('load-image', 'home');
       });
     },
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-    image_loaded() {
-      this.image_loaded ? this.SetGsap() : '';
-    },
     active_area() {
       this.open_list = [];
     },
   },
   computed: {
     ...mapState({
-      image_loaded: 'image_loaded',
       dealer_list: 'dealer_data',
     }),
     ...mapGetters([
@@ -546,8 +540,7 @@ export default {
     },
   },
   mounted() {
-    this.$emit('page-mounted');
-    this.data_load_finish ? this.PageInit() : '';
+    this.$LoadDataMixin(this);
   },
   metaInfo() {
     return this.meta_data;

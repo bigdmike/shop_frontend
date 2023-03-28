@@ -6,7 +6,7 @@
     <div class="w-full max-w-screen-xl px-5 pb-32 mx-auto xl:px-0 sm:px-10">
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
       <div
-        class="w-full max-w-screen-sm p-10 mx-auto text-white bg-basic_black section_corner"
+        class="w-full max-w-screen-sm p-10 mx-auto text-white bg-basic_black section_corner_y"
       >
         <h4 class="mb-2 text-xl font-bold text-center sm:text-2xl">
           請輸入訂購人的電話號碼與訂單號碼
@@ -108,51 +108,16 @@ export default {
     PageInit() {
       this.meta_data = GetMetaData('訂單查詢', '', '');
       this.$nextTick(() => {
+        this.$emit('page-mounted');
         this.$PageReady(this.meta_data.title);
       });
     },
   },
-  watch: {
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-  },
-  computed: {
-    data_load_finish() {
-      return this.$store.getters.data_load_finish;
-    },
-  },
-  mounted() {
-    this.$emit('page-mounted');
-  },
   created() {
-    this.data_load_finish ? this.PageInit() : '';
+    this.$LoadDataMixin(this);
   },
   metaInfo() {
     return this.meta_data;
   },
 };
 </script>
-
-<style scoped>
-.section_corner {
-  -webkit-clip-path: polygon(
-    0 40px,
-    40px 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 40px
-  );
-  clip-path: polygon(
-    0 40px,
-    40px 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 40px
-  );
-}
-</style>

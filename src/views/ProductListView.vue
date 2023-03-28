@@ -278,16 +278,9 @@ export default {
         this.$emit('load-image', 'home');
       });
     },
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-    image_loaded() {
-      this.image_loaded ? this.SetGsap() : '';
-    },
   },
   computed: {
     ...mapState({
-      image_loaded: 'image_loaded',
       category_data: 'category_data',
       product_list: 'product_list',
     }),
@@ -327,8 +320,8 @@ export default {
       }
     },
   },
-  mounted() {
-    this.data_load_finish ? this.PageInit() : '';
+  created() {
+    this.$LoadDataMixin(this);
   },
   metaInfo() {
     return this.meta_data;

@@ -9,6 +9,7 @@
         v-if="checkout_data != null"
         class="relative flex w-full max-w-screen-xl pt-24 pb-20 mx-auto md:pt-40"
       >
+        <!-- left side view -->
         <div
           class="w-full px-5 pt-5 pb-32 md:w-2/3 xl:pl-0 sm:pl-10 sm:pr-10 xs:pt-0"
         >
@@ -43,34 +44,10 @@
           </header>
 
           <ShopCart :checkout_data="checkout_data.CheckoutList" />
-          <div
-            class="block w-full mb-5 md:hidden"
-            v-if="checkout_data.GiveInfo.length > 0"
-          >
-            <div class="w-full">
-              <h4 class="mb-2 font-bold text-white">活動贈品</h4>
-            </div>
-            <div
-              class="flex items-center justify-between w-full p-3 mb-2 bg-black rounded-md"
-              v-for="(item, item_index) in checkout_data.GiveInfo"
-              :key="`give_info_${item_index}`"
-            >
-              <div class="">
-                <p class="text-sm font-bold text-white">
-                  {{ item.Title }}
-                </p>
-                <p class="text-sm text-primary">
-                  {{ item.GiveName }}
-                </p>
-              </div>
-              <button
-                @click="OpenImageDialog(item)"
-                class="text-xs underline text-primary"
-              >
-                查看圖片
-              </button>
-            </div>
-          </div>
+          <GiveInfo
+            :give_info="checkout_data.GiveInfo"
+            class="block mb-5 md:hidden"
+          />
           <ShopCartForm
             :errors="errors"
             :form_data="form_data"
@@ -83,7 +60,9 @@
           />
         </div>
       </div>
+      <!-- left side view -->
 
+      <!-- right side view -->
       <div
         v-if="checkout_data != null"
         data-scroll
@@ -93,120 +72,22 @@
         @mouseover="$emit('stop-scroll')"
         @mouseleave="$emit('start-scroll')"
       >
-        <GiveImageDialog ref="GiveImageDialog" />
         <div class="px-10">
-          <div class="w-full mb-5" v-if="checkout_data.GiveInfo.length > 0">
-            <div class="w-full">
-              <h4 class="mb-2 font-bold text-white">活動贈品</h4>
-            </div>
-            <div
-              class="flex items-center justify-between w-full p-3 mb-2 bg-black rounded-md"
-              v-for="(item, item_index) in checkout_data.GiveInfo"
-              :key="`give_info_${item_index}`"
-            >
-              <!-- <div class="w-16 mr-2 overflow-hidden rounded-lg">
-                <img :src="$ImageUrl(item.Image1)" class="w-full" />
-              </div> -->
-              <div class="">
-                <p class="text-sm font-bold text-white">
-                  {{ item.Title }}
-                </p>
-                <p class="text-sm text-primary">
-                  {{ item.GiveName }}
-                </p>
-              </div>
-              <button
-                @click="OpenImageDialog(item)"
-                class="text-xs underline text-primary"
-              >
-                查看圖片
-              </button>
-            </div>
-          </div>
-          <ol class="py-5 mb-5 text-white border-t border-b border-zinc-700">
-            <li class="flex items-center justify-between w-full mb-3 text-sm">
-              <p class="font-medium">合計</p>
-              <p class="font-semibold font-anybody">
-                NT$ {{ $MoneyFormat(product_total_price) }}
-              </p>
-            </li>
-            <li class="flex items-center justify-between text-sm w-ful">
-              <p class="font-medium">運費</p>
-              <p
-                class="font-semibold font-anybody"
-                v-if="!checkout_data.ShippingFree"
-              >
-                NT$ {{ $MoneyFormat(ship_price) }}
-              </p>
-              <p class="font-semibold font-anybody text-primary" v-else>
-                免運費
-              </p>
-            </li>
-            <li
-              v-if="payment_price != 0"
-              class="flex items-center justify-between w-full mt-3 text-sm"
-            >
-              <p class="font-medium">金流手續費</p>
-              <p class="font-semibold font-anybody">
-                NT$ {{ $MoneyFormat(payment_price) }}
-              </p>
-            </li>
-            <li
-              v-if="discount_price != 0"
-              class="flex items-center justify-between w-full mt-3 text-sm"
-            >
-              <p class="font-medium">優惠折扣金額</p>
-              <p class="font-semibold font-anybody">
-                - NT$ {{ $MoneyFormat(discount_price) }}
-              </p>
-            </li>
-            <li
-              v-if="coupon_discount != 0"
-              class="flex items-center justify-between w-full mt-3 text-sm"
-            >
-              <p class="font-medium">優惠代碼折抵</p>
-              <p class="font-semibold font-anybody">
-                - NT$ {{ $MoneyFormat(coupon_discount) }}
-              </p>
-            </li>
-          </ol>
-          <div
-            class="flex items-center justify-between w-full text-sm text-white"
-          >
-            <p class="font-medium">總金額</p>
-            <p class="font-semibold font-anybody">
-              NT$
-              {{ $MoneyFormat(total_price) }}
-            </p>
-          </div>
+          <GiveInfo :give_info="checkout_data.GiveInfo" class="mb-5" />
+          <PriceInfo
+            :coupon_discount="parseInt(coupon_discount)"
+            :product_total_price="parseInt(product_total_price)"
+            :ship_price="parseInt(ship_price)"
+            :shipping_free="checkout_data.ShippingFree"
+            :payment_price="parseInt(payment_price)"
+            :discount_price="parseInt(discount_price)"
+            :total_price="parseInt(total_price)"
+          />
         </div>
       </div>
+      <!-- right side view -->
 
-      <div
-        v-if="checkout_data == null"
-        class="w-full max-w-screen-xl px-5 py-64 mx-auto text-center xl:px-0"
-      >
-        <h4 class="mb-4 text-2xl font-bold text-white">購物車內目前沒有商品</h4>
-        <p class="mb-10 text-white">
-          您可以前往<a href="/collections?category=all" class="text-primary"
-            >瀏覽商品</a
-          >，選購您想要得商品
-        </p>
-        <div class="flex items-center justify-center">
-          <router-link
-            to="/"
-            class="px-4 py-2 mr-2 transition-all duration-300 rounded-lg text-primary hover:text-primary hover:bg-primary hover:bg-opacity-30"
-          >
-            回到首頁
-          </router-link>
-          <router-link
-            to="/collections?category=all"
-            class="px-4 py-2 text-white transition-all duration-300 rounded-lg bg-primary hover:bg-opacity-70"
-          >
-            瀏覽商品
-          </router-link>
-        </div>
-      </div>
+      <EmptyShopCart v-if="checkout_data == null" />
 
       <FixedFooter
         v-if="checkout_data != null"
@@ -217,7 +98,6 @@
         :payment_price="parseInt(payment_price)"
         :discount_price="parseInt(discount_price)"
         :total_price="parseInt(total_price)"
-        :checkout_data="checkout_data.CheckoutList"
         :coupon_discount="parseInt(coupon_discount)"
         :give_info="checkout_data.GiveInfo"
         @stop-scroll="$emit('stop-scroll')"
@@ -233,7 +113,9 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import ShopCartForm from '@/components/shopcart/ShopCartForm.vue';
 import FixedFooter from '@/components/shopcart/FixedFooter.vue';
 import ShopCart from '@/components/shopcart/ShopCartList.vue';
-import GiveImageDialog from '@/components/product_page/EventImageDialog.vue';
+import GiveInfo from '@/components/checkout/GiveInfo.vue';
+import PriceInfo from '@/components/checkout/PriceInfo.vue';
+import EmptyShopCart from '@/components/checkout/EmptyShopCart.vue';
 import {
   validName,
   validEmail,
@@ -257,7 +139,9 @@ export default {
     ShopCartForm,
     FixedFooter,
     ShopCart,
-    GiveImageDialog,
+    GiveInfo,
+    PriceInfo,
+    EmptyShopCart,
   },
   data() {
     return {
@@ -587,7 +471,9 @@ export default {
 
       this.meta_data = GetMetaData('結帳', '', '');
       this.$nextTick(() => {
+        this.$emit('load-image');
         this.$PageReady(this.meta_data.title);
+        this.$emit('page-mounted');
       });
     },
   },
@@ -664,8 +550,6 @@ export default {
       } else {
         return this.checkout_data.FinalTotal;
       }
-      // AfterCouponTotal
-      // return parseInt(this.product_total_price) + parseInt(this.ship_price);
     },
     coupon_discount() {
       if (this.checkout_data == null) {
@@ -680,9 +564,6 @@ export default {
   beforeRouteLeave(to, from, next) {
     setLocalStorage('check_out_form', JSON.stringify(this.form_data));
     next();
-  },
-  mounted() {
-    this.$emit('page-mounted');
   },
   created() {
     this.data_load_finish ? this.PageInit() : '';

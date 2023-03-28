@@ -15,7 +15,7 @@ import AboutSection from '@/components/home/AboutSection.vue';
 import VideoSection from '@/components/home/VideoSection.vue';
 import NewsListSection from '@/components/home/NewsListSection.vue';
 import { GetMetaData } from '@/common/meta';
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 export default {
   name: 'HomeView',
   components: {
@@ -32,6 +32,7 @@ export default {
   },
   methods: {
     SetGsap() {
+      this.$emit('page-mounted');
       this.$refs.CarouselSection.SetGsap();
       this.$refs.NewsListSection.SetGsap();
       this.$refs.MainProductSection.SetGsap();
@@ -54,21 +55,10 @@ export default {
         return state.carousel_data != null ? state.carousel_data : [];
       },
       news_data: 'news_data',
-      image_loaded: 'image_loaded',
     }),
-    ...mapGetters(['data_load_finish']),
   },
-  watch: {
-    image_loaded() {
-      this.image_loaded ? this.SetGsap() : '';
-    },
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-  },
-  mounted() {
-    this.$emit('page-mounted');
-    this.data_load_finish ? this.PageInit() : '';
+  created() {
+    this.$LoadDataMixin(this);
   },
   metaInfo() {
     return this.meta_data;

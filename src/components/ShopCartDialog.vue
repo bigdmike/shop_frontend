@@ -5,7 +5,7 @@
   >
     <div
       data-dialog-box
-      class="w-11/12 max-w-[400px] overflow-hidden section_corner p-10 bg-basic_black text-white flex items-center justify-center relative z-10"
+      class="w-11/12 max-w-[400px] overflow-hidden section_corner_y p-10 bg-basic_black text-white flex items-center justify-center relative z-10"
     >
       <h4 class="relative z-10 font-bold">已將商品加入購物車</h4>
       <div
@@ -48,26 +48,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.section_corner {
-  -webkit-clip-path: polygon(
-    0 40px,
-    40px 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 40px
-  );
-  clip-path: polygon(
-    0 40px,
-    40px 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 40px
-  );
-}
-</style>

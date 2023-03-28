@@ -52,3 +52,49 @@ body {
     background-position-x: -200%;
   }
 }
+
+.section_corner_y {
+  -webkit-clip-path: polygon(
+    0 40px,
+    40px 0,
+    100% 0,
+    100% calc(100% - 40px),
+    calc(100% - 40px) 100%,
+    0 100%,
+    0 40px
+  );
+  clip-path: polygon(
+    0 40px,
+    40px 0,
+    100% 0,
+    100% calc(100% - 40px),
+    calc(100% - 40px) 100%,
+    0 100%,
+    0 40px
+  );
+}
+
+.section_corner_tl {
+  -webkit-clip-path: polygon(
+    100% 0,
+    100% 100%,
+
+    100% 100%,
+    0 100%,
+
+    0 100%,
+    0 50px,
+
+    50px 0
+  );
+  clip-path: polygon(
+    100% 0,
+    100% 100%,
+
+    100% 100%,
+    0 100%,
+    0 100%,
+    0 50px,
+    50px 0
+  );
+}

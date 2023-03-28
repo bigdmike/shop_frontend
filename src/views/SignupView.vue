@@ -6,7 +6,7 @@
     <div class="w-full max-w-screen-xl px-5 pb-32 mx-auto xl:px-0 sm:px-10">
       <BreadCrumb class="mb-20" :path="bread_crumb_path" />
       <div
-        class="w-full max-w-screen-sm p-10 mx-auto bg-basic_black section_corner"
+        class="w-full max-w-screen-sm p-10 mx-auto bg-basic_black section_corner_y"
       >
         <h4 class="mb-8 text-2xl font-bold text-center text-white">會員註冊</h4>
         <div class="w-full md:px-20">
@@ -146,7 +146,6 @@ import { validEmail, validName, validPhone } from '@/common/validate';
 import { SendSignUpData } from '@/api/member';
 import { getLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
-import { mapGetters } from 'vuex';
 export default {
   name: 'SignupView',
   components: {
@@ -223,26 +222,16 @@ export default {
     PageInit() {
       this.meta_data = GetMetaData('會員註冊', '', '');
       this.$nextTick(() => {
+        this.$emit('page-mounted');
         this.$PageReady(this.meta_data.title);
       });
     },
-  },
-  watch: {
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-  },
-  computed: {
-    ...mapGetters(['data_load_finish']),
-  },
-  mounted() {
-    this.$emit('page-mounted');
   },
   created() {
     if (getLocalStorage('account_token')) {
       this.$router.push('/account/account_edit');
     } else {
-      this.data_load_finish ? this.PageInit() : '';
+      this.$LoadDataMixin(this);
     }
   },
   metaInfo() {
@@ -250,26 +239,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.section_corner {
-  -webkit-clip-path: polygon(
-    0 40px,
-    40px 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 40px
-  );
-  clip-path: polygon(
-    0 40px,
-    40px 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 40px
-  );
-}
-</style>

@@ -5,7 +5,7 @@
   >
     <div
       data-dialog-box
-      class="w-[450px] max-w-full bg-basic_gray relative z-10 px-14 py-10 section_corner"
+      class="w-[450px] max-w-full bg-basic_gray relative z-10 px-14 py-10 section_corner_y"
     >
       <button
         @click="Close"
@@ -99,26 +99,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.section_corner {
-  -webkit-clip-path: polygon(
-    0 40px,
-    40px 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 40px
-  );
-  clip-path: polygon(
-    0 40px,
-    40px 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 40px
-  );
-}
-</style>

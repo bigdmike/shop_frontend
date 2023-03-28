@@ -130,7 +130,7 @@ import { GetMetaData } from '@/common/meta';
 import { validEmail } from '@/common/validate';
 import { section_animation } from '@/gsap/section';
 import MoreButton from '@/components/ui/MoreButton.vue';
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import { postContact } from '@/api/page_data';
 export default {
   name: 'ContactView',
@@ -160,6 +160,7 @@ export default {
     },
     SetGsap() {
       this.page_ready = true;
+      this.$emit('page-mounted');
       this.section_animation = new section_animation(this.$refs.MainContent);
       this.section_animation.setup();
       this.$nextTick(() => {
@@ -189,24 +190,10 @@ export default {
     },
   },
   computed: {
-    ...mapState(['image_loaded']),
     ...mapGetters(['data_load_finish']),
   },
-  watch: {
-    image_loaded() {
-      this.image_loaded ? this.SetGsap() : '';
-    },
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-  },
-  mounted() {
-    this.$emit('page-mounted');
-  },
   created() {
-    setTimeout(() => {
-      this.data_load_finish ? this.PageInit() : '';
-    }, 100);
+    this.$LoadDataMixin(this);
   },
   metaInfo() {
     return this.meta_data;

@@ -120,21 +120,12 @@ export default {
     $route() {
       this.SetBreadCrumb();
     },
-    data_load_finish() {
-      this.data_load_finish ? this.PageInit() : '';
-    },
-    image_loaded() {
-      this.image_loaded ? this.SetGsap() : '';
-    },
   },
   computed: {
     ...mapGetters(['data_load_finish']),
-    image_loaded() {
-      return this.$store.state.image_loaded;
-    },
   },
   created() {
-    this.data_load_finish ? this.PageInit() : '';
+    this.$LoadDataMixin(this);
   },
   metaInfo() {
     return this.meta_data;
