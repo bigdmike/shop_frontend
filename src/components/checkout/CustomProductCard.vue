@@ -1,6 +1,13 @@
 <template>
   <div class="relative flex flex-wrap items-start w-full">
-    <div class="w-20 overflow-hidden rounded-lg md:w-1/4 aspect-square">
+    <div class="relative w-20 bg-black rounded-lg aspect-square">
+      <span
+        class="absolute top-0 right-0 text-white bg-primary w-5 h-5 rounded-[100%] flex items-center justify-center text-center transform translate-x-1 -translate-y-1"
+      >
+        <span class="block text-xs transform scale-90">{{
+          shopcart_item.Amount
+        }}</span>
+      </span>
       <img
         :src="$ImageUrl(shopcart_item.Image1)"
         class="object-cover w-full h-full"
@@ -11,9 +18,6 @@
         {{ shopcart_item.Title }}
       </p>
 
-      <p class="mb-2 text-xs font-medium text-white text-opacity-60">
-        x{{ shopcart_item.Amount }}
-      </p>
       <p
         v-for="(item, item_index) in stock_data"
         :key="`option_${item_index}`"
@@ -25,7 +29,7 @@
         >-
         {{ item.SpecTitle }}
       </p>
-      <div class="flex items-center justify-end w-full mt-4">
+      <div class="flex items-center justify-end w-full mt-2">
         <p class="text-sm font-bold text-white font-anybody md:text-base">
           NT${{
             $MoneyFormat(

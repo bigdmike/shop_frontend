@@ -1,7 +1,7 @@
 <template>
-  <ol class="max-h-[50vh] overflow-y-auto px-10 custom_scroll">
+  <ol class="max-h-[50vh] overflow-y-auto custom_scroll pt-5">
     <li
-      class="flex flex-wrap items-start pb-5 mb-5 border-b border-zinc-700"
+      class="flex flex-wrap items-start pb-2 mb-5 border-b border-zinc-700"
       v-for="(item, item_index) in shopcart"
       :key="`shopcart_${item_index}`"
     >

@@ -41,6 +41,36 @@
               </span>
             </h3>
           </header>
+
+          <ShopCart :checkout_data="checkout_data.CheckoutList" />
+          <div
+            class="block w-full mb-5 md:hidden"
+            v-if="checkout_data.GiveInfo.length > 0"
+          >
+            <div class="w-full">
+              <h4 class="mb-2 font-bold text-white">活動贈品</h4>
+            </div>
+            <div
+              class="flex items-center justify-between w-full p-3 mb-2 bg-black rounded-md"
+              v-for="(item, item_index) in checkout_data.GiveInfo"
+              :key="`give_info_${item_index}`"
+            >
+              <div class="">
+                <p class="text-sm font-bold text-white">
+                  {{ item.Title }}
+                </p>
+                <p class="text-sm text-primary">
+                  {{ item.GiveName }}
+                </p>
+              </div>
+              <button
+                @click="OpenImageDialog(item)"
+                class="text-xs underline text-primary"
+              >
+                查看圖片
+              </button>
+            </div>
+          </div>
           <ShopCartForm
             :errors="errors"
             :form_data="form_data"
@@ -59,32 +89,38 @@
         data-scroll
         data-scroll-sticky
         data-scroll-target="#ShopcartContainer"
-        class="absolute top-0 right-0 z-0 hidden w-1/3 h-screen pt-40 bg-basic_black sm:pt-44 md:block"
+        class="absolute top-0 right-0 z-0 hidden w-1/3 h-screen pt-40 pb-20 overflow-y-auto custom_scroll bg-basic_black sm:pt-44 md:block"
         @mouseover="$emit('stop-scroll')"
         @mouseleave="$emit('start-scroll')"
       >
-        <ShopCart :checkout_data="checkout_data.CheckoutList" />
-        <div class="px-10 pt-10">
-          <div
-            class="flex flex-wrap items-start pb-5 mb-5 border-b border-zinc-300"
-            v-if="checkout_data.GiveInfo.legnth > 0"
-          >
+        <GiveImageDialog ref="GiveImageDialog" />
+        <div class="px-10">
+          <div class="w-full mb-5" v-if="checkout_data.GiveInfo.length > 0">
             <div class="w-full">
-              <h4 class="mb-5 font-bold text-primary">活動贈品</h4>
+              <h4 class="mb-2 font-bold text-white">活動贈品</h4>
             </div>
-            <div class="w-1/4 overflow-hidden rounded-lg">
-              <img
-                :src="$ImageUrl(checkout_data.GiveInfo.Image1)"
-                class="w-full"
-              />
-            </div>
-            <div class="w-3/4 pl-3">
-              <p class="mb-2 text-sm font-bold text-white">
-                {{ checkout_data.GiveInfo.GiveName }}
-              </p>
-              <p class="text-sm text-basic_gray">
-                {{ checkout_data.GiveInfo.Title }}
-              </p>
+            <div
+              class="flex items-center justify-between w-full p-3 mb-2 bg-black rounded-md"
+              v-for="(item, item_index) in checkout_data.GiveInfo"
+              :key="`give_info_${item_index}`"
+            >
+              <!-- <div class="w-16 mr-2 overflow-hidden rounded-lg">
+                <img :src="$ImageUrl(item.Image1)" class="w-full" />
+              </div> -->
+              <div class="">
+                <p class="text-sm font-bold text-white">
+                  {{ item.Title }}
+                </p>
+                <p class="text-sm text-primary">
+                  {{ item.GiveName }}
+                </p>
+              </div>
+              <button
+                @click="OpenImageDialog(item)"
+                class="text-xs underline text-primary"
+              >
+                查看圖片
+              </button>
             </div>
           </div>
           <ol class="py-5 mb-5 text-white border-t border-b border-zinc-700">
@@ -96,8 +132,14 @@
             </li>
             <li class="flex items-center justify-between text-sm w-ful">
               <p class="font-medium">運費</p>
-              <p class="font-semibold font-anybody">
+              <p
+                class="font-semibold font-anybody"
+                v-if="!checkout_data.ShippingFree"
+              >
                 NT$ {{ $MoneyFormat(ship_price) }}
+              </p>
+              <p class="font-semibold font-anybody text-primary" v-else>
+                免運費
               </p>
             </li>
             <li
@@ -107,6 +149,15 @@
               <p class="font-medium">金流手續費</p>
               <p class="font-semibold font-anybody">
                 NT$ {{ $MoneyFormat(payment_price) }}
+              </p>
+            </li>
+            <li
+              v-if="discount_price != 0"
+              class="flex items-center justify-between w-full mt-3 text-sm"
+            >
+              <p class="font-medium">優惠折扣金額</p>
+              <p class="font-semibold font-anybody">
+                - NT$ {{ $MoneyFormat(discount_price) }}
               </p>
             </li>
             <li
@@ -162,13 +213,16 @@
         class="block md:hidden"
         :product_total_price="parseInt(product_total_price)"
         :ship_price="parseInt(ship_price)"
+        :shipping_free="checkout_data.ShippingFree"
         :payment_price="parseInt(payment_price)"
+        :discount_price="parseInt(discount_price)"
         :total_price="parseInt(total_price)"
         :checkout_data="checkout_data.CheckoutList"
         :coupon_discount="parseInt(coupon_discount)"
         :give_info="checkout_data.GiveInfo"
         @stop-scroll="$emit('stop-scroll')"
         @start-scroll="$emit('start-scroll')"
+        @open-image-dialg="OpenImageDialog"
       />
     </div>
   </main>
@@ -179,6 +233,7 @@ import BreadCrumb from '@/components/BreadCrumb.vue';
 import ShopCartForm from '@/components/shopcart/ShopCartForm.vue';
 import FixedFooter from '@/components/shopcart/FixedFooter.vue';
 import ShopCart from '@/components/shopcart/ShopCartList.vue';
+import GiveImageDialog from '@/components/product_page/EventImageDialog.vue';
 import {
   validName,
   validEmail,
@@ -202,6 +257,7 @@ export default {
     ShopCartForm,
     FixedFooter,
     ShopCart,
+    GiveImageDialog,
   },
   data() {
     return {
@@ -245,6 +301,9 @@ export default {
     };
   },
   methods: {
+    OpenImageDialog(data) {
+      this.$refs.GiveImageDialog.Open(data);
+    },
     SetSameBuyer() {
       this.form_data.consignee_first_name = this.form_data.buyer_first_name;
       this.form_data.consignee_last_name = this.form_data.buyer_last_name;
@@ -561,10 +620,27 @@ export default {
       shipway_data: 'shipway_data',
     }),
     product_total_price() {
+      // 返回商品原始價格加總
       if (this.checkout_data == null) {
         return 0;
       }
-      return this.checkout_data.DiscountFullTotal;
+      let price = 0;
+      this.checkout_data.CheckoutList.forEach((item) => {
+        if (item.MemberSellPrice) {
+          price += parseInt(item.MemberSellPrice);
+        } else {
+          price += parseInt(item.SellPrice);
+        }
+      });
+      return price;
+    },
+    discount_price() {
+      // 返回優惠價與原價價差
+      if (this.checkout_data == null) {
+        return 0;
+      } else {
+        return this.product_total_price - this.checkout_data.DiscountFullTotal;
+      }
     },
     ship_price() {
       if (this.checkout_data == null) {

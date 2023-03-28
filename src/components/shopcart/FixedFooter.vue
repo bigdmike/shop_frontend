@@ -28,7 +28,7 @@
           :class="open ? 'max-h-screen pb-5' : 'max-h-0'"
           class="w-full overflow-hidden bg-basic_black"
         >
-          <ol
+          <!-- <ol
             class="max-h-[300px] overflow-y-auto custom_scroll px-5 pt-5 mb-5"
           >
             <li
@@ -44,28 +44,34 @@
               <ProductCard v-if="item.IsCustom == 'N'" :shopcart_item="item" />
               <CustomProductCard v-else :shopcart_item="item" />
             </li>
-          </ol>
+          </ol> -->
 
-          <div class="px-5">
-            <div
-              class="flex flex-wrap items-start pt-5 mb-5 border-t border-zinc-600 border-opacity-20"
-              v-if="give_info.length > 0"
-            >
+          <div class="px-5 pt-5">
+            <!-- <div class="w-full mb-5" v-if="give_info.length > 0">
               <div class="w-full">
-                <h4 class="mb-5 font-bold text-primary">活動贈品</h4>
+                <h4 class="mb-2 font-bold text-white">活動贈品</h4>
               </div>
-              <div class="w-1/4 overflow-hidden rounded-lg">
-                <img :src="$ImageUrl(give_info.Image1)" class="w-full" />
+              <div
+                class="flex items-center justify-between w-full p-3 mb-2 bg-black rounded-md"
+                v-for="(item, item_index) in give_info"
+                :key="`give_info_${item_index}`"
+              >
+                <div class="">
+                  <p class="text-sm font-bold text-white">
+                    {{ item.Title }}
+                  </p>
+                  <p class="text-sm text-primary">
+                    {{ item.GiveName }}
+                  </p>
+                </div>
+                <button
+                  @click="$emit('open-image-dialg', item)"
+                  class="text-xs underline text-primary"
+                >
+                  查看圖片
+                </button>
               </div>
-              <div class="w-3/4 pl-3">
-                <p class="mb-2 text-sm font-bold">
-                  {{ give_info.GiveName }}
-                </p>
-                <p class="text-sm text-basic_gray">
-                  {{ give_info.Title }}
-                </p>
-              </div>
-            </div>
+            </div> -->
             <ol
               class="px-0 pt-5 pb-5 mb-5 border-t border-b border-zinc-600 border-opacity-20"
             >
@@ -81,8 +87,11 @@
                 class="flex items-center justify-between w-full text-sm text-white"
               >
                 <p class="font-medium">運費</p>
-                <p class="font-semibold font-anybody">
+                <p class="font-semibold font-anybody" v-if="!shipping_free">
                   NT$ {{ $MoneyFormat(ship_price) }}
+                </p>
+                <p class="font-semibold text-primary font-anybody" v-else>
+                  免運費
                 </p>
               </li>
               <li
@@ -92,6 +101,15 @@
                 <p class="font-medium">金流手續費</p>
                 <p class="font-semibold font-anybody">
                   NT$ {{ $MoneyFormat(payment_price) }}
+                </p>
+              </li>
+              <li
+                v-if="discount_price != 0"
+                class="flex items-center justify-between w-full mt-3 text-sm text-white"
+              >
+                <p class="font-medium">優惠折扣金額</p>
+                <p class="font-semibold font-anybody">
+                  - NT$ {{ $MoneyFormat(discount_price) }}
                 </p>
               </li>
               <li
@@ -122,8 +140,8 @@
 
 <script>
 import Teleport from 'vue2-teleport';
-import ProductCard from '@/components/checkout/ProductCard.vue';
-import CustomProductCard from '@/components/checkout/CustomProductCard.vue';
+// import ProductCard from '@/components/checkout/ProductCard.vue';
+// import CustomProductCard from '@/components/checkout/CustomProductCard.vue';
 export default {
   name: 'ShopCartFooter',
   props: {
@@ -131,6 +149,14 @@ export default {
     //   require: true,
     //   type: Array,
     // },
+    shipping_free: {
+      require: true,
+      type: Boolean,
+    },
+    discount_price: {
+      require: true,
+      type: Number,
+    },
     product_total_price: {
       require: true,
       type: Number,
@@ -166,8 +192,8 @@ export default {
   },
   components: {
     Teleport,
-    ProductCard,
-    CustomProductCard,
+    // ProductCard,
+    // CustomProductCard,
   },
   watch: {
     open() {
