@@ -6,7 +6,7 @@
     >
       <div
         data-dialog-box
-        class="w-[400px] max-w-full bg-bg_black relative z-10 p-5 rounded-md"
+        class="w-[400px] max-w-[90%] bg-bg_black relative z-10 p-5 rounded-md"
       >
         <div class="w-full mb-3" v-if="event_data != null">
           <img

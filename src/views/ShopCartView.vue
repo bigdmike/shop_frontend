@@ -45,7 +45,13 @@
 
           <ShopCart :checkout_data="checkout_data.CheckoutList" />
           <GiveInfo
+            :checkout_data="checkout_data"
             :give_info="checkout_data.GiveInfo"
+            :invalid_give_info="checkout_data.GiveInvalidInfo"
+            class="block mb-3 md:hidden"
+          />
+          <ShipFreeInfo
+            :checkout_data="checkout_data"
             class="block mb-5 md:hidden"
           />
           <ShopCartForm
@@ -73,7 +79,13 @@
         @mouseleave="$emit('start-scroll')"
       >
         <div class="px-10">
-          <GiveInfo :give_info="checkout_data.GiveInfo" class="mb-5" />
+          <GiveInfo
+            :checkout_data="checkout_data"
+            :give_info="checkout_data.GiveInfo"
+            :invalid_give_info="checkout_data.GiveInvalidInfo"
+            class="mb-5"
+          />
+          <ShipFreeInfo :checkout_data="checkout_data" />
           <PriceInfo
             :coupon_discount="parseInt(coupon_discount)"
             :product_total_price="parseInt(product_total_price)"
@@ -116,6 +128,7 @@ import ShopCart from '@/components/shopcart/ShopCartList.vue';
 import GiveInfo from '@/components/checkout/GiveInfo.vue';
 import PriceInfo from '@/components/checkout/PriceInfo.vue';
 import EmptyShopCart from '@/components/checkout/EmptyShopCart.vue';
+import ShipFreeInfo from '@/components/checkout/ShipFreeInfo.vue';
 import {
   validName,
   validEmail,
@@ -142,6 +155,7 @@ export default {
     GiveInfo,
     PriceInfo,
     EmptyShopCart,
+    ShipFreeInfo,
   },
   data() {
     return {

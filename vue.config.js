@@ -81,6 +81,6 @@ module.exports = {
     config
       .plugin('webpack-bundle-analyzer')
       .use(BundleAnalyzerPlugin)
-      .init((Plugin) => new Plugin({ analyzerPort: 1234 }));
+      .init((Plugin) => new Plugin({ analyzerPort: 1235 }));
   },
 };

@@ -35,10 +35,13 @@
       </p>
       <div
         v-if="form_data.ship_way == 1 || form_data.ship_way == 2"
-        class="relative mt-5"
+        class="relative mt-3"
       >
-        <div class="w-full p-3 mb-3 rounded-xl bg-basic_gray bg-opacity-20">
-          <p class="text-sm text-white">
+        <div class="w-full p-3 mb-3 rounded-md bg-basic_gray bg-opacity-20">
+          <p v-if="form_data.shop_name == ''" class="text-sm text-white">
+            尚未選擇門市
+          </p>
+          <p v-else class="text-sm text-white">
             您已選擇門市：<b class="text-base font-bold text-white">{{
               form_data.shop_name
             }}</b

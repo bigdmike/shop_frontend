@@ -29,7 +29,7 @@
       >
         <p class="font-medium">優惠折扣金額</p>
         <p class="font-semibold font-anybody">
-          - NT$ {{ $MoneyFormat(discount_price) }}
+          - NT$ {{ $MoneyFormat(Math.abs(discount_price)) }}
         </p>
       </li>
       <li
