@@ -6,9 +6,10 @@
         :asNavFor="$refs.small_swiper"
         v-bind="big_slick_option"
         @beforeChange="SetSlideIndex"
+        class="relative z-10"
       >
         <div
-          class="relative w-full overflow-hidden bg-gradient-to-b from-basic_black to-transparent section_corner_tl aspect-square"
+          class="relative w-full overflow-hidden aspect-square"
           v-for="(item, item_index) in images"
           :key="`big_carousel_${item_index}`"
         >
@@ -19,24 +20,25 @@
             :src="$ImageUrl(item.Image)"
             class="relative z-10 object-cover w-full h-full"
           />
-          <img
-            width="550"
-            height="122"
-            src="/img/logo_white.svg"
-            :alt="$GetColumn('brand_name')"
-            class="absolute z-0 w-11/12 transform -translate-x-1/2 -translate-y-1/2 opacity-20 top-1/2 left-1/2 mix-blend-overlay"
-          />
         </div>
       </VueSlickCarousel>
+      <div
+        class="absolute top-0 bottom-0 left-0 right-0 z-0 bg-gradient-to-b from-basic_black to-transparent section_corner_tl"
+      >
+        <img
+          width="550"
+          height="122"
+          src="/img/logo_white.svg"
+          :alt="$GetColumn('brand_name')"
+          class="absolute z-0 w-11/12 transform -translate-x-1/2 -translate-y-1/2 opacity-20 top-1/2 left-1/2 mix-blend-overlay"
+        />
+      </div>
     </div>
-    <VueSlickCarousel
-      ref="small_swiper"
-      :asNavFor="$refs.big_swiper"
-      v-bind="small_slick_option"
-    >
+    <div class="flex flex-wrap -mx-2">
       <div
         v-for="(item, item_index) in images"
         :key="`big_carousel_${item_index}`"
+        class="w-1/6 px-2 mb-4"
       >
         <div
           @click="SlideToIndex(item_index)"
@@ -45,7 +47,7 @@
               ? 'border-opacity-100'
               : 'border-opacity-20'
           "
-          class="mx-2 overflow-hidden transition-all duration-300 border-2 rounded-md border-primary hover:border-opacity-100 aspect-square"
+          class="transition-all duration-300 border-2 rounded-md border-primary hover:border-opacity-100 aspect-square"
         >
           <img
             :alt="title"
@@ -56,7 +58,7 @@
           />
         </div>
       </div>
-    </VueSlickCarousel>
+    </div>
   </div>
 </template>
 
