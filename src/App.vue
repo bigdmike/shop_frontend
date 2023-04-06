@@ -1,13 +1,20 @@
 <template>
   <div id="container" class="min-h-screen">
+    <!-- 頂部導覽列 -->
     <MainHeader ref="MainHeader" />
+    <!-- Loading組件 -->
     <MainLoading />
+    <!-- 加入購物車訊息 -->
     <ShopCartDialog />
+    <!-- 購物車 -->
     <ShopCartDrawer />
+    <!-- 系統訊息 -->
     <MainDialog />
+    <!-- 搜尋商品 -->
     <SearchDialog />
 
     <div id="app" class="min-h-screen">
+      <!-- 畫面 -->
       <router-view
         class="min-h-screen"
         ref="RouterView"
@@ -18,10 +25,16 @@
         @start-scroll="StartScroller"
         @page-mounted="page_mounted = true"
       />
+      <!-- 聯絡我們區塊 -->
       <ContactFooter v-show="page_mounted" />
+      <!-- Footer區塊 -->
       <MainFooter v-show="page_mounted" @scroll-top="ScrollToTop" />
     </div>
+
+    <!-- 手機版導覽列 -->
     <MainFooterNav @open-menu="OpenMenu" @open-message="OpenMessenger" />
+
+    <!-- 線上客服按鈕 -->
     <button
       v-if="data_load_finish"
       @click="OpenMessenger"
@@ -74,28 +87,28 @@ export default {
   data() {
     return {
       messenger_hvoer: false,
-      first_time_load: true,
       marquee_animation: null,
       image_loader: null,
       page_mounted: false,
     };
   },
   methods: {
-    AddShopCart() {
-      this.$refs.RouterView.AddShopCart();
-    },
     LoadImage() {
+      // 確認頁面圖片讀取狀況
       this.$nextTick(() => {
         this.image_loader.LoadImage();
       });
     },
     UpdateScroller() {
+      // 更新頁面滾動
       this.image_loader.locoScroll.update();
     },
     StartScroller() {
+      // 啟動頁面滾動
       this.image_loader.locoScroll.start();
     },
     StopScroller() {
+      // 暫停頁面滾動
       this.image_loader.locoScroll.stop();
     },
     ScrollToTop() {
@@ -105,33 +118,49 @@ export default {
       }, 150);
     },
     CheckPageData() {
+      // 檢查網站各項資料是否已經存在，如果不存在則Call API讀取資料
+
+      // 通用欄位資料
       this.common_column_data == null
         ? this.$store.dispatch('getColumnData')
         : '';
+
+      // 首頁輪播圖資料
       this.carousel_data == null ? this.$store.dispatch('getCarouselData') : '';
+
+      // 最新消息資料
       this.news_data == null ? this.$store.dispatch('getNewsData') : '';
       this.news_category_data == null
         ? this.$store.dispatch('getNewsCategoryData')
         : '';
-      this.promote_data == null ? this.$store.dispatch('getPromoteData') : '';
+
+      // 商品資料
       this.category_data == null ? this.$store.dispatch('getCategoryData') : '';
       this.product_data == null ? this.$store.dispatch('getProductData') : '';
+
+      // 常見問題資料
       this.question_category_data == null
         ? this.$store.dispatch('getQuestionCategoryData')
         : '';
       this.question_data == null ? this.$store.dispatch('getQuestionData') : '';
+
+      // 付款相關資料
       this.zipcode_data == null ? this.$store.dispatch('getZipCode') : '';
       this.payment_data == null ? this.$store.dispatch('getPaymentData') : '';
       this.shipway_data == null ? this.$store.dispatch('getShipwayData') : '';
+
+      // 經銷據點資料
       this.dealer_data == null ? this.$store.dispatch('getDealerData') : '';
     },
     OpenMenu() {
       this.$refs.MainHeader.OpenMenu();
     },
     OpenMessenger() {
+      // 紀錄GTM事件
       window.dataLayer.push({
         event: 'open_messenger',
       });
+      // 打開線上客服連結
       window.open(this.$GetColumn('company_messenger'), '_blank');
     },
     GetOrderMemo() {
@@ -145,7 +174,6 @@ export default {
   },
   computed: {
     ...mapState([
-      'body_lock',
       'common_column_data',
       'carousel_data',
       'news_data',
@@ -166,24 +194,24 @@ export default {
   },
   watch: {
     data_load_finish() {
+      // 當資料全數載入後，初始化購物車內容
       if (this.data_load_finish) {
         this.$store.dispatch('shopcart_module/GetShopCart');
-        // this.LoadImage('App');
-      }
-      if (this.data_load_finish && this.first_time_load) {
-        this.first_time_load = false;
       }
     },
     $route() {
+      // 網址路徑異動時，確認分潤標籤以及將頁面滾動到最上方
       this.GetOrderMemo();
       this.ScrollToTop();
     },
   },
 
   created() {
+    // 第一次進入網站，呼叫檢查網站資料
     this.CheckPageData();
   },
   mounted() {
+    // DOM載入後初始化ImageLoader以及跑馬燈的GSAP動畫
     this.image_loader = new ImageLoader();
     this.image_loader.SetScroller();
     this.marquee_animation = new marquee();

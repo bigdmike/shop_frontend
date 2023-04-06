@@ -13,10 +13,13 @@ const service = axios.create({
   },
 });
 
+// 錯誤事件
 const err = (error) => {
   if (error.response) {
     let data = error.response.data;
     console.log(`message: ${data.msg}`);
+    // 若發生權限錯誤則要求重新登入
+    // 可能是沒有登入或是token過期
     if (error.response.status == 401) {
       router.push('/account/login');
       setDialog('會員憑證過期，請重新登入');
@@ -28,7 +31,7 @@ const err = (error) => {
   }
   return Promise.reject(error);
 };
-
+// 顯示訊息
 const setDialog = (content) => {
   store.commit('SetDialog', {
     content: content,
@@ -39,25 +42,30 @@ const setDialog = (content) => {
 // request攔截器
 service.interceptors.request.use(
   (config) => {
+    // 若有登入會員，則帶入token
     const token = getLocalStorage('account_token');
     if (token) {
       config.headers['Authorization'] = 'Bearer ' + token;
     }
+    // 顯示Loading組件
     store.commit('SetLoading', 1);
     return config;
   },
   (error) => {
-    // Do something with request error
-    console.log(error); // for debug
+    // 錯誤事件
+    console.log(error);
     Promise.reject(error);
   }
 );
+
 // respone攔截器
 service.interceptors.response.use((response) => {
+  // 若沒有盡到錯誤但是發生權限問題，則刪除LocalStorage中的token並要求重新登入
   if (response.data.code == 302) {
     delLocalStorage('account_token');
     setDialog('會員憑證過期，請重新登入');
   }
+  // 關閉Loading組件
   store.commit('SetLoading', -1);
   return response.data;
 }, err);

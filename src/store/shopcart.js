@@ -5,14 +5,17 @@ import {
   delLocalStorage,
 } from '@/common/cookie';
 
+// 確認購物車中有無符合的商品，返回排序編號
 const GetShopCartItemIndex = (state, { product, options }) => {
   // 確認商品是否存在購物車
   let index = -1;
-  // 客製化商品不堆疊
+
+  // 客製化商品不堆疊，直接返回-1
   if (product.IsCustom == 'Y') {
     return index;
   }
 
+  // 檢查目前購物車中是否有商品ID與選項都符合的項目
   state.shopcart.forEach((item, item_index) => {
     if (item.product_data.GoodsID == product.GoodsID) {
       if (
@@ -26,6 +29,7 @@ const GetShopCartItemIndex = (state, { product, options }) => {
   return index;
 };
 
+// 確認有無符合的商品，返回排序編號
 const GetProductIndex = (state, product_id) => {
   // 確認商品是否存在
   let index = -1;
@@ -35,6 +39,7 @@ const GetProductIndex = (state, product_id) => {
   return index;
 };
 
+// 檢查商品與選項是否有符合的庫存資訊
 const CheckActiveOption = ({ product, options }, is_custom) => {
   if (is_custom == 'Y') {
     let error = false;
@@ -61,6 +66,7 @@ const CheckActiveOption = ({ product, options }, is_custom) => {
   }
 };
 
+// 儲存本地購物車
 const SetLocalShopCart = (shopcart) => {
   // LocalShopcart 格式
   // GoodsID,IsCustom,option1-option2-option3....,Amount
@@ -90,12 +96,12 @@ const SetLocalShopCart = (shopcart) => {
 const shopcart_module = {
   namespaced: true,
   state: () => ({
-    shopcart: [],
-    product_data: null,
-    add_cart_message: false,
+    shopcart: [], //購物車
+    product_data: null, //商品資料
+    add_cart_message: false, //購物車訊息顯示
   }),
-  getters: {},
   actions: {
+    // 會員加入購物車
     async AddShopCart(
       { dispatch, commit },
       { product, options, amount, show_message = false }
@@ -103,12 +109,16 @@ const shopcart_module = {
       let shop_cart_item = {
         GoodsID: product.GoodsID,
       };
+      // 一般商品，帶入ColorID與SizeID
       if (product.IsCustom == 'N') {
         shop_cart_item.ColorID = options[0];
         shop_cart_item.SizeID = options[1];
-      } else {
+      }
+      // 客製化商品，將CustomSpecID轉為字串帶入
+      else {
         shop_cart_item.CustomSpecID = options.join();
       }
+
       const add_result = await AddShopCart(shop_cart_item, amount);
       if (add_result.code == 302) {
         // token 過期，先清空購物車再新增至本地購物車
@@ -119,38 +129,47 @@ const shopcart_module = {
           amount: amount,
         });
       } else {
-        // 2.call 取得購物車 api 並存入 store
+        // call 取得購物車 api，更新購物車狀態，並依情況顯示加入購物車訊息
         dispatch('GetShopCart');
         show_message ? commit('SetAddCartMessage', true) : '';
       }
     },
+    // 會員移除購物車商品
     async RemoveShopCart({ state, dispatch, commit }, { index, amount }) {
       let remove_list = [];
+      // 若數量為-1表示移除全部數量
       if (amount == -1) {
         remove_list = state.shopcart[index].shopcart_id;
-      } else {
+      }
+      // 除此之外放入該商品指定數量的ShopCartID
+      else {
         for (let i = 0; i < amount; i++) {
           remove_list.push(state.shopcart[index].shopcart_id[i]);
         }
       }
 
+      // remove_list不為空時才執行
       if (remove_list.length > 0) {
         const remove_result = await RemoveShopCart(remove_list);
         if (remove_result.code == 302) {
           // token 過期，清空購物車
           commit('SetShopCart', []);
         } else {
-          // 移除商品後，重新取得目前購物車
+          // 重新取得目前購物車狀態
           dispatch('GetShopCart');
         }
       }
     },
+    // 取得會員購物車
     GetShopCart({ dispatch }) {
+      // 檢查是否有會員token，若無則改為讀取本地ShopCart
       if (getLocalStorage('account_token')) {
         GetShopCart().then(async (res) => {
           if (res.code == 302) {
+            // 若token過期則改為讀取本地ShopCart
             dispatch('GetLocalShopCart');
           } else {
+            // 將API的購物車資訊轉換格式
             dispatch('ConvertShopCart', res.data);
           }
         });
@@ -158,6 +177,7 @@ const shopcart_module = {
         dispatch('GetLocalShopCart');
       }
     },
+    // 取得本地購物車
     GetLocalShopCart({ state, commit }) {
       // 從localStorage 讀出購物車
       let shop_cart_text = getLocalStorage('shopcart');
@@ -184,6 +204,7 @@ const shopcart_module = {
 
             let option_status = CheckActiveOption(stock_data, shopcart_item[1]);
 
+            // 若商品存在且庫存存在則新增至購物車
             if (option_status != 'error') {
               tmp_list.push({
                 product_data: product_data[0],
@@ -198,6 +219,7 @@ const shopcart_module = {
       }
       commit('SetShopCart', tmp_list);
     },
+    // API購物車格式轉換
     async ConvertShopCart({ dispatch, commit, state }, shopcart) {
       // 暫存購物車
       let tmp_list = [];
@@ -205,17 +227,22 @@ const shopcart_module = {
       let delete_list = [];
 
       shopcart.forEach((item) => {
+        // 檢查商品是否存在
         const product_index = GetProductIndex(state, item.GoodsID);
 
+        // 商品存在
         if (product_index != -1) {
           const product_data = state.product_data[product_index];
           let shop_cart_item = {
             product: product_data,
             options: [],
           };
+          // 一般商品，帶入ColorID與SizeID
           if (product_data.IsCustom == 'N') {
             shop_cart_item.options = [item.ColorID, item.SizeID];
-          } else {
+          }
+          // 客製化商品，CustomSpecID轉為陣列帶入
+          else {
             shop_cart_item.options = item.CustomSpecID.split(',');
           }
 
@@ -255,8 +282,9 @@ const shopcart_module = {
               item.ShoppingCartID
             );
           }
-        } else {
-          // 若商品已不存在，則新增至待刪除清單
+        }
+        // 若商品已不存在，則新增至待刪除清單
+        else {
           delete_list.push(item.ShoppingCartID);
         }
       });
@@ -277,6 +305,7 @@ const shopcart_module = {
     },
   },
   mutations: {
+    // 非會員加入購物車
     AddShopCart(state, { product, options, amount, show_message = false }) {
       // 搜尋購物車中相同商品的位置，若無相同商品則返回-1
       const product_index = GetShopCartItemIndex(state, {
@@ -301,9 +330,12 @@ const shopcart_module = {
         );
         state.shopcart[product_index].amount += 1;
       }
+      // 儲存本地購物車
       SetLocalShopCart(state.shopcart);
+      // 依情況顯示加入購物車訊息
       show_message ? (state.add_cart_message = true) : '';
     },
+    // 非會員移除購物車商品
     RemoveShopCart(state, { index, amount }) {
       if (amount == -1) {
         // 若數量為-1則直接將該商品移除
@@ -317,15 +349,19 @@ const shopcart_module = {
           ? state.shopcart.splice(index, 1)
           : '';
       }
+      // 儲存本地購物車
       SetLocalShopCart(state.shopcart);
     },
+    // 設定購物車資料
     SetShopCart(state, shopcart) {
       state.shopcart = shopcart;
       SetLocalShopCart(shopcart);
     },
+    // 設定商品資料
     SetProductData(state, product_data) {
       state.product_data = product_data;
     },
+    // 設定購物車訊息顯示
     SetAddCartMessage(state, action) {
       state.add_cart_message = action;
     },

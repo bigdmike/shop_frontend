@@ -199,19 +199,24 @@ export default {
     };
   },
   methods: {
+    // 顯示贈品圖片視窗
     OpenImageDialog(data) {
       this.$refs.GiveImageDialog.Open(data);
     },
+    // 點選收件人同購買人時，將購買人資訊複製到收件人欄位
     SetSameBuyer() {
       this.form_data.consignee_first_name = this.form_data.buyer_first_name;
       this.form_data.consignee_last_name = this.form_data.buyer_last_name;
       this.form_data.consignee_phone = this.form_data.buyer_phone;
     },
+    // 更新結帳表單資訊
     UpdateForm(key, val) {
       this.$set(this.form_data, key, val);
+      // 若更新城市欄位則將地區清空
       if (key == 'city') {
         this.$set(this.form_data, 'area', '');
       }
+      // 若更新城市或是地區則重新判斷地址是否在外島
       if (key == 'city' || key == 'area') {
         if (
           val == '蘭嶼鄉' ||
@@ -225,18 +230,22 @@ export default {
           this.$set(this.form_data, 'outlying', false);
         }
       }
+      // 若更新付款方式或物流方式則重新取得結帳資料
       if (key == 'ship_way' || key == 'pay_way') {
         this.GetCashier();
       }
+      // 如果第一次更新物流方式則觸發GA4電子商務事件『選擇配送方式』
       if (key == 'ship_way' && this.first_choose_shipping) {
         this.first_choose_shipping = false;
         this.AddShipInfo();
       }
+      // 如果第一次更新付款方式則觸發GA4電子商務事件『選擇付款方式』
       if (key == 'pay_way' && this.first_choose_payment) {
         this.first_choose_payment = false;
         this.AddPaymentInfo();
       }
     },
+    // 取得結帳資訊API
     GetCashier() {
       if (this.shopcart.length > 0) {
         getCashier(
@@ -247,6 +256,7 @@ export default {
         ).then((res) => {
           if (res.code == 200) {
             this.checkout_data = res.data;
+            // 第一次呼叫時，觸發GA4 電子商務事件『開始結帳』
             if (this.first_enter) {
               this.first_enter = false;
               // GTM事件
@@ -267,7 +277,9 @@ export default {
                 currency: 'TWD',
               });
             }
-          } else if (res.msg.indexOf('超過物流限制') != -1) {
+          }
+          // 判斷各種錯誤訊息，開啟系統訊息顯示，如果發生無法結帳的錯誤則返回首頁
+          else if (res.msg.indexOf('超過物流限制') != -1) {
             this.$store.commit('SetDialog', {
               status: true,
               content: `很抱歉！<br/>購物車商品超出可運送範圍，您可以分次下單<br/>如需訂購大量商品請<a class="text-primary" href="${this.$GetColumn(
@@ -303,10 +315,10 @@ export default {
             });
             this.$router.push('/');
           }
-          //
         });
       }
     },
+    // 驗證結帳表單
     ValidateForm() {
       this.errors = [];
       this.form_data.ship_way == '' ? this.errors.push('ship_way') : '';
@@ -355,22 +367,26 @@ export default {
         this.SendData();
       }
     },
+    // 送出結帳
     SendData() {
       SendCheckout(this.form_data, this.shopcart).then((res) => {
         if (res.code == 200) {
+          // 將結帳資訊與購物車資訊暫存至LocalStorage
           setLocalStorage('trade_data', JSON.stringify(this.form_data));
           setLocalStorage('trade_shopcart', JSON.stringify(this.shopcart));
           setLocalStorage(
             'trade_checkout_data',
             JSON.stringify(this.checkout_data)
           );
-          // this.$store.commit('shopcart_module/SetShopCart', []);
+          // 若付款方式為PCHome則直接轉跳到回傳的網址
           if (
             this.checkout_data.PaymentInfo.PaymentType == 'PCHomeCredit' ||
             this.checkout_data.PaymentInfo.PaymentType == 'PCHomeATM'
           ) {
             window.location.replace(res.data.PaymentHTML);
-          } else {
+          }
+          // 若是綠界則新增form至body並觸發submit轉跳
+          else {
             document
               .querySelector('body')
               .insertAdjacentHTML('afterend', res.data.PaymentHTML);
@@ -379,8 +395,8 @@ export default {
         }
       });
     },
+    // GA4電子商務事件『新增收貨資訊』
     AddShipInfo() {
-      // GTM事件
       const shipway = this.shipway_data.filter(
         (item) => item.ShippingID == this.form_data.ship_way
       )[0];
@@ -402,8 +418,8 @@ export default {
         shipping_tier: shipway.Title,
       });
     },
+    // GA4電子商務事件『新增付款資訊』
     AddPaymentInfo() {
-      // GTM事件
       const payment_type = this.payment_data.filter(
         (item) => item.PaymentID == this.form_data.pay_way
       )[0];
@@ -424,11 +440,12 @@ export default {
         payment_type: payment_type.Title,
       });
     },
+    // 如果有登入會員則將購買人資料自動填入會員資料
     GetAccountData() {
       if (getLocalStorage('account_token')) {
         getAccountInfo().then((res) => {
           if (res.code == 302) {
-            // token過期
+            // token過期，轉跳至登入畫面
             this.$router.push('/account/login');
           } else {
             this.form_data.consignee_email = res.data.Account;
@@ -439,22 +456,25 @@ export default {
         });
       }
     },
+    // 設定超商取貨資訊
     SetCVSData() {
       if (getLocalStorage('check_out_form')) {
+        // 從LocalStorage讀取結帳資訊
         this.form_data = JSON.parse(getLocalStorage('check_out_form'));
-
-        // ?MerchantID=2000933&MerchantTradeNo=miGQA1678428295&LogisticsSubType=UNIMARTC2C&CVSStoreID=131386&CVSStoreName=建盛門市&CVSAddress=新竹市東區建中一路52號1樓&CVSTelephone=&CVSOutSide=0&ExtraData=
+        // 若URL QUERY有帶入MerchantID則填入超商門市資訊
         if (this.$route.query.MerchantID) {
           this.form_data.shop_id = this.$route.query.CVSStoreID;
           this.form_data.shop_name = this.$route.query.CVSStoreName;
           this.form_data.shop_address = this.$route.query.CVSAddress;
         }
-        delLocalStorage('check_out_form_');
+        // 刪除本地暫存結帳資料
+        delLocalStorage('check_out_form');
       }
     },
+    // 取得商品價錢
     GetPrice(shop_cart_item, active_option) {
+      // 一般商品，讀取Stock資料 DiscountPrice
       if (shop_cart_item.IsCustom == 'N') {
-        // 一般商品，讀取Stock資料 DiscountPrice
         const checkout_item = this.checkout_data.CheckoutList.filter((item) => {
           return (
             item.GoodsID == shop_cart_item.GoodsID &&
@@ -463,8 +483,9 @@ export default {
           );
         });
         return checkout_item[0].DiscountPrice;
-      } else {
-        // 客製化商品，讀取CustomGoodsStock資料
+      }
+      // 客製化商品，讀取CustomGoodsStock資料
+      else {
         const spec_text = active_option.join();
         const checkout_item = this.checkout_data.CheckoutList.filter((item) => {
           return (
@@ -475,10 +496,14 @@ export default {
         return checkout_item[0].DiscountPrice;
       }
     },
+    // 初始化
     PageInit() {
+      // 取得會員資訊
       this.GetAccountData();
+      // 取得超商門市資訊
       this.SetCVSData();
 
+      // 若購物車不為空則呼叫取得結帳資訊
       if (this.shopcart.length > 0) {
         this.GetCashier();
       }
@@ -503,6 +528,7 @@ export default {
       }
     },
     shopcart_drawer() {
+      // 當購物車抽屜關閉時，因為有可能有調整過商品數量所以重新取得結帳資訊
       if (!this.shopcart_drawer) {
         this.GetCashier();
       }
@@ -519,8 +545,8 @@ export default {
       payment_data: 'payment_data',
       shipway_data: 'shipway_data',
     }),
+    // 取得商品原始價格加總
     product_total_price() {
-      // 返回商品原始價格加總
       if (this.checkout_data == null) {
         return 0;
       }
@@ -534,23 +560,26 @@ export default {
       });
       return price;
     },
+    // 取得優惠價與原價價差
     discount_price() {
-      // 返回優惠價與原價價差
       if (this.checkout_data == null) {
         return 0;
       } else {
         return this.product_total_price - this.checkout_data.DiscountFullTotal;
       }
     },
+    // 取得運費
     ship_price() {
       if (this.checkout_data == null) {
         return 0;
       } else {
+        // 判斷本島外島
         return this.form_data.outlying
           ? this.checkout_data.ShippingFeeOutlying
           : this.checkout_data.ShippingFee;
       }
     },
+    // 取得金流手續費
     payment_price() {
       if (this.checkout_data == null) {
         return 0;
@@ -558,6 +587,7 @@ export default {
         return this.checkout_data.PaymentSubtotalFee;
       }
     },
+    // 取得結帳總金額
     total_price() {
       if (this.checkout_data == null) {
         return 0;
@@ -565,6 +595,7 @@ export default {
         return this.checkout_data.FinalTotal;
       }
     },
+    // 取得優惠券折扣金額
     coupon_discount() {
       if (this.checkout_data == null) {
         return 0;
@@ -575,6 +606,7 @@ export default {
         : 0;
     },
   },
+  // 離開頁面前先將結帳資訊儲存至本地，下次返回時可以繼續結帳
   beforeRouteLeave(to, from, next) {
     setLocalStorage('check_out_form', JSON.stringify(this.form_data));
     next();

@@ -218,35 +218,7 @@ export default {
     CustomProductCard,
   },
   methods: {
-    GetActiveOption(shopcart_item) {
-      return shopcart_item.product_data.Stock.filter((item) => {
-        return (
-          item.ColorID == shopcart_item.active_option[0] &&
-          item.SizeID == shopcart_item.active_option[1]
-        );
-      })[0];
-    },
-    GetDiscountAndPrice(item) {
-      let product = this.checkout_data.CheckoutList.filter((checkout_item) => {
-        return (
-          checkout_item.GoodsID == item.product_data.GoodsID &&
-          checkout_item.ColorID == item.active_option[0] &&
-          checkout_item.SizeID == item.active_option[1]
-        );
-      })[0];
-      let discount_list = [];
-      Object.keys(product.DiscountPercentFullInfo).length > 0
-        ? discount_list.push(product.DiscountPercentFullInfo)
-        : '';
-      Object.keys(product.DiscountPercentMenuInfo).length > 0
-        ? discount_list.push(product.DiscountPercentMenuInfo)
-        : '';
-      return {
-        discount_list: discount_list,
-        discount_price: product.DiscountPrice,
-        sell_price: product.SellPrice,
-      };
-    },
+    // GA4 電子商務事件
     SendPurchase() {
       // GTM事件
       let products = [];
@@ -275,22 +247,29 @@ export default {
     PageInit() {
       const trade_data = getLocalStorage('trade_data');
       const checkout_data = getLocalStorage('trade_checkout_data');
+      // 確認是否有讀取到付款資料與結帳資料
       if (this.$route.params.id && trade_data && checkout_data) {
         this.form_data =
           JSON.parse(trade_data).length == 1
             ? JSON.parse(trade_data)[0]
             : JSON.parse(trade_data);
         this.checkout_data = JSON.parse(checkout_data);
+        // 讀取完成後刪除本地暫存
         delLocalStorage('trade_data');
         delLocalStorage('trade_checkout_data');
+        // 觸發GA4 電子商務事件
         this.SendPurchase();
+        // 清空購物車
         this.$store.commit('shopcart_module/SetShopCart', []);
+
         this.meta_data = GetMetaData('訂單完成', '', '');
         this.$nextTick(() => {
           this.$emit('page-mounted');
           this.$PageReady(this.meta_data.title);
         });
-      } else {
+      }
+      // 若沒有正確讀取到資料則返回首頁
+      else {
         this.$router.push('/');
       }
     },

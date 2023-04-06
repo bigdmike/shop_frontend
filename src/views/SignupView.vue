@@ -205,7 +205,6 @@ export default {
           window.dataLayer.push({
             event: 'signup',
           });
-
           this.$store.commit('SetDialog', {
             status: true,
             content: '註冊成功，請由登入頁面進行登入',
@@ -228,6 +227,7 @@ export default {
     },
   },
   created() {
+    // 如果已經有登入則轉跳到會員中心
     if (getLocalStorage('account_token')) {
       this.$router.push('/account/account_edit');
     } else {
