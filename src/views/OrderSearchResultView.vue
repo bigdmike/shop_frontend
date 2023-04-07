@@ -196,7 +196,6 @@
 <script>
 import ProductCard from '@/components/order_search/ProductCard.vue';
 import CustomProductCard from '@/components/order_search/CustomProductCard.vue';
-//
 import { getLocalStorage, delLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
 import { mapGetters, mapState } from 'vuex';

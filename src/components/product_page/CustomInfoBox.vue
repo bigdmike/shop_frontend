@@ -17,14 +17,15 @@
     </h1>
 
     <div class="mb-5 text-right">
+      <!-- 1.原價+異動價格 2.售價+異動價格 3.會員價+異動價格 -->
       <p
         v-if="!is_member"
         class="font-semibold sm:text-2xl text-primary font-anybody"
       >
-        NT$ {{ $MoneyFormat(GetPrice()[0]) }}
+        NT$ {{ $MoneyFormat(GetPrice()[1]) }}
       </p>
       <p v-else class="font-semibold sm:text-2xl text-primary font-anybody">
-        NT$ {{ $MoneyFormat(GetPrice()[1]) }}
+        NT$ {{ $MoneyFormat(GetPrice()[2]) }}
       </p>
     </div>
 
@@ -96,6 +97,12 @@
 
     <div class="items-center hidden mb-10 md:flex">
       <div class="flex items-center mr-8">
+        <input
+          class="hidden"
+          v-on:focus="$event.target.select()"
+          ref="clone"
+          readonly
+        />
         <button
           @click="CopyLink"
           class="flex items-center justify-center w-12 h-12 mr-2 transition-colors duration-200 rounded-md bg-basic_black hover:bg-primary"
@@ -186,10 +193,12 @@ export default {
     },
   },
   methods: {
+    // 取得指定選項的所有可選規格
+    // 前一個選項選擇後才能往下選，前一個選項如果還沒選擇回傳空陣列
     GetCategorySpec(id, index) {
       let first_empty_option = this.active_option.indexOf('');
       if (index == 0) {
-        //第一個選項
+        //第一個選項直接回傳全部規格
         return this.product_data.CustomSpecList.filter(
           (item) => item.SpecCategoryID == id
         );
@@ -197,29 +206,37 @@ export default {
         // 前面的選項還沒選
         return [];
       } else {
+        // 取得該選項目前可選的所有規格
         const spec_list = this.GetAvailableSpec();
         return spec_list.filter((item) => item.SpecCategoryID == id);
       }
     },
+    // 取得所有可用規格
     GetAvailableSpec() {
       let disable_id = [];
+      // 篩選黑名單列表
       this.product_data.CustomGoodsSpecBlacklist.forEach((blacklist) => {
+        // 判斷此黑名單資料篩選出不能選擇的規格ID
         const need_filter_id = this.GetDisableSpecID(
           blacklist.CustomSpecID,
           this.active_option.filter((item) => item != '')
         );
+        // 如果有不能選擇的規格則將其加入禁用陣列
         if (need_filter_id.length > 0) {
-          // 取出除了active_option其餘的ID
           disable_id = disable_id.concat(need_filter_id);
         }
       });
+
+      // 清除重複
       disable_id = disable_id.filter(function (item, index) {
         return disable_id.indexOf(item) === index;
       });
+      // 將全部規格篩選掉不能選用的後返回資料
       return this.product_data.CustomSpecList.filter((item) => {
         return disable_id.indexOf(item.CustomSpecID) == -1;
       });
     },
+    // 取得不能選擇的規格
     GetDisableSpecID(black_list, active_list) {
       let match_id = [];
       let dismatch_id = [];
@@ -236,38 +253,27 @@ export default {
         return [];
       }
     },
+    // 取得目前選項的價錢
     GetPrice() {
-      let change_price = 0;
-      this.product_data.CustomGoodsChangePrice.forEach((change_item) => {
-        let match_count = 0;
-        change_item.CustomSpecID.forEach((id) => {
-          this.active_option.indexOf(id) != -1 ? (match_count += 1) : '';
-        });
-        if (match_count == change_item.CustomSpecID.length) {
-          change_price += parseInt(change_item.ChangePrice);
-        }
-      });
-
       const product_data = {
         product_data: this.product_data,
         active_option: this.active_option,
       };
 
-      this.$GetCustomPrice(product_data);
-      return [
-        parseInt(this.product_data.CustomGoodsStock[0].SellPrice) +
-          change_price,
-        parseInt(this.product_data.CustomGoodsStock[0].MemberSellPrice) +
-          change_price,
-      ];
+      return this.$GetCustomPrice(product_data);
     },
+    // 顯示贈品圖片
     OpenEventImageDialog(item) {
       this.$refs.EventImageDialog.Open(item);
     },
-    CopyLink() {
-      this.$refs.clone.focus();
-      document.execCommand('copy');
-      alert('已複製到剪貼簿');
+    // 複製連結
+    async CopyLink() {
+      this.$refs.clone.value = `${window.location.href}`;
+      var copyText = this.$refs.clone;
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      await navigator.clipboard.writeText(copyText.value);
+      alert('已複製連結！');
     },
     ShareToFB() {
       window
@@ -282,11 +288,13 @@ export default {
     },
   },
   mounted() {
+    // 如果商品資料有設定販售時間則設定Timer
     if (this.product_data.GoodsTimeEnd != null) {
       this.$refs.EventTimer.SetTimer();
     }
   },
   computed: {
+    // 取得商品販售時間狀態
     time_status() {
       if (this.start_time == null || this.end_time == null) {
         return 'none';
@@ -303,6 +311,7 @@ export default {
         return 'end';
       }
     },
+    // 取得商品開始販售時間
     start_time() {
       if (
         this.product_data.GoodsTimeStart == '' ||
@@ -319,6 +328,7 @@ export default {
       time.setSeconds(parseInt(this.product_data.GoodsTimeStart.slice(17, 19)));
       return time.getTime();
     },
+    // 取得商品結束販售時間
     end_time() {
       if (
         this.product_data.GoodsTimeEnd == '' ||
@@ -335,6 +345,7 @@ export default {
       time.setSeconds(parseInt(this.product_data.GoodsTimeEnd.slice(17, 19)));
       return time.getTime();
     },
+    // 是否登入會員
     is_member() {
       return getLocalStorage('account_token');
     },

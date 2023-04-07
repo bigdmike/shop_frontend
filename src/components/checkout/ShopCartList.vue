@@ -26,38 +26,8 @@ export default {
     ProductCard,
     CustomProductCard,
   },
-  methods: {
-    GetActiveOption(shopcart_item) {
-      return shopcart_item.product_data.Stock.filter((item) => {
-        return (
-          item.ColorID == shopcart_item.active_option[0] &&
-          item.SizeID == shopcart_item.active_option[1]
-        );
-      })[0];
-    },
-    GetDiscountAndPrice(item) {
-      let product = this.checkout_data.filter((checkout_item) => {
-        return (
-          checkout_item.GoodsID == item.product_data.GoodsID &&
-          checkout_item.ColorID == item.active_option[0] &&
-          checkout_item.SizeID == item.active_option[1]
-        );
-      })[0];
-      let discount_list = [];
-      Object.keys(product.DiscountPercentFullInfo).length > 0
-        ? discount_list.push(product.DiscountPercentFullInfo)
-        : '';
-      Object.keys(product.DiscountPercentMenuInfo).length > 0
-        ? discount_list.push(product.DiscountPercentMenuInfo)
-        : '';
-      return {
-        discount_list: discount_list,
-        discount_price: product.DiscountPrice,
-        sell_price: product.SellPrice,
-      };
-    },
-  },
   computed: {
+    // 轉換API返回的購物車
     shopcart() {
       let shopcart = [];
       this.checkout_data.forEach((item) => {

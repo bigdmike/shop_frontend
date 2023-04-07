@@ -122,9 +122,9 @@
 
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
-import ShopCartForm from '@/components/shopcart/ShopCartForm.vue';
-import FixedFooter from '@/components/shopcart/FixedFooter.vue';
-import ShopCart from '@/components/shopcart/ShopCartList.vue';
+import ShopCartForm from '@/components/checkout/ShopCartForm.vue';
+import ShopCart from '@/components/checkout/ShopCartList.vue';
+import FixedFooter from '@/components/checkout/FixedFooter.vue';
 import GiveInfo from '@/components/checkout/GiveInfo.vue';
 import PriceInfo from '@/components/checkout/PriceInfo.vue';
 import EmptyShopCart from '@/components/checkout/EmptyShopCart.vue';

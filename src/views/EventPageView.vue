@@ -168,61 +168,13 @@ export default {
     };
   },
   methods: {
-    SetNavTrigger() {
-      const description = document.querySelector('#Description');
-      const workflow = document.querySelector('#Workflow');
-      const precautions = document.querySelector('#Precautions');
-
-      window.addEventListener('scroll', () => {
-        if (precautions.getBoundingClientRect().top < window.innerHeight) {
-          this.active_tab = '購物須知';
-        } else if (workflow.getBoundingClientRect().top < window.innerHeight) {
-          this.active_tab = '下單流程';
-        } else if (
-          description.getBoundingClientRect().top < window.innerHeight
-        ) {
-          this.active_tab = '商品介紹';
-        }
-      });
-    },
-    ChangeTab(val) {
-      const description = document.querySelector('#Description');
-      const workflow = document.querySelector('#Workflow');
-      const precautions = document.querySelector('#Precautions');
-      const offset_top = window.innerWidth <= 640 ? 112 : 128;
-      let offsetPosition = 0;
-
-      this.active_tab = val;
-      if (this.active_tab == '購物須知') {
-        offsetPosition =
-          precautions.getBoundingClientRect().top +
-          window.pageYOffset -
-          offset_top -
-          38;
-      } else if (this.active_tab == '下單流程') {
-        offsetPosition =
-          workflow.getBoundingClientRect().top +
-          window.pageYOffset -
-          offset_top -
-          38;
-      } else if (this.active_tab == '商品介紹') {
-        offsetPosition =
-          description.getBoundingClientRect().top +
-          window.pageYOffset -
-          offset_top -
-          38;
-      }
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-    },
+    // 開啟商品購買視窗
     OpenProductDialog(item, custom) {
       custom
         ? this.$refs.CustomProductDialog.Open(item)
         : this.$refs.ProductDialog.Open(item);
     },
+    // 初始化
     PageInit() {
       this.bread_crumb_path[1].title = this.event_data.Title;
       this.bread_crumb_path[1].link += this.event_data.MenuID;
@@ -234,16 +186,17 @@ export default {
       );
       this.$emit('load-image');
     },
+    // 動畫初始化
     SetGsap() {
       this.$emit('page-mounted');
       this.$nextTick(() => {
-        this.SetNavTrigger();
         this.$refs.EventTimer.SetTimer();
         this.$PageReady(this.meta_data.title);
       });
     },
   },
   watch: {
+    // 若活動頁面不存在則轉跳至錯誤頁面
     event_data() {
       this.event_data == 'error' ? this.$RedirectError() : '';
     },
@@ -263,6 +216,7 @@ export default {
           (menu) => menu.MenuID == this.$route.params.id
         );
         category.length <= 0 ? (enable = false) : '';
+        // 確認商品販售時間是否超出
         if (item.GoodsTimeEnd != null) {
           new Date() > new Date(item.GoodsTimeEnd) ? (enable = false) : '';
         }

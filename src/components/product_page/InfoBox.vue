@@ -135,6 +135,12 @@
 
     <div class="items-center hidden md:flex">
       <div class="flex items-center mr-8">
+        <input
+          class="hidden"
+          v-on:focus="$event.target.select()"
+          ref="clone"
+          readonly
+        />
         <button
           @click="CopyLink"
           class="flex items-center justify-center w-12 h-12 mr-2 transition-colors duration-200 rounded-md bg-basic_black hover:bg-primary"
@@ -231,14 +237,20 @@ export default {
     },
   },
   methods: {
+    // 顯示贈品圖片
     OpenEventImageDialog(item) {
       this.$refs.EventImageDialog.Open(item);
     },
-    CopyLink() {
-      this.$refs.clone.focus();
-      document.execCommand('copy');
-      alert('已複製到剪貼簿');
+    // 複製連結
+    async CopyLink() {
+      this.$refs.clone.value = `${window.location.href}`;
+      var copyText = this.$refs.clone;
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      await navigator.clipboard.writeText(copyText.value);
+      alert('已複製連結！');
     },
+    // 分享至Facebook
     ShareToFB() {
       window
         .open(
@@ -247,19 +259,23 @@ export default {
         )
         .focus();
     },
+    // 分享至Line
     ShareToLine() {
       window.open(`line://msg/text/${window.location.href}`, '_blank').focus();
     },
   },
   mounted() {
+    // 如果商品資料有設定販售時間則設定Timer
     if (this.product_data.GoodsTimeEnd != null) {
       this.$refs.EventTimer.SetTimer();
     }
   },
   computed: {
+    // 是否登入會員
     is_member() {
       return getLocalStorage('account_token');
     },
+    // 取得第一個選項的全部規格
     first_options() {
       let tmp_options = [];
       this.product_data.Stock.forEach((item) => {
@@ -275,6 +291,7 @@ export default {
       });
       return tmp_options;
     },
+    // 取得第二個選項的全部規格
     second_options() {
       let tmp_options = [];
       let options = this.product_data.Stock.filter(
@@ -293,6 +310,7 @@ export default {
       });
       return tmp_options;
     },
+    // 取得與目前選項相符的庫存資料
     active_stock() {
       let stock = this.product_data.Stock.filter(
         (item) =>
@@ -303,6 +321,7 @@ export default {
         ? stock[0]
         : { Status: 'N', Price: 0, SellPrice: 0 };
     },
+    // 取得商品販售時間狀態
     time_status() {
       if (this.start_time == null || this.end_time == null) {
         return 'none';
@@ -319,6 +338,7 @@ export default {
         return 'end';
       }
     },
+    // 取得商品開始販售時間
     start_time() {
       if (
         this.product_data.GoodsTimeStart == '' ||
@@ -335,6 +355,7 @@ export default {
       time.setSeconds(parseInt(this.product_data.GoodsTimeStart.slice(17, 19)));
       return time.getTime();
     },
+    // 取得商品結束販售時間
     end_time() {
       if (
         this.product_data.GoodsTimeEnd == '' ||

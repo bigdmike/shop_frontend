@@ -100,13 +100,6 @@ export default {
     };
   },
   methods: {
-    SlideSwiper(val) {
-      if (val == -1) {
-        this.$refs.big_swiper.prev();
-      } else {
-        this.$refs.big_swiper.next();
-      }
-    },
     SlideToIndex(val) {
       this.$refs.big_swiper.goTo(val);
     },

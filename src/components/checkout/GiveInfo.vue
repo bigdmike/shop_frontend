@@ -81,9 +81,11 @@ export default {
     },
   },
   methods: {
+    // 顯示贈品圖片
     OpenImageDialog(data) {
       this.$refs.GiveImageDialog.Open(data);
     },
+    // 取得優惠門檻差額
     CheckThreshold(data) {
       if (data.GoodsIDArray.length <= 0) {
         // 全館優惠

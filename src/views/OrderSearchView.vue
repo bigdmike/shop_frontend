@@ -97,9 +97,12 @@ export default {
     },
     SendData() {
       GetOrder(this.trade_no, this.phone).then((res) => {
+        // 查無訂單則顯示錯誤訊息
         if (res.code == 500) {
           this.$store.commit('SetDialog', { status: true, content: res.msg });
-        } else {
+        }
+        // 將訂單資訊存入本地後跳轉至訂單結果頁面
+        else {
           setLocalStorage('trade_data', JSON.stringify(res.data));
           this.$router.push('/order_search/result');
         }

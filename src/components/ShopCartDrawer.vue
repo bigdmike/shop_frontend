@@ -129,7 +129,6 @@ export default {
     Close() {
       this.$store.commit('SetShopcartDrawer', false);
       this.menu_gsap_animation.close();
-      this.$store.commit('SetBodyLock', -1);
     },
     Add(index) {
       window.dataLayer.push({
@@ -214,7 +213,6 @@ export default {
     dialog() {
       if (this.dialog) {
         this.menu_gsap_animation.open();
-        this.$store.commit('SetBodyLock', 1);
         this.OpenShopCart();
       }
     },
@@ -231,12 +229,6 @@ export default {
     is_member() {
       return getLocalStorage('account_token');
     },
-    // shopcart() {
-    //   return this.$store.state.shopcart_module.shopcart;
-    // },
-    // dialog() {
-    //   return this.$store.state.shopcart_drawer;
-    // },
     total_price() {
       let price = 0;
       if (this.is_member) {

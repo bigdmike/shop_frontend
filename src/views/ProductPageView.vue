@@ -134,10 +134,12 @@ export default {
     };
   },
   methods: {
+    // 設定BreadCrumb
     SetBreadCrumb() {
       this.bread_crumb_path[2].title = this.product_data.Title;
       this.bread_crumb_path[2].link = `/product/${this.product_data.GoodsID}`;
     },
+    // 加入購物車
     AddShopCart() {
       // GTM事件
       window.dataLayer.push({
@@ -169,9 +171,11 @@ export default {
         this.$store.commit('shopcart_module/AddShopCart', shop_cart_item);
       }
     },
+    // 改變選購數量
     ChangeAmount(val) {
       this.amount + val <= 1 ? (this.amount = 1) : (this.amount += val);
     },
+    // 改變商品選項
     ChangeOption(index, val) {
       this.$set(this.active_option, index, val);
       if (index == 0) {
@@ -183,16 +187,21 @@ export default {
         }, 100);
       }
     },
+    // 取得商品資料
     GetProductData() {
       getSingleProductData(this.$route.params.id).then((res) => {
         if (res.code == 200) {
+          // 排序商品圖片
           res.data.Picture.sort((a, b) => {
             return a.Seq - b.Seq;
           });
+          // 篩選庫存，去除已停用的庫存
           res.data.Stock = res.data.Stock.filter((item) => item.Status == 'Y');
+          // 篩選優惠活動，去除已經過期的優惠活動
           res.data.Discount = res.data.Discount.filter(
             (item) => new Date(item.EndTime) > new Date()
           );
+          // 若商品沒有任何圖片，則放入一張預設圖片
           if (res.data.Picture.length <= 0) {
             res.data.Picture.push({
               Image: '/image/product_default.webp',
@@ -205,7 +214,9 @@ export default {
         }
       });
     },
+    // 初始化
     PageInit() {
+      // GA4 電子商務事件『瀏覽商品』
       window.dataLayer.push({
         event: 'viewProduct',
         items: [ConvertProductData(this.product_data)],
@@ -213,6 +224,7 @@ export default {
         currency: 'TWD',
       });
 
+      // META TAG設定
       let description = this.product_data.Memo1.replaceAll(/<[^>]+>/g, '');
       let image =
         this.product_data.Image2 != ''
@@ -228,6 +240,7 @@ export default {
         this.$emit('load-image');
       });
     },
+    // 動畫初始化
     SetGsap() {
       this.page_ready = true;
       this.$refs.RecommendProducts.SetGsap();
@@ -242,6 +255,7 @@ export default {
     return this.meta_data;
   },
   watch: {
+    // 第一次商品載入的時候，設定BreadCrumb以及預設選項
     product_data() {
       if (this.product_data != null) {
         this.SetBreadCrumb();
@@ -262,6 +276,7 @@ export default {
       image_loaded: 'image_loaded',
     }),
     ...mapGetters(['filter_product_data', 'filter_category_data']),
+    // 取得推薦商品
     recommend_product_list() {
       if (
         this.product_data.RecommendMenuID == '' ||
@@ -272,6 +287,7 @@ export default {
         return this.filter_product_data(this.product_data.RecommendMenuID);
       }
     },
+    // 篩選庫存最低價錢
     low_price() {
       let price = 99999999;
       this.product_data.Stock.forEach((item) => {
@@ -279,6 +295,7 @@ export default {
       });
       return price == 99999999 ? 0 : price;
     },
+    // 篩選庫存最高價錢
     high_price() {
       let price = 0;
       this.product_data.Stock.forEach((item) => {

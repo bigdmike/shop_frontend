@@ -88,11 +88,11 @@ export default {
   },
   data() {
     return {
-      dialog_animation: null,
-      status: false,
-      email: '',
-      address_list: [],
-      active_index: 0,
+      dialog_animation: null, //Dialog Gsap
+      status: false, //Dialog顯示狀態
+      email: '', //會員帳號
+      address_list: [], //常用地址清單
+      active_index: 0, //選擇的常用地址編號
     };
   },
   methods: {
@@ -125,7 +125,7 @@ export default {
     GetData() {
       getAddressAndEmail().then((res) => {
         if (res.code == 302) {
-          // token過期
+          // token過期，刪除本地token轉跳到登入畫面
           delLocalStorage('account_token');
           this.$router.push('/');
           this.$store.commit('SetDialog', {

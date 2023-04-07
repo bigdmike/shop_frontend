@@ -362,7 +362,7 @@
 </template>
 
 <script>
-import AddressDialog from '@/components/shopcart/AddressDialog.vue';
+import AddressDialog from '@/components/checkout/AddressDialog.vue';
 import { getLocalStorage, setLocalStorage } from '@/common/cookie';
 import { Get711Map, GetFamilyMap } from '@/api/shopcart';
 export default {
@@ -401,18 +401,6 @@ export default {
       // 選擇全家物流
       else if (key == 'ship_way' && val == 1) {
         this.$emit('update-action', 'pay_way', 4);
-      }
-      // 如果選擇不是超商物流則檢查金流是否是取貨付款
-      else if (key == 'ship_way' && val != 2 && val != 1) {
-        if (this.form_data.pay_way == 4 || this.form_data.pay_way == 5) {
-          this.$emit(
-            'update-action',
-            'pay_way',
-            this.$store.state.payment_data.filter(
-              (item) => item.PaymentID != 5 && item.PaymentID != 4
-            )[0].PaymentID
-          );
-        }
       }
       this.$emit('update-action', key, val);
     },
@@ -461,6 +449,7 @@ export default {
   },
   watch: {
     shipway_data() {
+      // 如果積材超出所有物流方式則顯示錯誤訊息，並轉跳回首頁
       if (this.shipway_data.length <= 0) {
         this.$router.push('/');
         this.$store.commit('SetDialog', {
@@ -473,19 +462,24 @@ export default {
     },
   },
   computed: {
+    // 取得物流方式
     shipway_data() {
       let shipway_list = JSON.parse(
         JSON.stringify(this.$store.state.shipway_data)
       );
+      // 如果目前商品中有低溫商品，則過濾出所有低溫物流
       if (this.has_forzen_product) {
         shipway_list = shipway_list.filter(
           (item) => item.DeliveryFrozen == 'Y'
         );
-      } else {
+      }
+      // 如果目前商品中沒有低溫商品，則過濾出所有非低溫物流
+      else {
         shipway_list = shipway_list.filter(
           (item) => item.DeliveryFrozen == 'N'
         );
       }
+      // 過濾出積材上限比目前購物車積材總合高的物流
       shipway_list = shipway_list.filter(
         (item) =>
           item.DeliverVolumeMax >= this.checkout_data.TotalDeliverVolume &&
@@ -493,6 +487,7 @@ export default {
       );
       return shipway_list;
     },
+    // 取得付款方式
     payment_data() {
       // 如果選擇 7-11物流則只能選 7-11取貨付款
       if (this.form_data.ship_way == 2) {
@@ -511,9 +506,11 @@ export default {
         );
       }
     },
+    // 縣市、郵遞區號資料
     zipcode_data() {
       return this.$store.state.zipcode_data;
     },
+    // 取得城市資料
     city_list() {
       let city = [];
       this.zipcode_data.forEach((item) => {
@@ -524,10 +521,14 @@ export default {
       });
       return city;
     },
+    // 取得目前選擇縣市底下的所有區域
     area_list() {
+      // 若城市還未選取，則回傳空陣列
       if (this.form_data.consignee_city == '') {
         return [];
-      } else {
+      }
+      // 過濾目前城市底下的所有區域
+      else {
         let area_list = [];
         this.zipcode_data.forEach((item) => {
           if (item.City == this.form_data.consignee_city) {
@@ -537,6 +538,7 @@ export default {
         return area_list;
       }
     },
+    // 判斷目前購物車種是否包含低溫商品
     has_forzen_product() {
       let forzen = false;
       this.checkout_data.CheckoutList.forEach((item) => {
@@ -546,18 +548,15 @@ export default {
       });
       return forzen;
     },
-    forzen_shipway() {
-      return this.$store.state.shipway_data.filter(
-        (item) => item.DeliveryFrozen == 'Y'
-      );
-    },
   },
   created() {
+    // 判斷是否登入
     if (getLocalStorage('account_token')) {
       this.member_login = true;
     } else {
       this.member_login = false;
     }
+    // 如果購物車商品積材過大沒有可用的物流，顯示錯誤訊息並轉跳回首頁
     if (this.shipway_data.length <= 0) {
       this.$router.push('/');
       this.$store.commit('SetDialog', {

@@ -86,26 +86,6 @@ export default {
     shopcart_item: {
       type: Object,
     },
-    // shopcart_index: {
-    //   type: Number,
-    // },
-  },
-  methods: {
-    GetPrice() {
-      return this.$GetCustomPrice(this.shopcart_item);
-    },
-    GetCategoryTitle(spec_id) {
-      let spec_item = this.shopcart_item.product_data.CustomSpecList.filter(
-        (item) => item.CustomSpecID == spec_id
-      )[0];
-      return spec_item.SpecCategoryTitle;
-    },
-    GetSpecTitle(spec_id) {
-      let spec_item = this.shopcart_item.product_data.CustomSpecList.filter(
-        (item) => item.CustomSpecID == spec_id
-      )[0];
-      return spec_item.SpecTitle;
-    },
   },
   computed: {
     product_data() {

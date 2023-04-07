@@ -71,24 +71,19 @@ Vue.prototype.$GetCustomPrice = (shopcart_item) => {
   // 讀取客製化商品的『價格異動資料』陣列
   shopcart_item.product_data.CustomGoodsChangePrice.forEach((change_item) => {
     let match_count = 0;
-    // 若『價格異動資料』類行為字串，則先分割為陣列後判斷與目前選擇之選項是否完全相符
+    let change_id_list = change_item.CustomSpecID;
+    // 若『價格異動資料』類行為字串，則先分割為陣列
     if (typeof change_item.CustomSpecID === 'string') {
-      change_item.CustomSpecID.split(',').forEach((id) => {
-        shopcart_item.active_option.indexOf(id) != -1 ? (match_count += 1) : '';
-      });
-    }
-    // 若『價格異動資料』類行為陣列，則直接判斷與目前選擇之選項是否完全相符
-    else if (
-      typeof change_item.CustomSpecID === 'object' &&
-      Array.isArray(change_item.CustomSpecID)
-    ) {
-      change_item.CustomSpecID.forEach((id) => {
-        shopcart_item.active_option.indexOf(id) != -1 ? (match_count += 1) : '';
-      });
+      change_id_list = change_item.CustomSpecID.split(',');
     }
 
+    // 判斷與目前選擇之選項是否完全相符
+    change_id_list.forEach((id) => {
+      shopcart_item.active_option.indexOf(id) != -1 ? (match_count += 1) : '';
+    });
+
     // 若『價格異動資料』的選項ID陣列與目前選擇之選項ID完全相符，則紀錄異動價錢
-    if (match_count == change_item.CustomSpecID.length) {
+    if (match_count == change_id_list.length) {
       change_price += parseInt(change_item.ChangePrice);
     }
   });

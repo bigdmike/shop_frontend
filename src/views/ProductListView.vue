@@ -173,6 +173,7 @@ export default {
     };
   },
   methods: {
+    // 判斷是否有指定商品分類
     SetActiveCategory() {
       this.active_category = this.$route.query.category
         ? this.$route.query.category
@@ -185,6 +186,7 @@ export default {
         this.$emit('update-scroll');
       });
     },
+    // MetaTag設定與GA4 電子商務事件
     SetMetaGTM() {
       if (this.active_category == 'all') {
         this.bread_crumb_path[1].title = '全部商品';
@@ -233,6 +235,7 @@ export default {
         }
       }
     },
+    // 取得商品最低價格
     GetPrice(item) {
       if (item.IsCustom == 'N') {
         // 一般商品，讀取Stock資料
@@ -246,6 +249,7 @@ export default {
         return item.CustomGoodsStock[0];
       }
     },
+    // 取得指定商品分類的商品
     GetCategoryProduct(category) {
       return this.sort_product_data.filter((item) => {
         return (
@@ -253,6 +257,7 @@ export default {
         );
       });
     },
+    // 初始化動畫
     SetGsap() {
       this.SetActiveCategory();
       this.section_animation == null
@@ -266,6 +271,7 @@ export default {
         this.$PageReady(this.meta_data.title);
       });
     },
+    // 頁面初始化
     PageInit() {
       this.$nextTick(() => {
         this.$emit('load-image', 'home');
@@ -273,9 +279,10 @@ export default {
     },
   },
   watch: {
+    // 變更篩選商品分類時重新讀取頁面圖片
     $route() {
       this.$nextTick(() => {
-        this.$emit('load-image', 'home');
+        this.$emit('load-image');
       });
     },
   },
@@ -289,6 +296,7 @@ export default {
       'filter_category_data',
       'filter_product_data',
     ]),
+    // 依照排序模式重新排序商品
     sort_product_data() {
       let tmp_product_data = JSON.parse(
         JSON.stringify(this.filter_product_data(this.active_category))

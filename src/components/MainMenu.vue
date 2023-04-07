@@ -120,11 +120,9 @@ export default {
     Open() {
       this.key_word = '';
       this.menu_gsap_animation.open();
-      this.$store.commit('SetBodyLock', 1);
     },
     Close() {
       this.menu_gsap_animation.close();
-      this.$store.commit('SetBodyLock', -1);
       this.key_word = '';
     },
     Search() {
