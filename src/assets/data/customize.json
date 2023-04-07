@@ -1,13 +1,13 @@
 [
     {
-        "GoodsID": 7,
+        "GoodsID": 12,
         "ImagePath": {
-            "本體": "/img/customize/7/",
-            "筒身": "/img/customize/7/筒身/",
-            "氣瓶": "/img/customize/7/氣瓶/",
-            "旋鈕": "/img/customize/7/旋鈕/",
-            "側蓋": "/img/customize/7/側蓋/",
-            "下座": "/img/customize/7/下座/"
+            "本體": "/img/customize/12/",
+            "筒身": "/img/customize/12/筒身/",
+            "氣瓶": "/img/customize/12/氣瓶/",
+            "旋鈕": "/img/customize/12/旋鈕/",
+            "側蓋": "/img/customize/12/側蓋/",
+            "下座": "/img/customize/12/下座/"
         }
     }
 ]

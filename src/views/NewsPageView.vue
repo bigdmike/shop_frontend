@@ -136,10 +136,14 @@ export default {
     };
   },
   methods: {
-    CopyLink() {
-      this.$refs.clone.focus();
-      document.execCommand('copy');
-      alert('已複製到剪貼簿');
+    // 複製連結
+    async CopyLink() {
+      this.$refs.clone.value = `${window.location.href}`;
+      var copyText = this.$refs.clone;
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      await navigator.clipboard.writeText(copyText.value);
+      alert('已複製連結！');
     },
     ShareToFB() {
       window
