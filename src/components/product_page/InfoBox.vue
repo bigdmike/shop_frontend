@@ -44,7 +44,7 @@
           class="flex-shrink-0 mb-2 mr-10 font-medium text-white font-anybody"
           v-if="first_options.length > 0"
         >
-          選項一
+          {{ product_data.Option1 }}
         </p>
         <div class="relative w-full" v-if="first_options.length > 0">
           <span
@@ -68,11 +68,14 @@
       <div class="mb-5">
         <p
           class="flex-shrink-0 mb-2 mr-10 font-medium text-white font-anybody"
-          v-if="second_options.length > 0"
+          v-if="second_options.length > 0 && second_options[0].Title != '無'"
         >
-          選項二
+          {{ product_data.Option2 }}
         </p>
-        <div class="relative w-full mb-5" v-if="second_options.length > 0">
+        <div
+          class="relative w-full mb-5"
+          v-if="second_options.length > 0 && second_options[0].Title != '無'"
+        >
           <span
             class="absolute z-10 text-white transform rotate-90 -translate-y-1/2 pointer-events-none right-5 icon-chevron_right top-1/2"
           ></span>
