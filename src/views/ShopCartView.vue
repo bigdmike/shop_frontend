@@ -552,11 +552,7 @@ export default {
       }
       let price = 0;
       this.checkout_data.CheckoutList.forEach((item) => {
-        if (item.MemberSellPrice) {
-          price += parseInt(item.MemberSellPrice);
-        } else {
-          price += parseInt(item.SellPrice);
-        }
+        price += parseInt(item.SellPrice);
       });
       return price;
     },

@@ -18,7 +18,11 @@
           ></span>
         </h2>
       </div>
-      <div id="Description" class="text-white" v-html="description"></div>
+      <div
+        id="Description"
+        class="text-white editor_content"
+        v-html="description"
+      ></div>
     </div>
     <CustomImageGallery
       v-if="show_image_gallery"
@@ -43,7 +47,11 @@
           ></span>
         </h2>
       </div>
-      <div id="Workflow" class="text-white" v-html="shipping_info"></div>
+      <div
+        id="Workflow"
+        class="text-white editor_content"
+        v-html="shipping_info"
+      ></div>
     </div>
     <div class="pt-5 mb-20 border-t border-basic_gray border-opacity-20">
       <div class="mb-10">
@@ -64,7 +72,11 @@
         </h2>
       </div>
 
-      <div id="Precautions" class="text-white" v-html="warning"></div>
+      <div
+        id="Precautions"
+        class="text-white editor_content"
+        v-html="warning"
+      ></div>
     </div>
   </div>
 </template>
@@ -98,3 +110,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.editor_content p {
+  margin-bottom: 10px;
+}
+</style>
