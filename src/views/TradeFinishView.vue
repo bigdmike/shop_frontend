@@ -148,14 +148,30 @@
           <li class="flex items-center justify-between w-full mb-3 text-sm">
             <p class="font-medium">合計</p>
             <p class="font-semibold font-anybody">
-              NT$ {{ $MoneyFormat(product_total_price) }}
+              NT$ {{ $MoneyFormat(product_original_price) }}
             </p>
           </li>
+
+          <li
+            v-if="product_original_price != product_total_price"
+            class="flex items-center justify-between w-full mb-3 text-sm"
+          >
+            <p class="font-medium">合計</p>
+            <p class="font-semibold font-anybody">
+              - NT$
+              {{ $MoneyFormat(product_original_price - product_total_price) }}
+            </p>
+          </li>
+
           <li class="flex items-center justify-between text-sm w-ful">
             <p class="font-medium">運費</p>
-            <p class="font-semibold font-anybody">
+            <p
+              v-if="!checkout_data.ShippingFree"
+              class="font-semibold font-anybody"
+            >
               NT$ {{ $MoneyFormat(ship_price) }}
             </p>
+            <p v-else class="font-semibold font-anybody text-primary">免運費</p>
           </li>
           <li
             v-if="payment_price != 0"
@@ -200,7 +216,8 @@
 <script>
 import ProductCard from '@/components/trade_finish/ProductCard.vue';
 import CustomProductCard from '@/components/trade_finish/CustomProductCard.vue';
-import { getLocalStorage, delLocalStorage } from '@/common/cookie';
+import { getLocalStorage } from '@/common/cookie';
+// delLocalStorage
 import { GetMetaData } from '@/common/meta';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
 import { mapGetters, mapState } from 'vuex';
@@ -255,8 +272,8 @@ export default {
             : JSON.parse(trade_data);
         this.checkout_data = JSON.parse(checkout_data);
         // 讀取完成後刪除本地暫存
-        delLocalStorage('trade_data');
-        delLocalStorage('trade_checkout_data');
+        // delLocalStorage('trade_data');
+        // delLocalStorage('trade_checkout_data');
         // 觸發GA4 電子商務事件
         this.SendPurchase();
         // 清空購物車
@@ -311,6 +328,15 @@ export default {
     },
     trade_no() {
       return this.$route.params.id;
+    },
+    product_original_price() {
+      let total_price = 0;
+      this.shopcart.forEach((item) => {
+        let price = item.SellPrice > item.Price ? item.SellPrice : item.Price;
+
+        total_price += parseInt(price);
+      });
+      return total_price;
     },
     product_total_price() {
       if (this.checkout_data == null) {

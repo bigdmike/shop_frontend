@@ -17,7 +17,7 @@
             <span
               data-section-subtitle
               class="block text-xl font-bold leading-none text-white"
-              >訂單編號 {{ checkout_data.TradeID }}</span
+              >訂單編號 {{ form_data.TradeID }}</span
             >
             <span
               data-section-subtitle-arrow
@@ -48,7 +48,7 @@
         <ol class="w-full px-2 mb-10">
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">訂單編號</p>
-            <p class="text-sm font-medium">#{{ checkout_data.TradeID }}</p>
+            <p class="text-sm font-medium">#{{ form_data.TradeID }}</p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">付款方式</p>
@@ -72,19 +72,19 @@
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">購買人姓名</p>
             <p class="text-sm font-medium">
-              {{ checkout_data.BuyerName }}
+              {{ form_data.BuyerName }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">購買人電話</p>
             <p class="text-sm font-medium">
-              {{ checkout_data.BuyerPhone }}
+              {{ form_data.BuyerPhone }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">購買人信箱</p>
             <p class="text-sm font-medium">
-              {{ checkout_data.ReceiverEmail }}
+              {{ form_data.ReceiverEmail }}
             </p>
           </li>
         </ol>
@@ -97,22 +97,24 @@
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人姓名</p>
             <p class="text-sm font-medium">
-              {{ checkout_data.ReceiverName }}
+              {{ form_data.ReceiverName }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人電話</p>
             <p class="text-sm font-medium">
-              {{ checkout_data.ReceiverPhone }}
+              {{ form_data.ReceiverPhone }}
             </p>
           </li>
           <li class="flex items-center justify-between w-full mb-3">
             <p class="text-sm">收件人地址</p>
             <p class="text-sm font-medium">
+              <!-- get_city_area.City +
+                get_city_area.Area + -->
               {{
                 get_city_area.City +
                 get_city_area.Area +
-                checkout_data.ReceiverAddress
+                form_data.ReceiverAddress
               }}
             </p>
           </li>
@@ -122,7 +124,10 @@
             訂單明細
           </p>
         </div>
-        <ol class="w-full mb-10 border-b border-zinc-700">
+        <ol
+          class="w-full mb-10 border-b border-zinc-700"
+          v-if="shopcart != null"
+        >
           <li
             :class="
               item_index != shopcart.length - 1
@@ -144,14 +149,30 @@
           <li class="flex items-center justify-between w-full mb-3 text-sm">
             <p class="font-medium">合計</p>
             <p class="font-semibold font-anybody">
-              NT$ {{ $MoneyFormat(product_total_price) }}
+              NT$ {{ $MoneyFormat(product_original_price) }}
             </p>
           </li>
+
+          <li
+            v-if="product_original_price != product_total_price"
+            class="flex items-center justify-between w-full mb-3 text-sm"
+          >
+            <p class="font-medium">合計</p>
+            <p class="font-semibold font-anybody">
+              - NT$
+              {{ $MoneyFormat(product_original_price - product_total_price) }}
+            </p>
+          </li>
+
           <li class="flex items-center justify-between text-sm w-ful">
             <p class="font-medium">運費</p>
-            <p class="font-semibold font-anybody">
+            <p
+              v-if="!checkout_data.ShippingFree"
+              class="font-semibold font-anybody"
+            >
               NT$ {{ $MoneyFormat(ship_price) }}
             </p>
+            <p v-else class="font-semibold font-anybody text-primary">免運費</p>
           </li>
           <li
             v-if="payment_price != 0"
@@ -168,7 +189,7 @@
           >
             <p class="font-medium">優惠代碼折抵</p>
             <p class="font-semibold font-anybody">
-              - NT$ {{ $MoneyFormat(checkout_data.CouponMoney) }}
+              - NT$ {{ $MoneyFormat(coupon_discount) }}
             </p>
           </li>
         </ol>
@@ -196,7 +217,8 @@
 <script>
 import ProductCard from '@/components/order_search/ProductCard.vue';
 import CustomProductCard from '@/components/order_search/CustomProductCard.vue';
-import { getLocalStorage, delLocalStorage } from '@/common/cookie';
+import { getLocalStorage } from '@/common/cookie';
+// delLocalStorage
 import { GetMetaData } from '@/common/meta';
 import { mapGetters, mapState } from 'vuex';
 export default {
@@ -218,7 +240,7 @@ export default {
       if (checkout_data) {
         this.form_data = JSON.parse(checkout_data)[0];
         this.checkout_data = JSON.parse(checkout_data)[0];
-        delLocalStorage('trade_data');
+        // delLocalStorage('trade_data');
         this.$store.commit('shopcart_module/SetShopCart', []);
         this.meta_data = GetMetaData('訂單完成', '', '');
         this.$nextTick(() => {
@@ -235,7 +257,7 @@ export default {
       'shipway_data',
       'payment_data',
       'zipcode_data',
-      'product_data',
+      'all_product_data',
     ]),
     ...mapGetters(['data_load_finish']),
     shopcart() {
@@ -256,7 +278,8 @@ export default {
           shopcart[is_exist].Amount += 1;
         } else {
           let tmp_shopcart_item = Object.assign({}, item);
-          tmp_shopcart_item.product_data = this.product_data.filter(
+          console.log(this.all_product_data);
+          tmp_shopcart_item.product_data = this.all_product_data.filter(
             (product) => product.GoodsID == item.GoodsID
           )[0];
           tmp_shopcart_item.Amount = 1;
@@ -264,6 +287,13 @@ export default {
         }
       });
       return shopcart;
+    },
+    product_original_price() {
+      let total_price = 0;
+      this.shopcart.forEach((item) => {
+        total_price += parseInt(item.SellPrice);
+      });
+      return total_price;
     },
     product_total_price() {
       let price = 0;

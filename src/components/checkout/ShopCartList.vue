@@ -1,5 +1,9 @@
 <template>
-  <ol class="max-h-[50vh] overflow-y-auto custom_scroll pt-5">
+  <ol
+    @mouseenter="StopScroll"
+    @mouseleave="StartScroll"
+    class="md:max-h-[50vh] md:overflow-y-auto custom_scroll pt-5 mb-10"
+  >
     <li
       class="flex flex-wrap items-start pb-2 mb-5 border-b border-zinc-700"
       v-for="(item, item_index) in shopcart"
@@ -51,6 +55,18 @@ export default {
         }
       });
       return shopcart;
+    },
+  },
+  methods: {
+    StopScroll() {
+      if (window.innerWidth > 768) {
+        this.$emit('stop-scroll');
+      }
+    },
+    StartScroll() {
+      if (window.innerWidth > 768) {
+        this.$emit('start-scroll');
+      }
     },
   },
 };

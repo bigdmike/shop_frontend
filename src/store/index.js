@@ -36,6 +36,7 @@ export default new Vuex.Store({
     news_category_data: null, //最新消息分類資料
     category_data: null, //商品分類資料
     event_data: null, //獨立銷售頁資料
+    all_product_data: null, //所有商品資料，包含已刪除以及停用的商品
     product_data: null, //商品資料
     question_category_data: null, //常見問題分類資料
     question_data: null, //常見問題資料
@@ -272,6 +273,10 @@ export default new Vuex.Store({
         // 排序
         tmp_data = tmp_data.sort((a, b) => {
           return parseInt(a.Seq) - parseInt(b.Seq);
+        });
+        commit('SetStateData', {
+          key: 'all_product_data',
+          val: res.data,
         });
         commit('SetStateData', {
           key: 'product_data',

@@ -75,7 +75,7 @@
       </p>
     </div>
     <div class="flex flex-wrap items-center mb-6 -mx-2">
-      <div class="w-1/2 px-2 mb-4">
+      <div class="w-full px-2 mb-4 md:w-1/2">
         <input
           type="text"
           name="first_name"
@@ -88,7 +88,7 @@
           請輸入正確的中文姓名
         </p>
       </div>
-      <div class="w-1/2 px-2 mb-4">
+      <div class="w-full px-2 mb-4 md:w-1/2">
         <input
           type="text"
           name="last_name"
@@ -153,7 +153,7 @@
       </div>
     </div>
     <div class="flex flex-wrap items-center mb-6 -mx-2">
-      <div class="w-1/2 px-2 mb-4">
+      <div class="w-full px-2 mb-4 md:w-1/2">
         <input
           type="text"
           name="first_name"
@@ -166,7 +166,7 @@
           請輸入正確的中文姓名
         </p>
       </div>
-      <div class="w-1/2 px-2 mb-4">
+      <div class="w-full px-2 mb-4 md:w-1/2">
         <input
           type="text"
           name="last_name"
@@ -192,7 +192,7 @@
           請輸入正確的手機號碼
         </p>
       </div>
-      <div class="w-1/2 px-2 mb-4">
+      <div class="w-full px-2 mb-4 md:w-1/2">
         <div class="relative rounded-md">
           <label class="absolute z-10 text-xs top-2 left-4 text-basic_gray"
             >縣市</label
@@ -213,7 +213,7 @@
           請選擇縣市
         </p>
       </div>
-      <div class="w-1/2 px-2 mb-4">
+      <div class="w-full px-2 mb-4 md:w-1/2">
         <div class="relative rounded-md">
           <span
             class="absolute z-10 text-white transform rotate-90 -translate-y-1/2 pointer-events-none right-5 icon-chevron_right top-1/2"

@@ -25,27 +25,59 @@
           </p>
         </div>
         <p class="text-xs font-medium text-white text-opacity-60">
-          <span class="mr-2 text-xs font-medium text-primary">選項一</span>
+          <span class="mr-2 text-xs font-medium text-primary">{{
+            shopcart_item.Option1
+          }}</span>
           {{ stock_data.ColorTitle }}
         </p>
         <p
           v-if="stock_data.SizeTitle != '無'"
           class="text-xs font-medium text-white text-opacity-60"
         >
-          <span class="mr-2 text-xs font-medium text-primary">選項二</span>
+          <span class="mr-2 text-xs font-medium text-primary">{{
+            shopcart_item.Option2
+          }}</span>
           {{ stock_data.SizeTitle }}
         </p>
       </div>
     </div>
-    <p
-      class="w-full text-sm font-bold text-right text-white font-anybody md:w-auto"
+
+    <div>
+      <p
+        v-if="original_price != shopcart_item.DiscountPrice"
+        class="mr-1 text-xs font-bold line-through transform scale-75 text-zinc-500 font-anybody md:text-base"
+      >
+        NT${{ $MoneyFormat(parseInt(original_price) * shopcart_item.Amount) }}
+      </p>
+      <p
+        class="w-full text-sm font-bold text-right text-white font-anybody md:w-auto"
+      >
+        NT${{
+          $MoneyFormat(
+            parseInt(shopcart_item.DiscountPrice) * shopcart_item.Amount
+          )
+        }}
+      </p>
+    </div>
+
+    <div
+      v-if="
+        shopcart_item.DiscountPercentMenuInfo &&
+        shopcart_item.DiscountPercentMenuInfo.length != 0
+      "
+      class="w-full px-3 py-2 mt-2 bg-green-500 border border-green-500 rounded-md bg-opacity-20"
     >
-      NT${{
-        $MoneyFormat(
-          parseInt(shopcart_item.DiscountPrice) * shopcart_item.Amount
-        )
-      }}
-    </p>
+      <span class="block text-xs text-green-500">符合打折優惠</span>
+      <p class="text-sm text-white">
+        {{ shopcart_item.DiscountPercentMenuInfo.Title }}
+      </p>
+      <p
+        v-if="shopcart_item.DiscountPercentFullInfo.length != 0"
+        class="text-sm text-white"
+      >
+        {{ shopcart_item.DiscountPercentFullInfo.Title }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -69,6 +101,11 @@ export default {
           item.ColorID == this.shopcart_item.ColorID &&
           item.SizeID == this.shopcart_item.SizeID
       )[0];
+    },
+    original_price() {
+      return this.shopcart_item.SellPrice > this.shopcart_item.Price
+        ? this.shopcart_item.SellPrice
+        : this.shopcart_item.Price;
     },
   },
 };

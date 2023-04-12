@@ -43,7 +43,11 @@
             </h3>
           </header>
 
-          <ShopCart :checkout_data="checkout_data.CheckoutList" />
+          <ShopCart
+            :checkout_data="checkout_data.CheckoutList"
+            @stop-scroll="$emit('stop-scroll')"
+            @start-scroll="$emit('start-scroll')"
+          />
           <GiveInfo
             :checkout_data="checkout_data"
             :give_info="checkout_data.GiveInfo"

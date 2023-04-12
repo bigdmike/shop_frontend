@@ -245,7 +245,7 @@ export default {
       return this.$store.state.zipcode_data;
     },
     product_list() {
-      return this.$store.state.product_data;
+      return this.$store.state.all_product_data;
     },
     payment_list() {
       return this.$store.state.payment_data;
