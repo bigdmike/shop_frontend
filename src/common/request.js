@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '@/store/index.js';
 import router from '@/router';
-import { getLocalStorage, delLocalStorage } from '@/common/cookie';
+import { getLocalStorage, logoutAccount } from '@/common/cookie';
 
 let baseURL = process.env.VUE_APP_BASE_API + '/';
 // 建立axios例項
@@ -22,10 +22,11 @@ const err = (error) => {
     // 可能是沒有登入或是token過期
     if (error.response.status == 401) {
       router.push('/account/login');
+      logoutAccount();
       setDialog('會員憑證過期，請重新登入');
     }
     if (error.response.status == 302) {
-      delLocalStorage('account_token');
+      logoutAccount();
       setDialog('會員憑證過期，請重新登入');
     }
   }
@@ -62,7 +63,7 @@ service.interceptors.request.use(
 service.interceptors.response.use((response) => {
   // 若沒有盡到錯誤但是發生權限問題，則刪除LocalStorage中的token並要求重新登入
   if (response.data.code == 302) {
-    delLocalStorage('account_token');
+    logoutAccount();
     setDialog('會員憑證過期，請重新登入');
   }
   // 關閉Loading組件

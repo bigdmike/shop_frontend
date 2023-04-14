@@ -19,7 +19,7 @@
           class="text-xs font-medium text-white text-opacity-60"
         >
           <span class="mr-2 text-xs font-medium text-primary">{{
-            shopcart_item.Option2
+            shopcart_item.product_data.Option2
           }}</span>
           {{ stock_data.SizeTitle }}
         </p>

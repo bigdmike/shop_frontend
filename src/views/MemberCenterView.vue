@@ -44,7 +44,7 @@
 
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue';
-import { delLocalStorage } from '@/common/cookie';
+import { logoutAccount } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
 import { mapGetters } from 'vuex';
 export default {
@@ -96,7 +96,7 @@ export default {
 
   methods: {
     Logout() {
-      delLocalStorage('account_token');
+      logoutAccount();
       this.$store.commit('shopcart_module/SetShopCart', []);
       this.$router.push('/account/login');
     },

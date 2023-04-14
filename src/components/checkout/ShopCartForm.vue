@@ -291,9 +291,9 @@
       v-if="coupon_info.length != 0"
       class="flex flex-wrap items-center mb-6"
     >
-      <div class="w-full p-5 rounded-xl bg-basic_gray bg-opacity-20">
-        <p class="text-xs">已套用優惠代碼：</p>
-        <h4 class="mb-2 text-2xl font-bold text-primary">
+      <div class="w-full p-5 bg-green-500 rounded-xl bg-opacity-20">
+        <p class="text-xs text-green-500">已套用優惠代碼：</p>
+        <h4 class="mb-2 text-2xl font-bold text-white">
           {{ coupon_info.Title }}
         </h4>
         <p class="text-sm text-white">

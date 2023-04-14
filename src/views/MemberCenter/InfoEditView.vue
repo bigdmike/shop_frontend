@@ -87,7 +87,7 @@
 <script>
 import { getAccountInfo, updateAccountInfo } from '@/api/member';
 import { validEmail, validPhone } from '@/common/validate';
-import { delLocalStorage } from '@/common/cookie';
+import { logoutAccount } from '@/common/cookie';
 export default {
   name: 'InfoEditView',
   components: {},
@@ -147,7 +147,7 @@ export default {
       updateAccountInfo(info_data).then((res) => {
         if (res.code == 302) {
           // token過期
-          delLocalStorage('account_token');
+          logoutAccount();
           this.$router.push('/account/login');
         } else {
           this.$store.commit('SetDialog', {

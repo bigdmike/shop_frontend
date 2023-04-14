@@ -58,7 +58,7 @@
 </template>
 <script>
 import { getOrderList } from '@/api/member';
-import { delLocalStorage } from '@/common/cookie';
+import { logoutAccount } from '@/common/cookie';
 export default {
   name: 'OrderListView',
   data() {
@@ -73,7 +73,7 @@ export default {
       getOrderList().then((res) => {
         if (res.code == 302) {
           // token 過期
-          delLocalStorage('account_token');
+          logoutAccount();
           this.$router.push('/account/login');
         } else {
           this.trade_list = res.data;

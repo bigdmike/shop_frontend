@@ -59,7 +59,7 @@
 
 <script>
 import { updateAccountPassword } from '@/api/member';
-import { delLocalStorage } from '@/common/cookie';
+import { logoutAccount } from '@/common/cookie';
 import { validPassword } from '@/common/validate';
 export default {
   name: 'PasswordEditView',
@@ -94,10 +94,10 @@ export default {
       updateAccountPassword(password_data).then((res) => {
         if (res.code == 302) {
           // token過期
-          delLocalStorage('account_token');
+          logoutAccount();
           this.$router.push('/account/login');
         } else {
-          delLocalStorage('account_token');
+          logoutAccount();
           this.$router.push('/account/login');
           this.$store.commit('SetDialog', {
             status: true,

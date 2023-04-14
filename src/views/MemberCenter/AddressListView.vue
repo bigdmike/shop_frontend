@@ -59,7 +59,7 @@
 
 <script>
 import { getAddressData, createReceiver, deleteReceiver } from '@/api/member';
-import { delLocalStorage } from '@/common/cookie';
+import { logoutAccount } from '@/common/cookie';
 import AddressCreateCard from '@/components/member/AddressCreateCard.vue';
 import AddressDeleteDialog from '@/components/member/AddressDeleteDialog.vue';
 export default {
@@ -79,7 +79,7 @@ export default {
       getAddressData().then((res) => {
         if (res.code == 302) {
           // token過期
-          delLocalStorage('account_token');
+          logoutAccount();
           this.$router.push('/account/login');
         }
         this.address_list = res.data;
@@ -96,7 +96,7 @@ export default {
       createReceiver(form_data).then((res) => {
         if (res.code == 302) {
           // token過期
-          delLocalStorage('account_token');
+          logoutAccount();
           this.$router.push('/account/login');
         } else {
           this.$store.commit('SetDialog', {
@@ -114,7 +114,7 @@ export default {
       deleteReceiver(id).then((res) => {
         if (res.code == 302) {
           // token過期
-          delLocalStorage('account_token');
+          logoutAccount();
           this.$router.push('/account/login');
         } else {
           this.$store.commit('SetDialog', {

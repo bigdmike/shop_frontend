@@ -38,25 +38,93 @@
           />
           <ShopcartProductCard v-else :shopcart_item="item" />
         </li>
-        <li class="flex items-center justify-end p-3">
+
+        <li class="px-2 mb-5" v-if="trade_data.CouponInfo">
+          <!-- CouponInfo -->
+          <div
+            class="w-full px-3 py-2 mt-2 bg-green-500 border border-green-500 rounded-md bg-opacity-20"
+          >
+            <span class="block text-xs text-green-500"
+              >使用優惠代碼 #{{ trade_data.CouponInfo.CouponNumber }}</span
+            >
+            <p class="text-sm text-white">
+              {{ trade_data.CouponInfo.Title }}，折抵NT$
+              {{ trade_data.CouponInfo.Money }}
+            </p>
+          </div>
+        </li>
+
+        <li class="flex items-center justify-end px-3 mb-2">
+          <p class="text-sm">商品小計</p>
+          <p class="w-32 text-sm font-bold text-right font-anybody">
+            NT$ {{ $MoneyFormat(original_product_price) }}
+          </p>
+        </li>
+
+        <li class="flex items-center justify-end px-3 mb-2">
+          <p class="text-sm">折扣優惠</p>
+          <p class="w-32 text-sm font-bold text-right font-anybody">
+            NT$ {{ $MoneyFormat(discount_count) }}
+          </p>
+        </li>
+
+        <li
+          v-if="trade_data.CouponInfo"
+          class="flex items-center justify-end px-3 mb-2"
+        >
+          <p class="text-sm">優惠代碼折扣</p>
+          <p class="w-32 text-sm font-bold text-right font-anybody">
+            NT$ -{{ $MoneyFormat(trade_data.CouponInfo.Money) }}
+          </p>
+        </li>
+
+        <li class="flex items-center justify-end px-3 mb-2">
           <p class="text-sm">金流手續費</p>
           <p class="w-32 text-sm font-bold text-right font-anybody">
             NT$ {{ $MoneyFormat(trade_data.PaymentSubtotalFee) }}
           </p>
         </li>
-        <li class="flex items-center justify-end p-3">
+        <li class="flex items-center justify-end px-3 mb-2">
           <p class="text-sm">運費</p>
-          <p class="w-32 text-sm font-bold text-right font-anybody">
+          <p
+            v-if="trade_data.ShippingFree != 'Y'"
+            class="w-32 text-sm font-bold text-right font-anybody"
+          >
             NT$ {{ $MoneyFormat(trade_data.ShippingFee) }}
           </p>
+          <p
+            v-else
+            class="w-32 font-semibold text-right font-anybody text-primary"
+          >
+            免運費
+          </p>
         </li>
-        <li class="flex items-center justify-end p-3">
+        <li class="flex items-center justify-end px-3">
           <p class="">總金額</p>
           <p class="w-32 font-bold text-right text-primary font-anybody">
             NT$ {{ $MoneyFormat(trade_data.Price) }}
           </p>
         </li>
       </ol>
+
+      <div
+        class="w-full"
+        v-if="trade_data && trade_data.TradeDiscount.length > 0"
+      >
+        <p class="mb-3 text-sm">贈品資訊</p>
+        <div
+          class="block w-full p-3 mb-2 bg-black rounded-md"
+          v-for="(item, item_index) in trade_data.TradeDiscount"
+          :key="`give_info_${item_index}`"
+        >
+          <p class="text-sm font-bold text-white">
+            {{ item.Title }}
+          </p>
+          <p class="text-sm text-primary">
+            {{ item.GiveName }}
+          </p>
+        </div>
+      </div>
       <div class="mb-5">
         <p class="mb-3 text-sm">付款資訊</p>
         <ol class="px-2 py-3 bg-black rounded-md">
@@ -133,7 +201,7 @@
 import CustomShopcartProductCard from '@/components/member_order/CustomProductCard.vue';
 import ShopcartProductCard from '@/components/member_order/ProductCard.vue';
 import { getOrderList } from '@/api/member';
-import { delLocalStorage } from '@/common/cookie';
+import { logoutAccount } from '@/common/cookie';
 export default {
   name: 'OrderListView',
   components: {
@@ -150,7 +218,7 @@ export default {
       getOrderList().then((res) => {
         if (res.code == 302) {
           // token 過期
-          delLocalStorage('account_token');
+          logoutAccount();
           this.$router.push('/account/login');
         } else {
           this.trade_list = res.data;
@@ -240,6 +308,20 @@ export default {
 
         return product_list;
       }
+    },
+    original_product_price() {
+      let price = 0;
+      this.trade_data.SubTradeList.forEach((item) => {
+        price += parseInt(item.SellPrice);
+      });
+      return price;
+    },
+    discount_count() {
+      let price = parseInt(this.trade_data.Price) - this.original_product_price;
+      this.trade_data.CouponInfo.length != 0
+        ? (price += parseInt(this.trade_data.CouponInfo.Money))
+        : '';
+      return price;
     },
     zipcode_data() {
       return this.$store.state.zipcode_data;

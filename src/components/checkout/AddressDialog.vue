@@ -80,7 +80,7 @@
 import Teleport from 'vue2-teleport';
 import { dialog_animation } from '@/gsap/dialog';
 import { getAddressAndEmail } from '@/api/member';
-import { delLocalStorage, getLocalStorage } from '@/common/cookie';
+import { logoutAccount, getLocalStorage } from '@/common/cookie';
 export default {
   name: 'AddressDeleteDialog',
   components: {
@@ -126,7 +126,7 @@ export default {
       getAddressAndEmail().then((res) => {
         if (res.code == 302) {
           // token過期，刪除本地token轉跳到登入畫面
-          delLocalStorage('account_token');
+          logoutAccount();
           this.$router.push('/');
           this.$store.commit('SetDialog', {
             status: true,

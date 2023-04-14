@@ -216,8 +216,7 @@
 <script>
 import ProductCard from '@/components/trade_finish/ProductCard.vue';
 import CustomProductCard from '@/components/trade_finish/CustomProductCard.vue';
-import { getLocalStorage } from '@/common/cookie';
-// delLocalStorage
+import { getLocalStorage, delLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
 import { ConvertAddShopCartData } from '@/common/gtm_methods';
 import { mapGetters, mapState } from 'vuex';
@@ -272,8 +271,8 @@ export default {
             : JSON.parse(trade_data);
         this.checkout_data = JSON.parse(checkout_data);
         // 讀取完成後刪除本地暫存
-        // delLocalStorage('trade_data');
-        // delLocalStorage('trade_checkout_data');
+        delLocalStorage('trade_data');
+        delLocalStorage('trade_checkout_data');
         // 觸發GA4 電子商務事件
         this.SendPurchase();
         // 清空購物車

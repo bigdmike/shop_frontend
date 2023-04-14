@@ -145,6 +145,30 @@
             <CustomProductCard v-else :shopcart_item="item" />
           </li>
         </ol>
+
+        <div
+          class="w-full"
+          v-if="checkout_data && checkout_data.TradeDiscount.length > 0"
+        >
+          <div class="mb-3">
+            <p class="px-2 py-2 font-bold text-white bg-primary bg-opacity-30">
+              活動贈品
+            </p>
+          </div>
+          <div
+            class="block w-full p-3 mb-2 bg-black rounded-md"
+            v-for="(item, item_index) in checkout_data.TradeDiscount"
+            :key="`give_info_${item_index}`"
+          >
+            <p class="text-sm font-bold text-white">
+              {{ item.Title }}
+            </p>
+            <p class="text-sm text-primary">
+              {{ item.GiveName }}
+            </p>
+          </div>
+        </div>
+
         <ol class="pb-5 mb-5 border-b border-zinc-700">
           <li class="flex items-center justify-between w-full mb-3 text-sm">
             <p class="font-medium">合計</p>
@@ -164,7 +188,7 @@
             </p>
           </li>
 
-          <li class="flex items-center justify-between text-sm w-ful">
+          <li class="flex items-center justify-between w-full text-sm">
             <p class="font-medium">運費</p>
             <p
               v-if="!checkout_data.ShippingFree"
@@ -217,8 +241,7 @@
 <script>
 import ProductCard from '@/components/order_search/ProductCard.vue';
 import CustomProductCard from '@/components/order_search/CustomProductCard.vue';
-import { getLocalStorage } from '@/common/cookie';
-// delLocalStorage
+import { getLocalStorage, delLocalStorage } from '@/common/cookie';
 import { GetMetaData } from '@/common/meta';
 import { mapGetters, mapState } from 'vuex';
 export default {
@@ -240,7 +263,7 @@ export default {
       if (checkout_data) {
         this.form_data = JSON.parse(checkout_data)[0];
         this.checkout_data = JSON.parse(checkout_data)[0];
-        // delLocalStorage('trade_data');
+        delLocalStorage('trade_data');
         this.$store.commit('shopcart_module/SetShopCart', []);
         this.meta_data = GetMetaData('訂單完成', '', '');
         this.$nextTick(() => {
